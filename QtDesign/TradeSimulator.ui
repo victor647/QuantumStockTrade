@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TradeSimulator</class>
+ <widget class="QDialog" name="TradeSimulator">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1042</width>
+    <height>778</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>模拟交易</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>341</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="lblBuyCount">
+      <property name="text">
+       <string>买入次数：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblSellCount">
+      <property name="text">
+       <string>卖出次数：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblSameDayPerformance">
+      <property name="text">
+       <string>做T次数：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblTotalFee">
+      <property name="text">
+       <string>总手续费：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblOriginalInvestment">
+      <property name="text">
+       <string>初始成本：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblFinalAsset">
+      <property name="text">
+       <string>最终资产：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblTotalProfit">
+      <property name="text">
+       <string>累计收益：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblTotalReturn">
+      <property name="text">
+       <string>盈亏比例：</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTableWidget" name="tblTradeHistory">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>210</y>
+     <width>1001</width>
+     <height>551</height>
+    </rect>
+   </property>
+   <property name="rowCount">
+    <number>0</number>
+   </property>
+   <property name="columnCount">
+    <number>16</number>
+   </property>
+   <column>
+    <property name="text">
+     <string>交易时间</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>交易操作</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>成交价格</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>成交数</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>持仓量</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>当日开盘</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>当日最高</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>当日最低</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>当日收盘</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>MA5</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>换手率</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>长线偏移</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>短线多空</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>平均成本</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>总收益</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>总利润</string>
+    </property>
+   </column>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
