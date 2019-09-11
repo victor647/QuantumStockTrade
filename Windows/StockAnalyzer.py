@@ -3,7 +3,7 @@ from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QErrorMessage
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 from Data.AnalysisData import AnalysisData
-from Windows.TradeSimulator import *
+from Windows.TradeSimulator import TradeSimulator
 from Data.TradeStrategy import TradeStrategy
 from Data.DataManager import DataManager
 
