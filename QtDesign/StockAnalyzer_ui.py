@@ -358,11 +358,12 @@ class Ui_StockAnalyzer(object):
         self.btnGetData.clicked.connect(StockAnalyzer.get_history_data)
         self.btnStartTrade.clicked.connect(StockAnalyzer.start_trade)
         self.btnAutoFindStrategy.clicked.connect(StockAnalyzer.auto_get_strategy)
+        self.cbxAllowSameDayTrade.clicked['bool'].connect(self.spbSameDayProfit.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(StockAnalyzer)
 
     def retranslateUi(self, StockAnalyzer):
         _translate = QtCore.QCoreApplication.translate
-        StockAnalyzer.setWindowTitle(_translate("StockAnalyzer", "股性分析神器"))
+        StockAnalyzer.setWindowTitle(_translate("StockAnalyzer", "个股股性分析"))
         self.grpStockPerformance.setTitle(_translate("StockAnalyzer", "个股表现"))
         self.lblStockIntervalOpen.setText(_translate("StockAnalyzer", "区间开盘价格： "))
         self.lblStockIntervalClose.setText(_translate("StockAnalyzer", "区间收盘价格： "))

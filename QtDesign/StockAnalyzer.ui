@@ -856,6 +856,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cbxAllowSameDayTrade</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbSameDayProfit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>436</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>516</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>get_history_data()</slot>

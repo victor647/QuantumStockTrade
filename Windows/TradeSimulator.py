@@ -1,4 +1,5 @@
-from Windows.StockAnalyzer import *
+import Windows.StockAnalyzer as StockAnalyzer
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from PyQt5.QtGui import QColor
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
@@ -32,11 +33,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         DataManager.get_average_price(DataManager.stockDatabase, trade_strategy.averagePricePeriod, trade_strategy.averageVolumePeriod)
 
     def start_trading(self):
-        self.trade_first_day()
-        self.trade_by_day()
-        self.trade_last_day()
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.trade_first_day()
+        trade_by_day = TradeByDay(self)
+        trade_by_day.start()
 
     def trade_first_day(self):
         # 获取首个交易日数据
@@ -48,101 +49,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.buy_stock(data, "首次买入", str.replace(data.date[2:], "-", "/") + " 09:30", price, self.tradeStrategy.baseShare)
         self.lblOriginalInvestment.setText("初始成本：" + str(self.initialAsset))
 
-    def trade_by_day(self):
-        # 遍历每日历史数据
-        for i in range(1, len(DataManager.stockDatabase) - 1):
-            # 获取当日可卖股份余额
-            self.sellableShare = self.currentShare
-            daily_data = DataManager.stockDatabase[i]
-            minute_database = []
-            # 初始化当日交易记录
-            daily_buy_history = []
-            daily_sell_history = []
-            # 获取当日5分钟K线数据
-            DataManager.parse_minute_data(StockAnalyzer.get_minute_data(daily_data.date, self.stockCode).data, minute_database)
-            # 获取上一交易日日K线数据
-            last_day_data = DataManager.stockDatabase[i - 1]
-            # 根据长短均线排列获取基础买卖点偏移
-            point_bias = TradeStrategy.long_term_bias(last_day_data)
-            # 根据前日收盘价与均线排列获取买卖点乘数
-            up_index = TradeStrategy.short_term_index(last_day_data)
-            # 获取基础买卖点
-            base_buy_point = self.tradeStrategy.buyPoint / up_index
-            base_sell_point = self.tradeStrategy.sellPoint * up_index
-            # 获取初始买卖点涨跌幅
-            current_buy_point = base_buy_point
-            current_sell_point = base_sell_point
-            # 遍历当日5分钟K线数据
-            for minute_data in minute_database:
-                # 5分钟最高和最低价与昨日收盘相比涨跌幅
-                minute_low = minute_data.low_percentage_minute(daily_data.previousClose)
-                minute_high = minute_data.high_percentage_minute(daily_data.previousClose)
-                # 加入偏移量后的实际买卖点涨跌幅
-                actual_buy_point = current_buy_point + point_bias
-                actual_sell_point = current_sell_point + point_bias
-                # 价格低于买点，执行买入操作
-                if minute_low < actual_buy_point:
-                    # 计算买入价格
-                    trade_price = daily_data.price_at_percentage(actual_buy_point)
-                    if self.buy_stock(daily_data, "被动买入", minute_data.time, trade_price, self.tradeStrategy.sharePerTrade, point_bias, up_index):
-                        # 计算下一次买点跌幅
-                        current_buy_point += base_buy_point
-                        # 记录本次买入，为做T卖出参考
-                        if self.tradeStrategy.allowSameDayTrade:
-                            daily_buy_history.append(actual_buy_point)
-
-                # 价格高于卖点，执行卖出操作
-                if minute_high > actual_sell_point:
-                    trade_price = daily_data.price_at_percentage(actual_sell_point)
-                    if self.sell_stock(daily_data, "被动卖出", minute_data.time, trade_price, self.tradeStrategy.sharePerTrade, point_bias, up_index):
-                        # 计算下一次卖点涨幅
-                        current_sell_point += base_sell_point
-                        # 记录本次卖出，为做T买回参考
-                        if self.tradeStrategy.allowSameDayTrade:
-                            daily_sell_history.append(actual_sell_point)
-
-                # 允许做T情况下，判断当前价位可否做T
-                if self.tradeStrategy.allowSameDayTrade:
-                    # 遍历当日买入记录
-                    for history in daily_buy_history:
-                        # 计算卖出价的涨跌幅
-                        t_sell_point = history + self.tradeStrategy.sameDayProfit
-                        # 价格高于做T卖出盈利点，执行卖出操作
-                        if minute_high > t_sell_point:
-                            # 判断是否有可卖余额，避免出现T+0操作
-                            if self.sellableShare >= self.tradeStrategy.sharePerTrade:
-                                # 计算做T卖出价格
-                                trade_price = daily_data.price_at_percentage(t_sell_point)
-                                if self.sell_stock(daily_data, "做T卖出", minute_data.time, trade_price, self.tradeStrategy.sharePerTrade, point_bias, up_index):
-                                    # 抵消当日买入记录
-                                    daily_buy_history.remove(history)
-                                    # 回溯再次买入点价格，跌到该买点会再次买入
-                                    current_buy_point -= base_buy_point
-                                    # 累计做T次数
-                                    self.totalSameDayTradeCount += 1
-                                    # 收盘价低于做T卖出价，做T成功
-                                    if daily_data.close < trade_price:
-                                        self.successfulSameDayTradeCount += 1
-
-                    # 遍历当日卖出记录
-                    for history in daily_sell_history:
-                        # 计算买回价的涨跌幅
-                        t_buy_point = history - self.tradeStrategy.sameDayProfit
-                        # 价格低于做T买回盈利点，执行买入操作
-                        if minute_low < t_buy_point:
-                            # 计算做T买回价格
-                            trade_price = daily_data.price_at_percentage(t_buy_point)
-                            if self.buy_stock(daily_data, "做T买回", minute_data.time, trade_price, self.tradeStrategy.sharePerTrade, point_bias, up_index):
-                                # 抵消当日卖出记录
-                                daily_sell_history.remove(history)
-                                # 回溯再次卖出点价格，涨到该卖点会再次卖出
-                                current_sell_point -= base_sell_point
-                                # 累计做T次数
-                                self.totalSameDayTradeCount += 1
-                                # 收盘价高于做T买回价，做T成功
-                                if daily_data.close > trade_price:
-                                    self.successfulSameDayTradeCount += 1
-
     def trade_last_day(self):
         # 获取最后一个交易日数据
         data = DataManager.stockDatabase[-1]
@@ -153,7 +59,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         if last_trade_share < 0:
             self.sell_stock(data, "末日卖出", str.replace(data.date[2:], "-", "/") + " 15:00", data.close, -last_trade_share)
 
-        # 汇总数据
+    def update_trade_count(self, data):
         self.lblBuyCount.setText("共买入" + str(self.totalBuyCount) + "次，成功" + str(self.successfulBuyCount) + "次")
         self.lblSellCount.setText("共卖出" + str(self.totalSellCount) + "次，成功" + str(self.successfulSellCount) + "次")
         self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
@@ -178,6 +84,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价高于买入价，买入成功
         if data.close > trade_price:
             self.successfulBuyCount += 1
+        # 更新交易记录显示
+        self.update_trade_count(data)
         return True
 
     def sell_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
@@ -197,6 +105,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价低于卖出价，卖出成功
         if data.close < trade_price:
             self.successfulSellCount += 1
+        # 更新交易记录显示
+        self.update_trade_count(data)
         return True
 
     @staticmethod
@@ -312,3 +222,111 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         if self.currentShare == 0:
             return 0.00
         return round(current_price - self.net_profit(current_price) / self.currentShare, 2)
+
+
+class TradeByDay(QThread):
+    tradeSimulator = None
+
+    def __init__(self, trade_simulator):
+        super().__init__()
+        self.tradeSimulator = trade_simulator
+
+    def __del__(self):
+        self.work = False
+        self.terminate()
+
+    def run(self):
+        # 遍历每日历史数据
+        for i in range(1, len(DataManager.stockDatabase) - 1):
+            # 获取当日可卖股份余额
+            self.tradeSimulator.sellableShare = self.tradeSimulator.currentShare
+            daily_data = DataManager.stockDatabase[i]
+            minute_database = []
+            # 初始化当日交易记录
+            daily_buy_history = []
+            daily_sell_history = []
+            # 获取当日5分钟K线数据
+            DataManager.parse_minute_data(StockAnalyzer.StockAnalyzer.get_minute_data(daily_data.date, self.tradeSimulator.stockCode).data, minute_database)
+            # 获取上一交易日日K线数据
+            last_day_data = DataManager.stockDatabase[i - 1]
+            # 根据长短均线排列获取基础买卖点偏移
+            point_bias = TradeStrategy.long_term_bias(last_day_data)
+            # 根据前日收盘价与均线排列获取买卖点乘数
+            up_index = TradeStrategy.short_term_index(last_day_data)
+            # 获取基础买卖点
+            base_buy_point = self.tradeSimulator.tradeStrategy.buyPoint / up_index
+            base_sell_point = self.tradeSimulator.tradeStrategy.sellPoint * up_index
+            # 获取初始买卖点涨跌幅
+            current_buy_point = base_buy_point
+            current_sell_point = base_sell_point
+            # 遍历当日5分钟K线数据
+            for minute_data in minute_database:
+                # 5分钟最高和最低价与昨日收盘相比涨跌幅
+                minute_low = minute_data.low_percentage_minute(daily_data.previousClose)
+                minute_high = minute_data.high_percentage_minute(daily_data.previousClose)
+                # 加入偏移量后的实际买卖点涨跌幅
+                actual_buy_point = current_buy_point + point_bias
+                actual_sell_point = current_sell_point + point_bias
+                # 价格低于买点，执行买入操作
+                if minute_low < actual_buy_point:
+                    # 计算买入价格
+                    trade_price = daily_data.price_at_percentage(actual_buy_point)
+                    if self.tradeSimulator.buy_stock(daily_data, "被动买入", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                        # 计算下一次买点跌幅
+                        current_buy_point += base_buy_point
+                        # 记录本次买入，为做T卖出参考
+                        if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                            daily_buy_history.append(actual_buy_point)
+
+                # 价格高于卖点，执行卖出操作
+                if minute_high > actual_sell_point:
+                    trade_price = daily_data.price_at_percentage(actual_sell_point)
+                    if self.tradeSimulator.sell_stock(daily_data, "被动卖出", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                        # 计算下一次卖点涨幅
+                        current_sell_point += base_sell_point
+                        # 记录本次卖出，为做T买回参考
+                        if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                            daily_sell_history.append(actual_sell_point)
+
+                # 允许做T情况下，判断当前价位可否做T
+                if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                    # 遍历当日买入记录
+                    for history in daily_buy_history:
+                        # 计算卖出价的涨跌幅
+                        t_sell_point = history + self.tradeSimulator.tradeStrategy.sameDayProfit
+                        # 价格高于做T卖出盈利点，执行卖出操作
+                        if minute_high > t_sell_point:
+                            # 判断是否有可卖余额，避免出现T+0操作
+                            if self.tradeSimulator.sellableShare >= self.tradeSimulator.tradeStrategy.sharePerTrade:
+                                # 计算做T卖出价格
+                                trade_price = daily_data.price_at_percentage(t_sell_point)
+                                if self.tradeSimulator.sell_stock(daily_data, "做T卖出", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                                    # 抵消当日买入记录
+                                    daily_buy_history.remove(history)
+                                    # 回溯再次买入点价格，跌到该买点会再次买入
+                                    current_buy_point -= base_buy_point
+                                    # 累计做T次数
+                                    self.tradeSimulator.totalSameDayTradeCount += 1
+                                    # 收盘价低于做T卖出价，做T成功
+                                    if daily_data.close < trade_price:
+                                        self.tradeSimulator.successfulSameDayTradeCount += 1
+
+                    # 遍历当日卖出记录
+                    for history in daily_sell_history:
+                        # 计算买回价的涨跌幅
+                        t_buy_point = history - self.tradeSimulator.tradeStrategy.sameDayProfit
+                        # 价格低于做T买回盈利点，执行买入操作
+                        if minute_low < t_buy_point:
+                            # 计算做T买回价格
+                            trade_price = daily_data.price_at_percentage(t_buy_point)
+                            if self.tradeSimulator.buy_stock(daily_data, "做T买回", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                                # 抵消当日卖出记录
+                                daily_sell_history.remove(history)
+                                # 回溯再次卖出点价格，涨到该卖点会再次卖出
+                                current_sell_point -= base_sell_point
+                                # 累计做T次数
+                                self.tradeSimulator.totalSameDayTradeCount += 1
+                                # 收盘价高于做T买回价，做T成功
+                                if daily_data.close > trade_price:
+                                    self.tradeSimulator.successfulSameDayTradeCount += 1
+        self.tradeSimulator.trade_last_day()

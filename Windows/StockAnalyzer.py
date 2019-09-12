@@ -2,15 +2,15 @@ import baostock
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QErrorMessage
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
-from Data.AnalysisData import AnalysisData
-from Windows.TradeSimulator import TradeSimulator
+import Data.AnalysisData as AnalysisData
+import Windows.TradeSimulator as TradeSimulator
 from Data.TradeStrategy import TradeStrategy
 from Data.DataManager import DataManager
 
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
     tradeStrategy = TradeStrategy()
-    analysisData = AnalysisData()
+    analysisData = AnalysisData.AnalysisData()
 
     def __init__(self):
         super().__init__()
@@ -21,9 +21,9 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.dteEndDate.setDate(now)
 
     def get_history_data(self):
-        DataManager.init()
+        DataManager.initialize()
         stock_code = self.iptStockNumber.text()
-        market = StockAnalyzer.get_trade_center(stock_code)
+        market = DataManager.get_trade_center(stock_code)
 
         start_date = self.dteStartDate.text()
         end_date = self.dteEndDate.text()
@@ -45,29 +45,8 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.show_data()
 
     @staticmethod
-    def get_trade_center(stock_code):
-        code = int(stock_code)
-        market = ""
-        # 深圳主板
-        if 0 < code < 100000:
-            market = "sz"
-        # 创业板
-        elif 300000 < code < 400000:
-            market = "sz"
-        # 上海主板
-        elif 600000 < code < 700000:
-            market = "sh"
-        # 深圳可转债
-        elif 128000 <= code <= 129000:
-            market = "sz"
-        # 上海可转债
-        elif 113500 <= code <= 113600:
-            market = "sh"
-        return market
-
-    @staticmethod
     def get_minute_data(date, code):
-        market = StockAnalyzer.get_trade_center(code)
+        market = DataManager.get_trade_center(code)
         return baostock.query_history_k_data(code=market + "." + code, fields="time,high,low",
                                              start_date=date, end_date=date, frequency="5", adjustflag="2")
 
@@ -119,7 +98,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.lblMarketIntervalClose.setText("区间收盘点位：" + str(DataManager.interval_close_price(DataManager.marketDatabase)))
         self.lblMarketIntervalHigh.setText("区间最高点位：" + str(DataManager.interval_highest_price(DataManager.marketDatabase)))
         self.lblMarketIntervalLow.setText("区间最低点位：" + str(DataManager.interval_lowest_price(DataManager.marketDatabase)))
-        self.lblMarketIntervalAverage.setText("区间平均点位：" + str(DataManager.interval_average_price(DataManager.marketDatabase)) + "%")
+        self.lblMarketIntervalAverage.setText("区间平均点位：" + str(DataManager.interval_average_price(DataManager.marketDatabase)))
         self.lblMarketIntervalTotal.setText("区间累计涨幅：" + str(DataManager.interval_total_performance(DataManager.marketDatabase)) + "%")
         self.lblMarketIntervalAveragePoint.setText("平均每日涨幅：" + str(DataManager.interval_average_performance(DataManager.marketDatabase)) + "%")
         self.lblMarketUpProbability.setText("每日上涨概率：" + str(DataManager.interval_up_probability(DataManager.marketDatabase)) + "%")
@@ -149,7 +128,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.tradeStrategy.volumeWeight = self.spbVolumeMultiplier.value()
         stock_code = self.iptStockNumber.text()
 
-        trade_window = TradeSimulator()
+        trade_window = TradeSimulator.TradeSimulator()
         trade_window.setWindowTitle(stock_code + "模拟交易")
         trade_window.get_trade_strategy(self.tradeStrategy, stock_code)
         trade_window.show()
@@ -165,6 +144,3 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
             error_dialog.exec_()
             return False
         return True
-
-
-

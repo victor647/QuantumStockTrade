@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>545</width>
-    <height>352</height>
+    <height>356</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
     <property name="title">
      <string>搜索范围</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -116,6 +116,9 @@
     </property>
    </widget>
    <widget class="QGroupBox" name="grpTechnicalIndex">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -127,7 +130,7 @@
     <property name="title">
      <string>技术指标</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -150,27 +153,20 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="rbnConsecutiveUp">
-          <property name="text">
-           <string>上涨</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="rbnConsecutiveDown">
-          <property name="text">
-           <string>下跌</string>
-          </property>
-          <property name="checked">
+         <widget class="QComboBox" name="cbbConsecutiveTrend">
+          <property name="editable">
            <bool>false</bool>
+          </property>
+          <property name="currentText">
+           <string/>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbConsecutiveUpDays">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="suffix">
            <string>天</string>
           </property>
@@ -197,23 +193,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox">
-          <property name="suffix">
-           <string>日平均</string>
+         <widget class="QComboBox" name="cbbAverageVolumePeriod">
+          <property name="editable">
+           <bool>false</bool>
           </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>60</number>
-          </property>
-          <property name="value">
-           <number>20</number>
+          <property name="currentText">
+           <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+         <widget class="QDoubleSpinBox" name="spbVolumeMultipler">
           <property name="suffix">
            <string>倍</string>
           </property>
@@ -249,7 +239,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbbPriceAverageComparison">
+         <widget class="QComboBox" name="cbbAveragePriceComparison">
           <property name="editable">
            <bool>false</bool>
           </property>
@@ -259,18 +249,12 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbPriceDeviationBase">
-          <property name="suffix">
-           <string>日均线</string>
+         <widget class="QComboBox" name="cbbAveragePricePeriod">
+          <property name="editable">
+           <bool>false</bool>
           </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>60</number>
-          </property>
-          <property name="value">
-           <number>20</number>
+          <property name="currentText">
+           <string/>
           </property>
          </widget>
         </item>
@@ -301,7 +285,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="grpCompanyQuality">
+   <widget class="QGroupBox" name="grpCompanyInfo">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -313,7 +297,7 @@
     <property name="title">
      <string>基本面指标</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -538,6 +522,38 @@
      </layout>
     </widget>
    </widget>
+   <widget class="QCheckBox" name="cbxTechnicalIndexEnabled">
+    <property name="geometry">
+     <rect>
+      <x>73</x>
+      <y>9</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cbxCompanyInfoEnabled">
+    <property name="geometry">
+     <rect>
+      <x>85</x>
+      <y>159</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -560,12 +576,12 @@
    <slot>search_all_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>183</x>
-     <y>171</y>
+     <x>423</x>
+     <y>231</y>
     </hint>
     <hint type="destinationlabel">
-     <x>83</x>
-     <y>355</y>
+     <x>451</x>
+     <y>258</y>
     </hint>
    </hints>
   </connection>
@@ -576,12 +592,268 @@
    <slot>get_all_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>61</x>
-     <y>178</y>
+     <x>421</x>
+     <y>208</y>
     </hint>
     <hint type="destinationlabel">
-     <x>57</x>
-     <y>196</y>
+     <x>455</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxConsecutiveTrend</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbConsecutiveUpDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>67</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTechnicalIndexEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>grpTechnicalIndex</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>37</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>54</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxConsecutiveTrend</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbConsecutiveTrend</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>153</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAverageVolume</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbAverageVolumePeriod</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAverageVolume</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbVolumeMultipler</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>35</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>280</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAveragePriceBias</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbAveragePriceComparison</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAveragePriceBias</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbPriceDeviation</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxPriceEarning</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbPriceEarningMin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxPriceEarning</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbPriceEarningMax</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>296</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxPriceBook</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbPriceBookMin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>53</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxPriceBook</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbPriceBookMax</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>241</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTotalShare</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbTotalShareMin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>269</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTotalShare</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbTotalShareMax</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTotalAsset</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbTotalAssetsMin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>128</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTotalAsset</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbTotalAssetsMax</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxCompanyInfoEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>grpCompanyInfo</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>64</x>
+     <y>190</y>
     </hint>
    </hints>
   </connection>

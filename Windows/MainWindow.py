@@ -1,8 +1,9 @@
 import sys
-from PyQt5.QtWidgets import QApplication
+import baostock
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from Windows.StockAnalyzer import *
-from Windows.StockFinder import *
+import Windows.StockAnalyzer as StockAnalyzer
+import Windows.StockFinder as StockFinder
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -14,11 +15,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
     def show_stock_analyzer(self):
-        self.stockAnalyzer = StockAnalyzer()
+        self.stockAnalyzer = StockAnalyzer.StockAnalyzer()
         self.stockAnalyzer.show()
 
     def show_stock_finder(self):
-        self.stockFinder = StockFinder()
+        self.stockFinder = StockFinder.StockFinder()
         self.stockFinder.show()
 
 

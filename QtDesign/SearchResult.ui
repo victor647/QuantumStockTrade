@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>478</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,12 +16,18 @@
   <widget class="QTableWidget" name="tblStockList">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>361</width>
-     <height>261</height>
+     <x>21</x>
+     <y>60</y>
+     <width>441</width>
+     <height>291</height>
     </rect>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>60</number>
+   </attribute>
+   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+    <bool>true</bool>
+   </attribute>
    <column>
     <property name="text">
      <string>股票代码</string>
@@ -32,8 +38,99 @@
      <string>股票名称</string>
     </property>
    </column>
+   <column>
+    <property name="text">
+     <string>市盈率</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>市净率</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>总市值</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="btnStopSearching">
+   <property name="geometry">
+    <rect>
+     <x>387</x>
+     <y>20</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>停止搜索</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>301</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="lblSearchProgress">
+      <property name="text">
+       <string>搜索进度：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblCurrentAnalyzing">
+      <property name="text">
+       <string>正在分析：</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnStopSearching</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchResult</receiver>
+   <slot>stop_searching()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>405</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>406</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tblStockList</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>SearchResult</receiver>
+   <slot>open_stock_page(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>stop_searching()</slot>
+  <slot>open_stock_page(int,int)</slot>
+ </slots>
 </ui>

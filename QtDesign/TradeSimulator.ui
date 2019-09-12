@@ -13,81 +13,13 @@
   <property name="windowTitle">
    <string>模拟交易</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>341</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="lblBuyCount">
-      <property name="text">
-       <string>买入次数：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblSellCount">
-      <property name="text">
-       <string>卖出次数：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblSameDayPerformance">
-      <property name="text">
-       <string>做T次数：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblTotalFee">
-      <property name="text">
-       <string>总手续费：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblOriginalInvestment">
-      <property name="text">
-       <string>初始成本：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblFinalAsset">
-      <property name="text">
-       <string>最终资产：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblTotalProfit">
-      <property name="text">
-       <string>累计收益：</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblTotalReturn">
-      <property name="text">
-       <string>盈亏比例：</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QTableWidget" name="tblTradeHistory">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>210</y>
+     <y>100</y>
      <width>1001</width>
-     <height>551</height>
+     <height>661</height>
     </rect>
    </property>
    <property name="rowCount">
@@ -96,6 +28,9 @@
    <property name="columnCount">
     <number>16</number>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>65</number>
+   </attribute>
    <column>
     <property name="text">
      <string>交易时间</string>
@@ -176,6 +111,86 @@
      <string>总利润</string>
     </property>
    </column>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>531</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="lblBuyCount">
+        <property name="text">
+         <string>买入次数：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSellCount">
+        <property name="text">
+         <string>卖出次数：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSameDayPerformance">
+        <property name="text">
+         <string>做T次数：</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="lblOriginalInvestment">
+        <property name="text">
+         <string>初始成本：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblFinalAsset">
+        <property name="text">
+         <string>最终资产：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTotalProfit">
+        <property name="text">
+         <string>累计收益：</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="lblTotalReturn">
+        <property name="text">
+         <string>盈亏比例：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTotalFee">
+        <property name="text">
+         <string>总手续费：</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
