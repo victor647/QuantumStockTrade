@@ -3,8 +3,9 @@ import pandas
 import tushare
 import baostock
 import Tools
-from PyQt5.QtCore import QDate, QThread
+from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from Windows.ProgressBar import ProgressBar
+
 
 def stock_list_path():
     return path.join(path.pardir, "Data", "stock_list.csv")
@@ -37,19 +38,21 @@ def export_all_stock_data():
     stock_list = save_stock_list_file()
     progress = ProgressBar(stock_list.shape[0])
     progress.show()
-    exporter = StockDataExporter(progress)
+    exporter = StockDataExporter()
+    exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.start()
 
 
 class StockDataExporter(QThread):
-    def __init__(self, progress_bar):
+    progressBarCallback = pyqtSignal(int, str, str)
+
+    def __init__(self):
         super().__init__()
         now = QDate.currentDate()
         start_date = now.addMonths(-1)
         self.today = now.toString('yyyy-MM-dd')
         self.startDate = start_date.toString('yyyy-MM-dd')
         self.stockList = read_stock_list_file()
-        self.progressBar = progress_bar
 
     def run(self):
         for index, row in self.stockList.iterrows():
@@ -62,5 +65,4 @@ class StockDataExporter(QThread):
             result = baostock.query_history_k_data_plus(code=market + "." + code, fields="date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST",
                                                         start_date=self.startDate, end_date=self.today, frequency="d", adjustflag="2")
             save_stock_history_data(result, code)
-            self.progressBar.update_search_progress(index + 1, code, name)
-        self.progressBar.close()
+            self.progressBarCallback.emit(index + 1, code, name)

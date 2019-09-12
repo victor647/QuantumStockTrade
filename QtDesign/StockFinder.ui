@@ -283,18 +283,24 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbbAverageVolumePeriod">
+         <widget class="QSpinBox" name="spbAverageVolumePeriod">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
             <pointsize>9</pointsize>
            </font>
           </property>
-          <property name="editable">
-           <bool>false</bool>
+          <property name="suffix">
+           <string>日平均</string>
           </property>
-          <property name="currentText">
-           <string/>
+          <property name="maximum">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>10</number>
           </property>
          </widget>
         </item>
@@ -363,18 +369,24 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbbAveragePricePeriod">
+         <widget class="QSpinBox" name="spbAveragePricePeriod">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
             <pointsize>9</pointsize>
            </font>
           </property>
-          <property name="editable">
-           <bool>false</bool>
+          <property name="suffix">
+           <string>日均线</string>
           </property>
-          <property name="currentText">
-           <string/>
+          <property name="maximum">
+           <number>20</number>
+          </property>
+          <property name="value">
+           <number>10</number>
           </property>
          </widget>
         </item>
@@ -892,22 +904,6 @@
     <hint type="destinationlabel">
      <x>153</x>
      <y>71</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAverageVolume</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbAverageVolumePeriod</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>54</x>
-     <y>107</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>173</x>
-     <y>106</y>
     </hint>
    </hints>
   </connection>
