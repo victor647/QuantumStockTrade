@@ -22,6 +22,12 @@
      <height>661</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="rowCount">
     <number>0</number>
    </property>
@@ -112,20 +118,32 @@
     </property>
    </column>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>20</y>
      <width>531</width>
-     <height>61</height>
+     <height>68</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
+    </font>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="lblBuyCount">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>买入次数：</string>
         </property>
@@ -133,6 +151,12 @@
       </item>
       <item>
        <widget class="QLabel" name="lblSellCount">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>卖出次数：</string>
         </property>
@@ -140,6 +164,12 @@
       </item>
       <item>
        <widget class="QLabel" name="lblSameDayPerformance">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>做T次数：</string>
         </property>
@@ -151,6 +181,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="lblOriginalInvestment">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>初始成本：</string>
         </property>
@@ -158,6 +194,12 @@
       </item>
       <item>
        <widget class="QLabel" name="lblFinalAsset">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>最终资产：</string>
         </property>
@@ -165,6 +207,12 @@
       </item>
       <item>
        <widget class="QLabel" name="lblTotalProfit">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>累计收益：</string>
         </property>
@@ -176,6 +224,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="lblTotalReturn">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>盈亏比例：</string>
         </property>
@@ -183,6 +237,12 @@
       </item>
       <item>
        <widget class="QLabel" name="lblTotalFee">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>总手续费：</string>
         </property>

@@ -1,14 +1,13 @@
-from PyQt5.QtCore import QDate, QThread
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtCore import QThread
+from PyQt5.QtWidgets import QMainWindow
 from QtDesign.StockFinder_ui import Ui_StockFinder
 import Windows.SearchResult as SearchResult
 import tushare
-import pandas
+import baostock
+import Data.FileManager as FileManager
 
 
 class StockFinder(QMainWindow, Ui_StockFinder):
-    today = ""
-    startDate = ""
     allStockData = []
     searchResult = None
     isSearching = False
@@ -17,27 +16,18 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        now = QDate.currentDate()
-        start_date = now.addMonths(-1)
-        self.today = now.toString('yyyy-MM-dd')
-        self.startDate = start_date.toString('yyyy-MM-dd')
+
         self.cbbConsecutiveTrend.addItems(['上涨', '下跌'])
         self.cbbAveragePriceComparison.addItems(['高于', '低于'])
         self.cbbAverageVolumePeriod.addItems(['5日平均', '10日平均', '20日平均'])
         self.cbbAveragePricePeriod.addItems(['5日均线', '10日均线', '20日均线'])
 
     @staticmethod
-    def get_all_stocks():
-        all_stock_data = tushare.get_stock_basics()
-        all_stock_data.to_csv('stock_data.csv')
-        dialog = QMessageBox()
-        dialog.setWindowTitle("成功")
-        dialog.setText("已导出数据至stock_data.csv！")
-        dialog.exec_()
-        return
+    def export_all_stock_data():
+        FileManager.export_all_stock_data()
 
     def search_all_stocks(self):
-        all_stock_data = pandas.read_csv('stock_data.csv')
+        all_stock_data = FileManager.read_stock_list_file()
         self.stockSearcher = StockSearcher(self, all_stock_data)
         self.show_search_result(all_stock_data.shape[0])
         self.stockSearcher.start()
@@ -69,6 +59,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         return True
 
     def technical_index_match_requirement(self, code):
+        data = baostock.query_history_k_data()
         # 获得股票今日数据
         data = tushare.get_hist_data(code, self.startDate, self.today)
         # 跳过当日停牌股票

@@ -6,6 +6,7 @@ import Data.AnalysisData as AnalysisData
 import Windows.TradeSimulator as TradeSimulator
 from Data.TradeStrategy import TradeStrategy
 from Data.DataManager import DataManager
+import Tools
 
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
@@ -23,7 +24,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
     def get_history_data(self):
         DataManager.initialize()
         stock_code = self.iptStockNumber.text()
-        market = DataManager.get_trade_center(stock_code)
+        market = Tools.get_trade_center(stock_code)
 
         start_date = self.dteStartDate.text()
         end_date = self.dteEndDate.text()
@@ -36,6 +37,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
             error_dialog.showMessage("股票代码无效！")
             error_dialog.exec_()
             return
+
         DataManager.parse_daily_data(result_stock.data, DataManager.stockDatabase)
 
         market_code = "000001" if market == "sh" else "399001"
@@ -46,7 +48,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
 
     @staticmethod
     def get_minute_data(date, code):
-        market = DataManager.get_trade_center(code)
+        market = Tools.get_trade_center(code)
         return baostock.query_history_k_data(code=market + "." + code, fields="time,high,low",
                                              start_date=date, end_date=date, frequency="5", adjustflag="2")
 

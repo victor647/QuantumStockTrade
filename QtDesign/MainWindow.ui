@@ -29,6 +29,12 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>个股实时盯盘</string>
     </property>
@@ -42,6 +48,12 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="btnStockAnalyzer">
@@ -50,6 +62,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>个股股性分析</string>
@@ -63,6 +81,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
        </property>
        <property name="text">
         <string>技术指标选股</string>
@@ -78,7 +102,7 @@
      <x>0</x>
      <y>0</y>
      <width>231</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
