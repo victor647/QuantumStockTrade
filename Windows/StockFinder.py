@@ -8,9 +8,9 @@ import Data.FileManager as FileManager
 
 class StockFinder(QMainWindow, Ui_StockFinder):
     searchResult = None
-    isSearching = False
     stockSearcher = None
     progressBar = None
+    criteriaItems = []
 
     def __init__(self):
         super().__init__()
@@ -22,6 +22,15 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def export_all_stock_data():
         FileManager.export_all_stock_data()
 
+    # 保存搜索条件
+    def export_search_config(self):
+        pass
+
+    # 读取保存的搜索条件
+    def load_search_config(self):
+        pass
+
+    # 搜索全部股票
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
         self.searchResult = SearchResult()
@@ -34,10 +43,12 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.stockSearcher.finishedCallback.connect(self.search_finished)
         self.stockSearcher.start()
 
+    # 搜索完毕回调
     def search_finished(self):
         self.progressBar.close()
         self.searchResult.finish_searching()
 
+    # 基本面指标分析
     def company_info_match_requirement(self, row):
         # 检测股票市盈率是否符合范围
         if self.cbxPriceEarning.isChecked():
@@ -64,12 +75,16 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 return False
         return True
 
+    # 技术面指标分析
     def technical_index_match_requirement(self, code):
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
         # 跳过当日停牌股票
         if data.iloc[-1]['tradestatus'] == 0:
             return False
+
+
+
         # 昨日成交量超过平均
         if self.cbxAverageVolume.isChecked():
             # 今日成交量
@@ -108,22 +123,28 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                     return False
         return True
 
+    # 检测股票是否在所选交易所中
     def code_in_search_range(self, code):
+        # 上海主板
         if self.cbxShanghaiMain.isChecked() and 600000 <= code < 688000:
             return True
+        # 深圳主板
         if self.cbxShenZhenMain.isChecked() and 0 <= code < 2000:
             return True
+        # 中小板
         if self.cbxShenZhenSmall.isChecked() and 2000 <= code < 3000:
             return True
+        # 创业板
         if self.cbxShenZhenNew.isChecked() and 300000 <= code < 301000:
             return True
+        # 科创板
         if self.cbxShanghaiScience.isChecked() and 688000 <= code < 689000:
             return True
         return False
 
 
+# 多线程股票搜索算法
 class StockSearcher(QThread):
-    isSearching = True
     addItemCallback = pyqtSignal(list)
     progressBarCallback = pyqtSignal(int, str, str)
     finishedCallback = pyqtSignal()
@@ -139,8 +160,6 @@ class StockSearcher(QThread):
 
     def run(self):
         for index, row in self.stock_list.iterrows():
-            if not self.isSearching:
-                break
             code_num = row['code']
             # 将股票代码固定为6位数
             code = str(code_num).zfill(6)
@@ -152,6 +171,7 @@ class StockSearcher(QThread):
             pb = row['pb']
             # 获得股票总市值
             assets = row['totalAssets']
+            # 更新窗口进度条
             self.progressBarCallback.emit(index, code, name)
             # 判断股票是否在选中的交易所中
             if not self.stockFinder.code_in_search_range(code_num):
@@ -159,11 +179,12 @@ class StockSearcher(QThread):
             # 基本面指标考察
             if self.stockFinder.cbxCompanyInfoEnabled.isChecked() and not self.stockFinder.company_info_match_requirement(row):
                 continue
-
             # 技术面指标考察
             if self.stockFinder.cbxTechnicalIndexEnabled.isChecked() and not self.stockFinder.technical_index_match_requirement(code):
                 continue
+            # 将符合要求的股票信息打包
             items = [code, name, pe, pb, assets]
+            # 添加股票信息至列表
             self.addItemCallback.emit(items)
+        # 搜索结束回调
         self.finishedCallback.emit()
-

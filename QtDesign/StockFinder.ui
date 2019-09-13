@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>545</width>
-    <height>356</height>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>370</x>
       <y>10</y>
-      <width>155</width>
+      <width>151</width>
       <height>151</height>
      </rect>
     </property>
@@ -38,7 +38,7 @@
        <x>10</x>
        <y>20</y>
        <width>135</width>
-       <height>111</height>
+       <height>126</height>
       </rect>
      </property>
      <property name="font">
@@ -131,44 +131,6 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QPushButton" name="btnStartSearch">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>200</y>
-      <width>151</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>开始搜索</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnGetAllStockData">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>170</y>
-      <width>151</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>获取当日股票数据</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="grpTechnicalIndex">
     <property name="enabled">
      <bool>true</bool>
@@ -190,235 +152,53 @@
     <property name="title">
      <string>技术指标</string>
     </property>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QListWidget" name="listWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>327</width>
-       <height>108</height>
+       <width>331</width>
+       <height>91</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
-      </font>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>115</y>
+       <width>331</width>
+       <height>21</height>
+      </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QCheckBox" name="cbxConsecutiveTrend">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>股价连续</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbConsecutiveTrend">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="editable">
-           <bool>false</bool>
-          </property>
-          <property name="currentText">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbConsecutiveUpDays">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>天</string>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>3</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="btnAddCriteria">
+        <property name="text">
+         <string>添加</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QCheckBox" name="cbxAverageVolume">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>昨日成交量超过</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbAverageVolumePeriod">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>日平均</string>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="value">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbVolumeMultipler">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>倍</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="btnEditCriteria">
+        <property name="text">
+         <string>编辑</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QCheckBox" name="cbxAveragePriceBias">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>昨日股价</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbAveragePriceComparison">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="editable">
-           <bool>false</bool>
-          </property>
-          <property name="currentText">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbAveragePricePeriod">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>日均线</string>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="value">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbPriceDeviation">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="btnRemoveCriteria">
+        <property name="text">
+         <string>删除</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnResetCriteria">
+        <property name="text">
+         <string>重置</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -429,7 +209,7 @@
       <x>10</x>
       <y>160</y>
       <width>351</width>
-      <height>141</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="font">
@@ -447,7 +227,7 @@
        <x>10</x>
        <y>20</y>
        <width>331</width>
-       <height>111</height>
+       <height>131</height>
       </rect>
      </property>
      <property name="font">
@@ -765,6 +545,27 @@
         </item>
        </layout>
       </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QCheckBox" name="cbxIncludeStStock">
+          <property name="text">
+           <string>包含ST股</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbxIncludeNewStock">
+          <property name="text">
+           <string>上市半年内次新股</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </widget>
@@ -811,6 +612,70 @@
     <property name="checked">
      <bool>true</bool>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>170</y>
+      <width>151</width>
+      <height>116</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="btnGetAllStockData">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>获取最新股票数据</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStartSearch">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>开始搜索</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSaveConfig">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>保存指标</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnLoadConfig">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>载入指标</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -860,22 +725,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxConsecutiveTrend</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbConsecutiveUpDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>73</x>
-     <y>70</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>262</x>
-     <y>67</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>cbxTechnicalIndexEnabled</sender>
    <signal>clicked(bool)</signal>
    <receiver>grpTechnicalIndex</receiver>
@@ -888,70 +737,6 @@
     <hint type="destinationlabel">
      <x>54</x>
      <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxConsecutiveTrend</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbConsecutiveTrend</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>30</x>
-     <y>68</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>153</x>
-     <y>71</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAverageVolume</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbVolumeMultipler</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>35</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>280</x>
-     <y>107</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAveragePriceBias</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbAveragePriceComparison</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>59</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>160</x>
-     <y>145</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAveragePriceBias</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbPriceDeviation</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>76</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>316</x>
-     <y>145</y>
     </hint>
    </hints>
   </connection>
