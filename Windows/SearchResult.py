@@ -34,7 +34,7 @@ class SearchResult(QDialog, Ui_SearchResult):
         webbrowser.open("http://quote.eastmoney.com/" + market + code + ".html")
 
     def export_stock_list(self):
-        parent = path.join(path.pardir, "Data", "SelectedStocks")
+        parent = path.join(path.pardir, "StockData", "SelectedStocks")
         file_path = QFileDialog.getSaveFileName(directory=parent, filter='TXT(*.txt)')
         if file_path[0] != "":
             file = open(file_path[0], "w")

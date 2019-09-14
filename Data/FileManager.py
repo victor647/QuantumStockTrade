@@ -10,7 +10,7 @@ from collections import namedtuple
 
 
 def stock_list_path():
-    return path.join(path.pardir, "Data", "stock_list.csv")
+    return path.join(path.pardir, "StockData", "stock_list.csv")
 
 
 def read_stock_list_file():
@@ -35,7 +35,7 @@ def import_search_config(file_path):
 
 
 def stock_history_path(stock_code):
-    return path.join(path.pardir, "Data\\StockHistory", stock_code + ".csv")
+    return path.join(path.pardir, "StockData\\StockHistory", stock_code + ".csv")
 
 
 def read_stock_history_data(stock_code):
