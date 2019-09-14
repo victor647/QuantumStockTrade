@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>301</width>
+     <width>303</width>
      <height>23</height>
     </rect>
    </property>
@@ -98,7 +98,7 @@
     <rect>
      <x>322</x>
      <y>10</y>
-     <width>211</width>
+     <width>213</width>
      <height>52</height>
     </rect>
    </property>
@@ -190,6 +190,9 @@
       </item>
       <item>
        <widget class="QDoubleSpinBox" name="spbAbsValue">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -263,9 +266,9 @@
  <connections>
   <connection>
    <sender>rbnPastAverage</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbAbsValue</receiver>
-   <slot>setEnabled(bool)</slot>
+   <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>344</x>
@@ -279,35 +282,71 @@
   </connection>
   <connection>
    <sender>rbnAbsValue</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbAveragePeriod</receiver>
-   <slot>setEnabled(bool)</slot>
+   <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>333</x>
      <y>59</y>
     </hint>
     <hint type="destinationlabel">
-     <x>410</x>
-     <y>35</y>
+     <x>452</x>
+     <y>31</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>rbnAbsValue</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbRelativePercentage</receiver>
-   <slot>setEnabled(bool)</slot>
+   <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>376</x>
-     <y>61</y>
+     <x>378</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
-     <x>469</x>
-     <y>33</y>
+     <x>532</x>
+     <y>31</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnConfirm</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchCriteria</receiver>
+   <slot>save_changes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>106</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>45</x>
+     <y>52</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchCriteria</receiver>
+   <slot>discard_changes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>207</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>56</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>save_changes()</slot>
+  <slot>discard_changes()</slot>
+ </slots>
 </ui>

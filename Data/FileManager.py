@@ -5,6 +5,8 @@ import baostock
 import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from Windows.ProgressBar import ProgressBar
+import json
+from collections import namedtuple
 
 
 def stock_list_path():
@@ -19,6 +21,17 @@ def save_stock_list_file():
     stock_list = tushare.get_stock_basics()
     stock_list.to_csv(stock_list_path())
     return stock_list
+
+
+def export_search_config(criteria_list, file_path):
+    with open(file_path, 'w') as file:
+        json.dump(obj=criteria_list, fp=file, default=lambda obj: obj.__dict__, indent=4)
+
+
+def import_search_config(file_path):
+    with open(file_path, 'r') as file:
+        criteria_list = json.load(fp=file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    return criteria_list
 
 
 def stock_history_path(stock_code):
@@ -41,6 +54,7 @@ def export_all_stock_data():
     exporter = StockDataExporter()
     exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.start()
+    progress.exec()
 
 
 class StockDataExporter(QThread):
@@ -49,7 +63,7 @@ class StockDataExporter(QThread):
     def __init__(self):
         super().__init__()
         now = QDate.currentDate()
-        start_date = now.addMonths(-1)
+        start_date = now.addMonths(-3)
         self.today = now.toString('yyyy-MM-dd')
         self.startDate = start_date.toString('yyyy-MM-dd')
         self.stockList = read_stock_list_file()

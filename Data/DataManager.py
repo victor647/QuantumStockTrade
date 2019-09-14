@@ -277,5 +277,3 @@ class DataManager:
     @staticmethod
     def interval_average_performance(database):
         return round(DataManager.interval_total_performance(database) / len(database), 2)
-
-

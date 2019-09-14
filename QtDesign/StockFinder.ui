@@ -150,9 +150,9 @@
      </font>
     </property>
     <property name="title">
-     <string>技术指标</string>
+     <string>短线技术指标</string>
     </property>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QListWidget" name="lstCriteriaItems">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -162,7 +162,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -557,7 +557,7 @@
         <item>
          <widget class="QCheckBox" name="cbxIncludeNewStock">
           <property name="text">
-           <string>上市半年内次新股</string>
+           <string>包含上市半年内次新股</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -572,8 +572,8 @@
    <widget class="QCheckBox" name="cbxTechnicalIndexEnabled">
     <property name="geometry">
      <rect>
-      <x>73</x>
-      <y>9</y>
+      <x>97</x>
+      <y>10</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -594,8 +594,8 @@
    <widget class="QCheckBox" name="cbxCompanyInfoEnabled">
     <property name="geometry">
      <rect>
-      <x>85</x>
-      <y>159</y>
+      <x>86</x>
+      <y>161</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -613,11 +613,11 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>170</y>
+      <y>200</y>
       <width>151</width>
       <height>116</height>
      </rect>
@@ -632,7 +632,7 @@
         </font>
        </property>
        <property name="text">
-        <string>获取最新股票数据</string>
+        <string>获取股票数据</string>
        </property>
       </widget>
      </item>
@@ -645,7 +645,7 @@
         </font>
        </property>
        <property name="text">
-        <string>开始搜索</string>
+        <string>开始搜索选股</string>
        </property>
       </widget>
      </item>
@@ -676,6 +676,25 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="lblGetStockReminder">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>171</y>
+      <width>151</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>每日请先获取最新股票数据！</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -884,9 +903,111 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnAddCriteria</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>add_criteria_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>65</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnEditCriteria</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>modify_criteria_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>182</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRemoveCriteria</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>remove_criteria_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnResetCriteria</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>reset_criteria_items()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>313</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>367</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSaveConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>export_search_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>402</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLoadConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>import_search_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>408</x>
+     <y>286</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>search_all_stocks()</slot>
   <slot>export_all_stock_data()</slot>
+  <slot>add_criteria_item()</slot>
+  <slot>modify_criteria_item()</slot>
+  <slot>remove_criteria_item()</slot>
+  <slot>reset_criteria_items()</slot>
+  <slot>export_search_config()</slot>
+  <slot>import_search_config()</slot>
  </slots>
 </ui>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
+    <width>509</width>
     <height>377</height>
    </rect>
   </property>
@@ -16,9 +16,9 @@
   <widget class="QTableWidget" name="tblStockList">
    <property name="geometry">
     <rect>
-     <x>21</x>
+     <x>19</x>
      <y>40</y>
-     <width>441</width>
+     <width>471</width>
      <height>311</height>
     </rect>
    </property>
@@ -42,6 +42,16 @@
    <column>
     <property name="text">
      <string>股票名称</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>所属行业</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>地区</string>
     </property>
    </column>
    <column>
@@ -79,6 +89,25 @@
     <string>共找到0只股票！</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="btnExportStockList">
+   <property name="geometry">
+    <rect>
+     <x>415</x>
+     <y>9</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>导出列表</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
@@ -98,9 +127,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnExportStockList</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchResult</receiver>
+   <slot>export_stock_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>stop_searching()</slot>
   <slot>open_stock_page(int,int)</slot>
+  <slot>export_stock_list()</slot>
  </slots>
 </ui>

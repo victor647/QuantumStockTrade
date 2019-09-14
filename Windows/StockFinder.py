@@ -1,9 +1,14 @@
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from Windows.SearchResult import SearchResult
 from Windows.ProgressBar import ProgressBar
 import Data.FileManager as FileManager
+from datetime import datetime
+import Windows.SearchCriteria as SearchCriteria
+import os.path as path
+
+stockFinderInstance = None
 
 
 class StockFinder(QMainWindow, Ui_StockFinder):
@@ -15,8 +20,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.cbbConsecutiveTrend.addItems(['上涨', '下跌'])
-        self.cbbAveragePriceComparison.addItems(['高于', '低于'])
+        global stockFinderInstance
+        stockFinderInstance = self
 
     @staticmethod
     def export_all_stock_data():
@@ -24,11 +29,62 @@ class StockFinder(QMainWindow, Ui_StockFinder):
 
     # 保存搜索条件
     def export_search_config(self):
-        pass
+        parent = path.join(path.pardir, "Data", "SearchConfigs")
+        file_path = QFileDialog.getSaveFileName(directory=parent, filter='JSON(*.json)')
+        if file_path[0] != "":
+            FileManager.export_search_config(self.criteriaItems, file_path[0])
 
     # 读取保存的搜索条件
-    def load_search_config(self):
-        pass
+    def import_search_config(self):
+        parent = path.join(path.pardir, "Data", "SearchConfigs")
+        file_path = QFileDialog.getOpenFileName(directory=parent, filter='JSON(*.json)')
+        if file_path[0] != "":
+            self.criteriaItems = FileManager.import_search_config(file_path[0])
+            self.update_criteria_list()
+
+    # 更新搜索条件列表显示
+    def update_criteria_list(self):
+        self.lstCriteriaItems.clear()
+        for item in self.criteriaItems:
+            text = "过去" + str(item.daysCountFirst) + "日" + item.logic + item.field + item.operator
+            if item.useAbsValue:
+                text += str(item.absoluteValue)
+            else:
+                text += str(item.daysCountSecond) + "日平均" + str(item.relativePercentage) + "%"
+            self.lstCriteriaItems.addItem(text)
+
+    # 新增搜索条件
+    def add_criteria_item(self):
+        item = SearchCriteria.CriteriaItem()
+        self.criteriaItems.append(item)
+        window = SearchCriteria.SearchCriteria(item)
+        window.show()
+        window.exec()
+
+    # 编辑所选搜索条件
+    def modify_criteria_item(self):
+        selection = self.lstCriteriaItems.selectedIndexes()
+        if len(selection) == 0:
+            return
+        index = selection[0].row()
+        item = self.criteriaItems[index]
+        window = SearchCriteria.SearchCriteria(item)
+        window.show()
+        window.exec()
+
+    # 删除所选搜索条件
+    def remove_criteria_item(self):
+        selection = self.lstCriteriaItems.selectedIndexes()
+        if len(selection) == 0:
+            return
+        index = selection[0].row()
+        self.criteriaItems.pop(index)
+        self.update_criteria_list()
+
+    # 重置搜索条件
+    def reset_criteria_items(self):
+        self.criteriaItems = []
+        self.lstCriteriaItems.clear()
 
     # 搜索全部股票
     def search_all_stocks(self):
@@ -46,10 +102,28 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     # 搜索完毕回调
     def search_finished(self):
         self.progressBar.close()
-        self.searchResult.finish_searching()
+        self.searchResult.update_found_stock_count()
 
     # 基本面指标分析
     def company_info_match_requirement(self, row):
+        # 检测股票是否是ST股
+        if not self.cbxIncludeStStock.isChecked():
+            name = row['name']
+            if "ST" in name:
+                return False
+
+        # 检测股票是否为次新股
+        if not self.cbxIncludeNewStock.isChecked():
+            date = row['timeToMarket']
+            # 去除还未上市的股票
+            if date == 0:
+                return False
+            # 从数字获取日期
+            start_date = datetime.strptime(str(date), "%Y%M%d")
+            # 排除上市半年内股票
+            if (datetime.today() - start_date).days < 180:
+                return False
+
         # 检测股票市盈率是否符合范围
         if self.cbxPriceEarning.isChecked():
             pe = row['pe']
@@ -83,44 +157,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if data.iloc[-1]['tradestatus'] == 0:
             return False
 
-
-
-        # 昨日成交量超过平均
-        if self.cbxAverageVolume.isChecked():
-            # 今日成交量
-            volume = data.iloc[-1]['turn']
-            # 均线成交量
-            average_volume_period = self.spbAverageVolumePeriod.value() * -1
-            average_volume = data['turn'][average_volume_period:-1].mean()
-            if volume / average_volume < self.spbVolumeMultipler.value():
+        # 逐条筛选自定义指标
+        for item in self.criteriaItems:
+            if not SearchCriteria.match_criteria_item(data, item):
                 return False
-
-        # 股价连续上涨下跌
-        if self.cbxConsecutiveTrend.isChecked():
-            days = self.spbConsecutiveUpDays.value() * -1
-            yesterday = data.iloc[days]['close']
-            for i in range(days + 1, -1):
-                today = data.iloc[i]['close']
-                if self.cbbConsecutiveTrend.currentIndex() == 0:
-                    if today < yesterday:
-                        return False
-                else:
-                    if today > yesterday:
-                        return False
-
-        # 昨日股价偏离均线
-        if self.cbxAveragePriceBias.isChecked():
-            # 今日收盘价
-            close = data.iloc[-1]['close']
-            # 均线价格
-            average_price_period = self.spbAveragePricePeriod.value() * -1
-            average_price = data['close'][average_price_period:-1].mean()
-            if self.cbbAveragePriceComparison.currentIndex() == 0:
-                if (close / average_price - 1) * 100 < self.spbPriceDeviation.value():
-                    return False
-            else:
-                if (close / average_price - 1) * 100 > self.spbPriceDeviation.value():
-                    return False
         return True
 
     # 检测股票是否在所选交易所中
@@ -165,12 +205,6 @@ class StockSearcher(QThread):
             code = str(code_num).zfill(6)
             # 获得股票中文名称
             name = row['name']
-            # 获得股票市盈率
-            pe = row['pe']
-            # 获得股票市净率
-            pb = row['pb']
-            # 获得股票总市值
-            assets = row['totalAssets']
             # 更新窗口进度条
             self.progressBarCallback.emit(index, code, name)
             # 判断股票是否在选中的交易所中
@@ -182,8 +216,18 @@ class StockSearcher(QThread):
             # 技术面指标考察
             if self.stockFinder.cbxTechnicalIndexEnabled.isChecked() and not self.stockFinder.technical_index_match_requirement(code):
                 continue
+            # 获得股票市盈率
+            pe = row['pe']
+            # 获得股票市净率
+            pb = row['pb']
+            # 获得股票总市值
+            assets = row['totalAssets']
+            # 获得股票行业信息
+            industry = row['industry']
+            # 获得股票上市地区
+            area = row['area']
             # 将符合要求的股票信息打包
-            items = [code, name, pe, pb, assets]
+            items = [code, name, industry, area, pe, pb, assets]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
         # 搜索结束回调
