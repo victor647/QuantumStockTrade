@@ -4,25 +4,31 @@ import tushare
 import baostock
 import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
+from PyQt5.QtWidgets import QFileDialog
 from Windows.ProgressBar import ProgressBar
 import json
 from collections import namedtuple
 
 
-# 默认全部股票列表存放相对路径
-def stock_list_path():
-    return path.join(path.pardir, "StockData", "stock_list.csv")
+# 默认全部股票列表存放路径
+def full_stock_info_path():
+    return path.join(path.pardir, "StockData", "full_stock_info.csv")
+
+
+# 选股器导出的股票列表文件夹
+def selected_stock_list_path():
+    return path.join(path.pardir, "StockData", "SelectedStocks")
 
 
 # 导入全部股票信息列表
 def read_stock_list_file():
-    return pandas.read_csv(stock_list_path())
+    return pandas.read_csv(full_stock_info_path())
 
 
 # 导出全部股票信息列表
 def save_stock_list_file():
     stock_list = tushare.get_stock_basics()
-    stock_list.to_csv(stock_list_path())
+    stock_list.to_csv(full_stock_info_path())
     return stock_list
 
 
@@ -39,7 +45,7 @@ def import_search_config(file_path):
     return criteria_list
 
 
-# 默认股票历史数据存放相对路径
+# 默认股票历史数据存放路径
 def stock_history_path(stock_code):
     return path.join(path.pardir, "StockData\\StockHistory", stock_code + ".csv")
 
@@ -64,6 +70,16 @@ def export_all_stock_data():
     exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.start()
     progress.exec()
+
+
+# 导出选股器找到的股票列表
+def export_selected_stock_list():
+    return QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+
+
+# 导入选股器找到的股票列表
+def import_selected_stock_list():
+    return QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
 
 
 class StockDataExporter(QThread):

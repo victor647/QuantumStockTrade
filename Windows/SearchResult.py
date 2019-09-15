@@ -1,8 +1,8 @@
 from QtDesign.SearchResult_ui import Ui_SearchResult
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QDialog, QTableWidgetItem
 import Tools
 import webbrowser
-import os.path as path
+import Data.FileManager as FileManager
 
 
 class SearchResult(QDialog, Ui_SearchResult):
@@ -34,8 +34,7 @@ class SearchResult(QDialog, Ui_SearchResult):
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):
-        parent = path.join(path.pardir, "StockData", "SelectedStocks")
-        file_path = QFileDialog.getSaveFileName(directory=parent, filter='TXT(*.txt)')
+        file_path = FileManager.export_selected_stock_list()
         if file_path[0] != "":
             file = open(file_path[0], "w")
             for i in range(self.tblStockList.rowCount()):

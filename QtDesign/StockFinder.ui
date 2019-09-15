@@ -196,7 +196,7 @@
       <item>
        <widget class="QPushButton" name="btnResetCriteria">
         <property name="text">
-         <string>重置</string>
+         <string>清空</string>
         </property>
        </widget>
       </item>
