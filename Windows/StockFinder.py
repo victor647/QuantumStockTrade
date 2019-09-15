@@ -93,7 +93,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.searchResult.show()
         self.progressBar = ProgressBar(stock_list.shape[0])
         self.progressBar.show()
-        self.stockSearcher = StockSearcher(self, stock_list)
+        self.stockSearcher = StockSearcher(stock_list)
         self.stockSearcher.progressBarCallback.connect(self.progressBar.update_search_progress)
         self.stockSearcher.addItemCallback.connect(self.searchResult.add_stock_item)
         self.stockSearcher.finishedCallback.connect(self.search_finished)
@@ -189,10 +189,9 @@ class StockSearcher(QThread):
     progressBarCallback = pyqtSignal(int, str, str)
     finishedCallback = pyqtSignal()
 
-    def __init__(self, stock_finder, stock_list):
+    def __init__(self, stock_list):
         super().__init__()
         self.stock_list = stock_list
-        self.stockFinder = stock_finder
 
     def __del__(self):
         self.work = False
@@ -208,13 +207,13 @@ class StockSearcher(QThread):
             # 更新窗口进度条
             self.progressBarCallback.emit(index, code, name)
             # 判断股票是否在选中的交易所中
-            if not self.stockFinder.code_in_search_range(code_num):
+            if not stockFinderInstance.code_in_search_range(code_num):
                 continue
             # 基本面指标考察
-            if self.stockFinder.cbxCompanyInfoEnabled.isChecked() and not self.stockFinder.company_info_match_requirement(row):
+            if stockFinderInstance.cbxCompanyInfoEnabled.isChecked() and not stockFinderInstance.company_info_match_requirement(row):
                 continue
             # 技术面指标考察
-            if self.stockFinder.cbxTechnicalIndexEnabled.isChecked() and not self.stockFinder.technical_index_match_requirement(code):
+            if stockFinderInstance.cbxTechnicalIndexEnabled.isChecked() and not stockFinderInstance.technical_index_match_requirement(code):
                 continue
             # 获得股票市盈率
             pe = row['pe']

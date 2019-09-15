@@ -1,6 +1,23 @@
 import math
 
 
+def short_term_index(stock_data):
+    bias_short = stock_data['close'] / stock_data['avg_price_five']
+    bias_long = stock_data['close'] / stock_data['avg_price_long']
+    return bias_short * bias_long
+
+
+# 五日均线与长线均线之差除以当日收盘价的平方根，作为次日交易基础价格偏移
+def long_term_bias(stock_data):
+    price_difference = (stock_data['avg_price_five'] - stock_data['avg_price_long']) / stock_data['close']
+    if price_difference == 0:
+        return 0
+
+    sign = -1 if price_difference < 0 else 1
+    price_difference = abs(price_difference)
+    return round(math.sqrt(price_difference) * sign, 2)
+
+
 class TradeStrategy:
     buyPoint = -2
     sellPoint = 2
@@ -23,21 +40,6 @@ class TradeStrategy:
         else:
             self.allowSameDayTrade = False
 
-    @staticmethod
-    def short_term_index(stock_data):
-        bias_short = stock_data.close / stock_data.averagePriceFive
-        bias_long = stock_data.close / stock_data.averagePriceLong
-        return bias_short * bias_long
 
-    # 五日均线与长线均线之差除以当日收盘价的平方根，作为次日交易基础价格偏移
-    @staticmethod
-    def long_term_bias(stock_data):
-        price_difference = (stock_data.averagePriceFive - stock_data.averagePriceLong) / stock_data.close
-        if price_difference == 0:
-            return 0
-
-        sign = -1 if price_difference < 0 else 1
-        price_difference = abs(price_difference)
-        return round(math.sqrt(price_difference) * sign, 2)
 
 

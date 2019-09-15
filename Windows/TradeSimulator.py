@@ -1,10 +1,45 @@
-import Windows.StockAnalyzer as StockAnalyzer
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
-from PyQt5.QtGui import QColor
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
-from Data.DataManager import DataManager
-from Data.TradeStrategy import TradeStrategy
+import Windows.StockAnalyzer as StockAnalyzer
+import Data.TradeStrategy as TradeStrategy
+import Data.DataAnalyzer as DataAnalyzer
+import Tools
+import baostock
+import pandas
+
+
+# 计算买入费用
+def buy_transaction_fee(money):
+    # 券商佣金
+    broker_fee = money * 0.00025
+    if broker_fee < 5:
+        broker_fee = 5
+    return round(broker_fee, 2)
+
+
+# 计算卖出费用
+def sell_transaction_fee(money):
+    # 券商佣金
+    broker_fee = money * 0.00025
+    if broker_fee < 5:
+        broker_fee = 5
+    # 印花税
+    tax = money * 0.001
+    return round(broker_fee + tax, 2)
+
+
+# 获取交易规则和股票代码
+def get_trade_strategy(trade_strategy, stock_code):
+    global tradeStrategyInstance
+    tradeStrategyInstance = trade_strategy
+    global stockCode
+    stockCode = stock_code
+
+
+tradeSimulatorInstance = None
+tradeStrategyInstance = None
+stockCode = ""
 
 
 class TradeSimulator(QDialog, Ui_TradeSimulator):
@@ -26,55 +61,56 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
-    def get_trade_strategy(self, trade_strategy, stock_code):
-        self.tradeStrategy = trade_strategy
-        self.stockCode = stock_code
-        DataManager.get_average_price(DataManager.stockDatabase, trade_strategy.averagePricePeriod, trade_strategy.averageVolumePeriod)
-
-    def start_trading(self):
+        global tradeSimulatorInstance
+        tradeSimulatorInstance = self
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+    # 开始模拟交易
+    def start_trading(self):
         self.trade_first_day()
-        trade_by_day = TradeByDay(self)
+        trade_by_day = TradeByDay()
         trade_by_day.start()
 
+    # 首日开盘价买入底仓
     def trade_first_day(self):
         # 获取首个交易日数据
-        data = DataManager.stockDatabase[0]
-        # 底仓买入价为开盘价
-        price = data.open
+        data = StockAnalyzer.stockDatabase.iloc[0]
+        price = round(data['open'], 2)
         # 计算底仓资产折现
-        self.initialAsset = round(price * self.tradeStrategy.baseShare, 2)
-        self.buy_stock(data, "首次买入", str.replace(data.date[2:], "-", "/") + " 09:30", price, self.tradeStrategy.baseShare)
+        self.initialAsset = round(price * tradeStrategyInstance.baseShare, 2)
+        self.buy_stock(data, "首次买入", str.replace(data['date'][2:], "-", "/") + " 09:30", price, tradeStrategyInstance.baseShare)
         self.lblOriginalInvestment.setText("初始成本：" + str(self.initialAsset))
 
+    # 末日收盘价计算仓位差补齐
     def trade_last_day(self):
         # 获取最后一个交易日数据
-        data = DataManager.stockDatabase[-1]
-        # 获取最后一个交易日需要买回或者卖出的股份数，保持结束底仓
-        last_trade_share = self.tradeStrategy.baseShare - self.currentShare
+        data = StockAnalyzer.stockDatabase.iloc[-1]
+        # 获取需要买回或者卖出的股份数，保持结束底仓
+        last_trade_share = tradeStrategyInstance.baseShare - self.currentShare
         if last_trade_share > 0:
-            self.buy_stock(data, "末日买入", str.replace(data.date[2:], "-", "/") + " 15:00", data.close, last_trade_share)
+            self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
-            self.sell_stock(data, "末日卖出", str.replace(data.date[2:], "-", "/") + " 15:00", data.close, -last_trade_share)
+            self.sell_stock(data, "末日卖出", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], -last_trade_share)
 
+    # 更新交易记录并计算资产变化
     def update_trade_count(self, data):
         self.lblBuyCount.setText("共买入" + str(self.totalBuyCount) + "次，成功" + str(self.successfulBuyCount) + "次")
         self.lblSellCount.setText("共卖出" + str(self.totalSellCount) + "次，成功" + str(self.successfulSellCount) + "次")
         self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
         self.lblTotalFee.setText("总手续费：" + str(round(self.totalFeePaid, 2)))
-        self.lblFinalAsset.setText("最终资产：" + str(self.net_worth(data.close)))
-        self.lblTotalProfit.setText("累计收益：" + str(self.net_profit(data.close)))
-        self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data.close)) + "%")
+        self.lblFinalAsset.setText("最终资产：" + str(self.net_worth(data['close'])))
+        self.lblTotalProfit.setText("累计收益：" + str(self.net_profit(data['close'])))
+        self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data['close'])) + "%")
 
+    # 模拟买入股票操作
     def buy_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最大买入额度已满，放弃买入
-        if self.currentShare >= self.tradeStrategy.maxShare:
+        if self.currentShare >= tradeStrategyInstance.maxShare:
             return False
         self.currentShare += trade_share
         money = trade_share * trade_price
-        fee = TradeSimulator.buy_fee(money)
+        fee = buy_transaction_fee(money)
         self.totalMoneySpent += money + fee
         self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
         # 累加交易手续费
@@ -82,20 +118,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 累加买入次数记录
         self.totalBuyCount += 1
         # 收盘价高于买入价，买入成功
-        if data.close > trade_price:
+        if data['close'] > trade_price:
             self.successfulBuyCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
 
+    # # 模拟卖出股票操作
     def sell_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最小持仓额度已到，放弃卖出
-        if self.currentShare <= self.tradeStrategy.minShare:
+        if self.currentShare <= tradeStrategyInstance.minShare:
             return False
         self.currentShare -= trade_share
         self.sellableShare -= trade_share
         money = trade_share * trade_price
-        fee = TradeSimulator.sell_fee(money)
+        fee = sell_transaction_fee(money)
         self.totalMoneyBack += money - fee
         self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
         # 累加交易手续费
@@ -103,26 +140,13 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 累加卖出次数记录
         self.totalSellCount += 1
         # 收盘价低于卖出价，卖出成功
-        if data.close < trade_price:
+        if data['close'] < trade_price:
             self.successfulSellCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
 
-    @staticmethod
-    def buy_fee(money):
-        fee = money * 0.00025
-        if fee < 5:
-            fee = 5
-        return round(fee, 2)
-
-    @staticmethod
-    def sell_fee(money):
-        fee = money * 0.00025
-        if fee < 5:
-            fee = 5
-        return round(fee + money * 0.001, 2)
-
+    # 在表格中添加交易记录
     def add_trade_log(self, data, time, action, trade_price, trade_share, remaining_share, point_bias, up_index):
         # 获取当前表格总行数
         row_count = self.tblTradeHistory.rowCount()
@@ -130,7 +154,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.insertRow(row_count)
         column = 0
         # 交易时间
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(DataManager.parse_time(time)))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(Tools.reformat_time(time)))
         column += 1
         # 操作
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
@@ -145,22 +169,22 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(remaining_share)))
         column += 1
         # 开盘
-        self.add_price_item(data, data.open, row_count, column)
+        self.add_price_item(data, round(data['open'], 2), row_count, column)
         column += 1
         # 最高
-        self.add_price_item(data, data.high, row_count, column)
+        self.add_price_item(data, round(data['high'], 2), row_count, column)
         column += 1
         # 最低
-        self.add_price_item(data, data.low, row_count, column)
+        self.add_price_item(data, round(data['low'], 2), row_count, column)
         column += 1
         # 收盘
-        self.add_price_item(data, data.close, row_count, column)
+        self.add_price_item(data, round(data['close'], 2), row_count, column)
         column += 1
         # 五日均线
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data.averagePriceFive)))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data['avg_price_five'])))
         column += 1
         # 换手率
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data.turn) + "%"))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
         # 长线偏移
         self.add_colored_item(point_bias, row_count, column, "%")
@@ -169,33 +193,27 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.add_colored_item(round((up_index - 1) * 100, 2), row_count, column)
         column += 1
         # 持仓成本
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data.close))))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
         column += 1
         # 累计收益
-        self.add_colored_item(self.net_profit(data.close), row_count, column)
+        self.add_colored_item(self.net_profit(data['close']), row_count, column)
         column += 1
         # 盈亏比例
-        self.add_colored_item(self.profit_percentage(data.close), row_count, column)
+        self.add_colored_item(self.profit_percentage(data['close']), row_count, column, "%")
 
+    # 添加带有红绿正负颜色的数据
     def add_colored_item(self, text, row_count, column, symbol=""):
         item = QTableWidgetItem(str(text) + symbol)
-        item.setForeground(TradeSimulator.get_text_color(text))
+        item.setForeground(Tools.get_text_color(text))
         self.tblTradeHistory.setItem(row_count, column, item)
 
+    # 添加价格数据
     def add_price_item(self, data, price, row_count, column):
+        pre_close = data['preclose']
         item = QTableWidgetItem()
-        item.setForeground(data.get_text_color(price))
-        item.setText(str(price) + " " + str(data.percentage_at_price(price)) + "%")
+        item.setForeground(Tools.get_price_color(price, pre_close))
+        item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
         self.tblTradeHistory.setItem(row_count, column, item)
-
-    # 将股票涨跌数字转化为红绿颜色
-    @staticmethod
-    def get_text_color(number):
-        if number > 0:
-            return QColor(200, 0, 0)
-        if number < 0:
-            return QColor(0, 128, 0)
-        return QColor(0, 0, 0)
 
     # 累计获利百分比
     def profit_percentage(self, current_price):
@@ -225,11 +243,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
 
 class TradeByDay(QThread):
-    tradeSimulator = None
-
-    def __init__(self, trade_simulator):
+    def __init__(self):
         super().__init__()
-        self.tradeSimulator = trade_simulator
 
     def __del__(self):
         self.work = False
@@ -237,96 +252,100 @@ class TradeByDay(QThread):
 
     def run(self):
         # 遍历每日历史数据
-        for i in range(1, len(DataManager.stockDatabase) - 1):
+        for i, daily_data in StockAnalyzer.stockDatabase.iterrows():
             # 获取当日可卖股份余额
-            self.tradeSimulator.sellableShare = self.tradeSimulator.currentShare
-            daily_data = DataManager.stockDatabase[i]
-            minute_database = []
+            tradeSimulatorInstance.sellableShare = tradeSimulatorInstance.currentShare
             # 初始化当日交易记录
             daily_buy_history = []
             daily_sell_history = []
+            # 缓存昨日收盘价和日期
+            pre_close = daily_data['preclose']
+            date = daily_data['date']
             # 获取当日5分钟K线数据
-            DataManager.parse_minute_data(StockAnalyzer.StockAnalyzer.get_minute_data(daily_data.date, self.tradeSimulator.stockCode).data, minute_database)
+            market = Tools.get_trade_center(stockCode)
+            result = baostock.query_history_k_data(code=market + "." + stockCode, fields="time,high,low",
+                                                   start_date=date, end_date=date, frequency="5", adjustflag="2")
+            minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
             # 获取上一交易日日K线数据
-            last_day_data = DataManager.stockDatabase[i - 1]
+            yesterday_data = StockAnalyzer.stockDatabase.iloc[i - 1]
             # 根据长短均线排列获取基础买卖点偏移
-            point_bias = TradeStrategy.long_term_bias(last_day_data)
+            point_bias = TradeStrategy.long_term_bias(yesterday_data)
             # 根据前日收盘价与均线排列获取买卖点乘数
-            up_index = TradeStrategy.short_term_index(last_day_data)
+            up_index = TradeStrategy.short_term_index(yesterday_data)
             # 获取基础买卖点
-            base_buy_point = self.tradeSimulator.tradeStrategy.buyPoint / up_index
-            base_sell_point = self.tradeSimulator.tradeStrategy.sellPoint * up_index
+            base_buy_point = tradeStrategyInstance.buyPoint / up_index
+            base_sell_point = tradeStrategyInstance.sellPoint * up_index
             # 获取初始买卖点涨跌幅
             current_buy_point = base_buy_point
             current_sell_point = base_sell_point
             # 遍历当日5分钟K线数据
-            for minute_data in minute_database:
+            for index, minute_data in minute_database.iterrows():
                 # 5分钟最高和最低价与昨日收盘相比涨跌幅
-                minute_low = minute_data.low_percentage_minute(daily_data.previousClose)
-                minute_high = minute_data.high_percentage_minute(daily_data.previousClose)
+                minute_low = DataAnalyzer.get_percentage_from_price(minute_data['high'], pre_close)
+                minute_high = DataAnalyzer.get_percentage_from_price(minute_data['low'], pre_close)
                 # 加入偏移量后的实际买卖点涨跌幅
                 actual_buy_point = current_buy_point + point_bias
                 actual_sell_point = current_sell_point + point_bias
                 # 价格低于买点，执行买入操作
                 if minute_low < actual_buy_point:
                     # 计算买入价格
-                    trade_price = daily_data.price_at_percentage(actual_buy_point)
-                    if self.tradeSimulator.buy_stock(daily_data, "被动买入", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                    trade_price = DataAnalyzer.get_price_from_percentage(pre_close, actual_buy_point)
+                    if tradeSimulatorInstance.buy_stock(daily_data, "被动买入", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
                         # 计算下一次买点跌幅
                         current_buy_point += base_buy_point
                         # 记录本次买入，为做T卖出参考
-                        if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                        if tradeStrategyInstance.allowSameDayTrade:
                             daily_buy_history.append(actual_buy_point)
 
                 # 价格高于卖点，执行卖出操作
                 if minute_high > actual_sell_point:
-                    trade_price = daily_data.price_at_percentage(actual_sell_point)
-                    if self.tradeSimulator.sell_stock(daily_data, "被动卖出", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                    trade_price = DataAnalyzer.get_price_from_percentage(pre_close, actual_sell_point)
+                    if tradeSimulatorInstance.sell_stock(daily_data, "被动卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
                         # 计算下一次卖点涨幅
                         current_sell_point += base_sell_point
                         # 记录本次卖出，为做T买回参考
-                        if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                        if tradeStrategyInstance.allowSameDayTrade:
                             daily_sell_history.append(actual_sell_point)
 
                 # 允许做T情况下，判断当前价位可否做T
-                if self.tradeSimulator.tradeStrategy.allowSameDayTrade:
+                if tradeStrategyInstance.allowSameDayTrade:
                     # 遍历当日买入记录
                     for history in daily_buy_history:
                         # 计算卖出价的涨跌幅
-                        t_sell_point = history + self.tradeSimulator.tradeStrategy.sameDayProfit
+                        t_sell_point = history + tradeStrategyInstance.sameDayProfit
                         # 价格高于做T卖出盈利点，执行卖出操作
                         if minute_high > t_sell_point:
                             # 判断是否有可卖余额，避免出现T+0操作
-                            if self.tradeSimulator.sellableShare >= self.tradeSimulator.tradeStrategy.sharePerTrade:
+                            if tradeSimulatorInstance.sellableShare >= tradeStrategyInstance.sharePerTrade:
                                 # 计算做T卖出价格
-                                trade_price = daily_data.price_at_percentage(t_sell_point)
-                                if self.tradeSimulator.sell_stock(daily_data, "做T卖出", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_sell_point)
+                                if tradeSimulatorInstance.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
                                     # 抵消当日买入记录
                                     daily_buy_history.remove(history)
                                     # 回溯再次买入点价格，跌到该买点会再次买入
                                     current_buy_point -= base_buy_point
                                     # 累计做T次数
-                                    self.tradeSimulator.totalSameDayTradeCount += 1
+                                    tradeSimulatorInstance.totalSameDayTradeCount += 1
                                     # 收盘价低于做T卖出价，做T成功
-                                    if daily_data.close < trade_price:
-                                        self.tradeSimulator.successfulSameDayTradeCount += 1
+                                    if daily_data['close'] < trade_price:
+                                        tradeSimulatorInstance.successfulSameDayTradeCount += 1
 
                     # 遍历当日卖出记录
                     for history in daily_sell_history:
                         # 计算买回价的涨跌幅
-                        t_buy_point = history - self.tradeSimulator.tradeStrategy.sameDayProfit
+                        t_buy_point = history - tradeStrategyInstance.sameDayProfit
                         # 价格低于做T买回盈利点，执行买入操作
                         if minute_low < t_buy_point:
                             # 计算做T买回价格
-                            trade_price = daily_data.price_at_percentage(t_buy_point)
-                            if self.tradeSimulator.buy_stock(daily_data, "做T买回", minute_data.time, trade_price, self.tradeSimulator.tradeStrategy.sharePerTrade, point_bias, up_index):
+                            trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_buy_point)
+                            if tradeSimulatorInstance.buy_stock(daily_data, "做T买回", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
                                 # 抵消当日卖出记录
                                 daily_sell_history.remove(history)
                                 # 回溯再次卖出点价格，涨到该卖点会再次卖出
                                 current_sell_point -= base_sell_point
                                 # 累计做T次数
-                                self.tradeSimulator.totalSameDayTradeCount += 1
+                                tradeSimulatorInstance.totalSameDayTradeCount += 1
                                 # 收盘价高于做T买回价，做T成功
-                                if daily_data.close > trade_price:
-                                    self.tradeSimulator.successfulSameDayTradeCount += 1
-        self.tradeSimulator.trade_last_day()
+                                if daily_data['close'] > trade_price:
+                                    tradeSimulatorInstance.successfulSameDayTradeCount += 1
+        tradeSimulatorInstance.trade_last_day()

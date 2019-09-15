@@ -1,5 +1,5 @@
 from QtDesign.ProgressBar_ui import Ui_ProgressBar
-from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5.QtWidgets import QDialog
 
 
 class ProgressBar(QDialog, Ui_ProgressBar):
@@ -10,11 +10,7 @@ class ProgressBar(QDialog, Ui_ProgressBar):
         self.total = total
 
     def update_search_progress(self, index, code, name):
-        if index == self.total:
-            message = QMessageBox()
-            message.setWindowTitle("成功")
-            message.setText("已获得所有股票最新数据！")
-            message.show()
-            self.close()
+        # 更新进度条显示
         self.pgbSearching.setValue(index / self.total * 100)
+        # 更新底部文字显示
         self.lblCurrentWorking.setText(code + name + "(" + str(index) + "/" + str(self.total) + ")")

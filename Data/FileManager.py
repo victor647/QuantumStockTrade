@@ -9,44 +9,53 @@ import json
 from collections import namedtuple
 
 
+# 默认全部股票列表存放相对路径
 def stock_list_path():
     return path.join(path.pardir, "StockData", "stock_list.csv")
 
 
+# 导入全部股票信息列表
 def read_stock_list_file():
     return pandas.read_csv(stock_list_path())
 
 
+# 导出全部股票信息列表
 def save_stock_list_file():
     stock_list = tushare.get_stock_basics()
     stock_list.to_csv(stock_list_path())
     return stock_list
 
 
+# 导出选股器搜索条件
 def export_search_config(criteria_list, file_path):
     with open(file_path, 'w') as file:
         json.dump(obj=criteria_list, fp=file, default=lambda obj: obj.__dict__, indent=4)
 
 
+# 导入选股器搜索条件
 def import_search_config(file_path):
     with open(file_path, 'r') as file:
         criteria_list = json.load(fp=file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     return criteria_list
 
 
+# 默认股票历史数据存放相对路径
 def stock_history_path(stock_code):
     return path.join(path.pardir, "StockData\\StockHistory", stock_code + ".csv")
 
 
+# 从csv文件读取单只股票历史数据
 def read_stock_history_data(stock_code):
     return pandas.read_csv(stock_history_path(stock_code))
 
 
+# 保存单只股票历史数据到csv文件
 def save_stock_history_data(bs_result, stock_code):
-    data = pandas.DataFrame(bs_result.data, columns=bs_result.fields)
+    data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
     data.to_csv(stock_history_path(stock_code))
 
 
+# 获取最新全部股票数据
 def export_all_stock_data():
     stock_list = save_stock_list_file()
     progress = ProgressBar(stock_list.shape[0])

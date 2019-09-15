@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>606</width>
-    <height>512</height>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>30</x>
       <y>60</y>
       <width>181</width>
-      <height>401</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="font">
@@ -38,7 +38,7 @@
        <x>11</x>
        <y>19</y>
        <width>151</width>
-       <height>371</height>
+       <height>381</height>
       </rect>
      </property>
      <property name="font">
@@ -166,19 +166,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblOffMarketPoint">
-        <property name="font">
-         <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>日均偏离大盘：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="lblInverseMarketUp">
         <property name="font">
          <font>
@@ -213,7 +200,7 @@
          </font>
         </property>
         <property name="text">
-         <string>平均最高涨幅： </string>
+         <string>平均日内最高： </string>
         </property>
        </widget>
       </item>
@@ -226,7 +213,33 @@
          </font>
         </property>
         <property name="text">
-         <string>平均最低涨幅： </string>
+         <string>平均日内最低： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblAverageCloseUp">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>阳线平均涨幅： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblAverageCloseDown">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>阴线平均跌幅： </string>
         </property>
        </widget>
       </item>
@@ -592,7 +605,7 @@
       <x>400</x>
       <y>60</y>
       <width>181</width>
-      <height>401</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="font">
@@ -610,7 +623,7 @@
        <x>10</x>
        <y>20</y>
        <width>161</width>
-       <height>241</height>
+       <height>252</height>
       </rect>
      </property>
      <property name="font">
@@ -957,7 +970,7 @@
        <x>10</x>
        <y>290</y>
        <width>161</width>
-       <height>101</height>
+       <height>110</height>
       </rect>
      </property>
      <property name="font">
@@ -1120,7 +1133,7 @@
       <x>220</x>
       <y>250</y>
       <width>171</width>
-      <height>211</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
@@ -1138,7 +1151,7 @@
        <x>10</x>
        <y>20</y>
        <width>151</width>
-       <height>181</height>
+       <height>191</height>
       </rect>
      </property>
      <property name="font">
@@ -1175,7 +1188,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblAverageCloseUp">
+       <widget class="QLabel" name="lblHighOpenHighClose">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -1183,7 +1196,46 @@
          </font>
         </property>
         <property name="text">
-         <string>阳线平均涨幅： </string>
+         <string>高开高走概率： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblHighOpenLowClose">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>高开低走概率： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblLowOpenLowClose">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>低开低走概率： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblLowOpenHighClose">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>低开高走概率： </string>
         </property>
        </widget>
       </item>
@@ -1210,19 +1262,6 @@
         </property>
         <property name="text">
          <string>阳线平均回撤：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageCloseDown">
-        <property name="font">
-         <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阴线平均跌幅： </string>
         </property>
        </widget>
       </item>

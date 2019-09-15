@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QDialog
 import Windows.StockFinder as StockFinder
 
 
+# 检测股票技术指标是否符合规定
 def match_criteria_item(data, item):
     # 获取起始天数
     start_index_first = item.daysCountFirst * -1
@@ -44,6 +45,7 @@ def match_criteria_item(data, item):
         return value_first < value_second
 
 
+# 自定义技术指标内容
 class CriteriaItem:
     logic = "平均"
     operator = "大于"
@@ -60,12 +62,14 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
     def __init__(self, criteria_item):
         super().__init__()
         self.setupUi(self)
+        # 初始化指标下拉列表内容
         self.cbbQueryLogic.addItems(['平均', '累计', '最高', '最低'])
         self.cbbOperator.addItems(['大于', '小于'])
         self.cbbComparisonField.addItems(['收盘价', '股价', '涨跌幅', '换手率'])
         self.criteriaItem = criteria_item
         self.read_item_data()
 
+    # 从指标中初始化界面数值显示
     def read_item_data(self):
         self.cbbQueryLogic.setCurrentText(self.criteriaItem.logic)
         self.cbbOperator.setCurrentText(self.criteriaItem.operator)
@@ -76,6 +80,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.spbRelativePercentage.setValue(self.criteriaItem.relativePercentage)
         self.spbAbsValue.setValue(self.criteriaItem.absoluteValue)
 
+    # 保存编辑后的指标
     def save_changes(self):
         self.criteriaItem.logic = self.cbbQueryLogic.currentText()
         self.criteriaItem.operator = self.cbbOperator.currentText()
@@ -88,5 +93,6 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         StockFinder.stockFinderInstance.update_criteria_list()
         self.close()
 
+    # 放弃编辑离开
     def discard_changes(self):
         self.close()

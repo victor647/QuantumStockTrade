@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_TradeSimulator(object):
     def setupUi(self, TradeSimulator):
         TradeSimulator.setObjectName("TradeSimulator")
-        TradeSimulator.resize(1042, 784)
+        TradeSimulator.resize(1175, 784)
         self.tblTradeHistory = QtWidgets.QTableWidget(TradeSimulator)
-        self.tblTradeHistory.setGeometry(QtCore.QRect(20, 100, 1001, 661))
+        self.tblTradeHistory.setGeometry(QtCore.QRect(20, 100, 1131, 661))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
@@ -55,7 +55,7 @@ class Ui_TradeSimulator(object):
         self.tblTradeHistory.setHorizontalHeaderItem(14, item)
         item = QtWidgets.QTableWidgetItem()
         self.tblTradeHistory.setHorizontalHeaderItem(15, item)
-        self.tblTradeHistory.horizontalHeader().setDefaultSectionSize(65)
+        self.tblTradeHistory.horizontalHeader().setDefaultSectionSize(70)
         self.layoutWidget = QtWidgets.QWidget(TradeSimulator)
         self.layoutWidget.setGeometry(QtCore.QRect(20, 20, 531, 68))
         font = QtGui.QFont()
