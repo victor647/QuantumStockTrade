@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
-    <height>467</height>
+    <width>377</width>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
-      <width>321</width>
+      <y>80</y>
+      <width>351</width>
       <height>192</height>
      </rect>
     </property>
@@ -47,76 +47,14 @@
       <string>当前价格</string>
      </property>
     </column>
-    <column>
-     <property name="text">
-      <string>涨跌幅</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>321</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="btnAddStock">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>添加</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnRemoveStock">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>删除</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnClearStocks">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>清空</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
    <widget class="QGroupBox" name="grpEventSignal">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
-      <width>321</width>
-      <height>141</height>
+      <y>320</y>
+      <width>351</width>
+      <height>151</height>
      </rect>
     </property>
     <property name="font">
@@ -128,13 +66,13 @@
     <property name="title">
      <string>盘中异动提示</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>301</width>
-       <height>108</height>
+       <width>334</width>
+       <height>120</height>
       </rect>
      </property>
      <property name="font">
@@ -156,6 +94,9 @@
           </property>
           <property name="text">
            <string>日内涨幅达到</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -188,6 +129,9 @@
           </property>
           <property name="text">
            <string>跌幅达到</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -225,6 +169,9 @@
           <property name="text">
            <string>5分钟涨幅达到</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -256,6 +203,9 @@
           </property>
           <property name="text">
            <string>跌幅达到</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -293,6 +243,9 @@
           <property name="text">
            <string>单笔买单</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -327,6 +280,9 @@
           </property>
           <property name="text">
            <string>单笔卖单</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -367,6 +323,9 @@
           <property name="text">
            <string>1分钟外盘大于</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -402,6 +361,9 @@
           <property name="text">
            <string>内盘大于</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -436,32 +398,135 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>321</width>
-      <height>26</height>
+      <width>351</width>
+      <height>60</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btnImportStockList">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>导入股票列表</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnStartTracking">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>开始盯盘</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnStopTracking">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>停止盯盘</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="lblLastUpdateTime">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>上次刷新：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblUpdateFrequency">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>刷新频率：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spbUpdateFrequency">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="suffix">
+          <string>秒</string>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>3</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>351</width>
+      <height>27</height>
+     </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QPushButton" name="btnImportStockList">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      <widget class="QLineEdit" name="iptStockCode">
        <property name="text">
-        <string>导入股票列表</string>
+        <string>600519</string>
+       </property>
+       <property name="maxLength">
+        <number>6</number>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnStartTracking">
+      <widget class="QPushButton" name="btnAddStock">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -469,12 +534,12 @@
         </font>
        </property>
        <property name="text">
-        <string>开始盯盘</string>
+        <string>添加股票</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnStopTracking">
+      <widget class="QPushButton" name="btnRemoveStock">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -482,7 +547,20 @@
         </font>
        </property>
        <property name="text">
-        <string>停止盯盘</string>
+        <string>删除股票</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClearStocks">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>清空列表</string>
        </property>
       </widget>
      </item>
@@ -494,8 +572,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>343</width>
-     <height>22</height>
+     <width>377</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>
@@ -558,8 +636,8 @@
    <slot>add_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>271</y>
+     <x>183</x>
+     <y>328</y>
     </hint>
     <hint type="destinationlabel">
      <x>74</x>
@@ -574,8 +652,8 @@
    <slot>remove_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>190</x>
-     <y>267</y>
+     <x>278</x>
+     <y>328</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
@@ -590,8 +668,8 @@
    <slot>clear_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
-     <y>277</y>
+     <x>359</x>
+     <y>328</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
@@ -607,11 +685,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>97</x>
-     <y>335</y>
+     <y>383</y>
     </hint>
     <hint type="destinationlabel">
      <x>142</x>
-     <y>335</y>
+     <y>383</y>
     </hint>
    </hints>
   </connection>
@@ -623,11 +701,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>229</x>
-     <y>332</y>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>281</x>
-     <y>334</y>
+     <y>382</y>
     </hint>
    </hints>
   </connection>
@@ -639,11 +717,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>105</x>
-     <y>361</y>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>140</x>
-     <y>362</y>
+     <y>410</y>
     </hint>
    </hints>
   </connection>
@@ -655,11 +733,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>236</x>
-     <y>358</y>
+     <y>406</y>
     </hint>
     <hint type="destinationlabel">
-     <x>276</x>
-     <y>360</y>
+     <x>351</x>
+     <y>418</y>
     </hint>
    </hints>
   </connection>
@@ -671,11 +749,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
-     <y>387</y>
+     <y>435</y>
     </hint>
     <hint type="destinationlabel">
      <x>114</x>
-     <y>389</y>
+     <y>437</y>
     </hint>
    </hints>
   </connection>
@@ -687,11 +765,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>236</x>
-     <y>388</y>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel">
-     <x>263</x>
-     <y>388</y>
+     <x>351</x>
+     <y>449</y>
     </hint>
    </hints>
   </connection>
@@ -703,11 +781,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>89</x>
-     <y>417</y>
+     <y>465</y>
     </hint>
     <hint type="destinationlabel">
      <x>138</x>
-     <y>417</y>
+     <y>465</y>
     </hint>
    </hints>
   </connection>
@@ -719,11 +797,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>229</x>
-     <y>415</y>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>269</x>
-     <y>415</y>
+     <x>351</x>
+     <y>480</y>
     </hint>
    </hints>
   </connection>

@@ -152,6 +152,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         row_count = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
         self.tblTradeHistory.insertRow(row_count)
+        # 缓存昨日收盘价
+        pre_close = data['preclose']
         column = 0
         # 交易时间
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(Tools.reformat_time(time)))
@@ -160,7 +162,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
         column += 1
         # 成交价格
-        self.add_price_item(data, trade_price, row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, data, trade_price, row_count, column)
         column += 1
         # 成交股数
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
@@ -169,16 +171,16 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(remaining_share)))
         column += 1
         # 开盘
-        self.add_price_item(data, round(data['open'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
         column += 1
         # 最高
-        self.add_price_item(data, round(data['high'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['high'], 2), pre_close, row_count, column)
         column += 1
         # 最低
-        self.add_price_item(data, round(data['low'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['low'], 2), pre_close, row_count, column)
         column += 1
         # 收盘
-        self.add_price_item(data, round(data['close'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
         column += 1
         # 五日均线
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data['avg_price_five'])))
@@ -187,33 +189,19 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
         # 长线偏移
-        self.add_colored_item(point_bias, row_count, column, "%")
+        Tools.add_colored_item(self.tblTradeHistory, point_bias, row_count, column, "%")
         column += 1
         # 短线多空
-        self.add_colored_item(round((up_index - 1) * 100, 2), row_count, column)
+        Tools.add_colored_item(self.tblTradeHistory, round((up_index - 1) * 100, 2), row_count, column)
         column += 1
         # 持仓成本
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
         column += 1
         # 累计收益
-        self.add_colored_item(self.net_profit(data['close']), row_count, column)
+        Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
         column += 1
         # 盈亏比例
-        self.add_colored_item(self.profit_percentage(data['close']), row_count, column, "%")
-
-    # 添加带有红绿正负颜色的数据
-    def add_colored_item(self, text, row_count, column, symbol=""):
-        item = QTableWidgetItem(str(text) + symbol)
-        item.setForeground(Tools.get_text_color(text))
-        self.tblTradeHistory.setItem(row_count, column, item)
-
-    # 添加价格数据
-    def add_price_item(self, data, price, row_count, column):
-        pre_close = data['preclose']
-        item = QTableWidgetItem()
-        item.setForeground(Tools.get_price_color(price, pre_close))
-        item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
-        self.tblTradeHistory.setItem(row_count, column, item)
+        Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
 
     # 累计获利百分比
     def profit_percentage(self, current_price):

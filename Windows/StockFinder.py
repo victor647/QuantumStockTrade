@@ -153,6 +153,9 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def technical_index_match_requirement(self, code):
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
+        # 跳过还未上市新股
+        if data.shape[0] == 0:
+            return False
         # 跳过当日停牌股票
         if data.iloc[-1]['tradestatus'] == 0:
             return False
