@@ -123,8 +123,10 @@ dmypy.json
 .pyre/
 
 # Data folder
-StockData/
+StockData/StockHistory
 
-#Pycharm stuff
+# Pycharm stuff
 .idea/
+.idea/workspace.xml
+.idea/workspace.xml
 .idea/workspace.xml
