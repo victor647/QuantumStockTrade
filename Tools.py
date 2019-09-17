@@ -1,4 +1,7 @@
 from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QTableWidgetItem
+import Data.FileManager as FileManager
+import Data.DataAnalyzer as DataAnalyzer
 
 
 # 根据股票代码获取股票交易所信息
@@ -12,7 +15,7 @@ def get_trade_center(stock_code):
     elif 300000 < code < 400000:
         market = "sz"
     # 上海主板
-    elif 600000 < code < 700000:
+    elif 600000 <= code < 700000:
         market = "sh"
     # 深圳可转债
     elif 128000 <= code <= 129000:
@@ -21,6 +24,14 @@ def get_trade_center(stock_code):
     elif 113500 <= code <= 113600:
         market = "sh"
     return market
+
+
+# 通过股票代码获取股票名称
+def get_stock_name(stock_code):
+    table = FileManager.read_stock_list_file()
+    row = table[table['code'] == int(stock_code)]
+    name = row.iloc[0]['name']
+    return name
 
 
 # 转换时间格式为可读
@@ -54,3 +65,18 @@ def get_price_color(price, pre_close):
     if price < pre_close:
         return QColor(0, 128, 0)
     return QColor(0, 0, 0)
+
+
+# 添加带有红绿正负颜色的数据
+def add_colored_item(table, text, row_count, column, symbol=""):
+    item = QTableWidgetItem(str(text) + symbol)
+    item.setForeground(get_text_color(text))
+    table.setItem(row_count, column, item)
+
+
+# 添加价格数据
+def add_price_item(table, price, pre_close, row_count, column):
+    item = QTableWidgetItem()
+    item.setForeground(get_price_color(price, pre_close))
+    item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
+    table.setItem(row_count, column, item)

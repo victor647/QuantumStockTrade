@@ -1,4 +1,4 @@
-import os.path as path
+import os
 import pandas
 import tushare
 import baostock
@@ -7,17 +7,17 @@ from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog
 from Windows.ProgressBar import ProgressBar
 import json
-from collections import namedtuple
+import Windows.SearchCriteria as SearchCriteria
 
 
 # 默认全部股票列表存放路径
 def full_stock_info_path():
-    return path.join(path.pardir, "StockData", "full_stock_info.csv")
+    return os.path.join(os.path.pardir, "StockData", "full_stock_info.csv")
 
 
 # 选股器导出的股票列表文件夹
 def selected_stock_list_path():
-    return path.join(path.pardir, "StockData", "SelectedStocks")
+    return os.path.join(os.path.pardir, "StockData", "SelectedStocks")
 
 
 # 导入全部股票信息列表
@@ -41,13 +41,17 @@ def export_search_config(criteria_list, file_path):
 # 导入选股器搜索条件
 def import_search_config(file_path):
     with open(file_path, 'r') as file:
-        criteria_list = json.load(fp=file, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        criteria_list = json.load(fp=file, object_hook=SearchCriteria.import_criteria_item)
     return criteria_list
 
 
 # 默认股票历史数据存放路径
 def stock_history_path(stock_code):
-    return path.join(path.pardir, "StockData\\StockHistory", stock_code + ".csv")
+    base_path = os.path.join(os.path.pardir, "StockData\\StockHistory")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    file_path = os.path.join(base_path, stock_code + ".csv")
+    return file_path
 
 
 # 从csv文件读取单只股票历史数据
@@ -68,6 +72,7 @@ def export_all_stock_data():
     progress.show()
     exporter = StockDataExporter()
     exporter.progressBarCallback.connect(progress.update_search_progress)
+    exporter.finishedCallback.connect(progress.finish_progress)
     exporter.start()
     progress.exec()
 
@@ -84,6 +89,7 @@ def import_selected_stock_list():
 
 class StockDataExporter(QThread):
     progressBarCallback = pyqtSignal(int, str, str)
+    finishedCallback = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -105,3 +111,4 @@ class StockDataExporter(QThread):
                                                         start_date=self.startDate, end_date=self.today, frequency="d", adjustflag="2")
             save_stock_history_data(result, code)
             self.progressBarCallback.emit(index + 1, code, name)
+        self.finishedCallback.emit()

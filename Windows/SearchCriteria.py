@@ -5,9 +5,6 @@ import Windows.StockFinder as StockFinder
 
 # 检测股票技术指标是否符合规定
 def match_criteria_item(data, item):
-    # 获取起始天数
-    start_index_first = item.daysCountFirst * -1
-    start_index_second = item.daysCountSecond * -1
     # 获取比较对象
     column_label = "close"
     if item.field == "涨跌幅":
@@ -23,26 +20,40 @@ def match_criteria_item(data, item):
     # 获取初始值
     value_first = 0
     if item.logic == "平均":
-        value_first = data[column_label][start_index_first:-1].mean()
+        value_first = data[column_label].tail(item.daysCountFirst).mean()
     elif item.logic == "累计":
-        value_first = data[column_label][start_index_first:-1].sum()
+        value_first = data[column_label].tail(item.daysCountFirst).sum()
     elif item.logic == "最高":
-        value_first = data[column_label][start_index_first:-1].max()
+        value_first = data[column_label].tail(item.daysCountFirst).max()
     elif item.logic == "最低":
-        value_first = data[column_label][start_index_first:-1].min()
+        value_first = data[column_label].tail(item.daysCountFirst).min()
 
     # 获取参照物绝对值
     value_second = item.absoluteValue
     if not item.useAbsValue:
         # 相对值乘以系数
         ratio = item.relativePercentage / 100 + 1
-        raw_value_second = data[column_label][start_index_second:-1].mean()
+        raw_value_second = data[column_label].tail(item.daysCountSecond).mean()
         value_second = raw_value_second * ratio
     # 返回比较结果
     if item.operator == "大于":
         return value_first > value_second
     else:
         return value_first < value_second
+
+
+# 通过json导入搜索条件
+def import_criteria_item(dct):
+    item = CriteriaItem()
+    item.logic = dct['logic']
+    item.operator = dct['operator']
+    item.field = dct['field']
+    item.daysCountFirst = dct['daysCountFirst']
+    item.daysCountSecond = dct['daysCountSecond']
+    item.useAbsValue = dct['useAbsValue']
+    item.relativePercentage = dct['relativePercentage']
+    item.absoluteValue = dct['absoluteValue']
+    return item
 
 
 # 自定义技术指标内容

@@ -43,20 +43,18 @@ stockCode = ""
 
 
 class TradeSimulator(QDialog, Ui_TradeSimulator):
-    stockCode = ""
-    tradeStrategy = None
-    currentShare = 0
-    sellableShare = 0
-    initialAsset = 0
-    totalMoneySpent = 0
-    totalMoneyBack = 0
-    totalFeePaid = 0
-    totalBuyCount = 0
-    successfulBuyCount = 0
-    totalSellCount = 0
-    successfulSellCount = 0
-    totalSameDayTradeCount = 0
-    successfulSameDayTradeCount = 0
+    __currentShare = 0
+    __sellableShare = 0
+    __initialAsset = 0
+    __totalMoneySpent = 0
+    __totalMoneyBack = 0
+    __totalFeePaid = 0
+    __totalBuyCount = 0
+    __successfulBuyCount = 0
+    __totalSellCount = 0
+    __successfulSellCount = 0
+    __totalSameDayTradeCount = 0
+    __successfulSameDayTradeCount = 0
 
     def __init__(self):
         super().__init__()
@@ -78,16 +76,16 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         data = StockAnalyzer.stockDatabase.iloc[0]
         price = round(data['open'], 2)
         # 计算底仓资产折现
-        self.initialAsset = round(price * tradeStrategyInstance.baseShare, 2)
+        self.__initialAsset = round(price * tradeStrategyInstance.baseShare, 2)
         self.buy_stock(data, "首次买入", str.replace(data['date'][2:], "-", "/") + " 09:30", price, tradeStrategyInstance.baseShare)
-        self.lblOriginalInvestment.setText("初始成本：" + str(self.initialAsset))
+        self.lblOriginalInvestment.setText("初始成本：" + str(self.__initialAsset))
 
     # 末日收盘价计算仓位差补齐
     def trade_last_day(self):
         # 获取最后一个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[-1]
         # 获取需要买回或者卖出的股份数，保持结束底仓
-        last_trade_share = tradeStrategyInstance.baseShare - self.currentShare
+        last_trade_share = tradeStrategyInstance.baseShare - self.__currentShare
         if last_trade_share > 0:
             self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
@@ -95,10 +93,10 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 更新交易记录并计算资产变化
     def update_trade_count(self, data):
-        self.lblBuyCount.setText("共买入" + str(self.totalBuyCount) + "次，成功" + str(self.successfulBuyCount) + "次")
-        self.lblSellCount.setText("共卖出" + str(self.totalSellCount) + "次，成功" + str(self.successfulSellCount) + "次")
-        self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
-        self.lblTotalFee.setText("总手续费：" + str(round(self.totalFeePaid, 2)))
+        self.lblBuyCount.setText("共买入" + str(self.__totalBuyCount) + "次，成功" + str(self.__successfulBuyCount) + "次")
+        self.lblSellCount.setText("共卖出" + str(self.__totalSellCount) + "次，成功" + str(self.__successfulSellCount) + "次")
+        self.lblSameDayPerformance.setText("共做T " + str(self.__totalSameDayTradeCount) + "次，成功" + str(self.__successfulSameDayTradeCount) + "次")
+        self.lblTotalFee.setText("总手续费：" + str(round(self.__totalFeePaid, 2)))
         self.lblFinalAsset.setText("最终资产：" + str(self.net_worth(data['close'])))
         self.lblTotalProfit.setText("累计收益：" + str(self.net_profit(data['close'])))
         self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data['close'])) + "%")
@@ -106,20 +104,20 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 模拟买入股票操作
     def buy_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最大买入额度已满，放弃买入
-        if self.currentShare >= tradeStrategyInstance.maxShare:
+        if self.__currentShare >= tradeStrategyInstance.maxShare:
             return False
-        self.currentShare += trade_share
+        self.__currentShare += trade_share
         money = trade_share * trade_price
         fee = buy_transaction_fee(money)
-        self.totalMoneySpent += money + fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
+        self.__totalMoneySpent += money + fee
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, point_bias, up_index)
         # 累加交易手续费
-        self.totalFeePaid += fee
+        self.__totalFeePaid += fee
         # 累加买入次数记录
-        self.totalBuyCount += 1
+        self.__totalBuyCount += 1
         # 收盘价高于买入价，买入成功
         if data['close'] > trade_price:
-            self.successfulBuyCount += 1
+            self.__successfulBuyCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
@@ -127,21 +125,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # # 模拟卖出股票操作
     def sell_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最小持仓额度已到，放弃卖出
-        if self.currentShare <= tradeStrategyInstance.minShare:
+        if self.__currentShare <= tradeStrategyInstance.minShare:
             return False
-        self.currentShare -= trade_share
-        self.sellableShare -= trade_share
+        self.__currentShare -= trade_share
+        self.__sellableShare -= trade_share
         money = trade_share * trade_price
         fee = sell_transaction_fee(money)
-        self.totalMoneyBack += money - fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
+        self.__totalMoneyBack += money - fee
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, point_bias, up_index)
         # 累加交易手续费
-        self.totalFeePaid += fee
+        self.__totalFeePaid += fee
         # 累加卖出次数记录
-        self.totalSellCount += 1
+        self.__totalSellCount += 1
         # 收盘价低于卖出价，卖出成功
         if data['close'] < trade_price:
-            self.successfulSellCount += 1
+            self.__successfulSellCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
@@ -152,6 +150,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         row_count = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
         self.tblTradeHistory.insertRow(row_count)
+        # 缓存昨日收盘价
+        pre_close = data['preclose']
         column = 0
         # 交易时间
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(Tools.reformat_time(time)))
@@ -160,7 +160,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
         column += 1
         # 成交价格
-        self.add_price_item(data, trade_price, row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, data, trade_price, row_count, column)
         column += 1
         # 成交股数
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
@@ -169,16 +169,16 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(remaining_share)))
         column += 1
         # 开盘
-        self.add_price_item(data, round(data['open'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
         column += 1
         # 最高
-        self.add_price_item(data, round(data['high'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['high'], 2), pre_close, row_count, column)
         column += 1
         # 最低
-        self.add_price_item(data, round(data['low'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['low'], 2), pre_close, row_count, column)
         column += 1
         # 收盘
-        self.add_price_item(data, round(data['close'], 2), row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
         column += 1
         # 五日均线
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data['avg_price_five'])))
@@ -187,37 +187,23 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
         # 长线偏移
-        self.add_colored_item(point_bias, row_count, column, "%")
+        Tools.add_colored_item(self.tblTradeHistory, point_bias, row_count, column, "%")
         column += 1
         # 短线多空
-        self.add_colored_item(round((up_index - 1) * 100, 2), row_count, column)
+        Tools.add_colored_item(self.tblTradeHistory, round((up_index - 1) * 100, 2), row_count, column)
         column += 1
         # 持仓成本
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
         column += 1
         # 累计收益
-        self.add_colored_item(self.net_profit(data['close']), row_count, column)
+        Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
         column += 1
         # 盈亏比例
-        self.add_colored_item(self.profit_percentage(data['close']), row_count, column, "%")
-
-    # 添加带有红绿正负颜色的数据
-    def add_colored_item(self, text, row_count, column, symbol=""):
-        item = QTableWidgetItem(str(text) + symbol)
-        item.setForeground(Tools.get_text_color(text))
-        self.tblTradeHistory.setItem(row_count, column, item)
-
-    # 添加价格数据
-    def add_price_item(self, data, price, row_count, column):
-        pre_close = data['preclose']
-        item = QTableWidgetItem()
-        item.setForeground(Tools.get_price_color(price, pre_close))
-        item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
-        self.tblTradeHistory.setItem(row_count, column, item)
+        Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
 
     # 累计获利百分比
     def profit_percentage(self, current_price):
-        return round(self.net_profit(current_price) / self.initialAsset * 100, 2)
+        return round(self.net_profit(current_price) / self.__initialAsset * 100, 2)
 
     # 累计获利金额
     def net_profit(self, current_price):
@@ -225,21 +211,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 股票与现金总资产
     def net_worth(self, current_price):
-        return round(self.net_profit(current_price) + self.initialAsset, 2)
+        return round(self.net_profit(current_price) + self.__initialAsset, 2)
 
     # 现金总资产
     def cash_worth(self):
-        return round(self.totalMoneyBack - self.totalMoneySpent, 2)
+        return round(self.__totalMoneyBack - self.__totalMoneySpent, 2)
 
     # 股票折现总资产
     def stock_worth(self, current_price):
-        return round(self.currentShare * current_price, 2)
+        return round(self.__currentShare * current_price, 2)
 
     # 持仓平均成本
     def average_cost(self, current_price):
-        if self.currentShare == 0:
+        if self.__currentShare == 0:
             return 0.00
-        return round(current_price - self.net_profit(current_price) / self.currentShare, 2)
+        return round(current_price - self.net_profit(current_price) / self.__currentShare, 2)
 
 
 class TradeByDay(QThread):
