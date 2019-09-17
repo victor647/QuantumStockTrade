@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>377</width>
+    <width>426</width>
     <height>529</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>351</width>
+      <width>401</width>
       <height>192</height>
      </rect>
     </property>
@@ -30,13 +30,8 @@
      </font>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>70</number>
+     <number>65</number>
     </attribute>
-    <column>
-     <property name="text">
-      <string>股票代码</string>
-     </property>
-    </column>
     <column>
      <property name="text">
       <string>股票名称</string>
@@ -44,7 +39,22 @@
     </column>
     <column>
      <property name="text">
-      <string>当前价格</string>
+      <string>最新价格</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>五档委比</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>5分钟涨跌</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>1分钟外盘</string>
      </property>
     </column>
    </widget>
@@ -53,7 +63,7 @@
      <rect>
       <x>10</x>
       <y>320</y>
-      <width>351</width>
+      <width>401</width>
       <height>151</height>
      </rect>
     </property>
@@ -71,7 +81,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>334</width>
+       <width>381</width>
        <height>120</height>
       </rect>
      </property>
@@ -241,7 +251,7 @@
            </font>
           </property>
           <property name="text">
-           <string>单笔买单</string>
+           <string>单笔买单大于</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -279,7 +289,7 @@
            </font>
           </property>
           <property name="text">
-           <string>单笔卖单</string>
+           <string>卖单大于</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -398,7 +408,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>351</width>
+      <width>401</width>
       <height>60</height>
      </rect>
     </property>
@@ -510,11 +520,23 @@
      <rect>
       <x>10</x>
       <y>280</y>
-      <width>351</width>
+      <width>401</width>
       <height>27</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="lblNewStockCode">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>股票代码</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QLineEdit" name="iptStockCode">
        <property name="text">
@@ -572,7 +594,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>377</width>
+     <width>426</width>
      <height>23</height>
     </rect>
    </property>

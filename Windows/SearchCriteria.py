@@ -1,7 +1,6 @@
 from QtDesign.SearchCriteria_ui import Ui_SearchCriteria
 from PyQt5.QtWidgets import QDialog
 import Windows.StockFinder as StockFinder
-import json
 
 
 # 检测股票技术指标是否符合规定
@@ -59,7 +58,6 @@ def import_criteria_item(dct):
 
 # 自定义技术指标内容
 class CriteriaItem:
-
     logic = "平均"
     operator = "大于"
     field = "股价"

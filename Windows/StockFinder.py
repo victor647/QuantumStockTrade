@@ -12,10 +12,10 @@ stockFinderInstance = None
 
 
 class StockFinder(QMainWindow, Ui_StockFinder):
-    searchResult = None
-    stockSearcher = None
-    progressBar = None
-    criteriaItems = []
+    __searchResult = None
+    __stockSearcher = None
+    __progressBar = None
+    __criteriaItems = []
 
     def __init__(self):
         super().__init__()
@@ -32,20 +32,20 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         parent = path.join(path.pardir, "StockData", "SearchConfigs")
         file_path = QFileDialog.getSaveFileName(directory=parent, filter='JSON(*.json)')
         if file_path[0] != "":
-            FileManager.export_search_config(self.criteriaItems, file_path[0])
+            FileManager.export_search_config(self.__criteriaItems, file_path[0])
 
     # 读取保存的搜索条件
     def import_search_config(self):
         parent = path.join(path.pardir, "StockData", "SearchConfigs")
         file_path = QFileDialog.getOpenFileName(directory=parent, filter='JSON(*.json)')
         if file_path[0] != "":
-            self.criteriaItems = FileManager.import_search_config(file_path[0])
+            self.__criteriaItems = FileManager.import_search_config(file_path[0])
             self.update_criteria_list()
 
     # 更新搜索条件列表显示
     def update_criteria_list(self):
         self.lstCriteriaItems.clear()
-        for item in self.criteriaItems:
+        for item in self.__criteriaItems:
             text = "过去" + str(item.daysCountFirst) + "日" + item.logic + item.field + item.operator
             if item.useAbsValue:
                 text += str(item.absoluteValue)
@@ -56,7 +56,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     # 新增搜索条件
     def add_criteria_item(self):
         item = SearchCriteria.CriteriaItem()
-        self.criteriaItems.append(item)
+        self.__criteriaItems.append(item)
         window = SearchCriteria.SearchCriteria(item)
         window.show()
         window.exec()
@@ -67,7 +67,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if len(selection) == 0:
             return
         index = selection[0].row()
-        item = self.criteriaItems[index]
+        item = self.__criteriaItems[index]
         window = SearchCriteria.SearchCriteria(item)
         window.show()
         window.exec()
@@ -78,31 +78,31 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if len(selection) == 0:
             return
         index = selection[0].row()
-        self.criteriaItems.pop(index)
+        self.__criteriaItems.pop(index)
         self.update_criteria_list()
 
     # 重置搜索条件
     def reset_criteria_items(self):
-        self.criteriaItems = []
+        self.__criteriaItems = []
         self.lstCriteriaItems.clear()
 
     # 搜索全部股票
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
-        self.searchResult = SearchResult()
-        self.searchResult.show()
-        self.progressBar = ProgressBar(stock_list.shape[0])
-        self.progressBar.show()
-        self.stockSearcher = StockSearcher(stock_list)
-        self.stockSearcher.progressBarCallback.connect(self.progressBar.update_search_progress)
-        self.stockSearcher.addItemCallback.connect(self.searchResult.add_stock_item)
-        self.stockSearcher.finishedCallback.connect(self.search_finished)
-        self.stockSearcher.start()
+        self.__searchResult = SearchResult()
+        self.__searchResult.show()
+        self.__progressBar = ProgressBar(stock_list.shape[0])
+        self.__progressBar.show()
+        self.__stockSearcher = StockSearcher(stock_list)
+        self.__stockSearcher.progressBarCallback.connect(self.__progressBar.update_search_progress)
+        self.__stockSearcher.addItemCallback.connect(self.__searchResult.add_stock_item)
+        self.__stockSearcher.finishedCallback.connect(self.search_finished)
+        self.__stockSearcher.start()
 
     # 搜索完毕回调
     def search_finished(self):
-        self.progressBar.close()
-        self.searchResult.update_found_stock_count()
+        self.__progressBar.close()
+        self.__searchResult.update_found_stock_count()
 
     # 基本面指标分析
     def company_info_match_requirement(self, row):
@@ -161,7 +161,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return False
 
         # 逐条筛选自定义指标
-        for item in self.criteriaItems:
+        for item in self.__criteriaItems:
             if not SearchCriteria.match_criteria_item(data, item):
                 return False
         return True

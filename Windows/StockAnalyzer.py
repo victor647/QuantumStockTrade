@@ -14,8 +14,8 @@ marketDatabase = None
     
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
-    tradeStrategy = TradeStrategy()
-    analysisData = DataAnalyzer.AnalysisData()
+    __tradeStrategy = TradeStrategy()
+    __analysisData = DataAnalyzer.AnalysisData()
     
     def __init__(self):
         super().__init__()
@@ -56,16 +56,16 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.analyze_data()
 
     def analyze_data(self):
-        self.analysisData.averageTurn = DataAnalyzer.average_turn(stockDatabase)
-        self.analysisData.averageCloseUp = DataAnalyzer.average_close_when_up(stockDatabase)
-        self.analysisData.averageCloseDown = DataAnalyzer.average_close_when_down(stockDatabase)
-        self.analysisData.averageHigh = DataAnalyzer.average_high(stockDatabase)
-        self.analysisData.averageLow = DataAnalyzer.average_low(stockDatabase)
-        self.analysisData.averageHighWhenUp = DataAnalyzer.average_high_when_up(stockDatabase)
-        self.analysisData.averageLowWhenDown = DataAnalyzer.average_low_when_down(stockDatabase)
-        self.analysisData.averageFullAmp = DataAnalyzer.average_amplitude(stockDatabase)
-        self.analysisData.averageFallback = DataAnalyzer.average_fallback(stockDatabase)
-        self.analysisData.averageBounce = DataAnalyzer.average_bounce(stockDatabase)
+        self.__analysisData.averageTurn = DataAnalyzer.average_turn(stockDatabase)
+        self.__analysisData.averageCloseUp = DataAnalyzer.average_close_when_up(stockDatabase)
+        self.__analysisData.averageCloseDown = DataAnalyzer.average_close_when_down(stockDatabase)
+        self.__analysisData.averageHigh = DataAnalyzer.average_high(stockDatabase)
+        self.__analysisData.averageLow = DataAnalyzer.average_low(stockDatabase)
+        self.__analysisData.averageHighWhenUp = DataAnalyzer.average_high_when_up(stockDatabase)
+        self.__analysisData.averageLowWhenDown = DataAnalyzer.average_low_when_down(stockDatabase)
+        self.__analysisData.averageFullAmp = DataAnalyzer.average_amplitude(stockDatabase)
+        self.__analysisData.averageFallback = DataAnalyzer.average_fallback(stockDatabase)
+        self.__analysisData.averageBounce = DataAnalyzer.average_bounce(stockDatabase)
 
         # 个股表现
         self.lblStockIntervalOpen.setText("区间开盘价格：" + str(DataAnalyzer.interval_open_price(stockDatabase)))
@@ -79,26 +79,26 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.lblWinMarket.setText("跑赢大盘日数：" + str(DataAnalyzer.win_market(stockDatabase, marketDatabase)) + "%")
         self.lblInverseMarketUp.setText("逆市上涨日数：" + str(DataAnalyzer.inverse_market_up(stockDatabase, marketDatabase)) + "%")
         self.lblInverseMarketDown.setText("逆市下跌日数：" + str(DataAnalyzer.inverse_market_down(stockDatabase, marketDatabase)) + "%")
-        self.lblAverageHigh.setText("平均日内最高：" + str(self.analysisData.averageHigh) + "%")
-        self.lblAverageLow.setText("平均日内最低：" + str(self.analysisData.averageLow) + "%")
-        self.lblAverageCloseUp.setText("阳线平均涨幅：" + str(self.analysisData.averageCloseUp) + "%")
-        self.lblAverageCloseDown.setText("阴线平均跌幅：" + str(self.analysisData.averageCloseDown) + "%")
+        self.lblAverageHigh.setText("平均日内最高：" + str(self.__analysisData.averageHigh) + "%")
+        self.lblAverageLow.setText("平均日内最低：" + str(self.__analysisData.averageLow) + "%")
+        self.lblAverageCloseUp.setText("阳线平均涨幅：" + str(self.__analysisData.averageCloseUp) + "%")
+        self.lblAverageCloseDown.setText("阴线平均跌幅：" + str(self.__analysisData.averageCloseDown) + "%")
         self.lblReachMaxProbability.setText("涨停触板概率：" + str(DataAnalyzer.reach_max_limit(stockDatabase)) + "%")
         self.lblStayMaxProbability.setText("涨停收盘概率：" + str(DataAnalyzer.stay_max_limit(stockDatabase)) + "%")
         self.lblReachMinProbability.setText("跌停触板概率：" + str(DataAnalyzer.reach_min_limit(stockDatabase)) + "%")
         self.lblStayMinProbability.setText("跌停收盘概率：" + str(DataAnalyzer.stay_min_limit(stockDatabase)) + "%")
 
         # 股性指标
-        self.lblAverageTurn.setText("平均换手率：" + str(self.analysisData.averageTurn) + "%")
-        self.lblAverageAmplitude.setText("每日平均振幅：" + str(self.analysisData.averageFullAmp) + "%")
+        self.lblAverageTurn.setText("平均换手率：" + str(self.__analysisData.averageTurn) + "%")
+        self.lblAverageAmplitude.setText("每日平均振幅：" + str(self.__analysisData.averageFullAmp) + "%")
         self.lblHighOpenHighClose.setText("高开高走概率：" + str(DataAnalyzer.high_open_high_close(stockDatabase)) + "%")
         self.lblHighOpenLowClose.setText("高开低走概率：" + str(DataAnalyzer.high_open_low_close(stockDatabase)) + "%")
         self.lblLowOpenLowClose.setText("低开低走概率：" + str(DataAnalyzer.low_open_low_close(stockDatabase)) + "%")
         self.lblLowOpenHighClose.setText("低开高走概率：" + str(DataAnalyzer.low_open_high_close(stockDatabase)) + "%")
-        self.lblAverageHighWhenUp.setText("阳线平均最高：" + str(self.analysisData.averageHighWhenUp) + "%")
-        self.lblAverageFallbackAmp.setText("阳线平均回撤：" + str(self.analysisData.averageFallback) + "%")
-        self.lblAverageLowWhenDown.setText("阴线平均最低：" + str(self.analysisData.averageLowWhenDown) + "%")
-        self.lblAverageBounceAmp.setText("阴线平均反弹：" + str(self.analysisData.averageBounce) + "%")
+        self.lblAverageHighWhenUp.setText("阳线平均最高：" + str(self.__analysisData.averageHighWhenUp) + "%")
+        self.lblAverageFallbackAmp.setText("阳线平均回撤：" + str(self.__analysisData.averageFallback) + "%")
+        self.lblAverageLowWhenDown.setText("阴线平均最低：" + str(self.__analysisData.averageLowWhenDown) + "%")
+        self.lblAverageBounceAmp.setText("阴线平均反弹：" + str(self.__analysisData.averageBounce) + "%")
 
         # 大盘表现
         self.lblMarketIntervalOpen.setText("区间开盘点位：" + str(DataAnalyzer.interval_open_price(marketDatabase)))
@@ -113,38 +113,38 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
     def auto_get_strategy(self):
         if not self.check_stock_data_exist():
             return
-        self.tradeStrategy.auto_get_strategy(self.analysisData)
-        self.spbBuyPoint.setValue(self.tradeStrategy.buyPoint)
-        self.spbSellPoint.setValue(self.tradeStrategy.sellPoint)
-        self.cbxAllowSameDayTrade.setChecked(self.tradeStrategy.allowSameDayTrade)
-        self.spbSameDayProfit.setValue(self.tradeStrategy.sameDayProfit)
+        self.__tradeStrategy.auto_get_strategy(self.__analysisData)
+        self.spbBuyPoint.setValue(self.__tradeStrategy.buyPoint)
+        self.spbSellPoint.setValue(self.__tradeStrategy.sellPoint)
+        self.cbxAllowSameDayTrade.setChecked(self.__tradeStrategy.allowSameDayTrade)
+        self.spbSameDayProfit.setValue(self.__tradeStrategy.sameDayProfit)
 
     def start_trade(self):
         if not self.check_stock_data_exist():
             return
-        self.tradeStrategy.buyPoint = self.spbBuyPoint.value()
-        self.tradeStrategy.sellPoint = self.spbSellPoint.value()
-        self.tradeStrategy.allowSameDayTrade = self.cbxAllowSameDayTrade.isChecked()
-        self.tradeStrategy.sameDayProfit = self.spbSameDayProfit.value()
-        self.tradeStrategy.baseShare = self.spbBaseShare.value()
-        self.tradeStrategy.sharePerTrade = self.spbSharePerTrade.value()
-        self.tradeStrategy.maxShare = self.spbMaxShare.value()
-        self.tradeStrategy.minShare = self.spbMinShare.value()
-        self.tradeStrategy.averagePricePeriod = self.spbAveragePeriodPriceLong.value()
-        self.tradeStrategy.averageVolumePeriod = self.spbAveragePeriodVolume.value()
-        self.tradeStrategy.volumeWeight = self.spbVolumeMultiplier.value()
+        self.__tradeStrategy.buyPoint = self.spbBuyPoint.value()
+        self.__tradeStrategy.sellPoint = self.spbSellPoint.value()
+        self.__tradeStrategy.allowSameDayTrade = self.cbxAllowSameDayTrade.isChecked()
+        self.__tradeStrategy.sameDayProfit = self.spbSameDayProfit.value()
+        self.__tradeStrategy.baseShare = self.spbBaseShare.value()
+        self.__tradeStrategy.sharePerTrade = self.spbSharePerTrade.value()
+        self.__tradeStrategy.maxShare = self.spbMaxShare.value()
+        self.__tradeStrategy.minShare = self.spbMinShare.value()
+        self.__tradeStrategy.averagePricePeriod = self.spbAveragePeriodPriceLong.value()
+        self.__tradeStrategy.averageVolumePeriod = self.spbAveragePeriodVolume.value()
+        self.__tradeStrategy.volumeWeight = self.spbVolumeMultiplier.value()
         stock_code = self.iptStockNumber.text()
 
         trade_window = TradeSimulator.TradeSimulator()
         trade_window.setWindowTitle(stock_code + "模拟交易")
-        TradeSimulator.get_trade_strategy(self.tradeStrategy, stock_code)
+        TradeSimulator.get_trade_strategy(self.__tradeStrategy, stock_code)
         trade_window.show()
         trade_window.start_trading()
         trade_window.exec_()
         return
 
     def check_stock_data_exist(self):
-        if self.analysisData.averageTurn == 0:
+        if self.__analysisData.averageTurn == 0:
             error_dialog = QErrorMessage()
             error_dialog.setWindowTitle("错误")
             error_dialog.showMessage("请先获取股票历史数据！")

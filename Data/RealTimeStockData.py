@@ -1,3 +1,15 @@
+import time
+
+
+class RecentTradeHistory:
+    time = 0
+    price = 0
+    volume = 0
+    worth = 0
+    direction = "B"
+    totalTradeCount = 0
+
+
 class RealTimeStockData:
     code = ""
     currentPrice = 0
@@ -8,7 +20,39 @@ class RealTimeStockData:
     totalBuyVolume = 0
     totalSellVolume = 0
     buySellInfo = None
-    recentTradeHistory = []
+    recentTradeHistory = dict()
+
+    # 读取股票最近几条交易记录数据
+    def parse_recent_history(self, data):
+        logs = data.split('|')
+        for log in logs:
+            log_split = log.split('/')
+            history = RecentTradeHistory()
+            trade_time = int(log_split[0].replace(':', ''))
+            history.time = trade_time
+            history.price = float(log_split[1])
+            history.volume = int(log_split[2])
+            history.direction = log_split[3]
+            history.worth = int(log_split[4])
+            history.totalTradeCount = int(log_split[5])
+            self.recentTradeHistory[trade_time] = history
+        self.delete_old_trade_history()
+
+    def delete_old_trade_history(self):
+        now = int(time.strftime("%H%M%S"))
+        history = sorted(self.recentTradeHistory)
+        for key in history:
+            # 超过三分钟的交易记录
+            if now - key > 300:
+                del self.recentTradeHistory[key]
+            else:
+                return
+
+    def get_most_recent_trade_logs(self, count):
+        history = sorted(self.recentTradeHistory, reverse=True)
+        for i in range(count):
+            trade_time = history[i]
+            print(str(self.recentTradeHistory[trade_time].price) + str(self.recentTradeHistory[trade_time].volume))
 
 
 class BuySellInfo:
@@ -32,12 +76,3 @@ class BuySellInfo:
     sellVolume4 = 0
     sellPrice5 = 0
     sellVolume5 = 0
-
-
-class RecentTradeHistory:
-    time = ""
-    price = 0
-    volume = 0
-    worth = 0
-    direction = "B"
-    totalTradeCount = 0
