@@ -14,12 +14,12 @@ marketDatabase = None
     
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
-    __tradeStrategy = TradeStrategy()
-    __analysisData = DataAnalyzer.AnalysisData()
     
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.__tradeStrategy = TradeStrategy()
+        self.__analysisData = DataAnalyzer.AnalysisData()
         now = QDate.currentDate()
         start = now.addMonths(-6)
         self.dteStartDate.setDate(start)

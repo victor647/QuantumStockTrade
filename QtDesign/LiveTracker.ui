@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>529</height>
+    <width>512</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>401</width>
+      <width>481</width>
       <height>192</height>
      </rect>
     </property>
@@ -32,9 +32,17 @@
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>65</number>
     </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>25</number>
+    </attribute>
     <column>
      <property name="text">
-      <string>股票名称</string>
+      <string>代码</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>名称</string>
      </property>
     </column>
     <column>
@@ -49,12 +57,17 @@
     </column>
     <column>
      <property name="text">
-      <string>5分钟涨跌</string>
+      <string>1分钟涨跌</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>1分钟外盘</string>
+      <string>外盘占比</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>成交额</string>
      </property>
     </column>
    </widget>
@@ -63,7 +76,7 @@
      <rect>
       <x>10</x>
       <y>320</y>
-      <width>401</width>
+      <width>481</width>
       <height>151</height>
      </rect>
     </property>
@@ -81,7 +94,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>381</width>
+       <width>461</width>
        <height>120</height>
       </rect>
      </property>
@@ -169,7 +182,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QCheckBox" name="cbxFiveMinUpPercent">
+         <widget class="QCheckBox" name="cbxOneMinUpPercent">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -177,7 +190,7 @@
            </font>
           </property>
           <property name="text">
-           <string>5分钟涨幅达到</string>
+           <string>1分钟涨幅达到</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -185,26 +198,26 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbFiveMinUpPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
+         <widget class="QDoubleSpinBox" name="spbOneMinUpPercent">
           <property name="suffix">
            <string>%</string>
           </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
           <property name="maximum">
-           <number>10</number>
+           <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
           </property>
           <property name="value">
-           <number>1</number>
+           <double>0.500000000000000</double>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="cbxFiveMinDownPercent">
+         <widget class="QCheckBox" name="cbxOneMinDownPercent">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -220,21 +233,21 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbFiveMinDownPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
+         <widget class="QDoubleSpinBox" name="spbOneMinDownPercent">
           <property name="suffix">
            <string>%</string>
           </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
           <property name="maximum">
-           <number>10</number>
+           <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
           </property>
           <property name="value">
-           <number>1</number>
+           <double>0.500000000000000</double>
           </property>
          </widget>
         </item>
@@ -403,12 +416,12 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>401</width>
+      <width>481</width>
       <height>60</height>
      </rect>
     </property>
@@ -484,6 +497,11 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
          <property name="text">
           <string>刷新频率：</string>
          </property>
@@ -493,12 +511,20 @@
         <widget class="QSpinBox" name="spbUpdateFrequency">
          <property name="maximumSize">
           <size>
-           <width>60</width>
+           <width>80</width>
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
          <property name="suffix">
           <string>秒</string>
+         </property>
+         <property name="prefix">
+          <string>每</string>
          </property>
          <property name="minimum">
           <number>1</number>
@@ -515,18 +541,24 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>280</y>
-      <width>401</width>
+      <width>481</width>
       <height>27</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
       <widget class="QLabel" name="lblNewStockCode">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -539,6 +571,17 @@
      </item>
      <item>
       <widget class="QLineEdit" name="iptStockCode">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+        </font>
+       </property>
        <property name="text">
         <string>600519</string>
        </property>
@@ -594,12 +637,30 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>426</width>
+     <width>512</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>打板神器</string>
+    </property>
+    <addaction name="MaxStockWatcher"/>
+    <addaction name="MinStockWatcher"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="MaxStockWatcher">
+   <property name="text">
+    <string>涨停板</string>
+   </property>
+  </action>
+  <action name="MinStockWatcher">
+   <property name="text">
+    <string>跌停板</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -728,38 +789,6 @@
     <hint type="destinationlabel">
      <x>281</x>
      <y>382</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxFiveMinUpPercent</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbFiveMinUpPercent</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>105</x>
-     <y>409</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>140</x>
-     <y>410</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxFiveMinDownPercent</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbFiveMinDownPercent</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>236</x>
-     <y>406</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>418</y>
     </hint>
    </hints>
   </connection>

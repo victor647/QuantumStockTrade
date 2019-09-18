@@ -43,8 +43,8 @@ stockCode = ""
 
 
 class TradeSimulator(QDialog, Ui_TradeSimulator):
-    __currentShare = 0
-    __sellableShare = 0
+    currentShare = 0
+    sellableShare = 0
     __initialAsset = 0
     __totalMoneySpent = 0
     __totalMoneyBack = 0
@@ -53,8 +53,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     __successfulBuyCount = 0
     __totalSellCount = 0
     __successfulSellCount = 0
-    __totalSameDayTradeCount = 0
-    __successfulSameDayTradeCount = 0
+    totalSameDayTradeCount = 0
+    successfulSameDayTradeCount = 0
 
     def __init__(self):
         super().__init__()
@@ -77,7 +77,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         price = round(data['open'], 2)
         # 计算底仓资产折现
         self.__initialAsset = round(price * tradeStrategyInstance.baseShare, 2)
-        self.buy_stock(data, "首次买入", str.replace(data['date'][2:], "-", "/") + " 09:30", price, tradeStrategyInstance.baseShare)
+        trade_time = str.replace(data['date'][2:], "-", "/") + " 09:30"
+        self.buy_stock(data, "首次买入", trade_time, price, tradeStrategyInstance.baseShare)
         self.lblOriginalInvestment.setText("初始成本：" + str(self.__initialAsset))
 
     # 末日收盘价计算仓位差补齐
@@ -85,7 +86,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 获取最后一个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[-1]
         # 获取需要买回或者卖出的股份数，保持结束底仓
-        last_trade_share = tradeStrategyInstance.baseShare - self.__currentShare
+        last_trade_share = tradeStrategyInstance.baseShare - self.currentShare
         if last_trade_share > 0:
             self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
@@ -95,7 +96,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def update_trade_count(self, data):
         self.lblBuyCount.setText("共买入" + str(self.__totalBuyCount) + "次，成功" + str(self.__successfulBuyCount) + "次")
         self.lblSellCount.setText("共卖出" + str(self.__totalSellCount) + "次，成功" + str(self.__successfulSellCount) + "次")
-        self.lblSameDayPerformance.setText("共做T " + str(self.__totalSameDayTradeCount) + "次，成功" + str(self.__successfulSameDayTradeCount) + "次")
+        self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
         self.lblTotalFee.setText("总手续费：" + str(round(self.__totalFeePaid, 2)))
         self.lblFinalAsset.setText("最终资产：" + str(self.net_worth(data['close'])))
         self.lblTotalProfit.setText("累计收益：" + str(self.net_profit(data['close'])))
@@ -104,13 +105,13 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 模拟买入股票操作
     def buy_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最大买入额度已满，放弃买入
-        if self.__currentShare >= tradeStrategyInstance.maxShare:
+        if self.currentShare >= tradeStrategyInstance.maxShare:
             return False
-        self.__currentShare += trade_share
+        self.currentShare += trade_share
         money = trade_share * trade_price
         fee = buy_transaction_fee(money)
         self.__totalMoneySpent += money + fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, point_bias, up_index)
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
         # 累加交易手续费
         self.__totalFeePaid += fee
         # 累加买入次数记录
@@ -125,14 +126,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # # 模拟卖出股票操作
     def sell_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
         # 最小持仓额度已到，放弃卖出
-        if self.__currentShare <= tradeStrategyInstance.minShare:
+        if self.currentShare <= tradeStrategyInstance.minShare:
             return False
-        self.__currentShare -= trade_share
-        self.__sellableShare -= trade_share
+        self.currentShare -= trade_share
+        self.sellableShare -= trade_share
         money = trade_share * trade_price
         fee = sell_transaction_fee(money)
         self.__totalMoneyBack += money - fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, point_bias, up_index)
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
         # 累加交易手续费
         self.__totalFeePaid += fee
         # 累加卖出次数记录
@@ -160,7 +161,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
         column += 1
         # 成交价格
-        Tools.add_price_item(self.tblTradeHistory, data, trade_price, row_count, column)
+        Tools.add_price_item(self.tblTradeHistory, trade_price, pre_close, row_count, column)
         column += 1
         # 成交股数
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
@@ -219,13 +220,13 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 股票折现总资产
     def stock_worth(self, current_price):
-        return round(self.__currentShare * current_price, 2)
+        return round(self.currentShare * current_price, 2)
 
     # 持仓平均成本
     def average_cost(self, current_price):
-        if self.__currentShare == 0:
+        if self.currentShare == 0:
             return 0.00
-        return round(current_price - self.net_profit(current_price) / self.__currentShare, 2)
+        return round(current_price - self.net_profit(current_price) / self.currentShare, 2)
 
 
 class TradeByDay(QThread):

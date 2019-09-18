@@ -37,6 +37,9 @@
    <attribute name="horizontalHeaderDefaultSectionSize">
     <number>70</number>
    </attribute>
+   <attribute name="verticalHeaderDefaultSectionSize">
+    <number>25</number>
+   </attribute>
    <column>
     <property name="text">
      <string>交易时间</string>
@@ -109,12 +112,12 @@
    </column>
    <column>
     <property name="text">
-     <string>总收益</string>
+     <string>持仓盈亏</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>总利润</string>
+     <string>收益率</string>
     </property>
    </column>
   </widget>
@@ -124,7 +127,7 @@
      <x>20</x>
      <y>20</y>
      <width>531</width>
-     <height>68</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">

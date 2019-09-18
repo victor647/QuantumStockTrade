@@ -50,10 +50,10 @@ def reformat_time(time):
 
 
 # 正数显示红色，负数显示绿色
-def get_text_color(number):
-    if number > 0:
+def get_text_color(number, threshold=0):
+    if number > threshold:
         return QColor(200, 0, 0)
-    if number < 0:
+    if number < threshold:
         return QColor(0, 128, 0)
     return QColor(0, 0, 0)
 
@@ -68,9 +68,9 @@ def get_price_color(price, pre_close):
 
 
 # 添加带有红绿正负颜色的数据
-def add_colored_item(table, text, row_count, column, symbol=""):
-    item = QTableWidgetItem(str(text) + symbol)
-    item.setForeground(get_text_color(text))
+def add_colored_item(table, value, row_count, column, symbol="", threshold=0):
+    item = QTableWidgetItem(str(value) + symbol)
+    item.setForeground(get_text_color(value, threshold))
     table.setItem(row_count, column, item)
 
 
