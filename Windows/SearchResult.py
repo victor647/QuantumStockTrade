@@ -16,7 +16,7 @@ class SearchResult(QDialog, Ui_SearchResult):
         self.lblTotalStockFound.setText("共找到" + str(self.tblStockList.rowCount()) + "只股票!")
 
     # 在列表中添加一只找到的股票
-    def add_stock_item(self, items):
+    def add_stock_item(self, items: list):
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
         for i in range(len(items)):
@@ -25,7 +25,7 @@ class SearchResult(QDialog, Ui_SearchResult):
         self.update_found_stock_count()
 
     # 在东方财富网站打开股票主页
-    def open_stock_page(self, row, column):
+    def open_stock_page(self, row: int, column: int):
         if column != 0:
             return
         code = self.tblStockList.item(row, 0).text()

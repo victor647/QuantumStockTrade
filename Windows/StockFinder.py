@@ -20,9 +20,11 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        # 初始化单例
         global stockFinderInstance
         stockFinderInstance = self
 
+    # 获取并导出全部股票信息
     @staticmethod
     def export_all_stock_data():
         FileManager.export_all_stock_data()
@@ -46,7 +48,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def update_criteria_list(self):
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            text = "过去" + str(item.daysCountFirst) + "日" + item.logic + item.field + item.operator
+            text = "最近" + str(item.daysCountFirst) + "日" + item.logic + item.field + item.operator
             if item.useAbsValue:
                 text += str(item.absoluteValue)
             else:
@@ -150,7 +152,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         return True
 
     # 技术面指标分析
-    def technical_index_match_requirement(self, code):
+    def technical_index_match_requirement(self, code: str):
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
         # 跳过还未上市新股
@@ -167,7 +169,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         return True
 
     # 检测股票是否在所选交易所中
-    def code_in_search_range(self, code):
+    def code_in_search_range(self, code: int):
         # 上海主板
         if self.cbxShanghaiMain.isChecked() and 600000 <= code < 688000:
             return True

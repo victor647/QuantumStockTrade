@@ -40,7 +40,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             file.close()
 
     # 在列表中插入一只股票
-    def add_stock_to_list(self, code):
+    def add_stock_to_list(self, code: str):
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
         # 加入盯盘代码列表

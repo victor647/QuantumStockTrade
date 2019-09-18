@@ -57,12 +57,12 @@
    </column>
    <column>
     <property name="text">
-     <string>成交数</string>
+     <string>成交数量</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>持仓量</string>
+     <string>持仓股数</string>
     </property>
    </column>
    <column>
@@ -87,12 +87,12 @@
    </column>
    <column>
     <property name="text">
-     <string>MA5</string>
+     <string>五日均线</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>换手率</string>
+     <string>当日换手</string>
     </property>
    </column>
    <column>

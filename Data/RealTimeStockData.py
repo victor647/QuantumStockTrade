@@ -2,17 +2,22 @@ import time
 
 
 # 获取最近一分钟外盘比例
-def get_active_buy_ratio(recent_transactions):
+def get_active_buy_ratio(recent_transactions: dict):
+    # 获取当前时间
     now = int(time.strftime("%H%M%S"))
+    # 将交易记录字典降序排序
     history = sorted(recent_transactions, reverse=True)
     total_buy = 0
     total_sell = 0
     for key in history:
         if now - key < 60:
+            # 主动买单则加入外盘
             if recent_transactions[key].direction == "B":
                 total_buy += recent_transactions[key].volume
+            # 主动卖单则加入内盘
             else:
                 total_sell += recent_transactions[key].volume
+        # 丢弃超过1分钟的数据
         else:
             break
 
@@ -23,20 +28,23 @@ def get_active_buy_ratio(recent_transactions):
 
 
 # 获取最近一分钟成交额
-def get_one_minute_worth(recent_transactions):
+def get_one_minute_worth(recent_transactions: dict):
+    # 获取当前时间
     now = int(time.strftime("%H%M%S"))
+    # 将交易记录字典降序排序
     history = sorted(recent_transactions, reverse=True)
     total_worth = 0
     for key in history:
         if now - key < 60:
-            total_worth += recent_transactions[key].volume * recent_transactions[key].price / 100
+            total_worth += recent_transactions[key].worth
+        # 丢弃超过1分钟的数据
         else:
             break
-    return round(total_worth, 2)
+    return round(total_worth / 10000, 2)
 
 
 # 获取最近一分钟涨跌
-def get_one_minute_change(recent_transactions):
+def get_one_minute_change(recent_transactions: dict):
     now = int(time.strftime("%H%M%S"))
     history = sorted(recent_transactions, reverse=True)
     now_price = recent_transactions[history[0]].price
@@ -47,7 +55,7 @@ def get_one_minute_change(recent_transactions):
 
 
 # 读取股票最近几条交易记录数据
-def parse_recent_transactions(data, recent_transactions):
+def parse_recent_transactions(data: str, recent_transactions: dict):
     logs = data.split('|')
     for log in logs:
         log_split = log.split('/')
@@ -60,14 +68,16 @@ def parse_recent_transactions(data, recent_transactions):
         history.volume = int(log_split[2])
         history.direction = log_split[3]
         history.worth = int(log_split[4])
-        history.totalTradeCount = int(log_split[5])
         recent_transactions[trade_time] = history
     delete_obsolete_transactions(recent_transactions)
 
 
 # 删除五分钟之前的交易数据
-def delete_obsolete_transactions(recent_transactions):
+def delete_obsolete_transactions(recent_transactions: dict):
     now = int(time.strftime("%H%M%S"))
+    # 收盘时间过后不再更新
+    if now > 150000:
+        return
     history = sorted(recent_transactions)
     for key in history:
         if now - key > 300:
@@ -77,7 +87,7 @@ def delete_obsolete_transactions(recent_transactions):
 
 
 # 获得N条最新交易记录
-def fetch_newest_transactions(recent_transactions, count):
+def fetch_newest_transactions(recent_transactions, count: int):
     history = sorted(recent_transactions, reverse=True)
     for i in range(count):
         trade_time = history[i]
@@ -85,18 +95,26 @@ def fetch_newest_transactions(recent_transactions, count):
 
 
 class RecentTradeHistory:
+    # 成交时间（int）
     time = 0
+    # 成交均价
     price = 0
+    # 成交量
     volume = 0
+    # 成交额
     worth = 0
+    # 买卖方向
     direction = "B"
-    totalTradeCount = 0
 
 
 class StockLiveStatus:
+    # 最新价格
     currentPrice = 0
+    # 涨跌幅
     percentChange = 0
+    # 昨日收盘价
     previousClose = 0
+    # 今日开盘价
     open = 0
 
     def __init__(self, code, live_info_list):
@@ -120,7 +138,7 @@ class BidInfo:
             self.sellPrice[i] = float(live_info_list[19 + i * 2])
             self.sellVolume[i] = int(live_info_list[20 + i * 2])
 
-    # 获取委比数据
+    # 计算委比数据
     def get_bid_ratio(self):
         total_buy = sum(self.buyVolume)
         total_sell = sum(self.sellVolume)

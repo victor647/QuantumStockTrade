@@ -33,20 +33,20 @@ def save_stock_list_file():
 
 
 # 导出选股器搜索条件
-def export_search_config(criteria_list, file_path):
+def export_search_config(criteria_list: list, file_path: str):
     with open(file_path, 'w') as file:
         json.dump(obj=criteria_list, fp=file, default=lambda obj: obj.__dict__, indent=4)
 
 
 # 导入选股器搜索条件
-def import_search_config(file_path):
+def import_search_config(file_path: str):
     with open(file_path, 'r') as file:
         criteria_list = json.load(fp=file, object_hook=SearchCriteria.import_criteria_item)
     return criteria_list
 
 
 # 默认股票历史数据存放路径
-def stock_history_path(stock_code):
+def stock_history_path(stock_code: str):
     base_path = os.path.join(os.path.pardir, "StockData\\StockHistory")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
@@ -55,12 +55,12 @@ def stock_history_path(stock_code):
 
 
 # 从csv文件读取单只股票历史数据
-def read_stock_history_data(stock_code):
+def read_stock_history_data(stock_code: str):
     return pandas.read_csv(stock_history_path(stock_code))
 
 
 # 保存单只股票历史数据到csv文件
-def save_stock_history_data(bs_result, stock_code):
+def save_stock_history_data(bs_result, stock_code: str):
     data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
     data.to_csv(stock_history_path(stock_code))
 
@@ -106,7 +106,9 @@ class StockDataExporter(QThread):
             code = str(code_num).zfill(6)
             # 获得股票中文名称
             name = row['name']
+            # 获取股票交易所
             market = Tools.get_trade_center(code)
+            # 获取股票历史数据
             result = baostock.query_history_k_data_plus(code=market + "." + code, fields="date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST",
                                                         start_date=self.startDate, end_date=self.today, frequency="d", adjustflag="2")
             save_stock_history_data(result, code)

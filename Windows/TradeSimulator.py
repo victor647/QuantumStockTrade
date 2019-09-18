@@ -10,7 +10,7 @@ import pandas
 
 
 # 计算买入费用
-def buy_transaction_fee(money):
+def buy_transaction_fee(money: float):
     # 券商佣金
     broker_fee = money * 0.00025
     if broker_fee < 5:
@@ -19,7 +19,7 @@ def buy_transaction_fee(money):
 
 
 # 计算卖出费用
-def sell_transaction_fee(money):
+def sell_transaction_fee(money: float):
     # 券商佣金
     broker_fee = money * 0.00025
     if broker_fee < 5:
@@ -29,8 +29,8 @@ def sell_transaction_fee(money):
     return round(broker_fee + tax, 2)
 
 
-# 获取交易规则和股票代码
-def get_trade_strategy(trade_strategy, stock_code):
+# 初始化交易规则和股票代码
+def init_trade_strategy(trade_strategy: TradeStrategy, stock_code: str):
     global tradeStrategyInstance
     tradeStrategyInstance = trade_strategy
     global stockCode
@@ -93,7 +93,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             self.sell_stock(data, "末日卖出", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], -last_trade_share)
 
     # 更新交易记录并计算资产变化
-    def update_trade_count(self, data):
+    def update_trade_count(self, data: pandas.DataFrame):
         self.lblBuyCount.setText("共买入" + str(self.__totalBuyCount) + "次，成功" + str(self.__successfulBuyCount) + "次")
         self.lblSellCount.setText("共卖出" + str(self.__totalSellCount) + "次，成功" + str(self.__successfulSellCount) + "次")
         self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
@@ -103,7 +103,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data['close'])) + "%")
 
     # 模拟买入股票操作
-    def buy_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
+    def buy_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, point_bias=0, up_index=1):
         # 最大买入额度已满，放弃买入
         if self.currentShare >= tradeStrategyInstance.maxShare:
             return False
@@ -124,7 +124,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         return True
 
     # # 模拟卖出股票操作
-    def sell_stock(self, data, action, time, trade_price, trade_share, point_bias=0, up_index=1):
+    def sell_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, point_bias=0, up_index=1):
         # 最小持仓额度已到，放弃卖出
         if self.currentShare <= tradeStrategyInstance.minShare:
             return False
@@ -146,7 +146,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         return True
 
     # 在表格中添加交易记录
-    def add_trade_log(self, data, time, action, trade_price, trade_share, remaining_share, point_bias, up_index):
+    def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, remaining_share: int, point_bias: float, up_index: float):
         # 获取当前表格总行数
         row_count = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
@@ -203,15 +203,15 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
 
     # 累计获利百分比
-    def profit_percentage(self, current_price):
+    def profit_percentage(self, current_price: float):
         return round(self.net_profit(current_price) / self.__initialAsset * 100, 2)
 
     # 累计获利金额
-    def net_profit(self, current_price):
+    def net_profit(self, current_price: float):
         return round(self.cash_worth() + self.stock_worth(current_price), 2)
 
     # 股票与现金总资产
-    def net_worth(self, current_price):
+    def net_worth(self, current_price: float):
         return round(self.net_profit(current_price) + self.__initialAsset, 2)
 
     # 现金总资产
@@ -219,11 +219,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         return round(self.__totalMoneyBack - self.__totalMoneySpent, 2)
 
     # 股票折现总资产
-    def stock_worth(self, current_price):
+    def stock_worth(self, current_price: float):
         return round(self.currentShare * current_price, 2)
 
     # 持仓平均成本
-    def average_cost(self, current_price):
+    def average_cost(self, current_price: float):
         if self.currentShare == 0:
             return 0.00
         return round(current_price - self.net_profit(current_price) / self.currentShare, 2)

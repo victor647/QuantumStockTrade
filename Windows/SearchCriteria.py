@@ -1,10 +1,23 @@
 from QtDesign.SearchCriteria_ui import Ui_SearchCriteria
 from PyQt5.QtWidgets import QDialog
 import Windows.StockFinder as StockFinder
+import pandas
+
+
+# 自定义技术指标内容
+class CriteriaItem:
+    logic = "平均"
+    operator = "大于"
+    field = "股价"
+    daysCountFirst = 1
+    daysCountSecond = 5
+    useAbsValue = False
+    relativePercentage = 20
+    absoluteValue = 10
 
 
 # 检测股票技术指标是否符合规定
-def match_criteria_item(data, item):
+def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     # 获取比较对象
     column_label = "close"
     if item.field == "涨跌幅":
@@ -56,21 +69,9 @@ def import_criteria_item(dct):
     return item
 
 
-# 自定义技术指标内容
-class CriteriaItem:
-    logic = "平均"
-    operator = "大于"
-    field = "股价"
-    daysCountFirst = 1
-    daysCountSecond = 5
-    useAbsValue = False
-    relativePercentage = 20
-    absoluteValue = 10
-
-
 class SearchCriteria(QDialog, Ui_SearchCriteria):
 
-    def __init__(self, criteria_item):
+    def __init__(self, criteria_item: CriteriaItem):
         super().__init__()
         self.setupUi(self)
         # 初始化指标下拉列表内容

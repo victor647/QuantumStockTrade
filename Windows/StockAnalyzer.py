@@ -26,35 +26,43 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.dteEndDate.setDate(now)
 
     def get_history_data(self):
+        # 获取股票代码
         stock_code = self.iptStockNumber.text()
+        # 获取交易所信息
         market = Tools.get_trade_center(stock_code)
-
+        # 获取开始日期
         start_date = self.dteStartDate.text()
+        # 获取结束日期
         end_date = self.dteEndDate.text()
-
+        # 获取股票历史数据
         result_stock = baostock.query_history_k_data(code=market + "." + stock_code, fields="date,open,high,low,close,preclose,turn",
                                                      start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
+        # 确保股票代码有效
         if len(result_stock.data) == 0:
             error_dialog = QErrorMessage()
             error_dialog.setWindowTitle("错误")
             error_dialog.showMessage("股票代码无效！")
             error_dialog.exec_()
             return
-
+        # 初始化股票历史数据库
         global stockDatabase
         stockDatabase = pandas.DataFrame(result_stock.data, columns=result_stock.fields, dtype=float)
+        # 分析股票股性
         DataAnalyzer.analyze_database(stockDatabase)
+        # 计算股票均线
         DataAnalyzer.get_average_price(stockDatabase, self.spbAveragePeriodPriceLong.value(), self.spbAveragePeriodVolume.value())
-
+        # 获取股票对应的大盘历史数据
         market_code = "000001" if market == "sh" else "399001"
         result_market = baostock.query_history_k_data(code=market + "." + market_code, fields="date,open,high,low,close,preclose,turn",
                                                       start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
-        
+        # 初始化大盘历史数据
         global marketDatabase
         marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
+        # 分析大盘表现
         DataAnalyzer.analyze_database(marketDatabase)
         self.analyze_data()
 
+    # 显示股票股性
     def analyze_data(self):
         self.__analysisData.averageTurn = DataAnalyzer.average_turn(stockDatabase)
         self.__analysisData.averageCloseUp = DataAnalyzer.average_close_when_up(stockDatabase)
@@ -137,7 +145,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
 
         trade_window = TradeSimulator.TradeSimulator()
         trade_window.setWindowTitle(stock_code + "模拟交易")
-        TradeSimulator.get_trade_strategy(self.__tradeStrategy, stock_code)
+        TradeSimulator.init_trade_strategy(self.__tradeStrategy, stock_code)
         trade_window.show()
         trade_window.start_trading()
         trade_window.exec_()
