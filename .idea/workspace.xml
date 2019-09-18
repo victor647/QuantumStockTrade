@@ -19,14 +19,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1988" />
-    <option name="y" value="-19" />
-    <option name="width" value="1612" />
-    <option name="height" value="905" />
+    <option name="x" value="196" />
+    <option name="y" value="118" />
+    <option name="width" value="1178" />
+    <option name="height" value="708" />
   </component>
   <component name="ProjectId" id="1Qk01dgauZzs8o7D0lt3efv0nVR" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="C:/Program Files/Python37/Lib/site-packages/PyQt5/pyrcc.pyd" />
     <property name="node.js.detected.package.eslint" value="true" />
