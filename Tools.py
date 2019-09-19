@@ -5,7 +5,7 @@ import Data.DataAnalyzer as DataAnalyzer
 
 
 # 根据股票代码获取股票交易所信息
-def get_trade_center(stock_code):
+def get_trade_center(stock_code: str):
     code = int(stock_code)
     market = ""
     # 深圳主板
@@ -27,7 +27,7 @@ def get_trade_center(stock_code):
 
 
 # 通过股票代码获取股票名称
-def get_stock_name(stock_code):
+def get_stock_name(stock_code: str):
     table = FileManager.read_stock_list_file()
     row = table[table['code'] == int(stock_code)]
     name = row.iloc[0]['name']
@@ -49,6 +49,12 @@ def reformat_time(time):
     return year + "/" + month + "/" + day + " " + hour + ":" + minute
 
 
+# 六位数时间转字符串
+def time_int_to_string(time: int):
+    time_string = str(time)
+    return time_string[:2] + ":" + time_string[2:4] + ":" + time_string[-2:]
+
+
 # 正数显示红色，负数显示绿色
 def get_text_color(number, threshold=0):
     if number > threshold:
@@ -59,7 +65,7 @@ def get_text_color(number, threshold=0):
 
 
 # 根据昨日收盘价判定股票价格显示颜色
-def get_price_color(price, pre_close):
+def get_price_color(price: float, pre_close: float):
     if price > pre_close:
         return QColor(200, 0, 0)
     if price < pre_close:
@@ -68,15 +74,17 @@ def get_price_color(price, pre_close):
 
 
 # 添加带有红绿正负颜色的数据
-def add_colored_item(table, value, row_count, column, symbol="", threshold=0):
+def add_colored_item(table, value, row_count: int, column: int, symbol="", threshold=0):
     item = QTableWidgetItem(str(value) + symbol)
     item.setForeground(get_text_color(value, threshold))
     table.setItem(row_count, column, item)
 
 
 # 添加价格数据
-def add_price_item(table, price, pre_close, row_count, column):
+def add_price_item(table, price: float, pre_close: float, row_count: int, column: int):
     item = QTableWidgetItem()
     item.setForeground(get_price_color(price, pre_close))
     item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
     table.setItem(row_count, column, item)
+
+

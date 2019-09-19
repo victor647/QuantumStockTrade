@@ -1,9 +1,11 @@
 import sys
+import traceback
 import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from Windows import StockAnalyzer, StockFinder, LiveTracker, StockReviewer
+from Windows import StockAnalyzer, StockFinder, StockReviewer
+from RealTimeMonitor import LiveTracker
 
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
@@ -38,6 +40,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def show_stock_reviewer(self):
         self.__stockReviewer = StockReviewer.StockReviewer()
         self.__stockReviewer.show()
+
+
+sys.excepthook = traceback.print_exception
 
 
 if __name__ == '__main__':

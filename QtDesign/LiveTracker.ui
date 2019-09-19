@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>530</height>
+    <width>715</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>481</width>
+      <width>691</width>
       <height>192</height>
      </rect>
     </property>
@@ -30,7 +30,7 @@
      </font>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>65</number>
+     <number>75</number>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>25</number>
@@ -47,7 +47,17 @@
     </column>
     <column>
      <property name="text">
-      <string>最新价格</string>
+      <string>最新成交</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>价格</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>涨跌幅</string>
      </property>
     </column>
     <column>
@@ -57,12 +67,12 @@
     </column>
     <column>
      <property name="text">
-      <string>1分钟涨跌</string>
+      <string>最近涨跌</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>外盘占比</string>
+      <string>外盘比例</string>
      </property>
     </column>
     <column>
@@ -75,9 +85,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
-      <width>481</width>
-      <height>151</height>
+      <y>280</y>
+      <width>691</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="font">
@@ -94,7 +104,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>461</width>
+       <width>671</width>
        <height>120</height>
       </rect>
      </property>
@@ -106,6 +116,47 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="lblRecentMeasurement">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>短时数据来源：</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spbRecentMeasureCount">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbRecentMeasurement"/>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QCheckBox" name="cbxDailyUpPercent">
@@ -116,7 +167,7 @@
            </font>
           </property>
           <property name="text">
-           <string>日内涨幅达到</string>
+           <string>日内当前涨跌幅达到</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -124,7 +175,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbDailyUpPercent">
+         <widget class="QSpinBox" name="spbDailyPercentChange">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -142,45 +193,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QCheckBox" name="cbxDailyDownPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>跌幅达到</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbDailyDownPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QCheckBox" name="cbxOneMinUpPercent">
           <property name="font">
@@ -190,7 +202,7 @@
            </font>
           </property>
           <property name="text">
-           <string>1分钟涨幅达到</string>
+           <string>短时涨跌幅达到</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -198,42 +210,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="spbOneMinUpPercent">
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.500000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxOneMinDownPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>跌幅达到</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbOneMinDownPercent">
+         <widget class="QDoubleSpinBox" name="spbShortTermPercentChange">
           <property name="suffix">
            <string>%</string>
           </property>
@@ -264,7 +241,7 @@
            </font>
           </property>
           <property name="text">
-           <string>单笔买单大于</string>
+           <string>单笔成交大于</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -272,7 +249,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbSingleBuyAmount">
+         <widget class="QSpinBox" name="spbSingleTransactionAmount">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -289,12 +266,12 @@
            <number>10000</number>
           </property>
           <property name="value">
-           <number>100</number>
+           <number>50</number>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="cbxSingleSellAmount">
+         <widget class="QCheckBox" name="cbxBuyBid">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -302,7 +279,7 @@
            </font>
           </property>
           <property name="text">
-           <string>卖单大于</string>
+           <string>短时委比超过正负</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -310,7 +287,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbSingleSellAmount">
+         <widget class="QSpinBox" name="spbBuyBidPercent">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -318,16 +295,16 @@
            </font>
           </property>
           <property name="suffix">
-           <string>万元</string>
+           <string>%</string>
           </property>
           <property name="minimum">
-           <number>10</number>
+           <number>0</number>
           </property>
           <property name="maximum">
-           <number>10000</number>
+           <number>100</number>
           </property>
           <property name="value">
-           <number>100</number>
+           <number>70</number>
           </property>
          </widget>
         </item>
@@ -336,7 +313,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QCheckBox" name="cbxActiveBuy">
+         <widget class="QCheckBox" name="cbxActiveBuyRatio">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -344,7 +321,7 @@
            </font>
           </property>
           <property name="text">
-           <string>1分钟外盘大于</string>
+           <string>短时外盘/内盘占比大于</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -374,23 +351,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="cbxActiveSell">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
+         <widget class="QCheckBox" name="cbxShortTermAmount">
           <property name="text">
-           <string>内盘大于</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
+           <string>短时成交额大于</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbActiveSellPercent">
+         <widget class="QSpinBox" name="spbShortTermAmount">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -398,16 +366,16 @@
            </font>
           </property>
           <property name="suffix">
-           <string>%</string>
+           <string>万</string>
           </property>
           <property name="minimum">
-           <number>50</number>
+           <number>10</number>
           </property>
           <property name="maximum">
-           <number>100</number>
+           <number>10000</number>
           </property>
           <property name="value">
-           <number>80</number>
+           <number>100</number>
           </property>
          </widget>
         </item>
@@ -421,8 +389,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>481</width>
-      <height>60</height>
+      <width>691</width>
+      <height>62</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -441,6 +409,88 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="btnClearStocks">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>清空列表</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblNewStockCode">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>股票代码</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="iptStockCode">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>600519</string>
+         </property>
+         <property name="maxLength">
+          <number>6</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnAddStock">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>添加股票</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnRemoveStock">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>删除股票</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QPushButton" name="btnStartTracking">
          <property name="font">
@@ -467,10 +517,6 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLabel" name="lblLastUpdateTime">
          <property name="minimumSize">
@@ -533,101 +579,11 @@
           <number>10</number>
          </property>
          <property name="value">
-          <number>3</number>
+          <number>2</number>
          </property>
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>280</y>
-      <width>481</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <item>
-      <widget class="QLabel" name="lblNewStockCode">
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-        </font>
-       </property>
-       <property name="text">
-        <string>股票代码</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="iptStockCode">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-        </font>
-       </property>
-       <property name="text">
-        <string>600519</string>
-       </property>
-       <property name="maxLength">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAddStock">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>添加股票</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnRemoveStock">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>删除股票</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnClearStocks">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>清空列表</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </widget>
@@ -637,7 +593,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>512</width>
+     <width>715</width>
      <height>23</height>
     </rect>
    </property>
@@ -687,8 +643,8 @@
    <slot>start_monitoring()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>47</y>
+     <x>525</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>203</x>
@@ -703,8 +659,8 @@
    <slot>stop_monitoring()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>305</x>
-     <y>43</y>
+     <x>698</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>310</x>
@@ -719,8 +675,8 @@
    <slot>add_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>183</x>
-     <y>328</y>
+     <x>615</x>
+     <y>92</y>
     </hint>
     <hint type="destinationlabel">
      <x>74</x>
@@ -735,8 +691,8 @@
    <slot>remove_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>278</x>
-     <y>328</y>
+     <x>698</x>
+     <y>92</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
@@ -751,8 +707,8 @@
    <slot>clear_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>359</x>
-     <y>328</y>
+     <x>352</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
@@ -763,96 +719,96 @@
   <connection>
    <sender>cbxDailyUpPercent</sender>
    <signal>clicked(bool)</signal>
-   <receiver>spbDailyUpPercent</receiver>
+   <receiver>spbDailyPercentChange</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>383</y>
+     <x>99</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>142</x>
-     <y>383</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDailyDownPercent</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbDailyDownPercent</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>229</x>
-     <y>380</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>281</x>
-     <y>382</y>
+     <x>193</x>
+     <y>352</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>cbxSingleBuyAmount</sender>
    <signal>clicked(bool)</signal>
-   <receiver>spbSingleBuyAmount</receiver>
+   <receiver>spbSingleTransactionAmount</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>76</x>
-     <y>435</y>
+     <x>78</x>
+     <y>392</y>
     </hint>
     <hint type="destinationlabel">
-     <x>114</x>
-     <y>437</y>
+     <x>207</x>
+     <y>393</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxSingleSellAmount</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbSingleSellAmount</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>236</x>
-     <y>436</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>351</x>
-     <y>449</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxActiveBuy</sender>
+   <sender>cbxActiveBuyRatio</sender>
    <signal>clicked(bool)</signal>
    <receiver>spbActiveBuyPercent</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>465</y>
+     <x>91</x>
+     <y>434</y>
     </hint>
     <hint type="destinationlabel">
-     <x>138</x>
-     <y>465</y>
+     <x>236</x>
+     <y>435</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxActiveSell</sender>
+   <sender>cbxOneMinUpPercent</sender>
    <signal>clicked(bool)</signal>
-   <receiver>spbActiveSellPercent</receiver>
+   <receiver>spbShortTermPercentChange</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>229</x>
-     <y>463</y>
+     <x>407</x>
+     <y>343</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>480</y>
+     <x>501</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxBuyBid</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbBuyBidPercent</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>420</x>
+     <y>383</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>482</x>
+     <y>381</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxShortTermAmount</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbShortTermAmount</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>419</y>
     </hint>
    </hints>
   </connection>
