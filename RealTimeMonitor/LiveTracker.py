@@ -177,40 +177,55 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
     # 检测涨跌幅是否达到设定值
     def check_daily_percentage(self, code: str, percent: float):
         if percent > self.spbDailyPercentChange.value():
-            QMessageBox.information(self, "个股异动提示", code + "当前日内涨幅达到" + str(percent) + "%")
+            self.add_message_log(code, "当前日内涨幅达到", percent)
         elif percent < self.spbDailyPercentChange.value() * -1:
-            QMessageBox.information(self, "个股异动提示", code + "当前日内跌幅达到" + str(percent) + "%")
+            self.add_message_log(code, "当前日内跌幅达到", percent)
 
     # 检测最近涨跌幅是否达到设定值
     def check_short_term_percentage(self, code: str, percent: float):
         if percent > self.spbShortTermPercentChange.value():
-            QMessageBox.information(self, "个股异动提示", code + "短时涨幅达到" + str(percent) + "%")
+            self.add_message_log(code, "短时涨幅达到", percent)
         elif percent < self.spbShortTermPercentChange.value() * -1:
-            QMessageBox.information(self, "个股异动提示", code + "短时跌幅达到" + str(percent) + "%")
+            self.add_message_log(code, "短时跌幅达到", percent)
 
     # 检测委比是否达到设定值
     def check_bid_ratio(self, code: str, ratio: float):
         if ratio > self.spbBuyBidPercent.value():
-            QMessageBox.information(self, "个股异动提示", code + "委比高于" + str(ratio) + "%")
+            self.add_message_log(code, "委比高于", ratio, "%")
         elif ratio < self.spbBuyBidPercent.value() * -1:
-            QMessageBox.information(self, "个股异动提示", code + "委比低于" + str(ratio) + "%")
+            self.add_message_log(code, "委比低于", ratio, "%")
 
     # 检测短时内外盘占比是否达到设定值
     def check_short_term_active_buy(self, code: str, percent: float):
         if percent > self.spbActiveBuyPercent.value():
-            QMessageBox.information(self, "个股异动提示", code + "短时外盘达到" + str(percent) + "%")
+            self.add_message_log(code, "短时外盘达到", percent)
         elif percent < 100 - self.spbActiveBuyPercent.value():
-            QMessageBox.information(self, "个股异动提示", code + "短时内盘达到" + str(100 - percent) + "%")
+            self.add_message_log(code, "短时内盘达到", 100 - percent)
 
     # 检测短时成交额是否达到设定值
     def check_short_term_amount(self, code: str, amount: float):
         if amount > self.spbShortTermAmount.value():
-            QMessageBox.information(self, "个股异动提示", code + "短时成交额达到" + str(amount) + "万")
+            self.add_message_log(code, "短时成交额达到", amount, "万")
 
-    def add_message_log(self, code: str, text: str):
-        if self.__recentMessages[code]
-        QMessageBox.information(self, "个股异动提示", code + text)
-
+    def add_message_log(self, code: str, message_type: str, value: float, suffix="%"):
+        # 获得当前时间
+        now = int(time.strftime("%H%M%S"))
+        # 收盘后不提示
+        if now > 150000:
+            return
+        # 若当前股票没有记录，则初始化记录
+        if code not in self.__recentMessages.keys():
+            self.__recentMessages[code] = dict()
+        # 寻找同一种异动类型的上一次提醒时间
+        if message_type in self.__recentMessages[code].keys():
+            last_time = self.__recentMessages[code][message_type]
+            # 若上次异动在冷却时间之内则跳过
+            if last_time - now < self.spbCooldownTime.value() * 100:
+                return
+        # 记录本次异动类型和时间
+        self.__recentMessages[code][message_type] = now
+        # 弹出窗口提示个股异动
+        QMessageBox.information(self, "个股异动提示", code + message_type + str(value) + suffix)
 
     # 得到实时行情的回调
     def parse_stock_live_data(self, url_data):
