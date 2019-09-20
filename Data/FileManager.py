@@ -32,8 +32,8 @@ def save_stock_list_file():
     return stock_list
 
 
-# 导出选股器搜索条件
-def export_search_config(criteria_list: list, file_path: str):
+# 导出数据为json文件
+def export_config_as_json(criteria_list: list, file_path: str):
     with open(file_path, 'w') as file:
         json.dump(obj=criteria_list, fp=file, default=lambda obj: obj.__dict__, indent=4)
 

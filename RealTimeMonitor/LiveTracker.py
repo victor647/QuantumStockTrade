@@ -1,8 +1,9 @@
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QMessageBox, QTreeWidgetItem
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
 import Data.FileManager as FileManager
 import RealTimeMonitor.RealTimeStockData as RealTimeStockData
+from RealTimeMonitor.MonitorCondition import StockMonitorData
 import time
 import Tools
 import urllib.request as url
@@ -26,8 +27,8 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         self.__stockRecentTransactions = dict()
         # 盯盘的股票代码列表
         self.__stocksToMonitor = list()
-        # 最近异动提醒记录
-        self.__recentMessages = dict()
+        # 每只股票的盯盘指标
+        self.__stockMonitorConditions = dict()
         # 初始化下拉列表内容
         self.cbbRecentMeasurement.addItems(['次交易', '分钟'])
         # 为表格自动设置列宽
@@ -40,22 +41,26 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             file = open(file_path[0], "r")
             for line in file:
                 code = line.rstrip('\n')
-                self.add_stock_to_list(code)
+                self.add_stock_to_watch_list(code)
             file.close()
 
     # 在列表中插入一只股票
-    def add_stock_to_list(self, code: str):
+    def add_stock_to_watch_list(self, code: str):
         # 去除重复股票代码
         if code in self.__stocksToMonitor:
             return
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
+        # 获取股票名称
+        name = Tools.get_stock_name(code)
         # 加入盯盘代码列表
         self.__stocksToMonitor.append(code)
         # 初始化成交记录
         self.__stockRecentTransactions[code] = dict()
-        # 获取股票名称
-        name = Tools.get_stock_name(code)
+        # 初始化盯盘指标
+        QTreeWidgetItem(self.trwMonitorConditions, [code])
+        self.__stockMonitorConditions[code] = StockMonitorData(code)
+
         # 在窗口列表中添加股票信息
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
@@ -63,9 +68,21 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
     # 添加股票按钮
     def add_stock_code(self):
         code = self.iptStockCode.text()
-        self.add_stock_to_list(code)
+        self.add_stock_to_watch_list(code)
         if isMonitoring:
             self.__StockMonitor.update_stock_watch_list(self.__stocksToMonitor)
+
+    def add_monitor_condition(self):
+        if len(self.trwMonitorConditions.selectedItems()) == 0:
+            return
+        selected_item = self.trwMonitorConditions.selectedItems()[0]
+        if selected_item.parent() is None:
+            QTreeWidgetItem(selected_item, ["新条件"])
+        else:
+            QTreeWidgetItem(selected_item, ["新指标", "日内涨幅", "5"])
+
+    def delete_monitor_condition(self):
+        pass
 
     # 移除一只股票
     def remove_stock_code(self):
@@ -171,61 +188,15 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             self.tblStockList.setItem(row, column, QTableWidgetItem(str(amount) + "万"))
             self.check_short_term_amount(code, amount)
 
+            self.__stockMonitorConditions[code].analyze_stock_data(live_data, recent_transactions_list)
+
         # 更新上次刷新列表时间
         self.lblLastUpdateTime.setText("上次刷新：" + time.strftime("%H:%M:%S"))
 
-    # 检测涨跌幅是否达到设定值
-    def check_daily_percentage(self, code: str, percent: float):
-        if percent > self.spbDailyPercentChange.value():
-            self.add_message_log(code, "当前日内涨幅达到", percent)
-        elif percent < self.spbDailyPercentChange.value() * -1:
-            self.add_message_log(code, "当前日内跌幅达到", percent)
-
-    # 检测最近涨跌幅是否达到设定值
-    def check_short_term_percentage(self, code: str, percent: float):
-        if percent > self.spbShortTermPercentChange.value():
-            self.add_message_log(code, "短时涨幅达到", percent)
-        elif percent < self.spbShortTermPercentChange.value() * -1:
-            self.add_message_log(code, "短时跌幅达到", percent)
-
-    # 检测委比是否达到设定值
-    def check_bid_ratio(self, code: str, ratio: float):
-        if ratio > self.spbBuyBidPercent.value():
-            self.add_message_log(code, "委比高于", ratio, "%")
-        elif ratio < self.spbBuyBidPercent.value() * -1:
-            self.add_message_log(code, "委比低于", ratio, "%")
-
-    # 检测短时内外盘占比是否达到设定值
-    def check_short_term_active_buy(self, code: str, percent: float):
-        if percent > self.spbActiveBuyPercent.value():
-            self.add_message_log(code, "短时外盘达到", percent)
-        elif percent < 100 - self.spbActiveBuyPercent.value():
-            self.add_message_log(code, "短时内盘达到", 100 - percent)
-
-    # 检测短时成交额是否达到设定值
-    def check_short_term_amount(self, code: str, amount: float):
-        if amount > self.spbShortTermAmount.value():
-            self.add_message_log(code, "短时成交额达到", amount, "万")
-
-    def add_message_log(self, code: str, message_type: str, value: float, suffix="%"):
-        # 获得当前时间
-        now = int(time.strftime("%H%M%S"))
-        # 收盘后不提示
-        if now > 150000:
-            return
-        # 若当前股票没有记录，则初始化记录
-        if code not in self.__recentMessages.keys():
-            self.__recentMessages[code] = dict()
-        # 寻找同一种异动类型的上一次提醒时间
-        if message_type in self.__recentMessages[code].keys():
-            last_time = self.__recentMessages[code][message_type]
-            # 若上次异动在冷却时间之内则跳过
-            if last_time - now < self.spbCooldownTime.value() * 100:
-                return
-        # 记录本次异动类型和时间
-        self.__recentMessages[code][message_type] = now
-        # 弹出窗口提示个股异动
-        QMessageBox.information(self, "个股异动提示", code + message_type + str(value) + suffix)
+    # 发布异动提示消息
+    def add_message_log(self, code: str, message: str):
+        name = Tools.get_stock_name(code)
+        QMessageBox.information(self, "个股异动提示", code + name + message)
 
     # 得到实时行情的回调
     def parse_stock_live_data(self, url_data):

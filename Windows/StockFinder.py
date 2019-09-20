@@ -34,7 +34,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         parent = path.join(path.pardir, "StockData", "SearchConfigs")
         file_path = QFileDialog.getSaveFileName(directory=parent, filter='JSON(*.json)')
         if file_path[0] != "":
-            FileManager.export_search_config(self.__criteriaItems, file_path[0])
+            FileManager.export_config_as_json(self.__criteriaItems, file_path[0])
 
     # 读取保存的搜索条件
     def import_search_config(self):
