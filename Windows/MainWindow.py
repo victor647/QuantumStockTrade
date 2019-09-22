@@ -4,8 +4,10 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from Windows import StockAnalyzer, StockFinder, StockReviewer
+from Windows import StockAnalyzer, StockReviewer
+from StockFinder import StockFinder
 from RealTimeMonitor import LiveTracker
+
 
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)

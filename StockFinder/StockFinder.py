@@ -1,11 +1,11 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from QtDesign.StockFinder_ui import Ui_StockFinder
-from Windows.SearchResult import SearchResult
+from StockFinder.SearchResult import SearchResult
 from Windows.ProgressBar import ProgressBar
 import Data.FileManager as FileManager
 from datetime import datetime
-import Windows.SearchCriteria as SearchCriteria
+import StockFinder.SearchCriteria as SearchCriteria
 import os.path as path
 
 stockFinderInstance = None

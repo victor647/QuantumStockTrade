@@ -7,7 +7,7 @@ from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog
 from Windows.ProgressBar import ProgressBar
 import json
-import Windows.SearchCriteria as SearchCriteria
+import StockFinder.SearchCriteria as SearchCriteria
 
 
 # 默认全部股票列表存放路径

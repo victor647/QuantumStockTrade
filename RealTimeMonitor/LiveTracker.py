@@ -1,9 +1,8 @@
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QMessageBox, QTreeWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QHeaderView, QMessageBox
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
 import Data.FileManager as FileManager
-import RealTimeMonitor.RealTimeStockData as RealTimeStockData
-from RealTimeMonitor.MonitorCondition import StockMonitorData
+from RealTimeMonitor.MonitorCondition import *
 import time
 import Tools
 import urllib.request as url
@@ -21,18 +20,12 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         self.setupUi(self)
         global liveTrackerInstance
         liveTrackerInstance = self
-        # 每只股票当前的价格、成交量等信息
+        # 每只股票实时数据
         self.__stockLiveData = dict()
-        # 每只股票最近几分钟的成交记录
-        self.__stockRecentTransactions = dict()
         # 盯盘的股票代码列表
         self.__stocksToMonitor = list()
-        # 每只股票的盯盘指标
-        self.__stockMonitorConditions = dict()
         # 初始化下拉列表内容
         self.cbbRecentMeasurement.addItems(['次交易', '分钟'])
-        # 为表格自动设置列宽
-        self.tblStockList.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     # 导入股票列表
     def import_stock_list(self):
@@ -55,12 +48,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         name = Tools.get_stock_name(code)
         # 加入盯盘代码列表
         self.__stocksToMonitor.append(code)
-        # 初始化成交记录
-        self.__stockRecentTransactions[code] = dict()
-        # 初始化盯盘指标
-        QTreeWidgetItem(self.trwMonitorConditions, [code])
-        self.__stockMonitorConditions[code] = StockMonitorData(code)
-
+        self.__stockLiveData[code] = RealTimeStockData.StockMonitorData(QTreeWidgetItem(self.trwMonitorConditions, [code + " " + name]))
         # 在窗口列表中添加股票信息
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
@@ -72,18 +60,6 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         if isMonitoring:
             self.__StockMonitor.update_stock_watch_list(self.__stocksToMonitor)
 
-    def add_monitor_condition(self):
-        if len(self.trwMonitorConditions.selectedItems()) == 0:
-            return
-        selected_item = self.trwMonitorConditions.selectedItems()[0]
-        if selected_item.parent() is None:
-            QTreeWidgetItem(selected_item, ["新条件"])
-        else:
-            QTreeWidgetItem(selected_item, ["新指标", "日内涨幅", "5"])
-
-    def delete_monitor_condition(self):
-        pass
-
     # 移除一只股票
     def remove_stock_code(self):
         selection = self.tblStockList.selectedIndexes()
@@ -93,22 +69,88 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         code = self.tblStockList.item(index, 0).text()
         self.__stocksToMonitor.pop(index)
         self.tblStockList.removeRow(index)
+        self.trwMonitorConditions.invisibleRootItem().removeChild(self.trwMonitorConditions.itemAt(index, 0))
         if len(self.__stocksToMonitor) == 0:
             # 清空整个列表
             self.stop_monitoring()
         else:
             # 删除单只股票数据
-            del self.__stockRecentTransactions[code]
             del self.__stockLiveData[code]
 
     # 清空股票列表
     def clear_stock_list(self):
         self.stop_monitoring()
         self.__stocksToMonitor = []
-        # 重置交易记录和实时数据
-        self.__stockRecentTransactions = dict()
+        # 重置股票实时数据
         self.__stockLiveData = dict()
         self.tblStockList.setRowCount(0)
+        # 重置盯盘指标树状图
+        self.trwMonitorConditions.clear()
+
+    # 添加盯盘指标组合
+    def add_monitor_condition(self):
+        # 未选中则跳过
+        if len(self.trwMonitorConditions.selectedItems()) == 0:
+            return
+        selected_item = self.trwMonitorConditions.selectedItems()[0]
+        parent = selected_item.parent()
+        # 如果选中的是股票代码
+        if parent is None:
+            code = selected_item.text(0).split(' ')[0]
+            self.__stockLiveData[code].add_monitor_condition_group()
+            selected_item.setExpanded(True)
+        # 如果选中的是其他指标组
+        elif parent.parent() is None:
+            code = parent.text(0).split(' ')[0]
+            self.__stockLiveData[code].add_monitor_condition_group()
+            parent.setExpanded(True)
+
+    # 删除盯盘指标组合
+    def delete_monitor_condition(self):
+        if len(self.trwMonitorConditions.selectedItems()) == 0:
+            return
+        selected_item = self.trwMonitorConditions.selectedItems()[0]
+        parent = selected_item.parent()
+        # 如果选中的是股票代码则跳过
+        if parent is None:
+            return
+        # 如果选中的是条件组，则没有上上层
+        if parent.parent() is None:
+            # 获取股票代码
+            code = parent.text(0).split(' ')[0]
+            # 删除条件组
+            self.__stockLiveData[code].remove_monitor_condition_group(selected_item)
+
+    # 双击盯盘条件树状图触发
+    def edit_monitor_condition(self, selected_item: QTreeWidgetItem, column_index: int):
+        parent = selected_item.parent()
+        # 如果选中的是股票代码根节点
+        if parent is None:
+            # 如果没有条件组则添加一个
+            if selected_item.childCount() == 0:
+                code = selected_item.text(0).split(' ')[0]
+                self.__stockLiveData[code].add_monitor_condition_group()
+                selected_item.setExpanded(True)
+            return
+        # 获取股票代码根节点
+        code_node = parent.parent()
+        # 如果选中的是条件组则编辑当前条件组
+        if code_node is None:
+            code = parent.text(0).split(' ')[0]
+            # 获取选中指标组合的排位
+            index_group = parent.indexOfChild(selected_item)
+            monitor = MonitorConditionEditor(self.__stockLiveData[code].monitorConditionGroups[index_group])
+            monitor.show()
+            monitor.exec_()
+        # 编辑所选的指标
+        else:
+            # 获取股票代码
+            code = code_node.text(0).split(' ')[0]
+            # 获取选中指标组合的排位
+            index_group = code_node.indexOfChild(parent)
+            monitor = MonitorConditionEditor(self.__stockLiveData[code].monitorConditionGroups[index_group])
+            monitor.show()
+            monitor.exec_()
 
     # 开始实时盯盘
     def start_monitoring(self):
@@ -144,15 +186,13 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             code = self.__stocksToMonitor[row]
             # 获取当前股票实时数据
             live_data = self.__stockLiveData[code]
-            # 获取当前股票交易记录全数据
-            stock_transaction_database = self.__stockRecentTransactions[code]
             # 获取指定规则下最近交易记录列表
             if self.cbbRecentMeasurement.currentIndex() == 0:
                 # 按照交易次数选取
-                recent_transactions_list = RealTimeStockData.fetch_recent_transactions_by_count(stock_transaction_database, self.spbRecentMeasureCount.value())
+                recent_transactions_list = self.__stockLiveData[code].fetch_recent_transactions_by_count(self.spbRecentMeasureCount.value())
             else:
                 # 按照交易时间选取
-                recent_transactions_list = RealTimeStockData.fetch_recent_transactions_by_minute(stock_transaction_database, self.spbRecentMeasureCount.value())
+                recent_transactions_list = self.__stockLiveData[code].fetch_recent_transactions_by_minute(self.spbRecentMeasureCount.value())
             # 数据初始列数
             column = 2
             # 最近成交记录
@@ -166,29 +206,24 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             # 涨跌幅
             Tools.add_colored_item(self.tblStockList, live_data.percentChange, row, column, "%")
             column += 1
-            self.check_daily_percentage(code, live_data.percentChange)
             # 五档委比数据
             ratio = live_data.bidInfo.get_bid_ratio()
             Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
             column += 1
-            self.check_bid_ratio(code, ratio)
             # 最近涨跌幅
             change = RealTimeStockData.get_recent_change(recent_transactions_list)
             ratio = round(change / live_data.previousClose * 100, 2)
             Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
             column += 1
-            self.check_short_term_percentage(code, ratio)
             # 最近成交外盘占比
             ratio = RealTimeStockData.get_active_buy_ratio(recent_transactions_list)
             Tools.add_colored_item(self.tblStockList, ratio, row, column, "%", 50)
             column += 1
-            self.check_short_term_active_buy(code, ratio)
             # 最近成交额
             amount = RealTimeStockData.get_total_amount(recent_transactions_list)
             self.tblStockList.setItem(row, column, QTableWidgetItem(str(amount) + "万"))
-            self.check_short_term_amount(code, amount)
 
-            self.__stockMonitorConditions[code].analyze_stock_data(live_data, recent_transactions_list)
+            self.__stockLiveData[code].analyze_stock_data(recent_transactions_list)
 
         # 更新上次刷新列表时间
         self.lblLastUpdateTime.setText("上次刷新：" + time.strftime("%H:%M:%S"))
@@ -206,10 +241,8 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             live_info_list = str(stock_data).split('~')
             # 获取股票代码
             code = live_info_list[2]
-            # 读取股票实时价格和买卖盘信息
-            self.__stockLiveData[code] = RealTimeStockData.StockLiveStatus(code, live_info_list)
-            # 读取股票最近6条成交记录
-            RealTimeStockData.parse_recent_transactions(live_info_list[29], self.__stockRecentTransactions[code])
+            # 更新股票实时价格和交易信息
+            self.__stockLiveData[code].update_stock_data(live_info_list)
         # 更新窗口股票列表信息显示
         self.update_stock_table()
 

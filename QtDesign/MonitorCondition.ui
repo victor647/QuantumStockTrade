@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MonitorCondition</class>
+ <widget class="QDialog" name="MonitorCondition">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>271</width>
+    <height>265</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>盯盘指标</string>
+  </property>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>251</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="lblGroupName">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>指标组合名称：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtGroupName">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btnAddItem">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>添加指标</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnDeleteItem">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>删除指标</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblMonitorItems">
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>120</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>25</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>监控指标</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>触发数值</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QPushButton" name="btnSave">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>保存</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnDiscard">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>取消</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnSave</sender>
+   <signal>clicked()</signal>
+   <receiver>MonitorCondition</receiver>
+   <slot>save_changes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>235</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>65</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnDiscard</sender>
+   <signal>clicked()</signal>
+   <receiver>MonitorCondition</receiver>
+   <slot>discard_changes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>188</x>
+     <y>237</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>186</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnAddItem</sender>
+   <signal>clicked()</signal>
+   <receiver>MonitorCondition</receiver>
+   <slot>add_condition_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>93</x>
+     <y>32</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnDeleteItem</sender>
+   <signal>clicked()</signal>
+   <receiver>MonitorCondition</receiver>
+   <slot>delete_condition_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>235</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>save_changes()</slot>
+  <slot>discard_changes()</slot>
+  <slot>add_condition_item()</slot>
+  <slot>delete_condition_item()</slot>
+ </slots>
+</ui>

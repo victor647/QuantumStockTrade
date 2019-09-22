@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>715</width>
-    <height>554</height>
+    <width>664</width>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>691</width>
+      <width>641</width>
       <height>171</height>
      </rect>
     </property>
@@ -36,7 +36,7 @@
      <number>0</number>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>75</number>
+     <number>65</number>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>25</number>
@@ -92,7 +92,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>691</width>
+      <width>641</width>
       <height>62</height>
      </rect>
     </property>
@@ -205,6 +205,7 @@
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -223,6 +224,7 @@
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -241,6 +243,7 @@
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -265,6 +268,7 @@
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -297,79 +301,37 @@
        <item>
         <widget class="QComboBox" name="cbbRecentMeasurement"/>
        </item>
-       <item>
-        <widget class="QLabel" name="lblCooldownTime">
-         <property name="font">
-          <font>
-           <family>Microsoft YaHei UI</family>
-          </font>
-         </property>
-         <property name="text">
-          <string>异动提示冷却时间：</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spbCooldownTime">
-         <property name="font">
-          <font>
-           <family>Microsoft YaHei UI</family>
-          </font>
-         </property>
-         <property name="suffix">
-          <string>分钟</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>60</number>
-         </property>
-         <property name="value">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QLabel" name="lblMonitorConditions">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>267</y>
-      <width>101</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-     </font>
-    </property>
-    <property name="text">
-     <string>盯盘指标设置</string>
-    </property>
    </widget>
    <widget class="QTreeWidget" name="trwMonitorConditions">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>300</y>
-      <width>691</width>
+      <width>641</width>
       <height>192</height>
      </rect>
     </property>
-    <property name="editTriggers">
-     <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContents</enum>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+    </property>
+    <attribute name="headerCascadingSectionResizes">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="headerMinimumSectionSize">
+     <number>200</number>
+    </attribute>
     <attribute name="headerDefaultSectionSize">
-     <number>150</number>
+     <number>200</number>
     </attribute>
     <column>
      <property name="text">
-      <string>股票名称</string>
+      <string>股票信息</string>
      </property>
     </column>
     <column>
@@ -383,16 +345,90 @@
      </property>
     </column>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>260</y>
-      <width>221</width>
-      <height>27</height>
+      <x>10</x>
+      <y>261</y>
+      <width>641</width>
+      <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="lblMonitorConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>盯盘指标设置：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAddCondition">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>添加指标组合</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnDeleteCondition">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>删除指标组合</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblCooldownTime">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>异动提示冷却时间：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spbCooldownTime">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="suffix">
+        <string>分钟</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>60</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="btnStartTracking">
        <property name="font">
@@ -421,52 +457,14 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>266</y>
-      <width>201</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QPushButton" name="btnAddCondition">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>添加指标（组）</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnDeleteCondition">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>删除指标（组）</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>715</width>
-     <height>23</height>
+     <width>664</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -516,7 +514,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>568</x>
-     <y>59</y>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>74</x>
@@ -532,7 +530,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>698</x>
-     <y>59</y>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
@@ -548,7 +546,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>266</x>
-     <y>59</y>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
@@ -564,7 +562,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>587</x>
-     <y>308</y>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
      <x>203</x>
@@ -580,7 +578,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>699</x>
-     <y>308</y>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
      <x>310</x>
@@ -620,6 +618,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>trwMonitorConditions</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>edit_monitor_condition(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>526</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>import_stock_list()</slot>
@@ -630,5 +644,6 @@
   <slot>clear_stock_list()</slot>
   <slot>add_monitor_condition()</slot>
   <slot>delete_monitor_condition()</slot>
+  <slot>edit_monitor_condition(QTreeWidgetItem*,int)</slot>
  </slots>
 </ui>

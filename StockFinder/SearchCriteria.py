@@ -1,6 +1,6 @@
 from QtDesign.SearchCriteria_ui import Ui_SearchCriteria
 from PyQt5.QtWidgets import QDialog
-import Windows.StockFinder as StockFinder
+import StockFinder.StockFinder as StockFinder
 import pandas
 
 
