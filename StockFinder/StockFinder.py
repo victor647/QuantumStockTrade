@@ -41,7 +41,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         parent = path.join(path.pardir, "StockData", "SearchConfigs")
         file_path = QFileDialog.getOpenFileName(directory=parent, filter='JSON(*.json)')
         if file_path[0] != "":
-            self.__criteriaItems = FileManager.import_search_config(file_path[0])
+            self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.import_criteria_item)
             self.update_criteria_list()
 
     # 更新搜索条件列表显示

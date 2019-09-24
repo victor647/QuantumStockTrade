@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>265</height>
+    <width>329</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>盯盘指标</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>251</width>
+     <width>305</width>
      <height>241</height>
     </rect>
    </property>
@@ -34,7 +34,7 @@
          </font>
         </property>
         <property name="text">
-         <string>指标组合名称：</string>
+         <string>指标组合名称</string>
         </property>
        </widget>
       </item>
@@ -51,6 +51,40 @@
         </property>
         <property name="placeholderText">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblCoolDownTime">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>冷却时间</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbCoolDownTime">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>分钟</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>120</number>
+        </property>
+        <property name="value">
+         <number>10</number>
         </property>
        </widget>
       </item>
@@ -88,6 +122,9 @@
     </item>
     <item>
      <widget class="QTableWidget" name="tblMonitorItems">
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>120</number>
+      </attribute>
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>120</number>
       </attribute>

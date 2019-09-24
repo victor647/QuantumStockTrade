@@ -49,32 +49,42 @@ class StockMonitorData:
     percentChange = 0.0
 
     # 初始化新增盯盘指标根节点
-    def __init__(self, item_node: QTreeWidgetItem):
-        self.monitorCodeNode = item_node
+    def __init__(self, code_node: QTreeWidgetItem, code: str):
+        self.codeNode = code_node
+        self.code = code
         self.recentTransactions = dict()
         self.monitorConditionGroups = []
         self.bidInfo = None
 
     # 删除时一并删除盯盘指标根节点
     def __del__(self):
-        del self.monitorCodeNode
+        del self.codeNode
 
     # 新增盯盘条件组
     def add_monitor_condition_group(self):
         count = len(self.monitorConditionGroups)
-        new_item = QTreeWidgetItem(["指标组" + str(count + 1)])
-        self.monitorCodeNode.addChild(new_item)
-        self.monitorConditionGroups.append(MonitorCondition.ConditionItemGroup(new_item))
+        condition_group = MonitorCondition.ConditionItemGroup("指标组" + str(count + 1), 10, [])
+        self.create_item_group_node(condition_group)
+        # 生成一个默认指标
+        condition_group.add_default_condition()
+        self.monitorConditionGroups.append(condition_group)
+
+    # 创建新的条件组节点
+    def create_item_group_node(self, item_group):
+        item_group_node = QTreeWidgetItem()
+        item_group_node.setText(0, item_group.name)
+        item_group_node.setText(3, str(item_group.coolDownTime) + "分钟")
+        self.codeNode.addChild(item_group_node)
+        item_group.conditionGroupNode = item_group_node
 
     # 删除盯盘条件组
     def remove_monitor_condition_group(self, selection: QTreeWidgetItem):
-        index = self.monitorCodeNode.indexOfChild(selection)
-        self.monitorCodeNode.removeChild(selection)
+        index = self.codeNode.indexOfChild(selection)
+        self.codeNode.removeChild(selection)
         self.monitorConditionGroups.pop(index)
 
     # 更新股票实时信息
     def update_stock_data(self, live_info: list):
-        self.code = live_info[2]
         self.currentPrice = float(live_info[3])
         self.previousClose = float(live_info[4])
         self.percentChange = float(live_info[32])
@@ -88,6 +98,9 @@ class StockMonitorData:
 
     # 读取股票最近几条交易记录数据
     def parse_recent_transactions(self, data: str):
+        # 跳过没有成交数据的
+        if data == "":
+            return
         logs = data.split('|')
         for log in logs:
             log_split = log.split('/')

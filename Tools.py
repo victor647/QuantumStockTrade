@@ -2,6 +2,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTableWidgetItem
 import Data.FileManager as FileManager
 import Data.DataAnalyzer as DataAnalyzer
+import webbrowser
 
 
 # 根据股票代码获取股票交易所信息
@@ -87,4 +88,9 @@ def add_price_item(table, price: float, pre_close: float, row_count: int, column
     item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
     table.setItem(row_count, column, item)
 
+
+# 在东方财富网站打开股票主页
+def open_stock_page(code: str):
+    market = get_trade_center(code)
+    webbrowser.open("http://quote.eastmoney.com/" + market + code + ".html")
 

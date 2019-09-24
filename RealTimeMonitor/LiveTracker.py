@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QHeaderView, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
 import Data.FileManager as FileManager
@@ -27,15 +27,37 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         # 初始化下拉列表内容
         self.cbbRecentMeasurement.addItems(['次交易', '分钟'])
 
+    # 快捷键设置
+    def keyPressEvent(self, key: QKeyEvent):
+        # Esc键清除选择
+        if key.key() == Qt.Key_Escape:
+            self.tblStockList.clearSelection()
+            self.trwMonitorConditions.clearSelection()
+        # 按删除键删除股票或指标组
+        elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
+            if self.tblStockList.selectedItems() is not None:
+                self.remove_stock_code()
+            if self.trwMonitorConditions.selectedItems() is not None:
+                self.delete_condition()
+        # 按回车键编辑指标组
+        elif key.key() == Qt.Key_Enter:
+            if self.trwMonitorConditions.selectedItems() is not None:
+                self.edit_condition()
+
+    # 在东方财富网站打开股票主页
+    def open_stock_page(self, row: int, column: int):
+        if column != 0:
+            return
+        code = self.tblStockList.item(row, 0).text()
+        Tools.open_stock_page(code)
+
     # 导入股票列表
     def import_stock_list(self):
-        file_path = FileManager.import_selected_stock_list()
-        if file_path[0] != "":
-            file = open(file_path[0], "r")
-            for line in file:
-                code = line.rstrip('\n')
-                self.add_stock_to_watch_list(code)
-            file.close()
+        FileManager.import_stock_list(self.add_stock_to_watch_list)
+
+    # 导出股票列表
+    def export_stock_list(self):
+        FileManager.export_stock_list(self.tblStockList)
 
     # 在列表中插入一只股票
     def add_stock_to_watch_list(self, code: str):
@@ -48,7 +70,9 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         name = Tools.get_stock_name(code)
         # 加入盯盘代码列表
         self.__stocksToMonitor.append(code)
-        self.__stockLiveData[code] = RealTimeStockData.StockMonitorData(QTreeWidgetItem(self.trwMonitorConditions, [code + " " + name]))
+        # 生成盯盘指标根节点
+        code_node = QTreeWidgetItem(self.trwMonitorConditions, [code + " " + name])
+        self.__stockLiveData[code] = RealTimeStockData.StockMonitorData(code_node, code)
         # 在窗口列表中添加股票信息
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
@@ -69,7 +93,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         code = self.tblStockList.item(index, 0).text()
         self.__stocksToMonitor.pop(index)
         self.tblStockList.removeRow(index)
-        self.trwMonitorConditions.invisibleRootItem().removeChild(self.trwMonitorConditions.itemAt(index, 0))
+        self.trwMonitorConditions.invisibleRootItem().removeChild(self.__stockLiveData[code].codeNode)
         if len(self.__stocksToMonitor) == 0:
             # 清空整个列表
             self.stop_monitoring()
@@ -88,7 +112,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         self.trwMonitorConditions.clear()
 
     # 添加盯盘指标组合
-    def add_monitor_condition(self):
+    def add_condition(self):
         # 未选中则跳过
         if len(self.trwMonitorConditions.selectedItems()) == 0:
             return
@@ -106,7 +130,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             parent.setExpanded(True)
 
     # 删除盯盘指标组合
-    def delete_monitor_condition(self):
+    def delete_condition(self):
         if len(self.trwMonitorConditions.selectedItems()) == 0:
             return
         selected_item = self.trwMonitorConditions.selectedItems()[0]
@@ -121,8 +145,15 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             # 删除条件组
             self.__stockLiveData[code].remove_monitor_condition_group(selected_item)
 
-    # 双击盯盘条件树状图触发
-    def edit_monitor_condition(self, selected_item: QTreeWidgetItem, column_index: int):
+    # 编辑盯盘指标组合
+    def edit_condition(self):
+        if len(self.trwMonitorConditions.selectedItems()) == 0:
+            return
+        selected_item = self.trwMonitorConditions.selectedItems()[0]
+        self.edit_monitor_condition(selected_item)
+
+    # 打开编辑界面
+    def edit_monitor_condition(self, selected_item: QTreeWidgetItem):
         parent = selected_item.parent()
         # 如果选中的是股票代码根节点
         if parent is None:
@@ -151,6 +182,31 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             monitor = MonitorConditionEditor(self.__stockLiveData[code].monitorConditionGroups[index_group])
             monitor.show()
             monitor.exec_()
+
+    def copy_condition(self):
+        pass
+
+    def paste_condition(self):
+        pass
+
+    # 从json文件导入每只股票的盯盘指标
+    def import_conditions(self):
+        for data in self.__stockLiveData.values():
+            # 从配置文件导入json数据
+            json_data = FileManager.import_json_config(FileManager.monitor_config_path(data.code))
+            # 初始化盯盘条件组
+            data.monitorConditionGroups = []
+            for group in json_data:
+                item_group = ConditionItemGroup.deserialize_from_json(group)
+                data.create_item_group_node(item_group)
+                data.monitorConditionGroups.append(item_group)
+                for i in range(len(item_group.conditionItems)):
+                    item_group.create_individual_item_node(item_group.conditionItems[i], i)
+
+    # 导出每只股票的盯盘指标到json文件
+    def export_conditions(self):
+        for data in self.__stockLiveData.values():
+            FileManager.export_config_as_json(data.monitorConditionGroups, FileManager.monitor_config_path(data.code))
 
     # 开始实时盯盘
     def start_monitoring(self):

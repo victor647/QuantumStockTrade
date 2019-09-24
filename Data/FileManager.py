@@ -4,7 +4,7 @@ import tushare
 import baostock
 import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QTableWidget
 from Windows.ProgressBar import ProgressBar
 import json
 import StockFinder.SearchCriteria as SearchCriteria
@@ -17,12 +17,55 @@ def full_stock_info_path():
 
 # 选股器导出的股票列表文件夹
 def selected_stock_list_path():
-    return os.path.join(os.path.pardir, "StockData", "SelectedStocks")
+    base_path = os.path.join(os.path.pardir, "StockData", "SelectedStocks")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    return base_path
+
+
+# 默认股票历史数据存放路径
+def stock_history_path(stock_code: str):
+    base_path = os.path.join(os.path.pardir, "StockData", "StockHistory")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    file_path = os.path.join(base_path, stock_code + ".csv")
+    return file_path
+
+
+# 盯盘指标存储文件夹
+def monitor_config_path(stock_code: str):
+    base_path = os.path.join(os.path.pardir, "StockData", "MonitorConfigs")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    file_path = os.path.join(base_path, stock_code + ".json")
+    return file_path
 
 
 # 导入全部股票信息列表
 def read_stock_list_file():
     return pandas.read_csv(full_stock_info_path())
+
+
+# 导出找到的股票列表到txt文件
+def export_stock_list(stock_table: QTableWidget):
+    file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+    if file_path[0] != "":
+        file = open(file_path[0], "w")
+        for i in range(stock_table.rowCount()):
+            text = stock_table.item(i, 0).text()
+            file.write(text + "\n")
+        file.close()
+
+
+# 从txt文件导入股票列表
+def import_stock_list(import_func):
+    file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+    if file_path[0] != "":
+        file = open(file_path[0], "r")
+        for line in file:
+            code = line.rstrip('\n')
+            import_func(code)
+        file.close()
 
 
 # 导出全部股票信息列表
@@ -33,25 +76,19 @@ def save_stock_list_file():
 
 
 # 导出数据为json文件
-def export_config_as_json(criteria_list: list, file_path: str):
+def export_config_as_json(export_object, file_path: str):
     with open(file_path, 'w') as file:
-        json.dump(obj=criteria_list, fp=file, default=lambda obj: obj.__dict__, indent=4)
+        json.dump(obj=export_object, fp=file, default=lambda obj: obj.__dict__, indent=4)
 
 
-# 导入选股器搜索条件
-def import_search_config(file_path: str):
+# 导入json数据
+def import_json_config(file_path: str, object_hook=None):
     with open(file_path, 'r') as file:
-        criteria_list = json.load(fp=file, object_hook=SearchCriteria.import_criteria_item)
-    return criteria_list
-
-
-# 默认股票历史数据存放路径
-def stock_history_path(stock_code: str):
-    base_path = os.path.join(os.path.pardir, "StockData\\StockHistory")
-    if not os.path.exists(base_path):
-        os.makedirs(base_path)
-    file_path = os.path.join(base_path, stock_code + ".csv")
-    return file_path
+        if object_hook is None:
+            data = json.load(fp=file)
+        else:
+            data = json.load(fp=file, object_hook=object_hook)
+    return data
 
 
 # 从csv文件读取单只股票历史数据
@@ -75,11 +112,6 @@ def export_all_stock_data():
     exporter.finishedCallback.connect(progress.finish_progress)
     exporter.start()
     progress.exec()
-
-
-# 导出选股器找到的股票列表
-def export_selected_stock_list():
-    return QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
 
 
 # 导入选股器找到的股票列表

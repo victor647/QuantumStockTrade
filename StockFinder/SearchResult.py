@@ -1,7 +1,6 @@
 from QtDesign.SearchResult_ui import Ui_SearchResult
 from PyQt5.QtWidgets import QDialog, QTableWidgetItem
 import Tools
-import webbrowser
 import Data.FileManager as FileManager
 
 
@@ -29,15 +28,8 @@ class SearchResult(QDialog, Ui_SearchResult):
         if column != 0:
             return
         code = self.tblStockList.item(row, 0).text()
-        market = Tools.get_trade_center(code)
-        webbrowser.open("http://quote.eastmoney.com/" + market + code + ".html")
+        Tools.open_stock_page(code)
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):
-        file_path = FileManager.export_selected_stock_list()
-        if file_path[0] != "":
-            file = open(file_path[0], "w")
-            for i in range(self.tblStockList.rowCount()):
-                text = self.tblStockList.item(i, 0).text()
-                file.write(text + "\n")
-            file.close()
+        FileManager.export_stock_list(self.tblStockList)

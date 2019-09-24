@@ -56,16 +56,16 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
 
 
 # 通过json导入搜索条件
-def import_criteria_item(dct):
+def import_criteria_item(json_data: dict):
     item = CriteriaItem()
-    item.logic = dct['logic']
-    item.operator = dct['operator']
-    item.field = dct['field']
-    item.daysCountFirst = dct['daysCountFirst']
-    item.daysCountSecond = dct['daysCountSecond']
-    item.useAbsValue = dct['useAbsValue']
-    item.relativePercentage = dct['relativePercentage']
-    item.absoluteValue = dct['absoluteValue']
+    item.logic = json_data['logic']
+    item.operator = json_data['operator']
+    item.field = json_data['field']
+    item.daysCountFirst = json_data['daysCountFirst']
+    item.daysCountSecond = json_data['daysCountSecond']
+    item.useAbsValue = json_data['useAbsValue']
+    item.relativePercentage = json_data['relativePercentage']
+    item.absoluteValue = json_data['absoluteValue']
     return item
 
 
