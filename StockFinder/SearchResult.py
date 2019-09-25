@@ -1,5 +1,7 @@
 from QtDesign.SearchResult_ui import Ui_SearchResult
 from PyQt5.QtWidgets import QDialog, QTableWidgetItem
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QKeyEvent
 import Tools
 import Data.FileManager as FileManager
 
@@ -9,6 +11,15 @@ class SearchResult(QDialog, Ui_SearchResult):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+    # 快捷键设置
+    def keyPressEvent(self, key: QKeyEvent):
+        # Esc键清除选择
+        if key.key() == Qt.Key_Escape:
+            self.tblStockList.clearSelection()
+        # 按删除键删除股票或指标组
+        elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
+            self.delete_selected_stocks()
 
     # 更新已找到的股票数量
     def update_found_stock_count(self):
@@ -29,6 +40,11 @@ class SearchResult(QDialog, Ui_SearchResult):
             return
         code = self.tblStockList.item(row, 0).text()
         Tools.open_stock_page(code)
+
+    # 删除所选中的股票
+    def delete_selected_stocks(self):
+        for item in self.tblStockList.selectedItems():
+            self.tblStockList.removeRow(item.row())
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):

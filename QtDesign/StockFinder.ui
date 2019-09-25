@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>543</width>
+    <width>533</width>
     <height>507</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
        <x>10</x>
        <y>20</y>
        <width>135</width>
-       <height>131</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="font">
@@ -471,7 +471,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QCheckBox" name="cbxTotalAsset">
+         <widget class="QCheckBox" name="cbxTotalAssets">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -899,7 +899,7 @@
       <x>370</x>
       <y>209</y>
       <width>151</width>
-      <height>120</height>
+      <height>161</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -912,12 +912,12 @@
         </font>
        </property>
        <property name="text">
-        <string>获取股票数据</string>
+        <string>获取全部股票历史日K线</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnStartSearch">
+      <widget class="QPushButton" name="btnSaveTechnicalConfig">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -925,12 +925,12 @@
         </font>
        </property>
        <property name="text">
-        <string>开始搜索选股</string>
+        <string>保存技术指标</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnSaveConfig">
+      <widget class="QPushButton" name="btnLoadTechnicalConfig">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -938,12 +938,12 @@
         </font>
        </property>
        <property name="text">
-        <string>保存指标</string>
+        <string>载入技术指标</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnLoadConfig">
+      <widget class="QPushButton" name="btnSaveCompanyConfig">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -951,7 +951,20 @@
         </font>
        </property>
        <property name="text">
-        <string>载入指标</string>
+        <string>导出基本面指标</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnLoadCompanyConfig">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导入基本面指标</string>
        </property>
       </widget>
      </item>
@@ -976,13 +989,32 @@
      <string>每日请先获取最新股票数据！</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnStartSearch">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>390</y>
+      <width>149</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>开始搜索选股！</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>543</width>
+     <width>533</width>
      <height>23</height>
     </rect>
    </property>
@@ -998,8 +1030,8 @@
    <slot>search_all_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>424</x>
-     <y>288</y>
+     <x>423</x>
+     <y>437</y>
     </hint>
     <hint type="destinationlabel">
      <x>451</x>
@@ -1136,7 +1168,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxTotalAsset</sender>
+   <sender>cbxTotalAssets</sender>
    <signal>clicked(bool)</signal>
    <receiver>spbTotalAssetsMin</receiver>
    <slot>setEnabled(bool)</slot>
@@ -1152,7 +1184,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxTotalAsset</sender>
+   <sender>cbxTotalAssets</sender>
    <signal>clicked(bool)</signal>
    <receiver>spbTotalAssetsMax</receiver>
    <slot>setEnabled(bool)</slot>
@@ -1248,14 +1280,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnSaveConfig</sender>
+   <sender>btnSaveTechnicalConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>export_search_config()</slot>
+   <slot>export_technical_config()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>403</x>
-     <y>319</y>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
@@ -1264,14 +1296,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnLoadConfig</sender>
+   <sender>btnLoadTechnicalConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>import_search_config()</slot>
+   <slot>import_technical_config()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>409</x>
-     <y>350</y>
+     <y>322</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -1391,6 +1423,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lstCriteriaItems</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>StockFinder</receiver>
+   <slot>edit_selected_item()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSaveCompanyConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>export_company_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>449</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>344</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLoadCompanyConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>import_company_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>471</x>
+     <y>398</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>search_all_stocks()</slot>
@@ -1399,7 +1479,10 @@
   <slot>modify_criteria_item()</slot>
   <slot>remove_criteria_item()</slot>
   <slot>reset_criteria_items()</slot>
-  <slot>export_search_config()</slot>
-  <slot>import_search_config()</slot>
+  <slot>export_technical_config()</slot>
+  <slot>import_technical_config()</slot>
+  <slot>edit_selected_item()</slot>
+  <slot>export_company_config()</slot>
+  <slot>import_company_config()</slot>
  </slots>
 </ui>

@@ -1,12 +1,13 @@
-from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
+from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from StockFinder.SearchResult import SearchResult
 from Windows.ProgressBar import ProgressBar
 import Data.FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
-import os.path as path
+
 
 stockFinderInstance = None
 
@@ -24,22 +25,96 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         global stockFinderInstance
         stockFinderInstance = self
 
+    # 快捷键设置
+    def keyPressEvent(self, key: QKeyEvent):
+        # Esc键清除选择
+        if key.key() == Qt.Key_Escape:
+            self.lstCriteriaItems.clearSelection()
+        # 按删除键删除股票或指标组
+        elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
+            self.remove_criteria_item()
+
     # 获取并导出全部股票信息
     @staticmethod
     def export_all_stock_data():
         FileManager.export_all_stock_data()
 
-    # 保存搜索条件
-    def export_search_config(self):
-        parent = path.join(path.pardir, "StockData", "SearchConfigs")
-        file_path = QFileDialog.getSaveFileName(directory=parent, filter='JSON(*.json)')
+    # 保存基本面指标搜索条件
+    def export_company_config(self):
+        file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
+        data = {
+            "peOn": self.cbxPriceEarning.isChecked(),
+            "peMin": self.spbPriceEarningMin.value(),
+            "peMax": self.spbPriceEarningMax.value(),
+            "pbOn": self.cbxPriceBook.isChecked(),
+            "pbMin": self.spbPriceBookMin.value(),
+            "pbMax": self.spbPriceBookMax.value(),
+            "totalShareOn": self.cbxTotalShare.isChecked(),
+            "totalShareMin": self.spbTotalShareMin.value(),
+            "totalShareMax": self.spbTotalShareMax.value(),
+            "totalAssetsOn": self.cbxTotalAssets.isChecked(),
+            "totalAssetsMin": self.spbTotalAssetsMin.value(),
+            "totalAssetsMax": self.spbTotalAssetsMax.value(),
+            "grossProfitOn": self.cbxGrossProfit.isChecked(),
+            "grossProfit": self.spbGrossProfit.value(),
+            "netProfitOn": self.cbxNetProfit.value(),
+            "netProfit": self.spbNetProfit.value(),
+            "incomeIncreaseOn": self.cbxIncomeIncrease.isChecked(),
+            "incomeIncrease": self.spbIncomeIncrease.value(),
+            "profitIncreaseOn": self.cbxProfitIncrease.isChecked(),
+            "profitIncrease": self.spbProfitIncrease.value(),
+            "netAssetProfitOn": self.cbxNetAssetProfit.isChecked(),
+            "netAssetProfit": self.spbNetAssetProfit.value(),
+            "totalHoldersOn": self.cbxTotalHolders.isChecked(),
+            "totalHoldersMin": self.spbTotalHoldersMin.value(),
+            "totalHoldersMax": self.spbTotalHoldersMax.value(),
+            "includeSt": self.cbxIncludeStStock.isChecked(),
+            "includeNew": self.cbxIncludeNewStock.isChecked(),
+        }
+        if file_path[0] != "":
+            FileManager.export_config_as_json(data, file_path[0])
+
+    def import_company_config(self):
+        file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
+        if file_path[0] != "":
+            data = FileManager.import_json_config(file_path[0])
+            self.cbxPriceEarning.setChecked(data.peOn)
+            self.spbPriceEarningMin.setValue(data.peMin)
+            self.spbPriceEarningMax.setValue(data.peMax)
+            self.cbxPriceBook.setChecked(data.pbOn)
+            self.spbPriceBookMin.setValue(data.pbMin)
+            self.spbPriceBookMax.setValue(data.pbMax)
+            self.cbxTotalShare.setChecked(data.totalShareOn)
+            self.spbTotalShareMin.setValue(data.totalShareMin)
+            self.spbTotalShareMax.setValue(data.totalShareMax)
+            self.cbxTotalAssets.setChecked(data.totalAssetsOn)
+            self.spbTotalAssetsMin.setValue(data.totalAssetsMin)
+            self.spbTotalAssetsMax.setValue(data.totalAssetsMax)
+            self.cbxGrossProfit.setChecked(data.grossProfitOn)
+            self.spbGrossProfit.setValue(data.grossProfit)
+            self.cbxNetProfit.setValue(data.netProfitOn)
+            self.spbNetProfit.setValue(data.netProfit)
+            self.cbxIncomeIncrease.setChecked(data.incomeIncreaseOn)
+            self.spbIncomeIncrease.setValue(data.incomeIncrease)
+            self.cbxProfitIncrease.setChecked(data.profitIncreaseOn)
+            self.spbProfitIncrease.setValue(data.profitIncrease)
+            self.cbxNetAssetProfit.setChecked(data.netAssetProfitOn)
+            self.spbNetAssetProfit.setValue(data.netAssetProfit)
+            self.cbxTotalHolders.setChecked(data.totalHoldersOn)
+            self.spbTotalHoldersMin.setValue(data.totalHoldersMin)
+            self.spbTotalHoldersMax.setValue(data.totalHoldersMax)
+            self.cbxIncludeStStock.setChecked(data.includeSt)
+            self.cbxIncludeNewStock.setChecked(data.includeNew)
+
+    # 保存技术指标搜索条件
+    def export_technical_config(self):
+        file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             FileManager.export_config_as_json(self.__criteriaItems, file_path[0])
 
-    # 读取保存的搜索条件
-    def import_search_config(self):
-        parent = path.join(path.pardir, "StockData", "SearchConfigs")
-        file_path = QFileDialog.getOpenFileName(directory=parent, filter='JSON(*.json)')
+    # 读取保存的技术指标搜索条件
+    def import_technical_config(self):
+        file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.import_criteria_item)
             self.update_criteria_list()
@@ -48,11 +123,11 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def update_criteria_list(self):
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            text = "最近" + str(item.daysCountFirst) + "日" + item.logic + item.field + item.operator
+            text = "最近" + str(item.daysCountFirst) + "日" + item.queryLogic + item.field + item.operator
             if item.useAbsValue:
                 text += str(item.absoluteValue)
             else:
-                text += str(item.daysCountSecond) + "日平均" + str(item.relativePercentage) + "%"
+                text += "最近" + str(item.daysCountSecond) + "日" + item.comparedLogic + str(item.relativePercentage) + "%"
             self.lstCriteriaItems.addItem(text)
 
     # 新增搜索条件
@@ -60,6 +135,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         item = SearchCriteria.CriteriaItem()
         self.__criteriaItems.append(item)
         window = SearchCriteria.SearchCriteria(item)
+        window.show()
+        window.exec()
+
+    # 双击编辑所选搜索条件
+    def edit_selected_item(self, item: QListWidgetItem):
+        index = self.lstCriteriaItems.indexFromItem(item)
+        window = SearchCriteria.SearchCriteria(self.__criteriaItems[index.row()])
         window.show()
         window.exec()
 
@@ -149,6 +231,45 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             assets = row['totalAssets']
             if assets < self.spbTotalAssetsMin.value() or assets > self.spbTotalAssetsMax.value():
                 return False
+
+        # 检测股票毛利率是否达标
+        if self.cbxGrossProfit.isChecked():
+            gpr = row['gpr']
+            if gpr < self.spbGrossProfit.value():
+                return False
+
+        # 检测股票净利率是否达标
+        if self.cbxNetProfit.isChecked():
+            npr = row['npr']
+            if npr < self.spbNetProfit.value():
+                return False
+
+        # 检测股票收入增长是否达标
+        if self.cbxIncomeIncrease.isChecked():
+            revenue = row['rev']
+            if revenue < self.spbIncomeIncrease.value():
+                return False
+
+        # 检测股票利润增长是否达标
+        if self.cbxProfitIncrease.isChecked():
+            profit = row['profit']
+            if profit < self.spbProfitIncrease.value():
+                return False
+
+        # 检测股票净资产收益率是否达标
+        if self.cbxNetAssetProfit.isChecked():
+            profit = row['esp']
+            asset = row['bvps']
+            if profit / asset * 100 < self.spbNetAssetProfit.value():
+                return False
+
+        # 检测股票股东人数是否符合范围
+        if self.cbxTotalHolders.isChecked():
+            holders = row['holders'] / 10000
+            if holders < self.spbTotalHoldersMin.value() or holders > self.spbTotalHoldersMax.value():
+                return False
+
+        # 所有指标全部达标
         return True
 
     # 技术面指标分析

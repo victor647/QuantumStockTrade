@@ -23,6 +23,14 @@ def selected_stock_list_path():
     return base_path
 
 
+# 选股条件储存路径
+def search_config_path():
+    base_path = os.path.join(os.path.pardir, "StockData", "SearchConfigs")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    return base_path
+
+
 # 默认股票历史数据存放路径
 def stock_history_path(stock_code: str):
     base_path = os.path.join(os.path.pardir, "StockData", "StockHistory")
@@ -126,7 +134,7 @@ class StockDataExporter(QThread):
     def __init__(self):
         super().__init__()
         now = QDate.currentDate()
-        start_date = now.addMonths(-3)
+        start_date = now.addYears(-1)
         self.today = now.toString('yyyy-MM-dd')
         self.startDate = start_date.toString('yyyy-MM-dd')
         self.stockList = read_stock_list_file()
