@@ -57,7 +57,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             "totalAssetsMax": self.spbTotalAssetsMax.value(),
             "grossProfitOn": self.cbxGrossProfit.isChecked(),
             "grossProfit": self.spbGrossProfit.value(),
-            "netProfitOn": self.cbxNetProfit.value(),
+            "netProfitOn": self.cbxNetProfit.isChecked(),
             "netProfit": self.spbNetProfit.value(),
             "incomeIncreaseOn": self.cbxIncomeIncrease.isChecked(),
             "incomeIncrease": self.spbIncomeIncrease.value(),
@@ -78,33 +78,33 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             data = FileManager.import_json_config(file_path[0])
-            self.cbxPriceEarning.setChecked(data.peOn)
-            self.spbPriceEarningMin.setValue(data.peMin)
-            self.spbPriceEarningMax.setValue(data.peMax)
-            self.cbxPriceBook.setChecked(data.pbOn)
-            self.spbPriceBookMin.setValue(data.pbMin)
-            self.spbPriceBookMax.setValue(data.pbMax)
-            self.cbxTotalShare.setChecked(data.totalShareOn)
-            self.spbTotalShareMin.setValue(data.totalShareMin)
-            self.spbTotalShareMax.setValue(data.totalShareMax)
-            self.cbxTotalAssets.setChecked(data.totalAssetsOn)
-            self.spbTotalAssetsMin.setValue(data.totalAssetsMin)
-            self.spbTotalAssetsMax.setValue(data.totalAssetsMax)
-            self.cbxGrossProfit.setChecked(data.grossProfitOn)
-            self.spbGrossProfit.setValue(data.grossProfit)
-            self.cbxNetProfit.setValue(data.netProfitOn)
-            self.spbNetProfit.setValue(data.netProfit)
-            self.cbxIncomeIncrease.setChecked(data.incomeIncreaseOn)
-            self.spbIncomeIncrease.setValue(data.incomeIncrease)
-            self.cbxProfitIncrease.setChecked(data.profitIncreaseOn)
-            self.spbProfitIncrease.setValue(data.profitIncrease)
-            self.cbxNetAssetProfit.setChecked(data.netAssetProfitOn)
-            self.spbNetAssetProfit.setValue(data.netAssetProfit)
-            self.cbxTotalHolders.setChecked(data.totalHoldersOn)
-            self.spbTotalHoldersMin.setValue(data.totalHoldersMin)
-            self.spbTotalHoldersMax.setValue(data.totalHoldersMax)
-            self.cbxIncludeStStock.setChecked(data.includeSt)
-            self.cbxIncludeNewStock.setChecked(data.includeNew)
+            self.cbxPriceEarning.setChecked(data['peOn'])
+            self.spbPriceEarningMin.setValue(data['peMin'])
+            self.spbPriceEarningMax.setValue(data['peMax'])
+            self.cbxPriceBook.setChecked(data['pbOn'])
+            self.spbPriceBookMin.setValue(data['pbMin'])
+            self.spbPriceBookMax.setValue(data['pbMax'])
+            self.cbxTotalShare.setChecked(data['totalShareOn'])
+            self.spbTotalShareMin.setValue(data['totalShareMin'])
+            self.spbTotalShareMax.setValue(data['totalShareMax'])
+            self.cbxTotalAssets.setChecked(data['totalAssetsOn'])
+            self.spbTotalAssetsMin.setValue(data['totalAssetsMin'])
+            self.spbTotalAssetsMax.setValue(data['totalAssetsMax'])
+            self.cbxGrossProfit.setChecked(data['grossProfitOn'])
+            self.spbGrossProfit.setValue(data['grossProfit'])
+            self.cbxNetProfit.setChecked(data['netProfitOn'])
+            self.spbNetProfit.setValue(data['netProfit'])
+            self.cbxIncomeIncrease.setChecked(data['incomeIncreaseOn'])
+            self.spbIncomeIncrease.setValue(data['incomeIncrease'])
+            self.cbxProfitIncrease.setChecked(data['profitIncreaseOn'])
+            self.spbProfitIncrease.setValue(data['profitIncrease'])
+            self.cbxNetAssetProfit.setChecked(data['netAssetProfitOn'])
+            self.spbNetAssetProfit.setValue(data['netAssetProfit'])
+            self.cbxTotalHolders.setChecked(data['totalHoldersOn'])
+            self.spbTotalHoldersMin.setValue(data['totalHoldersMin'])
+            self.spbTotalHoldersMax.setValue(data['totalHoldersMax'])
+            self.cbxIncludeStStock.setChecked(data['includeSt'])
+            self.cbxIncludeNewStock.setChecked(data['includeNew'])
 
     # 保存技术指标搜索条件
     def export_technical_config(self):
@@ -120,20 +120,24 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.update_criteria_list()
 
     # 更新搜索条件列表显示
-    def update_criteria_list(self):
+    def update_criteria_list(self, edited_item=None):
+        # 添加条件时
+        if edited_item is not None and edited_item not in self.__criteriaItems:
+            self.__criteriaItems.append(edited_item)
+        # 重新生成图表
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            text = "最近" + str(item.daysCountFirst) + "日" + item.queryLogic + item.field + item.operator
+            operator = "<" if item.operator == "小于" else ">"
+            text = "最近" + str(item.daysCountFirst) + "日" + item.queryLogic + item.field + operator
             if item.useAbsValue:
                 text += str(item.absoluteValue)
             else:
-                text += "最近" + str(item.daysCountSecond) + "日" + item.comparedLogic + str(item.relativePercentage) + "%"
+                text += "最近" + str(item.daysCountSecond) + "日" + item.comparedLogic + item.field + "×" + str(item.relativePercentage) + "%"
             self.lstCriteriaItems.addItem(text)
 
     # 新增搜索条件
     def add_criteria_item(self):
         item = SearchCriteria.CriteriaItem()
-        self.__criteriaItems.append(item)
         window = SearchCriteria.SearchCriteria(item)
         window.show()
         window.exec()
@@ -227,7 +231,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 return False
 
         # 检测股票总市值是否符合范围
-        if self.cbxTotalAsset.isChecked():
+        if self.cbxTotalAssets.isChecked():
             assets = row['totalAssets']
             if assets < self.spbTotalAssetsMin.value() or assets > self.spbTotalAssetsMax.value():
                 return False

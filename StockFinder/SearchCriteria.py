@@ -25,7 +25,7 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     elif item.field == "换手率":
         column_label = "turn"
     elif item.field == "股价":
-        if item.field == "开盘":
+        if item.queryLogic == "开盘":
             column_label = "open"
         elif item.queryLogic == "收盘":
             column_label = "close"
@@ -54,7 +54,7 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     value_second = item.absoluteValue
     if not item.useAbsValue:
         # 相对值乘以系数
-        ratio = item.relativePercentage / 100 + 1
+        ratio = item.relativePercentage / 100
         data_second = data[column_label].tail(item.daysCountSecond)
         raw_value_second = 0
         if item.comparedLogic == "平均":
@@ -113,6 +113,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.spbFirstPeriod.setValue(self.criteriaItem.daysCountFirst)
         self.spbAveragePeriod.setValue(self.criteriaItem.daysCountSecond)
         self.rbnAbsValue.setChecked(self.criteriaItem.useAbsValue)
+        self.cbbComparedLogic.setCurrentText(self.criteriaItem.comparedLogic)
         self.spbRelativePercentage.setValue(self.criteriaItem.relativePercentage)
         self.spbAbsValue.setValue(self.criteriaItem.absoluteValue)
 
@@ -127,7 +128,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.criteriaItem.useAbsValue = self.rbnAbsValue.isChecked()
         self.criteriaItem.relativePercentage = self.spbRelativePercentage.value()
         self.criteriaItem.absoluteValue = self.spbAbsValue.value()
-        StockFinder.stockFinderInstance.update_criteria_list()
+        StockFinder.stockFinderInstance.update_criteria_list(self.criteriaItem)
         self.close()
 
     # 放弃编辑离开

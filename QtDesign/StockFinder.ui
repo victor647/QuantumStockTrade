@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>533</width>
-    <height>507</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>10</y>
+      <y>80</y>
       <width>151</width>
-      <height>151</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="font">
@@ -38,7 +38,7 @@
        <x>10</x>
        <y>20</y>
        <width>135</width>
-       <height>121</height>
+       <height>131</height>
       </rect>
      </property>
      <property name="font">
@@ -140,7 +140,7 @@
       <x>10</x>
       <y>10</y>
       <width>351</width>
-      <height>151</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="font">
@@ -158,58 +158,18 @@
        <x>10</x>
        <y>20</y>
        <width>331</width>
-       <height>91</height>
+       <height>131</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>115</y>
-       <width>331</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QPushButton" name="btnAddCriteria">
-        <property name="text">
-         <string>添加</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnEditCriteria">
-        <property name="text">
-         <string>编辑</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnRemoveCriteria">
-        <property name="text">
-         <string>删除</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnResetCriteria">
-        <property name="text">
-         <string>清空</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="grpCompanyInfo">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>180</y>
       <width>351</width>
-      <height>281</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="font">
@@ -227,7 +187,7 @@
        <x>10</x>
        <y>20</y>
        <width>331</width>
-       <height>251</height>
+       <height>273</height>
       </rect>
      </property>
      <property name="font">
@@ -333,24 +293,29 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbPriceBookMin">
+         <widget class="QDoubleSpinBox" name="spbPriceBookMin">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
            </font>
           </property>
           <property name="suffix">
            <string>倍</string>
           </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
           <property name="minimum">
-           <number>0</number>
+           <double>0.000000000000000</double>
           </property>
           <property name="maximum">
-           <number>10</number>
+           <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
           </property>
           <property name="value">
-           <number>1</number>
+           <double>1.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -368,24 +333,26 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbPriceBookMax">
+         <widget class="QDoubleSpinBox" name="spbPriceBookMax">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
            </font>
           </property>
           <property name="suffix">
            <string>倍</string>
           </property>
-          <property name="minimum">
+          <property name="decimals">
            <number>1</number>
           </property>
-          <property name="maximum">
-           <number>50</number>
+          <property name="minimum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
           </property>
           <property name="value">
-           <number>5</number>
+           <double>5.000000000000000</double>
           </property>
          </widget>
         </item>
@@ -575,7 +542,7 @@
            <string>%</string>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>-20</number>
           </property>
           <property name="maximum">
            <number>100</number>
@@ -613,7 +580,7 @@
            <string>%</string>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>-20</number>
           </property>
           <property name="maximum">
            <number>100</number>
@@ -655,7 +622,7 @@
            <string>%</string>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>-20</number>
           </property>
           <property name="maximum">
            <number>100</number>
@@ -693,7 +660,7 @@
            <string>%</string>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>-20</number>
           </property>
           <property name="maximum">
            <number>100</number>
@@ -779,10 +746,13 @@
            <number>1</number>
           </property>
           <property name="minimum">
-           <double>0.100000000000000</double>
+           <double>0.000000000000000</double>
           </property>
           <property name="maximum">
            <double>10.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.500000000000000</double>
           </property>
           <property name="value">
            <double>1.000000000000000</double>
@@ -853,7 +823,7 @@
     <property name="geometry">
      <rect>
       <x>97</x>
-      <y>10</y>
+      <y>11</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -875,7 +845,7 @@
     <property name="geometry">
      <rect>
       <x>86</x>
-      <y>170</y>
+      <y>181</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -897,7 +867,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>209</y>
+      <y>279</y>
       <width>151</width>
       <height>161</height>
      </rect>
@@ -974,7 +944,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>180</y>
+      <y>250</y>
       <width>151</width>
       <height>16</height>
      </rect>
@@ -993,9 +963,9 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>390</y>
+      <y>450</y>
       <width>149</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -1007,6 +977,54 @@
     <property name="text">
      <string>开始搜索选股！</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>20</y>
+      <width>151</width>
+      <height>58</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <widget class="QPushButton" name="btnAddCriteria">
+         <property name="text">
+          <string>添加</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnRemoveCriteria">
+         <property name="text">
+          <string>删除</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
+       <item>
+        <widget class="QPushButton" name="btnEditCriteria">
+         <property name="text">
+          <string>编辑</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnResetCriteria">
+         <property name="text">
+          <string>清空</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1100,38 +1118,6 @@
     <hint type="destinationlabel">
      <x>296</x>
      <y>219</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxPriceBook</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbPriceBookMin</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>55</x>
-     <y>263</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>185</x>
-     <y>263</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxPriceBook</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbPriceBookMax</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>73</x>
-     <y>263</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>292</x>
-     <y>246</y>
     </hint>
    </hints>
   </connection>

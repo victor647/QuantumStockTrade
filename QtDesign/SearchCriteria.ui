@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
+    <width>645</width>
     <height>75</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>309</width>
+     <width>316</width>
      <height>25</height>
     </rect>
    </property>
@@ -31,6 +31,12 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QLabel" name="lblFirst">
+      <property name="maximumSize">
+       <size>
+        <width>35</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <family>Microsoft YaHei UI</family>
@@ -57,7 +63,7 @@
        <number>1</number>
       </property>
       <property name="maximum">
-       <number>10</number>
+       <number>250</number>
       </property>
      </widget>
     </item>
@@ -96,7 +102,7 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>322</x>
+     <x>340</x>
      <y>10</y>
      <width>291</width>
      <height>58</height>
@@ -142,7 +148,7 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>250</number>
         </property>
         <property name="value">
          <number>10</number>
@@ -173,11 +179,14 @@
         <property name="decimals">
          <number>1</number>
         </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
         <property name="maximum">
          <double>1000.000000000000000</double>
         </property>
         <property name="value">
-         <double>20.000000000000000</double>
+         <double>100.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -285,8 +294,8 @@
      <y>30</y>
     </hint>
     <hint type="destinationlabel">
-     <x>447</x>
-     <y>59</y>
+     <x>596</x>
+     <y>65</y>
     </hint>
    </hints>
   </connection>
@@ -317,8 +326,8 @@
      <y>59</y>
     </hint>
     <hint type="destinationlabel">
-     <x>532</x>
-     <y>31</y>
+     <x>610</x>
+     <y>33</y>
     </hint>
    </hints>
   </connection>
