@@ -4,7 +4,8 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from Windows import StockAnalyzer, StockReviewer
+from Windows import StockReviewer
+from StockAnalyzer import StockAnalyzer
 from StockFinder import StockFinder
 from RealTimeMonitor import LiveTracker
 

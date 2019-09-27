@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
-import Windows.StockAnalyzer as StockAnalyzer
+import StockAnalyzer.StockAnalyzer as StockAnalyzer
 import Data.TradeStrategy as TradeStrategy
 import Data.DataAnalyzer as DataAnalyzer
 import Tools

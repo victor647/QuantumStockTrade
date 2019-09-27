@@ -2,15 +2,15 @@ import baostock
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QErrorMessage
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
-import Windows.TradeSimulator as TradeSimulator
+import StockAnalyzer.TradeSimulator as TradeSimulator
 from Data.TradeStrategy import TradeStrategy
 import Data.DataAnalyzer as DataAnalyzer
 import Tools
 import pandas
 
 
-stockDatabase = None
-marketDatabase = None
+stockDatabase = pandas.DataFrame()
+marketDatabase = pandas.DataFrame()
     
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):

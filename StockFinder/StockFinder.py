@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QDate
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
@@ -7,6 +7,7 @@ from Windows.ProgressBar import ProgressBar
 import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
+import tushare
 
 
 stockFinderInstance = None
@@ -33,6 +34,55 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 按删除键删除股票或指标组
         elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
             self.remove_criteria_item()
+
+    # 根据十大流通股东结构选股
+    @staticmethod
+    def search_by_holders_structure():
+        # pro = tushare.pro_api('eee03f328c31ce7b74e1f0417863e4019723e9bdda3fb0d243cf9a1c')
+        stock_list = FileManager.read_stock_list_file()
+        today = QDate.currentDate()
+        year = today.year()
+        month = today.month()
+        quarter = 4
+        if month < 4:
+            year -= 1
+        elif month < 7:
+            quarter = 1
+        elif month < 10:
+            quarter = 2
+        else:
+            quarter = 3
+
+        search_result = []
+        for index, row_stock in stock_list.iterrows():
+            code_num = row_stock['code']
+            code = str(code_num).zfill(6)
+            data = tushare.top10_holders(code=code, year=year, quarter=quarter)[1]
+            data['h_pro'] = data['h_pro'].astype(float)
+            under_five = data[data['h_pro'] < 5]
+            # 单人持股比例超过3%的跳过
+            if under_five['h_pro'].max() > 3:
+                continue
+            count = 0
+            for i, row_holder in under_five.iterrows():
+                # 排除公司持股和限售情况
+                if "有限公司" in row_holder['name'] or row_holder['sharetype'] == "限售流通股":
+                    continue
+                count += 1
+                # 股权结构优秀，加入选中列表
+                if count >= 5:
+                    search_result.append(code)
+                    break
+            if index > 100:
+                break
+
+        file_path = QFileDialog.getSaveFileName(directory=FileManager.selected_stock_list_path(), filter='TXT(*.txt)')
+        if file_path[0] != "":
+            file = open(file_path[0], "w")
+            for code in search_result:
+                file.write(code + "\n")
+            file.close()
+
 
     # 获取并导出全部股票信息
     @staticmethod
@@ -174,7 +224,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.__criteriaItems = []
         self.lstCriteriaItems.clear()
 
-    # 搜索全部股票
+    # 开始搜索全部股票
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
         self.__searchResult = SearchResult()

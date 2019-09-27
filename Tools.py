@@ -3,6 +3,13 @@ from PyQt5.QtWidgets import QTableWidgetItem
 import FileManager as FileManager
 import Data.DataAnalyzer as DataAnalyzer
 import webbrowser
+from datetime import date
+
+
+# 获取今天日期，格式‘20190101’
+def get_today_date():
+    today = date.today()
+    return today.strftime("%Y%M%D")
 
 
 # 根据股票代码获取股票交易所信息
