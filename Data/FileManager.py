@@ -41,12 +41,11 @@ def stock_history_path(stock_code: str):
 
 
 # 盯盘指标存储文件夹
-def monitor_config_path(stock_code: str):
+def monitor_config_path():
     base_path = os.path.join(os.path.pardir, "StockData", "MonitorConfigs")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
-    file_path = os.path.join(base_path, stock_code + ".json")
-    return file_path
+    return base_path
 
 
 # 导入全部股票信息列表
@@ -81,6 +80,21 @@ def save_stock_list_file():
     stock_list = tushare.get_stock_basics()
     stock_list.to_csv(full_stock_info_path())
     return stock_list
+
+
+# 导出盯盘指标
+def export_monitor_conditions(groups: list):
+    file_path = QFileDialog.getSaveFileName(directory=monitor_config_path(), filter='JSON(*.json)')
+    if file_path[0] != "":
+        export_config_as_json(groups, file_path[0])
+
+
+# 导入盯盘指标
+def import_monitor_conditions():
+    file_path = QFileDialog.getOpenFileName(directory=monitor_config_path(), filter='JSON(*.json)')
+    if file_path[0] != "":
+        return import_json_config(file_path[0])
+    return None
 
 
 # 导出数据为json文件

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>716</width>
+    <width>715</width>
     <height>601</height>
    </rect>
   </property>
@@ -357,9 +357,9 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>510</y>
+      <y>506</y>
       <width>221</width>
-      <height>27</height>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -368,7 +368,7 @@
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -381,7 +381,7 @@
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -453,32 +453,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnCopyCondition">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>复制</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnPasteCondition">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>粘贴</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="btnImportMonitorConditions">
        <property name="font">
         <font>
@@ -487,7 +461,20 @@
         </font>
        </property>
        <property name="text">
-        <string>导入</string>
+        <string>导入单个</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnImportGenericConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导入通用</string>
        </property>
       </widget>
      </item>
@@ -512,7 +499,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>716</width>
+     <width>715</width>
      <height>23</height>
     </rect>
    </property>
@@ -690,7 +677,7 @@
    <slot>import_conditions()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>601</x>
+     <x>546</x>
      <y>314</y>
     </hint>
     <hint type="destinationlabel">
@@ -712,38 +699,6 @@
     <hint type="destinationlabel">
      <x>522</x>
      <y>285</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnCopyCondition</sender>
-   <signal>clicked()</signal>
-   <receiver>LiveTracker</receiver>
-   <slot>copy_condition()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>402</x>
-     <y>314</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>270</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnPasteCondition</sender>
-   <signal>clicked()</signal>
-   <receiver>LiveTracker</receiver>
-   <slot>paste_condition()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>314</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>349</x>
-     <y>284</y>
     </hint>
    </hints>
   </connection>
@@ -795,6 +750,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnImportGenericConditions</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>import_generic_conditions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>621</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>import_stock_list()</slot>
@@ -813,5 +784,6 @@
   <slot>paste_condition()</slot>
   <slot>open_stock_page()</slot>
   <slot>edit_condition()</slot>
+  <slot>import_generic_conditions()</slot>
  </slots>
 </ui>

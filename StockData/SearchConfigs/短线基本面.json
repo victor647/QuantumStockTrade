@@ -1,5 +1,5 @@
 {
-    "peOn": true,
+    "peOn": false,
     "peMin": 10,
     "peMax": 100,
     "pbOn": true,
@@ -21,9 +21,9 @@
     "profitIncrease": 10,
     "netAssetProfitOn": false,
     "netAssetProfit": 5,
-    "totalHoldersOn": false,
+    "totalHoldersOn": true,
     "totalHoldersMin": 0.0,
-    "totalHoldersMax": 5.0,
+    "totalHoldersMax": 10.0,
     "includeSt": false,
     "includeNew": true
 }

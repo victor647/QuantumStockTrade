@@ -27,12 +27,12 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     elif item.field == "股价":
         if item.queryLogic == "开盘":
             column_label = "open"
-        elif item.queryLogic == "收盘":
-            column_label = "close"
         elif item.queryLogic == "最高":
             column_label = "high"
         elif item.queryLogic == "最低":
             column_label = "low"
+        else:
+            column_label = "close"
 
     # 获取初始值
     value_first = 0

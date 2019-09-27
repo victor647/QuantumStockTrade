@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
 import Data.FileManager as FileManager
@@ -183,30 +183,51 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             monitor.show()
             monitor.exec_()
 
-    def copy_condition(self):
-        pass
+    # 获取树状图选中项目的股票代码
+    def get_selected_code(self):
+        if len(self.trwMonitorConditions.selectedItems()) == 0:
+            return ""
+        selected_item = self.trwMonitorConditions.selectedItems()[0]
+        # 选中的必须是代码节点
+        if selected_item.parent() is not None:
+            return ""
+        # 获取股票代码
+        return selected_item.text(0).split(' ')[0]
 
-    def paste_condition(self):
-        pass
-
-    # 从json文件导入每只股票的盯盘指标
+    # 从json文件导入单个股票的盯盘指标
     def import_conditions(self):
+        code = self.get_selected_code()
+        if code == "":
+            return
+        json_data = FileManager.import_monitor_conditions()
+        self.conditions_parser(self.__stockLiveData[code], json_data)
+
+    # 导入通用的指标到每只股票
+    def import_generic_conditions(self):
+        json_data = FileManager.import_monitor_conditions()
         for data in self.__stockLiveData.values():
-            # 从配置文件导入json数据
-            json_data = FileManager.import_json_config(FileManager.monitor_config_path(data.code))
-            # 初始化盯盘条件组
-            data.monitorConditionGroups = []
-            for group in json_data:
-                item_group = ConditionItemGroup.deserialize_from_json(group)
-                data.create_item_group_node(item_group)
-                data.monitorConditionGroups.append(item_group)
-                for i in range(len(item_group.conditionItems)):
-                    item_group.create_individual_item_node(item_group.conditionItems[i], i)
+            self.conditions_parser(data, json_data)
+
+    @staticmethod
+    def conditions_parser(data: RealTimeStockData.StockMonitorData, json_data: list):
+        # 初始化盯盘条件组
+        data.monitorConditionGroups = []
+        # 遍历每个条件组
+        for group in json_data:
+            # 解析json数据
+            item_group = ConditionItemGroup.deserialize_from_json(group)
+            data.create_item_group_node(item_group)
+            data.monitorConditionGroups.append(item_group)
+            # 创建指标子节点
+            for i in range(len(item_group.conditionItems)):
+                item_group.create_individual_item_node(item_group.conditionItems[i], i)
 
     # 导出每只股票的盯盘指标到json文件
     def export_conditions(self):
-        for data in self.__stockLiveData.values():
-            FileManager.export_config_as_json(data.monitorConditionGroups, FileManager.monitor_config_path(data.code))
+        code = self.get_selected_code()
+        if code == "":
+            return
+        FileManager.export_monitor_conditions(self.__stockLiveData[code].monitorConditionGroups)
 
     # 开始实时盯盘
     def start_monitoring(self):
