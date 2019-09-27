@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QTableWidgetItem
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
 import Tools
-import Data.FileManager as FileManager
+import FileManager as FileManager
 
 
 class SearchResult(QDialog, Ui_SearchResult):

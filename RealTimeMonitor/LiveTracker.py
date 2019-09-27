@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
-import Data.FileManager as FileManager
+import FileManager as FileManager
 from RealTimeMonitor.MonitorCondition import *
 import time
 import Tools

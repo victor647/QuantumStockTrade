@@ -4,7 +4,7 @@ from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from StockFinder.SearchResult import SearchResult
 from Windows.ProgressBar import ProgressBar
-import Data.FileManager as FileManager
+import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
 

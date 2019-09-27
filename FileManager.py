@@ -12,12 +12,16 @@ import StockFinder.SearchCriteria as SearchCriteria
 
 # 默认全部股票列表存放路径
 def full_stock_info_path():
-    return os.path.join(os.path.pardir, "StockData", "full_stock_info.csv")
+    base_path = os.path.join(os.path.curdir, "StockData")
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+    file_path = os.path.join(base_path, "full_stock_info.csv")
+    return file_path
 
 
 # 选股器导出的股票列表文件夹
 def selected_stock_list_path():
-    base_path = os.path.join(os.path.pardir, "StockData", "SelectedStocks")
+    base_path = os.path.join(os.path.curdir, "StockData", "SelectedStocks")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     return base_path
@@ -25,7 +29,7 @@ def selected_stock_list_path():
 
 # 选股条件储存路径
 def search_config_path():
-    base_path = os.path.join(os.path.pardir, "StockData", "SearchConfigs")
+    base_path = os.path.join(os.path.curdir, "StockData", "SearchConfigs")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     return base_path
@@ -33,7 +37,7 @@ def search_config_path():
 
 # 默认股票历史数据存放路径
 def stock_history_path(stock_code: str):
-    base_path = os.path.join(os.path.pardir, "StockData", "StockHistory")
+    base_path = os.path.join(os.path.curdir, "StockData", "StockHistory")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     file_path = os.path.join(base_path, stock_code + ".csv")
@@ -42,7 +46,7 @@ def stock_history_path(stock_code: str):
 
 # 盯盘指标存储文件夹
 def monitor_config_path():
-    base_path = os.path.join(os.path.pardir, "StockData", "MonitorConfigs")
+    base_path = os.path.join(os.path.curdir, "StockData", "MonitorConfigs")
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     return base_path

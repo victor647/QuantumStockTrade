@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTableWidgetItem
-import Data.FileManager as FileManager
+import FileManager as FileManager
 import Data.DataAnalyzer as DataAnalyzer
 import webbrowser
 
