@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>478</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>80</y>
       <width>691</width>
-      <height>192</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="font">
@@ -28,6 +28,12 @@
       <family>Microsoft YaHei UI</family>
       <pointsize>9</pointsize>
      </font>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>75</number>
@@ -81,332 +87,6 @@
      </property>
     </column>
    </widget>
-   <widget class="QGroupBox" name="grpEventSignal">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>280</y>
-      <width>691</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>盘中异动提示</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>671</width>
-       <height>120</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="lblRecentMeasurement">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-           </font>
-          </property>
-          <property name="text">
-           <string>短时数据来源：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbRecentMeasureCount">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string/>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbRecentMeasurement"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblCooldownTime">
-          <property name="text">
-           <string>异动提示冷却时间：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbCooldownTime">
-          <property name="suffix">
-           <string>分钟</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>60</number>
-          </property>
-          <property name="value">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QCheckBox" name="cbxDailyUpPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>日内当前涨跌幅达到</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbDailyPercentChange">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxOneMinUpPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>短时涨跌幅达到</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbShortTermPercentChange">
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.500000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QCheckBox" name="cbxSingleBuyAmount">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>单笔成交大于</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbSingleTransactionAmount">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>万元</string>
-          </property>
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>10000</number>
-          </property>
-          <property name="value">
-           <number>50</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxBuyBid">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>短时委比超过正负</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbBuyBidPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="value">
-           <number>70</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QCheckBox" name="cbxActiveBuyRatio">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>短时外盘/内盘占比大于</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbActiveBuyPercent">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="minimum">
-           <number>50</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="value">
-           <number>80</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxShortTermAmount">
-          <property name="text">
-           <string>短时成交额大于</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbShortTermAmount">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>万</string>
-          </property>
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>10000</number>
-          </property>
-          <property name="value">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
@@ -433,7 +113,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnClearStocks">
+        <widget class="QPushButton" name="btnExportStockList">
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
@@ -441,7 +121,7 @@
           </font>
          </property>
          <property name="text">
-          <string>清空列表</string>
+          <string>导出股票列表</string>
          </property>
         </widget>
        </item>
@@ -510,36 +190,23 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="btnClearStocks">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>清空列表</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="btnStartTracking">
-         <property name="font">
-          <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>开始盯盘</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnStopTracking">
-         <property name="font">
-          <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>停止盯盘</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="lblLastUpdateTime">
          <property name="minimumSize">
@@ -606,7 +273,223 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="lblRecentMeasurement">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>短时数据来源：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spbRecentMeasureCount">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbbRecentMeasurement"/>
+       </item>
       </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTreeWidget" name="trwMonitorConditions">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>300</y>
+      <width>691</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::SelectedClicked</set>
+    </property>
+    <attribute name="headerMinimumSectionSize">
+     <number>150</number>
+    </attribute>
+    <attribute name="headerDefaultSectionSize">
+     <number>150</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>股票名称</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>监控指标</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>触发数值</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>冷却时间（分钟）</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>506</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="btnStartTracking">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>开始盯盘</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStopTracking">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>停止盯盘</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>266</y>
+      <width>691</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="lblMonitorConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>盯盘指标设置</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAddCondition">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>添加</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnDeleteCondition">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAddCondition_2">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>编辑</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnImportMonitorConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导入单个</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnImportGenericConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导入通用</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnExportMonitorConditions">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导出</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -617,7 +500,7 @@
      <x>0</x>
      <y>0</y>
      <width>715</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -660,46 +543,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnStartTracking</sender>
-   <signal>clicked()</signal>
-   <receiver>LiveTracker</receiver>
-   <slot>start_monitoring()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>525</x>
-     <y>59</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>203</x>
-     <y>25</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnStopTracking</sender>
-   <signal>clicked()</signal>
-   <receiver>LiveTracker</receiver>
-   <slot>stop_monitoring()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>698</x>
-     <y>59</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>25</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>btnAddStock</sender>
    <signal>clicked()</signal>
    <receiver>LiveTracker</receiver>
    <slot>add_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>615</x>
-     <y>92</y>
+     <x>463</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>74</x>
@@ -714,8 +565,8 @@
    <slot>remove_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>698</x>
-     <y>92</y>
+     <x>594</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>198</x>
@@ -730,7 +581,7 @@
    <slot>clear_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>352</x>
+     <x>647</x>
      <y>59</y>
     </hint>
     <hint type="destinationlabel">
@@ -740,98 +591,178 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxDailyUpPercent</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbDailyPercentChange</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnStartTracking</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>start_monitoring()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>351</y>
+     <x>327</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
-     <x>193</x>
-     <y>352</y>
+     <x>321</x>
+     <y>573</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxSingleBuyAmount</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbSingleTransactionAmount</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnStopTracking</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>stop_monitoring()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>392</y>
+     <x>439</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
-     <x>207</x>
-     <y>393</y>
+     <x>435</x>
+     <y>573</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxActiveBuyRatio</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbActiveBuyPercent</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnAddCondition</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>add_condition()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>434</y>
+     <x>149</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
-     <x>236</x>
-     <y>435</y>
+     <x>153</x>
+     <y>279</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxOneMinUpPercent</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbShortTermPercentChange</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnDeleteCondition</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>delete_condition()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>407</x>
-     <y>343</y>
+     <x>231</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>501</x>
-     <y>341</y>
+     <x>300</x>
+     <y>303</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxBuyBid</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbBuyBidPercent</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnExportStockList</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>export_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>420</x>
-     <y>383</y>
+     <x>147</x>
+     <y>48</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
-     <y>381</y>
+     <x>140</x>
+     <y>67</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxShortTermAmount</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbShortTermAmount</receiver>
-   <slot>setEnabled(bool)</slot>
+   <sender>btnImportMonitorConditions</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>import_conditions()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>527</x>
-     <y>421</y>
+     <x>546</x>
+     <y>314</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>419</y>
+     <x>477</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnExportMonitorConditions</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>export_conditions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>700</x>
+     <y>314</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tblStockList</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>open_stock_page()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>294</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>47</x>
+     <y>283</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnAddCondition_2</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>edit_condition()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>300</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>237</x>
+     <y>527</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trwMonitorConditions</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>edit_monitor_condition(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>88</x>
+     <y>531</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnImportGenericConditions</sender>
+   <signal>clicked()</signal>
+   <receiver>LiveTracker</receiver>
+   <slot>import_generic_conditions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>621</x>
+     <y>318</y>
     </hint>
    </hints>
   </connection>
@@ -843,5 +774,16 @@
   <slot>add_stock_code()</slot>
   <slot>remove_stock_code()</slot>
   <slot>clear_stock_list()</slot>
+  <slot>add_condition()</slot>
+  <slot>delete_condition()</slot>
+  <slot>export_stock_list()</slot>
+  <slot>edit_monitor_condition(QTreeWidgetItem*,int)</slot>
+  <slot>import_conditions()</slot>
+  <slot>export_conditions()</slot>
+  <slot>copy_condition()</slot>
+  <slot>paste_condition()</slot>
+  <slot>open_stock_page()</slot>
+  <slot>edit_condition()</slot>
+  <slot>import_generic_conditions()</slot>
  </slots>
 </ui>

@@ -89,24 +89,43 @@
     <string>共找到0只股票！</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnExportStockList">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>415</x>
+     <x>330</x>
      <y>9</y>
-     <width>75</width>
-     <height>24</height>
+     <width>158</width>
+     <height>27</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>导出列表</string>
-   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="btnDeleteStock">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>删除选中</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnExportStockList">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>导出列表</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
@@ -134,12 +153,28 @@
    <slot>export_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>396</x>
-     <y>16</y>
+     <x>412</x>
+     <y>17</y>
     </hint>
     <hint type="destinationlabel">
      <x>359</x>
      <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnDeleteStock</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchResult</receiver>
+   <slot>delete_selected_stocks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>392</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>30</y>
     </hint>
    </hints>
   </connection>
@@ -148,5 +183,6 @@
   <slot>stop_searching()</slot>
   <slot>open_stock_page(int,int)</slot>
   <slot>export_stock_list()</slot>
+  <slot>delete_selected_stocks()</slot>
  </slots>
 </ui>
