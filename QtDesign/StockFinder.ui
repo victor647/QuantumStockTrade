@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
-    <height>540</height>
+    <width>645</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QGroupBox" name="grpSearchRange">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>80</y>
+      <x>480</x>
+      <y>12</y>
       <width>151</width>
       <height>161</height>
      </rect>
@@ -131,15 +131,15 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="grpTechnicalIndex">
+   <widget class="QGroupBox" name="grpCustomCriterias">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
-      <width>351</width>
+      <y>12</y>
+      <width>461</width>
       <height>161</height>
      </rect>
     </property>
@@ -150,26 +150,92 @@
      </font>
     </property>
     <property name="title">
-     <string>短线技术指标</string>
+     <string>自定义指标</string>
     </property>
     <widget class="QListWidget" name="lstCriteriaItems">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
-       <width>331</width>
-       <height>131</height>
+       <y>21</y>
+       <width>440</width>
+       <height>100</height>
       </rect>
      </property>
     </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>127</y>
+       <width>441</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btnAddCriteria">
+        <property name="text">
+         <string>添加</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRemoveCriteria">
+        <property name="text">
+         <string>删除</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnEditCriteria">
+        <property name="text">
+         <string>编辑</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnResetCriteria">
+        <property name="text">
+         <string>清空</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnExportCustomConfig">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>导出</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnImportCustomConfig">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>导入</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
-   <widget class="QGroupBox" name="grpCompanyInfo">
+   <widget class="QGroupBox" name="grpBasicCriterias">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>180</y>
-      <width>351</width>
-      <height>301</height>
+      <width>331</width>
+      <height>341</height>
      </rect>
     </property>
     <property name="font">
@@ -186,8 +252,8 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>331</width>
-       <height>273</height>
+       <width>311</width>
+       <height>306</height>
       </rect>
      </property>
      <property name="font">
@@ -816,63 +882,311 @@
         </item>
        </layout>
       </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_16">
+        <item>
+         <widget class="QPushButton" name="btnExportBasicConfig">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnImportBasicConfig">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>载入</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
+    <widget class="QCheckBox" name="cbxBasicCriteriasEnabled">
+     <property name="geometry">
+      <rect>
+       <x>76</x>
+       <y>1</y>
+       <width>21</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
-   <widget class="QCheckBox" name="cbxTechnicalIndexEnabled">
+   <widget class="QGroupBox" name="grpTechnicalCriterias">
     <property name="geometry">
      <rect>
-      <x>97</x>
-      <y>11</y>
-      <width>21</width>
-      <height>16</height>
+      <x>350</x>
+      <y>180</y>
+      <width>281</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
      </font>
     </property>
-    <property name="text">
-     <string/>
+    <property name="title">
+     <string>技术面指标</string>
     </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>24</y>
+       <width>261</width>
+       <height>184</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_11">
+        <item>
+         <widget class="QCheckBox" name="cbxMacdEnabled">
+          <property name="text">
+           <string>MACD</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbMacdPosition"/>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbMacdBehaviour"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_12">
+        <item>
+         <widget class="QCheckBox" name="cbxBollEnabled">
+          <property name="text">
+           <string>BOLL</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbBollBehaviour"/>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbBollTrack"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <widget class="QCheckBox" name="cbxExpmaEnabled">
+          <property name="text">
+           <string>EXPMA</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbExpmaBehaviour">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_14">
+        <item>
+         <widget class="QCheckBox" name="cbxKdjEnabled">
+          <property name="text">
+           <string>KDJ</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbKdjItem"/>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbKdjBehaviour"/>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spbKdjThreshold">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <item>
+         <widget class="QCheckBox" name="cbxTrixEnabled">
+          <property name="text">
+           <string>TRIX</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spbTrixPeriod">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="suffix">
+           <string>日内</string>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbTrixBehaviour"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_17">
+        <item>
+         <widget class="QPushButton" name="btnExportTechnicalConfig">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnImportTechnicalConfig">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>载入</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QCheckBox" name="cbxTechnicalCriteriasEnabled">
+     <property name="geometry">
+      <rect>
+       <x>78</x>
+       <y>1</y>
+       <width>21</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
-   <widget class="QCheckBox" name="cbxCompanyInfoEnabled">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>86</x>
-      <y>181</y>
-      <width>21</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>279</y>
-      <width>151</width>
-      <height>161</height>
+      <x>350</x>
+      <y>410</y>
+      <width>281</width>
+      <height>91</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="lblGetStockReminder">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>每日请先获取最新K线图，16:00更新当日数据</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="btnGetAllStockData">
        <property name="font">
@@ -882,147 +1196,22 @@
         </font>
        </property>
        <property name="text">
-        <string>获取全部股票历史日K线</string>
+        <string>获取全部股票最近一年日K线</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnSaveTechnicalConfig">
+      <widget class="QPushButton" name="btnStartSearch">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>保存技术指标</string>
+        <string>开始搜索选股！</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnLoadTechnicalConfig">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>载入技术指标</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnSaveCompanyConfig">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>导出基本面指标</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnLoadCompanyConfig">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>导入基本面指标</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="lblGetStockReminder">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>250</y>
-      <width>151</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>每日请先获取最新股票数据！</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnStartSearch">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>450</y>
-      <width>149</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>开始搜索选股！</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>20</y>
-      <width>151</width>
-      <height>58</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_12">
-       <item>
-        <widget class="QPushButton" name="btnAddCriteria">
-         <property name="text">
-          <string>添加</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnRemoveCriteria">
-         <property name="text">
-          <string>删除</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_11">
-       <item>
-        <widget class="QPushButton" name="btnEditCriteria">
-         <property name="text">
-          <string>编辑</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnResetCriteria">
-         <property name="text">
-          <string>清空</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </item>
     </layout>
    </widget>
@@ -1032,12 +1221,24 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>533</width>
+     <width>645</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="mnuOtherCriterias">
+    <property name="title">
+     <string>其他指标</string>
+    </property>
+    <addaction name="actHoldersStatus"/>
+   </widget>
+   <addaction name="mnuOtherCriterias"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actHoldersStatus">
+   <property name="text">
+    <string>股权结构</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -1048,8 +1249,8 @@
    <slot>search_all_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>437</y>
+     <x>351</x>
+     <y>522</y>
     </hint>
     <hint type="destinationlabel">
      <x>451</x>
@@ -1064,8 +1265,8 @@
    <slot>export_all_stock_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>422</x>
-     <y>241</y>
+     <x>351</x>
+     <y>487</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
@@ -1074,14 +1275,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxTechnicalIndexEnabled</sender>
+   <sender>cbxTechnicalCriteriasEnabled</sender>
    <signal>clicked(bool)</signal>
-   <receiver>grpTechnicalIndex</receiver>
+   <receiver>grpCustomCriterias</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>48</y>
+     <x>448</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
      <x>54</x>
@@ -1096,12 +1297,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>70</x>
-     <y>235</y>
+     <x>74</x>
+     <y>246</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>235</y>
+     <x>179</x>
+     <y>247</y>
     </hint>
    </hints>
   </connection>
@@ -1112,12 +1313,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>218</y>
+     <x>75</x>
+     <y>246</y>
     </hint>
     <hint type="destinationlabel">
-     <x>296</x>
-     <y>219</y>
+     <x>328</x>
+     <y>247</y>
     </hint>
    </hints>
   </connection>
@@ -1128,12 +1329,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>291</y>
+     <x>64</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>291</y>
+     <x>177</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
@@ -1144,12 +1345,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>291</y>
+     <x>72</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>298</x>
-     <y>272</y>
+     <x>328</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
@@ -1160,12 +1361,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>320</y>
+     <x>93</x>
+     <y>339</y>
     </hint>
     <hint type="destinationlabel">
-     <x>182</x>
-     <y>320</y>
+     <x>171</x>
+     <y>340</y>
     </hint>
    </hints>
   </connection>
@@ -1176,28 +1377,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>301</y>
+     <x>68</x>
+     <y>339</y>
     </hint>
     <hint type="destinationlabel">
-     <x>348</x>
-     <y>320</y>
+     <x>328</x>
+     <y>340</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>cbxCompanyInfoEnabled</sender>
+   <sender>cbxBasicCriteriasEnabled</sender>
    <signal>clicked(bool)</signal>
-   <receiver>grpCompanyInfo</receiver>
+   <receiver>grpBasicCriterias</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>94</x>
-     <y>208</y>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
      <x>64</x>
-     <y>213</y>
+     <y>266</y>
     </hint>
    </hints>
   </connection>
@@ -1208,8 +1409,8 @@
    <slot>add_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>157</y>
+     <x>89</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>65</x>
@@ -1224,8 +1425,8 @@
    <slot>modify_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>149</x>
-     <y>156</y>
+     <x>237</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>182</x>
@@ -1240,8 +1441,8 @@
    <slot>remove_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>155</y>
+     <x>163</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -1256,8 +1457,8 @@
    <slot>reset_criteria_items()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
-     <y>154</y>
+     <x>311</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>367</x>
@@ -1266,14 +1467,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnSaveTechnicalConfig</sender>
+   <sender>btnExportCustomConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>export_technical_config()</slot>
+   <slot>export_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>403</x>
-     <y>290</y>
+     <x>318</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
@@ -1282,14 +1483,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnLoadTechnicalConfig</sender>
+   <sender>btnImportCustomConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>import_technical_config()</slot>
+   <slot>import_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>409</x>
-     <y>322</y>
+     <x>392</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -1304,12 +1505,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>66</x>
-     <y>342</y>
+     <x>72</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel">
-     <x>130</x>
-     <y>343</y>
+     <x>172</x>
+     <y>371</y>
     </hint>
    </hints>
   </connection>
@@ -1320,12 +1521,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>255</x>
-     <y>341</y>
+     <x>261</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel">
-     <x>292</x>
-     <y>341</y>
+     <x>328</x>
+     <y>371</y>
     </hint>
    </hints>
   </connection>
@@ -1336,12 +1537,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>58</x>
-     <y>370</y>
+     <x>64</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>142</x>
-     <y>369</y>
+     <x>172</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
@@ -1352,12 +1553,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>365</y>
+     <x>265</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>303</x>
-     <y>364</y>
+     <x>329</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
@@ -1368,12 +1569,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>92</x>
-     <y>392</y>
+     <x>98</x>
+     <y>432</y>
     </hint>
     <hint type="destinationlabel">
-     <x>231</x>
-     <y>400</y>
+     <x>328</x>
+     <y>433</y>
     </hint>
    </hints>
   </connection>
@@ -1384,12 +1585,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>428</y>
+     <x>89</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>144</x>
-     <y>428</y>
+     <x>196</x>
+     <y>464</y>
     </hint>
    </hints>
   </connection>
@@ -1400,12 +1601,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>419</y>
+     <x>75</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>291</x>
-     <y>427</y>
+     <x>328</x>
+     <y>464</y>
     </hint>
    </hints>
   </connection>
@@ -1426,14 +1627,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnSaveCompanyConfig</sender>
+   <sender>btnExportBasicConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>export_company_config()</slot>
+   <slot>export_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>449</x>
-     <y>343</y>
+     <x>22</x>
+     <y>526</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -1442,18 +1643,242 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnLoadCompanyConfig</sender>
+   <sender>btnImportBasicConfig</sender>
    <signal>clicked()</signal>
    <receiver>StockFinder</receiver>
-   <slot>import_company_config()</slot>
+   <slot>import_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>379</y>
+     <x>179</x>
+     <y>526</y>
     </hint>
     <hint type="destinationlabel">
      <x>471</x>
      <y>398</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actHoldersStatus</sender>
+   <signal>triggered()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>search_by_holders_structure()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxMacdEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbMacdPosition</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>375</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>462</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxMacdEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbMacdBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>240</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>576</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxBollEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbBollBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>394</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>484</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxBollEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbBollTrack</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>583</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxExpmaEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbExpmaBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>478</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxKdjEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbKdjItem</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>388</x>
+     <y>334</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxKdjEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbKdjBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>520</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxKdjEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbKdjThreshold</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>331</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>338</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTrixEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbTrixPeriod</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTrixEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>cbbTrixBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>412</x>
+     <y>367</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>370</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnExportTechnicalConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>export_technical_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>427</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>431</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnImportTechnicalConfig</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>import_technical_config()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTechnicalCriteriasEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>grpTechnicalCriterias</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>433</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>217</y>
     </hint>
    </hints>
   </connection>
@@ -1468,7 +1893,10 @@
   <slot>export_technical_config()</slot>
   <slot>import_technical_config()</slot>
   <slot>edit_selected_item()</slot>
-  <slot>export_company_config()</slot>
-  <slot>import_company_config()</slot>
+  <slot>export_basic_config()</slot>
+  <slot>import_basic_config()</slot>
+  <slot>search_by_holders_structure()</slot>
+  <slot>export_custom_config()</slot>
+  <slot>import_custom_config()</slot>
  </slots>
 </ui>

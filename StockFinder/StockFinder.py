@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QDate
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
@@ -7,6 +7,8 @@ from Windows.ProgressBar import ProgressBar
 import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
+import tushare
+import Data.DataAnalyzer as DataAnalyzer
 
 
 stockFinderInstance = None
@@ -24,6 +26,15 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 初始化单例
         global stockFinderInstance
         stockFinderInstance = self
+        # 初始化技术面指标下拉菜单
+        self.cbbMacdPosition.addItems(['零轴下方', '零轴上方'])
+        self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿'])
+        self.cbbBollBehaviour.addItems(['上穿', '下穿'])
+        self.cbbBollTrack.addItems(['上轨', '中轨', '下轨'])
+        self.cbbExpmaBehaviour.addItems(['多头下穿白线', '多头下穿黄线', '空头上穿白线', '空头上穿黄线', '金叉转为多头', '死叉转为空头'])
+        self.cbbKdjItem.addItems(['K值', 'D值', 'J值'])
+        self.cbbKdjBehaviour.addItems(['大于', '小于'])
+        self.cbbTrixBehaviour.addItems(['金叉', '死叉'])
 
     # 快捷键设置
     def keyPressEvent(self, key: QKeyEvent):
@@ -34,13 +45,60 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
             self.remove_criteria_item()
 
+    # 根据十大流通股东结构选股
+    @staticmethod
+    def search_by_holders_structure():
+        stock_list = FileManager.read_stock_list_file()
+        today = QDate.currentDate()
+        year = today.year()
+        month = today.month()
+        quarter = 4
+        if month < 4:
+            year -= 1
+        elif month < 7:
+            quarter = 1
+        elif month < 10:
+            quarter = 2
+        else:
+            quarter = 3
+
+        search_result = []
+        for index, row_stock in stock_list.iterrows():
+            code_num = row_stock['code']
+            code = str(code_num).zfill(6)
+            data = tushare.top10_holders(code=code, year=year, quarter=quarter)[1]
+            data['h_pro'] = data['h_pro'].astype(float)
+            under_five = data[data['h_pro'] < 5]
+            # 单人持股比例超过3%的跳过
+            if under_five['h_pro'].max() > 3:
+                continue
+            count = 0
+            for i, row_holder in under_five.iterrows():
+                # 排除公司持股和限售情况
+                if "有限公司" in row_holder['name'] or row_holder['sharetype'] == "限售流通股":
+                    continue
+                count += 1
+                # 股权结构优秀，加入选中列表
+                if count >= 5:
+                    search_result.append(code)
+                    break
+            if index > 100:
+                break
+
+        file_path = QFileDialog.getSaveFileName(directory=FileManager.selected_stock_list_path(), filter='TXT(*.txt)')
+        if file_path[0] != "":
+            file = open(file_path[0], "w")
+            for code in search_result:
+                file.write(code + "\n")
+            file.close()
+
     # 获取并导出全部股票信息
     @staticmethod
     def export_all_stock_data():
         FileManager.export_all_stock_data()
 
     # 保存基本面指标搜索条件
-    def export_company_config(self):
+    def export_basic_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
             "peOn": self.cbxPriceEarning.isChecked(),
@@ -69,12 +127,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             "totalHoldersMin": self.spbTotalHoldersMin.value(),
             "totalHoldersMax": self.spbTotalHoldersMax.value(),
             "includeSt": self.cbxIncludeStStock.isChecked(),
-            "includeNew": self.cbxIncludeNewStock.isChecked(),
+            "includeNew": self.cbxIncludeNewStock.isChecked()
         }
         if file_path[0] != "":
             FileManager.export_config_as_json(data, file_path[0])
 
-    def import_company_config(self):
+    # 载入基本面指标搜索条件
+    def import_basic_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             data = FileManager.import_json_config(file_path[0])
@@ -106,20 +165,64 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbxIncludeStStock.setChecked(data['includeSt'])
             self.cbxIncludeNewStock.setChecked(data['includeNew'])
 
-    # 保存技术指标搜索条件
+    # 保存技术面指标搜索条件
     def export_technical_config(self):
+        file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
+        data = {
+            "macdOn": self.cbxMacdEnabled.isChecked(),
+            "macdPosition": self.cbbMacdPosition.currentText(),
+            "macdBehaviour": self.cbbMacdBehaviour.currentText(),
+            "bollOn": self.cbxBollEnabled.isChecked(),
+            "bollBehaviour": self.cbbBollBehaviour.currentText(),
+            "bollTrack": self.cbbBollTrack.currentText(),
+            "expmaOn": self.cbxExpmaEnabled.isChecked(),
+            "expmaBehaviour": self.cbbExpmaBehaviour.currentText(),
+            "kdjOn": self.cbxKdjEnabled.isChecked(),
+            "kdjItem": self.cbbKdjItem.currentText(),
+            "kdjBehaviour": self.cbbKdjBehaviour.currentText(),
+            "kdjThreshold": self.spbKdjThreshold.value(),
+            "trixOn": self.cbxTrixEnabled.isChecked(),
+            "trixPeriod": self.spbTrixPeriod.value(),
+            "trixBehaviour": self.cbbTrixBehaviour.currentText()
+        }
+        if file_path[0] != "":
+            FileManager.export_config_as_json(data, file_path[0])
+
+    # 载入技术面指标搜索条件
+    def import_technical_config(self):
+        file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
+        if file_path[0] != "":
+            data = FileManager.import_json_config(file_path[0])
+            self.cbxMacdEnabled.setChecked(data['macdOn'])
+            self.cbbMacdPosition.setCurrentText(data['macdPosition'])
+            self.cbbMacdBehaviour.setCurrentText(data['macdBehaviour'])
+            self.cbxBollEnabled.setChecked(data['bollOn'])
+            self.cbbBollBehaviour.setCurrentText(data['bollBehaviour'])
+            self.cbbBollTrack.setCurrentText(data['bollTrack'])
+            self.cbxExpmaEnabled.setChecked(data['expmaOn'])
+            self.cbbExpmaBehaviour.setCurrentText(data['expmaBehaviour'])
+            self.cbxKdjEnabled.setChecked(data['kdjOn'])
+            self.cbbKdjItem.setCurrentText(data['kdjItem'])
+            self.cbbKdjBehaviour.setCurrentText(data['kdjBehaviour'])
+            self.spbKdjThreshold.setValue(data['kdjThreshold'])
+            self.cbxTrixEnabled.setChecked(data['trixOn'])
+            self.spbTrixPeriod.setValue(data['trixPeriod'])
+            self.cbbTrixBehaviour.setCurrentText(data['trixBehaviour'])
+
+    # 保存自定义指标搜索条件
+    def export_custom_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             FileManager.export_config_as_json(self.__criteriaItems, file_path[0])
 
-    # 读取保存的技术指标搜索条件
-    def import_technical_config(self):
+    # 载入自定义指标搜索条件
+    def import_custom_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.import_criteria_item)
             self.update_criteria_list()
 
-    # 更新搜索条件列表显示
+    # 更新自定义搜索条件列表显示
     def update_criteria_list(self, edited_item=None):
         # 添加条件时
         if edited_item is not None and edited_item not in self.__criteriaItems:
@@ -135,21 +238,21 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 text += "最近" + str(item.daysCountSecond) + "日" + item.comparedLogic + item.field + "×" + str(item.relativePercentage) + "%"
             self.lstCriteriaItems.addItem(text)
 
-    # 新增搜索条件
+    # 新增自定义搜索条件
     def add_criteria_item(self):
         item = SearchCriteria.CriteriaItem()
         window = SearchCriteria.SearchCriteria(item)
         window.show()
         window.exec()
 
-    # 双击编辑所选搜索条件
+    # 双击编辑所选自定义搜索条件
     def edit_selected_item(self, item: QListWidgetItem):
         index = self.lstCriteriaItems.indexFromItem(item)
         window = SearchCriteria.SearchCriteria(self.__criteriaItems[index.row()])
         window.show()
         window.exec()
 
-    # 编辑所选搜索条件
+    # 点击编辑按钮编辑所选自定义搜索条件
     def modify_criteria_item(self):
         selection = self.lstCriteriaItems.selectedIndexes()
         if len(selection) == 0:
@@ -160,7 +263,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         window.show()
         window.exec()
 
-    # 删除所选搜索条件
+    # 删除所选自定义搜索条件
     def remove_criteria_item(self):
         selection = self.lstCriteriaItems.selectedIndexes()
         if len(selection) == 0:
@@ -169,12 +272,12 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.__criteriaItems.pop(index)
         self.update_criteria_list()
 
-    # 重置搜索条件
+    # 清空自定义搜索条件
     def reset_criteria_items(self):
         self.__criteriaItems = []
         self.lstCriteriaItems.clear()
 
-    # 搜索全部股票
+    # 开始搜索全部股票
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
         self.__searchResult = SearchResult()
@@ -193,7 +296,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.__searchResult.update_found_stock_count()
 
     # 基本面指标分析
-    def company_info_match_requirement(self, row):
+    def match_basic_criterias(self, row):
         # 检测股票是否是ST股
         if not self.cbxIncludeStStock.isChecked():
             name = row['name']
@@ -276,8 +379,11 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 所有指标全部达标
         return True
 
-    # 技术面指标分析
-    def technical_index_match_requirement(self, code: str):
+    # 自定义指标分析
+    def match_custom_criterias(self, code: str):
+        # 若没有自定义指标则跳过
+        if len(self.__criteriaItems) == 0:
+            return True
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
         # 跳过还未上市新股
@@ -291,6 +397,29 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         for item in self.__criteriaItems:
             if not SearchCriteria.match_criteria_item(data, item):
                 return False
+        return True
+
+    # 技术指标分析
+    def match_technical_criterias(self, code: str):
+        # 获得股票历史数据
+        data = FileManager.read_stock_history_data(code)
+        # 获取收盘价序列
+        stock_prices = data['close']
+        # 检测MACD图形
+        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(stock_prices, 2, self.cbbMacdPosition.currentText(), self.cbbMacdBehaviour.currentText()):
+            return False
+        # 检测BOLL区间
+        if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(stock_prices, 2, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
+            return False
+        # 检测EXPMA图形
+        if self.cbxExpmaEnabled.isChecked() and not DataAnalyzer.match_expma(stock_prices, 2, self.cbbExpmaBehaviour.currentText()):
+            return False
+        # 检测KDJ图形
+        if self.cbxKdjEnabled.isChecked() and not DataAnalyzer.match_kdj(stock_prices, 2, self.cbbKdjItem.currentText(), self.cbbKdjBehaviour.currentText(), self.spbKdjThreshold.value()):
+            return False
+        # 检测TRIX图形
+        if self.cbxTrixEnabled.isChecked() and not DataAnalyzer.match_trix(stock_prices, 2, self.cbbTrixBehaviour.currentText()):
+            return False
         return True
 
     # 检测股票是否在所选交易所中
@@ -340,10 +469,13 @@ class StockSearcher(QThread):
             if not stockFinderInstance.code_in_search_range(code_num):
                 continue
             # 基本面指标考察
-            if stockFinderInstance.cbxCompanyInfoEnabled.isChecked() and not stockFinderInstance.company_info_match_requirement(row):
+            if stockFinderInstance.cbxBasicCriteriasEnabled.isChecked() and not stockFinderInstance.match_basic_criterias(row):
                 continue
             # 技术面指标考察
-            if stockFinderInstance.cbxTechnicalIndexEnabled.isChecked() and not stockFinderInstance.technical_index_match_requirement(code):
+            if stockFinderInstance.cbxTechnicalCriteriasEnabled.isChecked() and not stockFinderInstance.match_technical_criterias(code):
+                continue
+            # 自定义指标考察
+            if not stockFinderInstance.match_custom_criterias(code):
                 continue
             # 获得股票市盈率
             pe = row['pe']
