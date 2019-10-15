@@ -1,4 +1,6 @@
 import pandas
+import talib
+import math
 
 
 class AnalysisData:
@@ -41,26 +43,30 @@ def close_price_up(database: pandas.DataFrame):
 
 # 低开高走概率
 def low_open_high_close(database: pandas.DataFrame):
-    selected = database[(database['open_pct'] < 0) & (database['close_pct'] > database['open_pct'])]
-    return round(selected.shape[0] / database.shape[0] * 100, 2)
+    low_open = database[database['open_pct'] < 0]
+    high_close = low_open[low_open['close_pct'] > low_open['open_pct']]
+    return round(high_close.shape[0] / low_open.shape[0] * 100, 2)
 
 
 # 低开低走概率
 def low_open_low_close(database: pandas.DataFrame):
-    selected = database[(database['close_pct'] < database['open_pct']) & (database['open_pct'] < 0)]
-    return round(selected.shape[0] / database.shape[0] * 100, 2)
+    low_open = database[database['open_pct'] < 0]
+    low_close = low_open[low_open['close_pct'] < low_open['open_pct']]
+    return round(low_close.shape[0] / low_open.shape[0] * 100, 2)
 
 
 # 高开高走概率
 def high_open_high_close(database: pandas.DataFrame):
-    selected = database[(database['close_pct'] > database['open_pct']) & (database['open_pct'] > 0)]
-    return round(selected.shape[0] / database.shape[0] * 100, 2)
+    high_open = database[database['open_pct'] > 0]
+    high_close = high_open[high_open['close_pct'] > high_open['open_pct']]
+    return round(high_close.shape[0] / high_open.shape[0] * 100, 2)
 
 
 # 高开低走概率
 def high_open_low_close(database: pandas.DataFrame):
-    selected = database[(database['open_pct'] > 0) & database['close_pct'] < (database['open_pct'])]
-    return round(selected.shape[0] / database.shape[0] * 100, 2)
+    high_open = database[database['open_pct'] > 0]
+    low_close = high_open[high_open['close_pct'] < high_open['open_pct']]
+    return round(low_close.shape[0] / high_open.shape[0] * 100, 2)
 
 
 # 最高价涨停概率
@@ -237,3 +243,75 @@ def get_percentage_from_price(price: float, pre_close: float):
 # 通过涨跌幅计算价格
 def get_price_from_percentage(pre_close: float, percentage: float):
     return round(pre_close * (1 + percentage / 100), 2)
+
+
+# 计算是否符合MACD图形
+def match_macd(stock_closes: pandas.Series, days_ahead: int, position: str, behaviour: str):
+    # 获取MACD指标的三条数据
+    white, yellow, column = talib.MACD(stock_closes)
+    # 上市一个月内新股数据太少跳过
+    if math.isnan(white.iloc[-days_ahead]):
+        return False
+
+    if behaviour == "金叉":
+        # 白线上穿黄线
+        if white.iloc[-days_ahead] > yellow.iloc[-days_ahead] or white.iloc[-1] < yellow.iloc[-1]:
+            return False
+    elif behaviour == "死叉":
+        # 白线下穿黄线
+        if white.iloc[-days_ahead] < yellow.iloc[-days_ahead] or white.iloc[-1] > yellow.iloc[-1]:
+            return False
+    elif behaviour == "翻红":
+        # 绿柱缩短变红
+        if column.iloc[-days_ahead] > 0 or column.iloc[-1] < 0:
+            return False
+    elif behaviour == "翻绿":
+        # 红柱缩短变绿
+        if column.iloc[-days_ahead] < 0 or column.iloc[-1] > 0:
+            return False
+
+    # 交汇点与零轴相对位置
+    if position == "零轴下方" and white.iloc[-1] > 0:
+        return False
+    if position == "零轴上方" and white.iloc[-1] < 0:
+        return False
+    return True
+
+
+# 计算是否符合BOLL图形
+def match_boll(stock_closes: pandas.Series, days_ahead: int, track: str, behaviour: str):
+    # 获取布林线的三根轨道
+    upper, middle, lower = talib.BBANDS(stock_closes)
+    # 上市一个月内新股数据太少跳过
+    if math.isnan(upper.iloc[-days_ahead]):
+        return False
+
+    # 获取对应轨道价格，默认为上轨
+    threshold_price = upper
+    if track == "中轨":
+        threshold_price = middle
+    if track == "下轨":
+        threshold_price = lower
+
+    if behaviour == "上穿":
+        if stock_closes.iloc[-days_ahead] > threshold_price.iloc[-days_ahead] or stock_closes.iloc[-1] < threshold_price.iloc[-1]:
+            return False
+    elif behaviour == "下穿":
+        if stock_closes.iloc[-days_ahead] < threshold_price.iloc[-days_ahead] or stock_closes.iloc[-1] > threshold_price.iloc[-1]:
+            return False
+    return True
+
+
+# 计算是否符合EXPMA图形
+def match_expma(stock_closes: pandas.Series, days_ahead: int, behaviour: str):
+    return True
+
+
+# 计算是否符合KDJ图形
+def match_kdj(stock_closes: pandas.Series, days_ahead: int, line: str, behaviour: str, threshold: int):
+    return True
+
+
+# 计算是否符合TRIX图形
+def match_trix(stock_closes: pandas.Series, days_ahead: int, behaviour: str):
+    return True

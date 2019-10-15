@@ -41,7 +41,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         if len(result_stock.data) == 0:
             error_dialog = QErrorMessage()
             error_dialog.setWindowTitle("错误")
-            error_dialog.showMessage("股票代码无效！")
+            error_dialog.showMessage("股票代码无效或网络无响应！")
             error_dialog.exec_()
             return
         # 初始化股票历史数据库
