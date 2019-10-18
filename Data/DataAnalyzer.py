@@ -1,6 +1,4 @@
-import pandas
-import talib
-import math
+import pandas, talib, math
 
 
 class AnalysisData:
@@ -33,6 +31,68 @@ def analyze_database(database: pandas.DataFrame):
     database['low_pct'] = round((database['low'] / database['preclose'] - 1) * 100, 2)
     database['close_pct'] = round((database['close'] / database['preclose'] - 1) * 100, 2)
     database['amplitude'] = database['high_pct'] + abs(database['low_pct'])
+
+
+# 计算技术指标
+def get_technical_index(stock_data: pandas.DataFrame):
+    stock_closes = stock_data['close']
+
+    # 计算KDJ曲线，至少上市13天
+    if stock_closes.shape[0] < 13:
+        return
+    low_list = stock_data['low'].rolling(window=9).min()
+    high_list = stock_data['high'].rolling(window=9).max()
+    # talib中KD的均线算法和通达信算法不同，手写覆盖
+    rsv = (stock_data['close'] - low_list) / (high_list - low_list) * 100
+    k = SMA(rsv, 3, 1)
+    d = SMA(k, 3, 1)
+    j = k * 3 - d * 2
+    stock_data['kdj_k'] = k
+    stock_data['kdj_d'] = d
+    stock_data['kdj_j'] = j
+
+    # 计算BOLL轨道，至少上市20天
+    if stock_closes.shape[0] < 20:
+        return
+    upper, middle, lower = talib.BBANDS(stock_closes, 20, 2, 2)
+    stock_data['boll_upper'] = upper
+    stock_data['boll_middle'] = middle
+    stock_data['boll_lower'] = lower
+
+    # 计算MACD图形，至少上市34天
+    if stock_closes.shape[0] < 34:
+        return
+    white, yellow, column = talib.MACD(stock_closes)
+    column = column * 2
+    stock_data['macd_white'] = white
+    stock_data['macd_yellow'] = yellow
+    stock_data['macd_column'] = column
+
+    # 计算TRIX曲线，至少上市43天
+    if stock_closes.shape[0] < 43:
+        return
+    white = talib.TRIX(stock_closes, 12)
+    yellow = talib.MA(white, 9)
+    stock_data['trix_white'] = white
+    stock_data['trix_yellow'] = yellow
+
+    # 计算EXPMA曲线，至少上市99天
+    if stock_closes.shape[0] < 99:
+        return
+    stock_data['expma_white'] = talib.EMA(stock_closes, 12)
+    stock_data['expma_yellow'] = talib.EMA(stock_closes, 50)
+
+
+# 计算通达信版SMA值
+def SMA(data: pandas.Series, period: int, weight: int):
+    sma = [math.nan]
+    for index in range(1, data.shape[0]):
+        last_sma = sma[index - 1]
+        if math.isnan(last_sma):
+            sma.append((data.iloc[index] * weight) / period)
+        else:
+            sma.append((data.iloc[index] * weight + last_sma * (period - weight)) / period)
+    return pandas.Series(sma)
 
 
 # 区间内每日上涨概率
@@ -221,20 +281,6 @@ def inverse_market_down(stock_database: pandas.DataFrame, market_database: panda
     return round(count / stock_database.shape[0] * 100, 2)
 
 
-# 计算股票均线与平均换手率
-def get_average_price(database: pandas.DataFrame, price_period: int, volume_period: int):
-    rows = database.shape[0]
-    for i in range(rows - 1, -1, -1):
-        min_index = max(0, i - 5)
-        database.loc[i, 'avg_price_five'] = round(database.loc[min_index:i, 'close'].mean(), 2)
-
-        min_index = max(0, i - price_period)
-        database.loc[i, 'avg_price_long'] = round(database.loc[min_index:i, 'close'].mean(), 2)
-
-        min_index = max(0, i - volume_period)
-        database.loc[i, 'avg_turn'] = round(database.loc[min_index:i, 'turn'].mean(), 2)
-
-
 # 通过价格计算涨跌幅
 def get_percentage_from_price(price: float, pre_close: float):
     return round((price / pre_close - 1) * 100, 2)
@@ -246,72 +292,135 @@ def get_price_from_percentage(pre_close: float, percentage: float):
 
 
 # 计算是否符合MACD图形
-def match_macd(stock_closes: pandas.Series, days_ahead: int, position: str, behaviour: str):
+def match_macd(stock_data: pandas.DataFrame, days_ahead: int, position: str, behaviour: str):
     # 获取MACD指标的三条数据
-    white, yellow, column = talib.MACD(stock_closes)
-    # 上市一个月内新股数据太少跳过
-    if math.isnan(white.iloc[-days_ahead]):
-        return False
-
-    if behaviour == "金叉":
-        # 白线上穿黄线
-        if white.iloc[-days_ahead] > yellow.iloc[-days_ahead] or white.iloc[-1] < yellow.iloc[-1]:
-            return False
-    elif behaviour == "死叉":
-        # 白线下穿黄线
-        if white.iloc[-days_ahead] < yellow.iloc[-days_ahead] or white.iloc[-1] > yellow.iloc[-1]:
-            return False
-    elif behaviour == "翻红":
-        # 绿柱缩短变红
-        if column.iloc[-days_ahead] > 0 or column.iloc[-1] < 0:
-            return False
-    elif behaviour == "翻绿":
-        # 红柱缩短变绿
-        if column.iloc[-days_ahead] < 0 or column.iloc[-1] > 0:
-            return False
+    white = stock_data['macd_white']
+    yellow = stock_data['macd_yellow']
 
     # 交汇点与零轴相对位置
     if position == "零轴下方" and white.iloc[-1] > 0:
         return False
     if position == "零轴上方" and white.iloc[-1] < 0:
         return False
-    return True
+
+    # 白线上穿黄线
+    if behaviour == "金叉":
+        return white.iloc[-days_ahead] < yellow.iloc[-days_ahead] and white.iloc[-1] > yellow.iloc[-1]
+    # 白线下穿黄线
+    elif behaviour == "死叉":
+        return white.iloc[-days_ahead] > yellow.iloc[-days_ahead] and white.iloc[-1] < yellow.iloc[-1]
+    else:
+        column = stock_data['macd_column']
+        # 绿柱缩短变红
+        if behaviour == "翻红":
+            return column.iloc[-days_ahead] < 0 < column.iloc[-1]
+        # 红柱缩短变绿
+        else:
+            return column.iloc[-days_ahead] > 0 > column.iloc[-1]
 
 
 # 计算是否符合BOLL图形
-def match_boll(stock_closes: pandas.Series, days_ahead: int, track: str, behaviour: str):
+def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behaviour: str):
     # 获取布林线的三根轨道
-    upper, middle, lower = talib.BBANDS(stock_closes)
-    # 上市一个月内新股数据太少跳过
-    if math.isnan(upper.iloc[-days_ahead]):
-        return False
+    upper = stock_data['boll_upper']
+    middle = stock_data['boll_middle']
+    lower = stock_data['boll_lower']
+    stock_closes = stock_data['close']
 
-    # 获取对应轨道价格，默认为上轨
-    threshold_price = upper
+    # 获取对应轨道价格
+    if track == "上轨":
+        line = upper
     if track == "中轨":
-        threshold_price = middle
-    if track == "下轨":
-        threshold_price = lower
+        line = middle
+    else:
+        line = lower
+
+    # 获取最近和几日前的价格以及轨道
+    ahead_stock = stock_closes.iloc[-days_ahead]
+    ahead_line = line.iloc[-days_ahead]
+    newest_stock = stock_closes.iloc[-1]
+    newest_line = line.iloc[-1]
 
     if behaviour == "上穿":
-        if stock_closes.iloc[-days_ahead] > threshold_price.iloc[-days_ahead] or stock_closes.iloc[-1] < threshold_price.iloc[-1]:
-            return False
+        return ahead_stock < ahead_line and newest_stock > newest_line
     elif behaviour == "下穿":
-        if stock_closes.iloc[-days_ahead] < threshold_price.iloc[-days_ahead] or stock_closes.iloc[-1] > threshold_price.iloc[-1]:
-            return False
-    return True
+        return ahead_stock > ahead_line and newest_stock < newest_line
+    return False
 
 
 # 计算是否符合EXPMA图形
-def match_expma(stock_closes: pandas.Series, days_ahead: int, behaviour: str):
-    return True
+def match_expma(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
+    # 获得长短两条EMA均线
+    white = stock_data['expma_white']
+    yellow = stock_data['expma_yellow']
+    stock_closes = stock_data['close']
+
+    # 白线在上为多头排列，否则为空头排列
+    if "多头" in behaviour and white.iloc[-1] < yellow.iloc[-1]:
+        return False
+    elif "空头" in behaviour and white.iloc[-1] > yellow.iloc[-1]:
+        return False
+
+    # 获取被比较的两个价格
+    first = stock_closes if "穿" in behaviour else white
+    second = white if "白线" in behaviour else yellow
+
+    # 获取最近和几日前的价格
+    ahead_first = first.iloc[-days_ahead]
+    ahead_second = second.iloc[-days_ahead]
+    newest_first = first.iloc[-1]
+    newest_second = second.iloc[-1]
+
+    if "下" or "金叉" in behaviour:
+        return ahead_first > ahead_second and newest_first < newest_second
+    if "上" or "死叉" in behaviour:
+        return ahead_first < ahead_second and newest_first > newest_second
+    return False
 
 
 # 计算是否符合KDJ图形
-def match_kdj(stock_closes: pandas.Series, days_ahead: int, line: str, behaviour: str, threshold: int):
-    return True
+def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold: int):
+    # 获取三条线的值
+    line_k = stock_data['kdj_k']
+    line_d = stock_data['kdj_d']
+    line_j = stock_data['kdj_j']
+
+    # 获取用户需要的值
+    if "K" in line:
+        value = line_k
+    elif "D" in line:
+        value = line_d
+    # 计算J值
+    else:
+        value = line_j
+
+    if behaviour == "大于":
+        return value.iloc[-1] > threshold
+    else:
+        return value.iloc[-1] < threshold
+
+
+# 计算是否符合RSI图形
+def match_rsi(stock_closes: pandas.Series, period: int, behaviour: str, threshold: int):
+    value = talib.RSI(stock_closes, time_period=period)
+    if behaviour == "大于":
+        return value.iloc[-1] > threshold
+    else:
+        return value.iloc[-1] < threshold
 
 
 # 计算是否符合TRIX图形
-def match_trix(stock_closes: pandas.Series, days_ahead: int, behaviour: str):
-    return True
+def match_trix(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
+    # 获取白线和黄线
+    white = stock_data['trix_white']
+    yellow = stock_data['trix_yellow']
+    # 获取最近和几日前的价格
+    ahead_white = white.iloc[-days_ahead]
+    ahead_yellow = yellow.iloc[-days_ahead]
+    newest_white = white.iloc[-1]
+    newest_yellow = yellow.iloc[-1]
+
+    if behaviour == "金叉":
+        return ahead_white < ahead_yellow and newest_white > newest_yellow
+    else:
+        return ahead_white > ahead_yellow and newest_white < newest_yellow

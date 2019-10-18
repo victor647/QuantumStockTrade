@@ -1,13 +1,9 @@
-import os
-import pandas
-import tushare
-import baostock
+import os, json, pandas, tushare, baostock, time
 import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
 from Windows.ProgressBar import ProgressBar
-import json
-import StockFinder.SearchCriteria as SearchCriteria
+import Data.DataAnalyzer as DataAnalyzer
 
 
 # 默认全部股票列表存放路径
@@ -52,11 +48,6 @@ def monitor_config_path():
     return base_path
 
 
-# 导入全部股票信息列表
-def read_stock_list_file():
-    return pandas.read_csv(full_stock_info_path())
-
-
 # 导出找到的股票列表到txt文件
 def export_stock_list(stock_table: QTableWidget):
     file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
@@ -84,6 +75,11 @@ def save_stock_list_file():
     stock_list = tushare.get_stock_basics()
     stock_list.to_csv(full_stock_info_path())
     return stock_list
+
+
+# 导入全部股票信息列表
+def read_stock_list_file():
+    return pandas.read_csv(full_stock_info_path())
 
 
 # 导出盯盘指标
@@ -124,13 +120,20 @@ def read_stock_history_data(stock_code: str):
 
 # 保存单只股票历史数据到csv文件
 def save_stock_history_data(bs_result, stock_code: str):
+    tick = time.time()
     data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
+    print ("get data costs ", time.time() - tick)
+    tick = time.time()
+    DataAnalyzer.get_technical_index(data)
+    print("calculate costs ", time.time() - tick)
+    tick = time.time()
     data.to_csv(stock_history_path(stock_code))
+    print("save file costs ", time.time() - tick)
 
 
 # 获取最新全部股票数据
 def export_all_stock_data():
-    stock_list = save_stock_list_file()
+    stock_list = read_stock_list_file()
     progress = ProgressBar(stock_list.shape[0])
     progress.show()
     exporter = StockDataExporter()

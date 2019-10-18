@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QDate
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageBox
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from StockFinder.SearchResult import SearchResult
@@ -7,7 +7,7 @@ from Windows.ProgressBar import ProgressBar
 import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
-import tushare
+import tushare, Tools
 import Data.DataAnalyzer as DataAnalyzer
 
 
@@ -92,10 +92,15 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 file.write(code + "\n")
             file.close()
 
-    # 获取并导出全部股票信息
+    # 获取并导出全部股票K线
     @staticmethod
     def export_all_stock_data():
         FileManager.export_all_stock_data()
+
+    # 获取两市全部股票列表
+    def export_all_stock_list(self):
+        FileManager.save_stock_list_file()
+        QMessageBox.information(self, "成功", "导出全部股票列表成功！")
 
     # 保存基本面指标搜索条件
     def export_basic_config(self):
@@ -137,6 +142,9 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             data = FileManager.import_json_config(file_path[0])
+            if "peOn" not in data:
+                Tools.show_error_dialog("选取的配置文件格式不对！")
+                return
             self.cbxPriceEarning.setChecked(data['peOn'])
             self.spbPriceEarningMin.setValue(data['peMin'])
             self.spbPriceEarningMax.setValue(data['peMax'])
@@ -169,6 +177,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def export_technical_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
+            "timePeriod": self.spbTechnicalTimePeriod.value(),
             "macdOn": self.cbxMacdEnabled.isChecked(),
             "macdPosition": self.cbbMacdPosition.currentText(),
             "macdBehaviour": self.cbbMacdBehaviour.currentText(),
@@ -181,8 +190,11 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             "kdjItem": self.cbbKdjItem.currentText(),
             "kdjBehaviour": self.cbbKdjBehaviour.currentText(),
             "kdjThreshold": self.spbKdjThreshold.value(),
+            "rsiOn": self.cbxRsiEnabled.isChecked(),
+            "rsiPeriod": self.spbRsiTimePeriod.value(),
+            "rsiBehaviour": self.cbbRsiBehaviour.currentText(),
+            "rsiThreshold": self.spbRsiThreshold.value(),
             "trixOn": self.cbxTrixEnabled.isChecked(),
-            "trixPeriod": self.spbTrixPeriod.value(),
             "trixBehaviour": self.cbbTrixBehaviour.currentText()
         }
         if file_path[0] != "":
@@ -193,6 +205,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != "":
             data = FileManager.import_json_config(file_path[0])
+            if "timePeriod" not in data:
+                Tools.show_error_dialog("选取的配置文件格式不对！")
+                return
+            self.spbTechnicalTimePeriod.setValue(data['timePeriod'])
             self.cbxMacdEnabled.setChecked(data['macdOn'])
             self.cbbMacdPosition.setCurrentText(data['macdPosition'])
             self.cbbMacdBehaviour.setCurrentText(data['macdBehaviour'])
@@ -205,8 +221,11 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbbKdjItem.setCurrentText(data['kdjItem'])
             self.cbbKdjBehaviour.setCurrentText(data['kdjBehaviour'])
             self.spbKdjThreshold.setValue(data['kdjThreshold'])
+            self.cbxRsiEnabled.setChecked(data['rsiOn'])
+            self.spbRsiTimePeriod.setValue(data['rsiPeriod'])
+            self.cbbRsiBehaviour.setCurrentText(data['rsiBehaviour'])
+            self.spbRsiThreshold.setValue(data['rsiThreshold'])
             self.cbxTrixEnabled.setChecked(data['trixOn'])
-            self.spbTrixPeriod.setValue(data['trixPeriod'])
             self.cbbTrixBehaviour.setCurrentText(data['trixBehaviour'])
 
     # 保存自定义指标搜索条件
@@ -403,22 +422,24 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def match_technical_criterias(self, code: str):
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
-        # 获取收盘价序列
-        stock_prices = data['close']
+        # 跳过上市一个月内的新股
+        if data.shape[0] < 20:
+            return False
+        period = self.spbTechnicalTimePeriod.value() + 1
         # 检测MACD图形
-        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(stock_prices, 2, self.cbbMacdPosition.currentText(), self.cbbMacdBehaviour.currentText()):
+        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(data, period, self.cbbMacdPosition.currentText(), self.cbbMacdBehaviour.currentText()):
             return False
         # 检测BOLL区间
-        if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(stock_prices, 2, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
+        if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
             return False
         # 检测EXPMA图形
-        if self.cbxExpmaEnabled.isChecked() and not DataAnalyzer.match_expma(stock_prices, 2, self.cbbExpmaBehaviour.currentText()):
+        if self.cbxExpmaEnabled.isChecked() and not DataAnalyzer.match_expma(data, period, self.cbbExpmaBehaviour.currentText()):
             return False
         # 检测KDJ图形
-        if self.cbxKdjEnabled.isChecked() and not DataAnalyzer.match_kdj(stock_prices, 2, self.cbbKdjItem.currentText(), self.cbbKdjBehaviour.currentText(), self.spbKdjThreshold.value()):
+        if self.cbxKdjEnabled.isChecked() and not DataAnalyzer.match_kdj(data, self.cbbKdjItem.currentText(), self.cbbKdjBehaviour.currentText(), self.spbKdjThreshold.value()):
             return False
         # 检测TRIX图形
-        if self.cbxTrixEnabled.isChecked() and not DataAnalyzer.match_trix(stock_prices, 2, self.cbbTrixBehaviour.currentText()):
+        if self.cbxTrixEnabled.isChecked() and not DataAnalyzer.match_trix(data, period, self.cbbTrixBehaviour.currentText()):
             return False
         return True
 

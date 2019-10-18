@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>527</height>
+    <width>619</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>30</x>
       <y>60</y>
       <width>181</width>
-      <height>411</height>
+      <height>471</height>
      </rect>
     </property>
     <property name="font">
@@ -38,7 +38,7 @@
        <x>11</x>
        <y>19</y>
        <width>151</width>
-       <height>381</height>
+       <height>433</height>
       </rect>
      </property>
      <property name="font">
@@ -304,7 +304,7 @@
       <x>220</x>
       <y>60</y>
       <width>171</width>
-      <height>181</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="font">
@@ -322,7 +322,7 @@
        <x>10</x>
        <y>20</y>
        <width>151</width>
-       <height>151</height>
+       <height>180</height>
       </rect>
      </property>
      <property name="font">
@@ -445,7 +445,7 @@
       <x>30</x>
       <y>20</y>
       <width>551</width>
-      <height>26</height>
+      <height>27</height>
      </rect>
     </property>
     <property name="font">
@@ -604,8 +604,8 @@
      <rect>
       <x>400</x>
       <y>60</y>
-      <width>181</width>
-      <height>411</height>
+      <width>201</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="font">
@@ -623,7 +623,7 @@
        <x>10</x>
        <y>20</y>
        <width>161</width>
-       <height>252</height>
+       <height>275</height>
       </rect>
      </property>
      <property name="font">
@@ -949,7 +949,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>270</y>
+       <y>300</y>
        <width>51</width>
        <height>16</height>
       </rect>
@@ -964,165 +964,76 @@
       <string>多空信号：</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>290</y>
-       <width>161</width>
-       <height>110</height>
+       <x>11</x>
+       <y>322</y>
+       <width>170</width>
+       <height>135</height>
       </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
-      </font>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_11">
-        <item>
-         <widget class="QLabel" name="lblAveragePriceDescription">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>5日均线交叉</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbAveragePeriodPriceLong">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>60</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblAveragePriceDescription2">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>日均线</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
-        <item>
-         <widget class="QLabel" name="lblVolumeMultiplier">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>成交量乘数</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbVolumeMultiplier">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>-10.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
-        <item>
-         <widget class="QLabel" name="lblVolumeDescription">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>成交量超过</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbAveragePeriodVolume">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblVolumeDescription2">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>日平均</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnStartTrade">
-        <property name="font">
-         <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
+       <widget class="QCheckBox" name="cbxMacdEnabled">
         <property name="text">
-         <string>开始模拟交易推演</string>
+         <string>MACD翻红/翻绿</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxKdjEnabled">
+        <property name="text">
+         <string>KDJ J值大于100/小于0</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxBollEnabled">
+        <property name="text">
+         <string>BOLL突破上轨/跌破下轨</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxBollEnabled_2">
+        <property name="text">
+         <string>TRIX金叉/死叉</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="lblSignalTradeUnit">
+          <property name="text">
+           <string>信号出现时立刻买卖</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spbSignalTradeUnit">
+          <property name="suffix">
+           <string>笔</string>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -1131,9 +1042,9 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>250</y>
+      <y>270</y>
       <width>171</width>
-      <height>221</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="font">
@@ -1151,7 +1062,7 @@
        <x>10</x>
        <y>20</y>
        <width>151</width>
-       <height>191</height>
+       <height>226</height>
       </rect>
      </property>
      <property name="font">
@@ -1294,14 +1205,33 @@
      </layout>
     </widget>
    </widget>
+   <widget class="QPushButton" name="btnStartTrade">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>540</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>开始模拟交易回测！</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>606</width>
-     <height>22</height>
+     <width>619</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>

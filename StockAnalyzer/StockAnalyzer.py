@@ -1,6 +1,6 @@
 import baostock
 from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QMainWindow, QErrorMessage
+from PyQt5.QtWidgets import QMainWindow
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 import StockAnalyzer.TradeSimulator as TradeSimulator
 from Data.TradeStrategy import TradeStrategy
@@ -39,10 +39,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
                                                      start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
         # 确保股票代码有效
         if len(result_stock.data) == 0:
-            error_dialog = QErrorMessage()
-            error_dialog.setWindowTitle("错误")
-            error_dialog.showMessage("股票代码无效或网络无响应！")
-            error_dialog.exec_()
+            Tools.show_error_dialog("股票代码无效或网络无响应！")
             return
         # 初始化股票历史数据库
         global stockDatabase
@@ -50,7 +47,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         # 分析股票股性
         DataAnalyzer.analyze_database(stockDatabase)
         # 计算股票均线
-        DataAnalyzer.get_average_price(stockDatabase, self.spbAveragePeriodPriceLong.value(), self.spbAveragePeriodVolume.value())
+        DataAnalyzer.get_technical_index(stockDatabase)
         # 获取股票对应的大盘历史数据
         market_code = "000001" if market == "sh" else "399001"
         result_market = baostock.query_history_k_data(code=market + "." + market_code, fields="date,open,high,low,close,preclose,turn",
@@ -153,9 +150,6 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
 
     def check_stock_data_exist(self):
         if self.__analysisData.averageTurn == 0:
-            error_dialog = QErrorMessage()
-            error_dialog.setWindowTitle("错误")
-            error_dialog.showMessage("请先获取股票历史数据！")
-            error_dialog.exec_()
+            Tools.show_error_dialog("请先获取股票历史数据！")
             return False
         return True

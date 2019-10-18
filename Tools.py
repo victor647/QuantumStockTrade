@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage
 import FileManager as FileManager
 import Data.DataAnalyzer as DataAnalyzer
 import webbrowser
@@ -101,3 +101,10 @@ def open_stock_page(code: str):
     market = get_trade_center(code)
     webbrowser.open("http://quote.eastmoney.com/" + market + code + ".html")
 
+
+# 显示报错信息
+def show_error_dialog(message: str):
+    error_dialog = QErrorMessage()
+    error_dialog.setWindowTitle("错误")
+    error_dialog.showMessage(message)
+    error_dialog.exec_()
