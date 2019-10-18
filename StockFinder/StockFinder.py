@@ -190,10 +190,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             "kdjItem": self.cbbKdjItem.currentText(),
             "kdjBehaviour": self.cbbKdjBehaviour.currentText(),
             "kdjThreshold": self.spbKdjThreshold.value(),
-            "rsiOn": self.cbxRsiEnabled.isChecked(),
-            "rsiPeriod": self.spbRsiTimePeriod.value(),
-            "rsiBehaviour": self.cbbRsiBehaviour.currentText(),
-            "rsiThreshold": self.spbRsiThreshold.value(),
             "trixOn": self.cbxTrixEnabled.isChecked(),
             "trixBehaviour": self.cbbTrixBehaviour.currentText()
         }
@@ -221,10 +217,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbbKdjItem.setCurrentText(data['kdjItem'])
             self.cbbKdjBehaviour.setCurrentText(data['kdjBehaviour'])
             self.spbKdjThreshold.setValue(data['kdjThreshold'])
-            self.cbxRsiEnabled.setChecked(data['rsiOn'])
-            self.spbRsiTimePeriod.setValue(data['rsiPeriod'])
-            self.cbbRsiBehaviour.setCurrentText(data['rsiBehaviour'])
-            self.spbRsiThreshold.setValue(data['rsiThreshold'])
             self.cbxTrixEnabled.setChecked(data['trixOn'])
             self.cbbTrixBehaviour.setCurrentText(data['trixBehaviour'])
 

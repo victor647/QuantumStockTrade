@@ -1,4 +1,4 @@
-import os, json, pandas, tushare, baostock, time
+import os, json, pandas, tushare, baostock
 import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
@@ -120,15 +120,9 @@ def read_stock_history_data(stock_code: str):
 
 # 保存单只股票历史数据到csv文件
 def save_stock_history_data(bs_result, stock_code: str):
-    tick = time.time()
     data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
-    print ("get data costs ", time.time() - tick)
-    tick = time.time()
     DataAnalyzer.get_technical_index(data)
-    print("calculate costs ", time.time() - tick)
-    tick = time.time()
     data.to_csv(stock_history_path(stock_code))
-    print("save file costs ", time.time() - tick)
 
 
 # 获取最新全部股票数据

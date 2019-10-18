@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>648</width>
-    <height>624</height>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -921,7 +921,7 @@
       <x>360</x>
       <y>180</y>
       <width>271</width>
-      <height>321</height>
+      <height>251</height>
      </rect>
     </property>
     <property name="font">
@@ -938,7 +938,7 @@
        <x>11</x>
        <y>24</y>
        <width>252</width>
-       <height>281</height>
+       <height>211</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1084,68 +1084,7 @@
            <number>100</number>
           </property>
           <property name="value">
-           <number>50</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_19">
-        <item>
-         <widget class="QCheckBox" name="cbxRsiEnabled">
-          <property name="text">
-           <string>RSI</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbRsiTimePeriod">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>日线</string>
-          </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>50</number>
-          </property>
-          <property name="value">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbRsiBehaviour"/>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbRsiThreshold">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string/>
-          </property>
-          <property name="minimum">
            <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="value">
-           <number>50</number>
           </property>
          </widget>
         </item>
@@ -1245,62 +1184,11 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>530</y>
-      <width>621</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_20">
-     <item>
-      <widget class="QPushButton" name="btnGetAllStockList">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取两市全部股票列表</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnStartSearch">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>开始搜索选股！</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnGetAllStockData">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取全部股票最近一年日K线</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="lblGetStockReminder">
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>500</y>
+      <y>431</y>
       <width>243</width>
       <height>25</height>
      </rect>
@@ -1314,6 +1202,63 @@
     <property name="text">
      <string>每日请先获取最新K线图，16:00更新当日数据</string>
     </property>
+   </widget>
+   <widget class="QPushButton" name="btnStartSearch">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>490</y>
+      <width>271</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>开始搜索选股！</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>458</y>
+      <width>271</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_19">
+     <item>
+      <widget class="QPushButton" name="btnGetAllStockList">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>获取全部股票列表</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnGetAllStockData">
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>获取历史日K线</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1947,54 +1892,6 @@
     <hint type="destinationlabel">
      <x>541</x>
      <y>217</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxRsiEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbRsiBehaviour</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>399</x>
-     <y>439</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>523</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxRsiEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbRsiThreshold</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>421</x>
-     <y>427</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>584</x>
-     <y>437</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxRsiEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbRsiTimePeriod</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>401</x>
-     <y>431</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>457</x>
-     <y>432</y>
     </hint>
    </hints>
   </connection>
