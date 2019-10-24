@@ -2,7 +2,7 @@ from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import StockAnalyzer.StockAnalyzer as StockAnalyzer
-import Data.TradeStrategy as TradeStrategy
+import StockAnalyzer.TradeStrategy as TradeStrategy
 import Data.DataAnalyzer as DataAnalyzer
 import Tools
 import baostock
@@ -76,9 +76,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         data = StockAnalyzer.stockDatabase.iloc[0]
         price = round(data['open'], 2)
         # 计算底仓资产折现
-        self.__initialAsset = round(price * tradeStrategyInstance.baseShare, 2)
+        self.__initialAsset = round(price * tradeStrategyInstance.initialShare, 2)
         trade_time = str.replace(data['date'][2:], "-", "/") + " 09:30"
-        self.buy_stock(data, "首次买入", trade_time, price, tradeStrategyInstance.baseShare)
+        self.buy_stock(data, "首次买入", trade_time, price, tradeStrategyInstance.initialShare)
         self.lblOriginalInvestment.setText("初始成本：" + str(self.__initialAsset))
 
     # 末日收盘价计算仓位差补齐
@@ -86,7 +86,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 获取最后一个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[-1]
         # 获取需要买回或者卖出的股份数，保持结束底仓
-        last_trade_share = tradeStrategyInstance.baseShare - self.currentShare
+        last_trade_share = tradeStrategyInstance.initialShare - self.currentShare
         if last_trade_share > 0:
             self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
@@ -103,15 +103,20 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data['close'])) + "%")
 
     # 模拟买入股票操作
-    def buy_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, point_bias=0, up_index=1):
+    def buy_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, signal="无"):
         # 最大买入额度已满，放弃买入
         if self.currentShare >= tradeStrategyInstance.maxShare:
             return False
+        # 准备买入额度超过最大可持仓额度，减少买入额度
+        if tradeStrategyInstance.maxShare - self.currentShare < trade_share:
+            trade_share = tradeStrategyInstance.maxShare - self.currentShare
+
         self.currentShare += trade_share
+        trade_price = round(trade_price, 2)
         money = trade_share * trade_price
         fee = buy_transaction_fee(money)
         self.__totalMoneySpent += money + fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, signal)
         # 累加交易手续费
         self.__totalFeePaid += fee
         # 累加买入次数记录
@@ -124,16 +129,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         return True
 
     # # 模拟卖出股票操作
-    def sell_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, point_bias=0, up_index=1):
+    def sell_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, signal="无"):
         # 最小持仓额度已到，放弃卖出
         if self.currentShare <= tradeStrategyInstance.minShare:
             return False
+        # 准备卖出额度超过最小可持仓额度，减少卖出额度
+        if self.currentShare - tradeStrategyInstance.minShare < trade_share:
+            trade_share = self.currentShare - tradeStrategyInstance.minShare
+
         self.currentShare -= trade_share
         self.sellableShare -= trade_share
+        trade_price = round(trade_price, 2)
         money = trade_share * trade_price
         fee = sell_transaction_fee(money)
         self.__totalMoneyBack += money - fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, point_bias, up_index)
+        self.add_trade_log(data, time, action, trade_price, trade_share, self.currentShare, signal)
         # 累加交易手续费
         self.__totalFeePaid += fee
         # 累加卖出次数记录
@@ -146,7 +156,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         return True
 
     # 在表格中添加交易记录
-    def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, remaining_share: int, point_bias: float, up_index: float):
+    def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, remaining_share: int, signal: str):
         # 获取当前表格总行数
         row_count = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
@@ -181,17 +191,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘
         Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
         column += 1
-        # 五日均线
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(data['avg_price_five'])))
-        column += 1
         # 换手率
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
-        # 长线偏移
-        Tools.add_colored_item(self.tblTradeHistory, point_bias, row_count, column, "%")
-        column += 1
-        # 短线多空
-        Tools.add_colored_item(self.tblTradeHistory, round((up_index - 1) * 100, 2), row_count, column)
+        # 多空信号
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(signal)))
         column += 1
         # 持仓成本
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
@@ -232,107 +236,198 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 class TradeByDay(QThread):
     def __init__(self):
         super().__init__()
+        self.__trend = "无"
+        self.__crossShort = ""
+        self.__crossLong = ""
 
     def __del__(self):
         self.work = False
         self.terminate()
 
     def run(self):
+        self.get_trend_type()
+
         # 遍历每日历史数据
-        for i, daily_data in StockAnalyzer.stockDatabase.iterrows():
+        for day_index, stock_today in StockAnalyzer.stockDatabase.iterrows():
+            self.update_trend_status(day_index, stock_today)
             # 获取当日可卖股份余额
             tradeSimulatorInstance.sellableShare = tradeSimulatorInstance.currentShare
-            # 初始化当日交易记录
-            daily_buy_history = []
-            daily_sell_history = []
-            # 缓存昨日收盘价和日期
-            pre_close = daily_data['preclose']
-            date = daily_data['date']
-            # 获取当日5分钟K线数据
-            market = Tools.get_trade_center(stockCode)
-            result = baostock.query_history_k_data(code=market + "." + stockCode, fields="time,high,low",
-                                                   start_date=date, end_date=date, frequency="5", adjustflag="2")
-            minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
-            # 获取上一交易日日K线数据
-            yesterday_data = StockAnalyzer.stockDatabase.iloc[i - 1]
-            # 根据长短均线排列获取基础买卖点偏移
-            point_bias = TradeStrategy.long_term_bias(yesterday_data)
-            # 根据前日收盘价与均线排列获取买卖点乘数
-            up_index = TradeStrategy.short_term_index(yesterday_data)
-            # 获取基础买卖点
-            base_buy_point = tradeStrategyInstance.buyPoint / up_index
-            base_sell_point = tradeStrategyInstance.sellPoint * up_index
-            # 获取初始买卖点涨跌幅
-            current_buy_point = base_buy_point
-            current_sell_point = base_sell_point
-            # 遍历当日5分钟K线数据
-            for index, minute_data in minute_database.iterrows():
-                # 5分钟最高和最低价与昨日收盘相比涨跌幅
-                minute_low = DataAnalyzer.get_percentage_from_price(minute_data['high'], pre_close)
-                minute_high = DataAnalyzer.get_percentage_from_price(minute_data['low'], pre_close)
-                # 加入偏移量后的实际买卖点涨跌幅
-                actual_buy_point = current_buy_point + point_bias
-                actual_sell_point = current_sell_point + point_bias
-                # 价格低于买点，执行买入操作
-                if minute_low < actual_buy_point:
-                    # 计算买入价格
-                    trade_price = DataAnalyzer.get_price_from_percentage(pre_close, actual_buy_point)
-                    if tradeSimulatorInstance.buy_stock(daily_data, "被动买入", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
-                        # 计算下一次买点跌幅
-                        current_buy_point += base_buy_point
-                        # 记录本次买入，为做T卖出参考
-                        if tradeStrategyInstance.allowSameDayTrade:
-                            daily_buy_history.append(actual_buy_point)
+            self.normal_trade(stock_today)
+            self.trade_by_signal(day_index, stock_today)
+        tradeSimulatorInstance.trade_last_day()
 
-                # 价格高于卖点，执行卖出操作
-                if minute_high > actual_sell_point:
-                    trade_price = DataAnalyzer.get_price_from_percentage(pre_close, actual_sell_point)
-                    if tradeSimulatorInstance.sell_stock(daily_data, "被动卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
-                        # 计算下一次卖点涨幅
-                        current_sell_point += base_sell_point
-                        # 记录本次卖出，为做T买回参考
-                        if tradeStrategyInstance.allowSameDayTrade:
-                            daily_sell_history.append(actual_sell_point)
+    # 更新多空趋势情况
+    def update_trend_status(self, index: int, stock_today: pandas.DataFrame):
+        # 前两天数据不足不改变趋势
+        if index < 2:
+            return
+        # 获得开盘时间
+        start_time = str.replace(stock_today['date'][2:], "-", "/") + " 09:30"
 
-                # 允许做T情况下，判断当前价位可否做T
-                if tradeStrategyInstance.allowSameDayTrade:
-                    # 遍历当日买入记录
-                    for history in daily_buy_history:
-                        # 计算卖出价的涨跌幅
-                        t_sell_point = history + tradeStrategyInstance.sameDayProfit
-                        # 价格高于做T卖出盈利点，执行卖出操作
-                        if minute_high > t_sell_point:
-                            # 判断是否有可卖余额，避免出现T+0操作
-                            if tradeSimulatorInstance.sellableShare >= tradeStrategyInstance.sharePerTrade:
-                                # 计算做T卖出价格
-                                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_sell_point)
-                                if tradeSimulatorInstance.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
-                                    # 抵消当日买入记录
-                                    daily_buy_history.remove(history)
-                                    # 回溯再次买入点价格，跌到该买点会再次买入
-                                    current_buy_point -= base_buy_point
-                                    # 累计做T次数
-                                    tradeSimulatorInstance.totalSameDayTradeCount += 1
-                                    # 收盘价低于做T卖出价，做T成功
-                                    if daily_data['close'] < trade_price:
-                                        tradeSimulatorInstance.successfulSameDayTradeCount += 1
+        # 根据前两日指标变化计算多空趋势
+        stock_after = StockAnalyzer.stockDatabase.iloc[index - 1]
+        stock_before = StockAnalyzer.stockDatabase.iloc[index - 2]
+        if stock_before[self.__crossShort] < stock_before[self.__crossLong] and stock_after[self.__crossShort] > stock_after[self.__crossLong]:
+            self.__trend = "上升"
+            tradeSimulatorInstance.buy_stock(stock_today, "抄底买入", start_time, stock_today['open'], tradeStrategyInstance.trendChangeTradeShare, "转为上升趋势")
+        if stock_before[self.__crossShort] > stock_before[self.__crossLong] and stock_after[self.__crossShort] < stock_after[self.__crossLong]:
+            self.__trend = "下降"
+            tradeSimulatorInstance.sell_stock(stock_today, "见顶卖出", start_time, stock_today['open'], tradeStrategyInstance.trendChangeTradeShare, "转为下降趋势")
 
-                    # 遍历当日卖出记录
-                    for history in daily_sell_history:
-                        # 计算买回价的涨跌幅
-                        t_buy_point = history - tradeStrategyInstance.sameDayProfit
-                        # 价格低于做T买回盈利点，执行买入操作
-                        if minute_low < t_buy_point:
-                            # 计算做T买回价格
-                            trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_buy_point)
-                            if tradeSimulatorInstance.buy_stock(daily_data, "做T买回", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, point_bias, up_index):
-                                # 抵消当日卖出记录
-                                daily_sell_history.remove(history)
-                                # 回溯再次卖出点价格，涨到该卖点会再次卖出
-                                current_sell_point -= base_sell_point
+    # 获取多空趋势转变信号
+    def get_trend_type(self):
+        # MACD交叉
+        if StockAnalyzer.stockAnalyzerInstance.rbnMacd.isChecked():
+            self.__crossShort = "macd_white"
+            self.__crossLong = "macd_yellow"
+        # TRIX交叉
+        elif StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked():
+            self.__crossShort = "trix_white"
+            self.__crossLong = "trix_yellow"
+        # EXPMA交叉
+        elif StockAnalyzer.stockAnalyzerInstance.rbnExpma.isChecked():
+            self.__crossShort = "expma_white"
+            self.__crossLong = "expma_yellow"
+        # 均线交叉
+        else:
+            self.__crossShort = DataAnalyzer.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaShort.value())
+            self.__crossLong = DataAnalyzer.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaLong.value())
+
+        stock_initial = StockAnalyzer.stockDatabase.iloc[0]
+        if stock_initial[self.__crossShort] > stock_initial[self.__crossLong]:
+            self.__trend = "上升"
+        if stock_initial[self.__crossShort] < stock_initial[self.__crossLong]:
+            self.__trend = "下降"
+
+    # 普通交易策略
+    def normal_trade(self, daily_data: pandas.DataFrame):
+        # 初始化当日交易记录
+        daily_buy_history = []
+        daily_sell_history = []
+        # 缓存昨日收盘价和日期
+        pre_close = daily_data['preclose']
+        date = daily_data['date']
+        # 获取当日5分钟K线数据
+        market = Tools.get_trade_center(stockCode)
+        result = baostock.query_history_k_data(code=market + "." + stockCode, fields="time,high,low",
+                                               start_date=date, end_date=date, frequency="5", adjustflag="2")
+        minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
+
+        # 获取基础买卖点涨跌幅
+        current_buy_point = tradeStrategyInstance.buyPointBase
+        current_sell_point = tradeStrategyInstance.sellPointBase
+        # 根据股票运行趋势调整买卖点
+        if self.__trend == "上升":
+            current_buy_point += tradeStrategyInstance.buyPointTrendBias
+            current_sell_point += tradeStrategyInstance.sellPointTrendBias
+        elif self.__trend == "下降":
+            current_buy_point -= tradeStrategyInstance.buyPointTrendBias
+            current_sell_point -= tradeStrategyInstance.sellPointTrendBias
+
+        # 遍历当日5分钟K线数据
+        for index, minute_data in minute_database.iterrows():
+            # 5分钟最高和最低价与昨日收盘相比涨跌幅
+            minute_low = DataAnalyzer.get_percentage_from_price(minute_data['high'], pre_close)
+            minute_high = DataAnalyzer.get_percentage_from_price(minute_data['low'], pre_close)
+            # 价格低于买点，执行买入操作
+            if minute_low < current_buy_point:
+                # 计算买入价格
+                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, current_buy_point)
+                if tradeSimulatorInstance.buy_stock(daily_data, "被动买入", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, self.__trend):
+                    # 记录本次买入，为做T卖出参考
+                    if tradeStrategyInstance.allowSameDayTrade:
+                        daily_buy_history.append(current_buy_point)
+                    # 计算下一次买点跌幅
+                    current_buy_point -= tradeStrategyInstance.buyPointStep
+
+            # 价格高于卖点，执行卖出操作
+            if minute_high > current_sell_point:
+                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, current_sell_point)
+                if tradeSimulatorInstance.sell_stock(daily_data, "被动卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, self.__trend):
+                    # 记录本次卖出，为做T买回参考
+                    if tradeStrategyInstance.allowSameDayTrade:
+                        daily_sell_history.append(current_sell_point)
+                    # 计算下一次卖点涨幅
+                    current_sell_point += tradeStrategyInstance.sellPointStep
+
+            # 允许做T情况下，判断当前价位可否做T
+            if tradeStrategyInstance.allowSameDayTrade:
+                # 遍历当日买入记录
+                for history in daily_buy_history:
+                    # 计算卖出价的涨跌幅
+                    t_sell_point = history + tradeStrategyInstance.sameDayProfit
+                    # 价格高于做T卖出盈利点，执行卖出操作
+                    if minute_high > t_sell_point:
+                        # 判断是否有可卖余额，避免出现T+0操作
+                        if tradeSimulatorInstance.sellableShare >= tradeStrategyInstance.sharePerTrade:
+                            # 计算做T卖出价格
+                            trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_sell_point)
+                            if tradeSimulatorInstance.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade):
+                                # 抵消当日买入记录
+                                daily_buy_history.remove(history)
+                                # 回溯再次买入点价格，跌到该买点会再次买入
+                                current_buy_point += tradeStrategyInstance.buyPointStep
                                 # 累计做T次数
                                 tradeSimulatorInstance.totalSameDayTradeCount += 1
-                                # 收盘价高于做T买回价，做T成功
-                                if daily_data['close'] > trade_price:
+                                # 收盘价低于做T卖出价，做T成功
+                                if daily_data['close'] < trade_price:
                                     tradeSimulatorInstance.successfulSameDayTradeCount += 1
-        tradeSimulatorInstance.trade_last_day()
+
+                # 遍历当日卖出记录
+                for history in daily_sell_history:
+                    # 计算买回价的涨跌幅
+                    t_buy_point = history - tradeStrategyInstance.sameDayProfit
+                    # 价格低于做T买回盈利点，执行买入操作
+                    if minute_low < t_buy_point:
+                        # 计算做T买回价格
+                        trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_buy_point)
+                        if tradeSimulatorInstance.buy_stock(daily_data, "做T买回", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade):
+                            # 抵消当日卖出记录
+                            daily_sell_history.remove(history)
+                            # 回溯再次卖出点价格，涨到该卖点会再次卖出
+                            current_sell_point -= tradeStrategyInstance.sellPointStep
+                            # 累计做T次数
+                            tradeSimulatorInstance.totalSameDayTradeCount += 1
+                            # 收盘价高于做T买回价，做T成功
+                            if daily_data['close'] > trade_price:
+                                tradeSimulatorInstance.successfulSameDayTradeCount += 1
+
+    # 多空信号交易策略
+    @staticmethod
+    def trade_by_signal(index: int, stock_today: pandas.DataFrame):
+        # 获得收盘时间
+        end_time = str.replace(stock_today['date'][2:], "-", "/") + " 15:00"
+        # 根据前两日指标变化计算多空趋势
+        stock_today = StockAnalyzer.stockDatabase.iloc[index]
+        net_buy_share = 0
+        message = ""
+        # KDJ极值信号
+        if StockAnalyzer.stockAnalyzerInstance.cbxKdjEnabled.isChecked():
+            if stock_today['kdj_j'] < 0:
+                net_buy_share += tradeStrategyInstance.signalTradeShare
+                message += "KDJ中J<0 "
+            if stock_today['kdj_j'] > 100:
+                net_buy_share -= tradeStrategyInstance.signalTradeShare
+                message += "KDJ中J>100 "
+        # BOLL轨道信号
+        if StockAnalyzer.stockAnalyzerInstance.cbxBollEnabled.isChecked():
+            if stock_today['low'] < stock_today['boll_lower']:
+                net_buy_share += tradeStrategyInstance.signalTradeShare
+                message += "BOLL下穿下轨 "
+            if stock_today['high'] > stock_today['boll_upper']:
+                net_buy_share -= tradeStrategyInstance.signalTradeShare
+                message += "BOLL上穿上轨 "
+        # BIAS极值信号
+        if StockAnalyzer.stockAnalyzerInstance.cbxBiasEnabled.isChecked():
+            if stock_today['bias_24'] < -tradeStrategyInstance.biasThreshold:
+                net_buy_share += tradeStrategyInstance.signalTradeShare
+                message += "BIAS < -" + str(tradeStrategyInstance.biasThreshold)
+            if stock_today['bias_24'] > tradeStrategyInstance.biasThreshold:
+                net_buy_share -= tradeStrategyInstance.signalTradeShare
+                message += "BIAS > " + str(tradeStrategyInstance.biasThreshold)
+
+        # 计算当天收盘净买入额执行操作
+        if net_buy_share > 0:
+            tradeSimulatorInstance.buy_stock(stock_today, "超跌买入", end_time, stock_today['close'], net_buy_share, message)
+        if net_buy_share < 0:
+            tradeSimulatorInstance.sell_stock(stock_today, "冲高卖出", end_time, stock_today['close'], -net_buy_share, message)

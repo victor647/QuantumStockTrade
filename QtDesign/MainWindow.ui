@@ -120,8 +120,20 @@
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="actReconnect"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actReconnect">
+   <property name="text">
+    <string>断线重连</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -189,11 +201,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actReconnect</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reconnect_server()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_stock_analyzer()</slot>
   <slot>show_stock_finder()</slot>
   <slot>show_live_tracker()</slot>
   <slot>show_stock_reviewer()</slot>
+  <slot>reconnect_server()</slot>
  </slots>
 </ui>

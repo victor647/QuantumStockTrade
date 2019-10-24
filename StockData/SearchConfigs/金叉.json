@@ -1,17 +1,16 @@
 {
+    "timePeriod": 1,
     "macdOn": true,
-    "macdPosition": "\u96f6\u8f74\u4e0b\u65b9",
-    "macdBehaviour": "\u91d1\u53c9",
+    "macdBehaviour": "\u7eff\u67f1\u7f29\u77ed",
     "bollOn": false,
     "bollBehaviour": "\u4e0a\u7a7f",
-    "bollTrack": "\u4e0a\u8f68",
+    "bollTrack": "\u4e0b\u8f68",
     "expmaOn": false,
     "expmaBehaviour": "\u591a\u5934\u4e0b\u7a7f\u767d\u7ebf",
     "kdjOn": false,
     "kdjItem": "K\u503c",
     "kdjBehaviour": "\u5927\u4e8e",
-    "kdjThreshold": 50,
-    "trixOn": false,
-    "trixPeriod": 5,
+    "kdjThreshold": 0,
+    "trixOn": true,
     "trixBehaviour": "\u91d1\u53c9"
 }

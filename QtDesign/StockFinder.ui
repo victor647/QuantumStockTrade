@@ -167,7 +167,7 @@
       <rect>
        <x>10</x>
        <y>127</y>
-       <width>441</width>
+       <width>482</width>
        <height>27</height>
       </rect>
      </property>
@@ -252,7 +252,7 @@
       <rect>
        <x>10</x>
        <y>23</y>
-       <width>321</width>
+       <width>328</width>
        <height>306</height>
       </rect>
      </property>
@@ -938,7 +938,7 @@
        <x>11</x>
        <y>24</y>
        <width>252</width>
-       <height>211</height>
+       <height>215</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -988,6 +988,12 @@
        <layout class="QHBoxLayout" name="horizontalLayout_11">
         <item>
          <widget class="QCheckBox" name="cbxMacdEnabled">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>MACD</string>
           </property>
@@ -995,9 +1001,6 @@
            <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbMacdPosition"/>
         </item>
         <item>
          <widget class="QComboBox" name="cbbMacdBehaviour"/>
@@ -1222,7 +1225,7 @@
      <string>开始搜索选股！</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -1700,22 +1703,6 @@
     <hint type="destinationlabel">
      <x>266</x>
      <y>269</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxMacdEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbMacdPosition</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>386</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>470</x>
-     <y>280</y>
     </hint>
    </hints>
   </connection>

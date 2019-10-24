@@ -32,7 +32,7 @@
     <number>0</number>
    </property>
    <property name="columnCount">
-    <number>16</number>
+    <number>14</number>
    </property>
    <attribute name="horizontalHeaderDefaultSectionSize">
     <number>70</number>
@@ -87,22 +87,12 @@
    </column>
    <column>
     <property name="text">
-     <string>五日均线</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
      <string>当日换手</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>长线偏移</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>短线多空</string>
+     <string>运行趋势 / 多空信号</string>
     </property>
    </column>
    <column>
@@ -112,12 +102,12 @@
    </column>
    <column>
     <property name="text">
-     <string>持仓盈亏</string>
+     <string>累计收益</string>
     </property>
    </column>
    <column>
     <property name="text">
-     <string>收益率</string>
+     <string>盈亏比例</string>
     </property>
    </column>
   </widget>

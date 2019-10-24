@@ -27,8 +27,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         global stockFinderInstance
         stockFinderInstance = self
         # 初始化技术面指标下拉菜单
-        self.cbbMacdPosition.addItems(['零轴下方', '零轴上方'])
-        self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿'])
+        self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿', '红柱缩短', '绿柱缩短'])
         self.cbbBollBehaviour.addItems(['上穿', '下穿'])
         self.cbbBollTrack.addItems(['上轨', '中轨', '下轨'])
         self.cbbExpmaBehaviour.addItems(['多头下穿白线', '多头下穿黄线', '空头上穿白线', '空头上穿黄线', '金叉转为多头', '死叉转为空头'])
@@ -179,7 +178,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         data = {
             "timePeriod": self.spbTechnicalTimePeriod.value(),
             "macdOn": self.cbxMacdEnabled.isChecked(),
-            "macdPosition": self.cbbMacdPosition.currentText(),
             "macdBehaviour": self.cbbMacdBehaviour.currentText(),
             "bollOn": self.cbxBollEnabled.isChecked(),
             "bollBehaviour": self.cbbBollBehaviour.currentText(),
@@ -206,7 +204,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 return
             self.spbTechnicalTimePeriod.setValue(data['timePeriod'])
             self.cbxMacdEnabled.setChecked(data['macdOn'])
-            self.cbbMacdPosition.setCurrentText(data['macdPosition'])
             self.cbbMacdBehaviour.setCurrentText(data['macdBehaviour'])
             self.cbxBollEnabled.setChecked(data['bollOn'])
             self.cbbBollBehaviour.setCurrentText(data['bollBehaviour'])
@@ -419,7 +416,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return False
         period = self.spbTechnicalTimePeriod.value() + 1
         # 检测MACD图形
-        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(data, period, self.cbbMacdPosition.currentText(), self.cbbMacdBehaviour.currentText()):
+        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(data, period, self.cbbMacdBehaviour.currentText()):
             return False
         # 检测BOLL区间
         if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):

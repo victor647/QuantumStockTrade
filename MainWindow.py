@@ -26,6 +26,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.reconnect_server()
+
+    @staticmethod
+    def reconnect_server():
         baostock.login()
 
     def show_stock_analyzer(self):
