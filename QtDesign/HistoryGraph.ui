@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HistoryGraph</class>
+ <widget class="QDialog" name="HistoryGraph">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>849</width>
+    <height>665</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>K线图</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

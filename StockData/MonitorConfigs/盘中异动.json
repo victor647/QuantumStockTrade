@@ -1,19 +1,22 @@
 [
     {
-        "name": "\u76d8\u4e2d\u5f02\u52a8",
+        "name": "\u77ac\u65f6\u5f02\u52a8",
         "coolDownTime": 10,
         "conditionItems": [
             {
                 "field": "\u77ed\u65f6\u6da8\u8dcc\u5e45",
-                "thresholdValue": 0.5
-            },
-            {
-                "field": "\u5f53\u524d\u59d4\u6bd4",
-                "thresholdValue": 50.0
-            },
+                "thresholdValue": 1.0
+            }
+        ],
+        "conditionGroupNode": {}
+    },
+    {
+        "name": "\u4e3b\u529b\u5438\u8d27",
+        "coolDownTime": 10,
+        "conditionItems": [
             {
                 "field": "\u77ed\u65f6\u5185\u5916\u76d8\u5360\u6bd4",
-                "thresholdValue": 70.0
+                "thresholdValue": 80.0
             },
             {
                 "field": "\u77ed\u65f6\u6210\u4ea4\u989d",

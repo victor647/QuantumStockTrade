@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1175</width>
-    <height>784</height>
+    <width>1122</width>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QTableWidget" name="tblTradeHistory">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>1131</width>
+     <x>10</x>
+     <y>90</y>
+     <width>1101</width>
      <height>661</height>
     </rect>
    </property>
@@ -114,8 +114,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>20</y>
+     <x>10</x>
+     <y>10</y>
      <width>531</width>
      <height>71</height>
     </rect>
@@ -245,7 +245,45 @@
     </item>
    </layout>
   </widget>
+  <widget class="QPushButton" name="btnShowDiagram">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>10</y>
+     <width>91</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>显示K线图</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnShowDiagram</sender>
+   <signal>clicked()</signal>
+   <receiver>TradeSimulator</receiver>
+   <slot>show_history_diagram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>622</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>show_history_diagram()</slot>
+ </slots>
 </ui>

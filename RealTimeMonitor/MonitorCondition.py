@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidget, QTableWidget
 
 
 def base_message():
-    return "最近" + LiveTracker.liveTrackerInstance.spbRecentMeasureCount + LiveTracker.liveTrackerInstance.cbbRecentMeasurement.currentText()
+    return "最近" + str(LiveTracker.liveTrackerInstance.spbRecentMeasureCount.value()) + LiveTracker.liveTrackerInstance.cbbRecentMeasurement.currentText()
 
 
 # 单条监测指标

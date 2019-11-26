@@ -4,9 +4,8 @@ from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import StockAnalyzer.StockAnalyzer as StockAnalyzer
 import StockAnalyzer.TradeStrategy as TradeStrategy
 import Data.DataAnalyzer as DataAnalyzer
-import Tools
-import baostock
-import pandas
+import Data.HistoryGraph as HistoryGraph
+import baostock, pandas, Tools
 
 
 # 计算买入费用
@@ -231,6 +230,12 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         if self.currentShare == 0:
             return 0.00
         return round(current_price - self.net_profit(current_price) / self.currentShare, 2)
+
+    # 显示交易记录K线图
+    def show_history_diagram(self):
+        graph = HistoryGraph.HistoryGraph(StockAnalyzer.stockDatabase)
+        graph.show()
+        graph.exec_()
 
 
 class TradeByDay(QThread):

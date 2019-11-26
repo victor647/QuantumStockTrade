@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_TradeSimulator(object):
     def setupUi(self, TradeSimulator):
         TradeSimulator.setObjectName("TradeSimulator")
-        TradeSimulator.resize(1175, 784)
+        TradeSimulator.resize(1122, 763)
         self.tblTradeHistory = QtWidgets.QTableWidget(TradeSimulator)
-        self.tblTradeHistory.setGeometry(QtCore.QRect(20, 100, 1131, 661))
+        self.tblTradeHistory.setGeometry(QtCore.QRect(10, 90, 1101, 661))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
@@ -54,7 +54,7 @@ class Ui_TradeSimulator(object):
         self.tblTradeHistory.horizontalHeader().setDefaultSectionSize(70)
         self.tblTradeHistory.verticalHeader().setDefaultSectionSize(25)
         self.layoutWidget = QtWidgets.QWidget(TradeSimulator)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 20, 531, 71))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 531, 71))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
@@ -128,8 +128,15 @@ class Ui_TradeSimulator(object):
         self.lblTotalFee.setObjectName("lblTotalFee")
         self.horizontalLayout_3.addWidget(self.lblTotalFee)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.btnShowDiagram = QtWidgets.QPushButton(TradeSimulator)
+        self.btnShowDiagram.setGeometry(QtCore.QRect(560, 10, 91, 23))
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        self.btnShowDiagram.setFont(font)
+        self.btnShowDiagram.setObjectName("btnShowDiagram")
 
         self.retranslateUi(TradeSimulator)
+        self.btnShowDiagram.clicked.connect(TradeSimulator.show_history_diagram)
         QtCore.QMetaObject.connectSlotsByName(TradeSimulator)
 
     def retranslateUi(self, TradeSimulator):
@@ -156,7 +163,7 @@ class Ui_TradeSimulator(object):
         item = self.tblTradeHistory.horizontalHeaderItem(9)
         item.setText(_translate("TradeSimulator", "当日换手"))
         item = self.tblTradeHistory.horizontalHeaderItem(10)
-        item.setText(_translate("TradeSimulator", "多空信号"))
+        item.setText(_translate("TradeSimulator", "运行趋势 / 多空信号"))
         item = self.tblTradeHistory.horizontalHeaderItem(11)
         item.setText(_translate("TradeSimulator", "平均成本"))
         item = self.tblTradeHistory.horizontalHeaderItem(12)
@@ -171,3 +178,4 @@ class Ui_TradeSimulator(object):
         self.lblTotalProfit.setText(_translate("TradeSimulator", "累计收益："))
         self.lblTotalReturn.setText(_translate("TradeSimulator", "盈亏比例："))
         self.lblTotalFee.setText(_translate("TradeSimulator", "总手续费："))
+        self.btnShowDiagram.setText(_translate("TradeSimulator", "显示K线图"))
