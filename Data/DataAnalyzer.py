@@ -36,6 +36,8 @@ def analyze_database(database: pandas.DataFrame):
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     stock_closes = stock_data['close']
+    # 将价格数据转换为涨跌幅数据
+    analyze_database(stock_data)
 
     # 计算KDJ曲线，至少上市13天
     if stock_closes.shape[0] < 13:

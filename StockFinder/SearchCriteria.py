@@ -9,19 +9,24 @@ class CriteriaItem:
     queryLogic = "平均"
     operator = "大于"
     field = "股价"
-    daysCountFirst = 1
-    daysCountSecond = 5
-    useAbsValue = False
-    absoluteValue = 10
+    queryPeriodBegin = 3
+    queryPeriodEnd = 1
+    comparedPeriodBegin = 10
+    comparedPeriodEnd = 1
+    comparedObject = "比值"
     comparedLogic = "平均"
-    relativePercentage = 20
+    value = 1
 
 
 # 检测股票技术指标是否符合规定
 def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
-    column_label = ""
-    if item.field == "涨跌幅":
-        column_label = "pctChg"
+    column_label = "close_pct"
+    if item.field == "最高涨幅":
+        column_label = "high_pct"
+    elif item.field == "最低跌幅":
+        column_label = "low_pct"
+    elif item.field == "振幅":
+        column_label = "amplitude"
     elif item.field == "换手率":
         column_label = "turn"
     elif item.field == "股价":
@@ -36,7 +41,10 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
 
     # 获取初始值
     value_first = 0
-    data_first = data[column_label].tail(item.daysCountFirst)
+    if item.queryPeriodEnd == 1:
+        data_first = data[column_label].tail(item.queryPeriodBegin)
+    else:
+        data_first = data[column_label].iloc[-item.queryPeriodBegin:-(item.queryPeriodEnd - 1)]
     if item.queryLogic == "平均":
         value_first = data_first.mean()
     elif item.queryLogic == "累计":
@@ -45,17 +53,19 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
         value_first = data_first.max()
     elif item.queryLogic == "最低":
         value_first = data_first.min()
-    elif item.comparedLogic == "开盘":
+    elif item.queryLogic == "开盘":
         value_first = data_first.values[0]
-    elif item.comparedLogic == "收盘":
+    elif item.queryLogic == "收盘":
         value_first = data_first.values[-1]
 
-    # 获取参照物绝对值
-    value_second = item.absoluteValue
-    if not item.useAbsValue:
-        # 相对值乘以系数
-        ratio = item.relativePercentage / 100
-        data_second = data[column_label].tail(item.daysCountSecond)
+    # 获取参照数据
+    if item.comparedObject == "绝对值":
+        value_second = item.value
+    else:
+        if item.comparedPeriodEnd == 1:
+            data_second = data[column_label].tail(item.comparedPeriodBegin)
+        else:
+            data_second = data[column_label].iloc[-item.comparedPeriodBegin:-(item.comparedPeriodEnd - 1)]
         raw_value_second = 0
         if item.comparedLogic == "平均":
             raw_value_second = data_second.mean()
@@ -69,7 +79,12 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
             raw_value_second = data_second.values[0]
         elif item.comparedLogic == "收盘":
             raw_value_second = data_second.values[-1]
-        value_second = raw_value_second * ratio
+        # 取差值或者比值
+        if item.comparedObject == "差值":
+            value_second = raw_value_second + item.value
+        else:
+            value_second = raw_value_second * item.value
+
     # 返回比较结果
     if item.operator == "大于":
         return value_first > value_second
@@ -83,12 +98,13 @@ def import_criteria_item(json_data: dict):
     item.queryLogic = json_data['queryLogic']
     item.operator = json_data['operator']
     item.field = json_data['field']
-    item.daysCountFirst = json_data['daysCountFirst']
-    item.daysCountSecond = json_data['daysCountSecond']
-    item.useAbsValue = json_data['useAbsValue']
-    item.absoluteValue = json_data['absoluteValue']
+    item.queryPeriodBegin = json_data['queryPeriodBegin']
+    item.queryPeriodEnd = json_data['queryPeriodEnd']
+    item.comparedPeriodBegin = json_data['comparedPeriodBegin']
+    item.comparedPeriodEnd = json_data['comparedPeriodEnd']
     item.comparedLogic = json_data['comparedLogic']
-    item.relativePercentage = json_data['relativePercentage']
+    item.comparedObject = json_data['comparedObject']
+    item.value = json_data['value']
     return item
 
 
@@ -101,7 +117,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.cbbQueryLogic.addItems(['平均', '累计', '开盘', '收盘', '最高', '最低'])
         self.cbbComparedLogic.addItems(['平均', '累计', '开盘', '收盘', '最高', '最低'])
         self.cbbOperator.addItems(['大于', '小于'])
-        self.cbbComparisonField.addItems(['股价', '涨跌幅', '换手率'])
+        self.cbbComparisonField.addItems(['股价', '收盘涨幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
         self.criteriaItem = criteria_item
         self.read_item_data()
 
@@ -110,27 +126,46 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.cbbQueryLogic.setCurrentText(self.criteriaItem.queryLogic)
         self.cbbOperator.setCurrentText(self.criteriaItem.operator)
         self.cbbComparisonField.setCurrentText(self.criteriaItem.field)
-        self.spbFirstPeriod.setValue(self.criteriaItem.daysCountFirst)
-        self.spbAveragePeriod.setValue(self.criteriaItem.daysCountSecond)
-        self.rbnAbsValue.setChecked(self.criteriaItem.useAbsValue)
+        self.spbQueryPeriodBegin.setValue(self.criteriaItem.queryPeriodBegin)
+        self.spbQueryPeriodEnd.setValue(self.criteriaItem.queryPeriodEnd)
+        self.spbComparedPeriodBegin.setValue(self.criteriaItem.comparedPeriodBegin)
+        self.spbComparedPeriodEnd.setValue(self.criteriaItem.comparedPeriodEnd)
         self.cbbComparedLogic.setCurrentText(self.criteriaItem.comparedLogic)
-        self.spbRelativePercentage.setValue(self.criteriaItem.relativePercentage)
-        self.spbAbsValue.setValue(self.criteriaItem.absoluteValue)
+        if self.criteriaItem.comparedObject == "绝对值":
+            self.rbnAbsValue.setChecked(True)
+        elif self.criteriaItem.comparedObject == "差值":
+            self.rbnDifference.setChecked(True)
+        else:
+            self.rbnRatio.setChecked(True)
+        self.spbValue.setValue(self.criteriaItem.value)
 
     # 保存编辑后的指标
     def save_changes(self):
         self.criteriaItem.queryLogic = self.cbbQueryLogic.currentText()
         self.criteriaItem.operator = self.cbbOperator.currentText()
         self.criteriaItem.field = self.cbbComparisonField.currentText()
-        self.criteriaItem.daysCountFirst = self.spbFirstPeriod.value()
-        self.criteriaItem.daysCountSecond = self.spbAveragePeriod.value()
+        self.criteriaItem.queryPeriodBegin = self.spbQueryPeriodBegin.value()
+        self.criteriaItem.queryPeriodEnd = self.spbQueryPeriodEnd.value()
+        self.criteriaItem.comparedPeriodBegin = self.spbComparedPeriodBegin.value()
+        self.criteriaItem.comparedPeriodEnd = self.spbComparedPeriodEnd.value()
         self.criteriaItem.comparedLogic = self.cbbComparedLogic.currentText()
-        self.criteriaItem.useAbsValue = self.rbnAbsValue.isChecked()
-        self.criteriaItem.relativePercentage = self.spbRelativePercentage.value()
-        self.criteriaItem.absoluteValue = self.spbAbsValue.value()
+        if self.rbnAbsValue.isChecked():
+            self.criteriaItem.comparedObject = "绝对值"
+        elif self.rbnDifference.isChecked():
+            self.criteriaItem.comparedObject = "差值"
+        else:
+            self.criteriaItem.comparedObject = "比值"
+        self.criteriaItem.value = self.spbValue.value()
         StockFinder.stockFinderInstance.update_criteria_list(self.criteriaItem)
         self.close()
 
     # 放弃编辑离开
     def discard_changes(self):
         self.close()
+
+    # 根据所选的区间范围决定区间可选值
+    def update_gui(self):
+        self.spbQueryPeriodBegin.setEnabled(self.cbbQueryLogic.currentText() != "收盘")
+        self.spbQueryPeriodEnd.setEnabled(self.cbbQueryLogic.currentText() != "开盘")
+        self.spbComparedPeriodBegin.setEnabled(self.cbbComparedLogic.currentText() != "收盘")
+        self.spbComparedPeriodEnd.setEnabled(self.cbbComparedLogic.currentText() != "开盘")

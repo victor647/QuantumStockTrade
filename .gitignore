@@ -127,3 +127,4 @@ StockData/StockHistory
 # Pycharm stuff
 .idea/
 .idea/workspace.xml
+StockData/full_stock_info.csv

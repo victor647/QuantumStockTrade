@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>75</height>
+    <width>363</width>
+    <height>148</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,94 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>316</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLabel" name="lblFirst">
-      <property name="maximumSize">
-       <size>
-        <width>35</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>最近</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="spbFirstPeriod">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="suffix">
-       <string>日</string>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>250</number>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="cbbQueryLogic">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="cbbComparisonField">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="cbbOperator">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>10</y>
-     <width>291</width>
-     <height>58</height>
+     <width>341</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="font">
@@ -116,9 +30,15 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QRadioButton" name="rbnPastAverage">
+       <widget class="QLabel" name="lblRecent">
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -128,13 +48,113 @@
         <property name="text">
          <string>过去</string>
         </property>
-        <property name="checked">
-         <bool>true</bool>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbQueryPeriodBegin">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>日</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>250</number>
+        </property>
+        <property name="value">
+         <number>3</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbAveragePeriod">
+       <widget class="QLabel" name="lblTo1">
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>到</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbQueryPeriodEnd">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>日</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>250</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbbQueryLogic">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbbComparisonField">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="lblRecent_2">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>相比过去</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbComparedPeriodBegin">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -156,6 +176,47 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="lblTo2">
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>到</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbComparedPeriodEnd">
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>日</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>250</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QComboBox" name="cbbComparedLogic">
         <property name="font">
          <font>
@@ -165,37 +226,96 @@
         </property>
        </widget>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QDoubleSpinBox" name="spbRelativePercentage">
+       <widget class="QComboBox" name="cbbOperator">
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
           <pointsize>9</pointsize>
          </font>
         </property>
-        <property name="suffix">
-         <string>%</string>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbnRatio">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="decimals">
-         <number>1</number>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="minimum">
-         <double>0.000000000000000</double>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
         </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
+        <property name="text">
+         <string>比值</string>
         </property>
-        <property name="value">
-         <double>100.000000000000000</double>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QRadioButton" name="rbnDifference">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>差值</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QRadioButton" name="rbnAbsValue">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -208,9 +328,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="spbAbsValue">
+       <widget class="QDoubleSpinBox" name="spbValue">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="font">
          <font>
@@ -230,8 +350,11 @@
         <property name="maximum">
          <double>10000.000000000000000</double>
         </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
         <property name="value">
-         <double>10.000000000000000</double>
+         <double>1.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -239,20 +362,14 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>40</y>
-     <width>161</width>
+     <x>100</x>
+     <y>110</y>
+     <width>158</width>
      <height>27</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-     <pointsize>9</pointsize>
-    </font>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
@@ -287,50 +404,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>rbnPastAverage</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbAbsValue</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>344</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>596</x>
-     <y>65</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>rbnAbsValue</sender>
    <signal>toggled(bool)</signal>
-   <receiver>spbAveragePeriod</receiver>
+   <receiver>spbComparedPeriodBegin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>333</x>
-     <y>59</y>
+     <x>208</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>452</x>
-     <y>31</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rbnAbsValue</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbRelativePercentage</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>378</x>
-     <y>59</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>610</x>
-     <y>33</y>
+     <x>156</x>
+     <y>64</y>
     </hint>
    </hints>
   </connection>
@@ -341,12 +426,12 @@
    <slot>save_changes()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>106</x>
-     <y>51</y>
+     <x>137</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
-     <x>45</x>
-     <y>52</y>
+     <x>94</x>
+     <y>146</y>
     </hint>
    </hints>
   </connection>
@@ -357,11 +442,75 @@
    <slot>discard_changes()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>207</x>
-     <y>45</y>
+     <x>256</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
-     <x>246</x>
+     <x>362</x>
+     <y>146</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbbQueryLogic</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>SearchCriteria</receiver>
+   <slot>update_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbbComparedLogic</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>SearchCriteria</receiver>
+   <slot>update_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>294</x>
+     <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbnAbsValue</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbComparedPeriodEnd</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>242</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>57</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbnAbsValue</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbbComparedLogic</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
      <y>56</y>
     </hint>
    </hints>
@@ -370,5 +519,6 @@
  <slots>
   <slot>save_changes()</slot>
   <slot>discard_changes()</slot>
+  <slot>update_gui()</slot>
  </slots>
 </ui>

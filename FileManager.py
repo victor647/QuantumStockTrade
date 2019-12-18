@@ -128,9 +128,9 @@ def save_stock_history_data(bs_result, stock_code: str):
 # 获取最新全部股票数据
 def export_all_stock_data():
     stock_list = read_stock_list_file()
-    progress = ProgressBar(stock_list.shape[0])
-    progress.show()
     exporter = StockDataExporter()
+    progress = ProgressBar(stock_list.shape[0], exporter)
+    progress.show()
     exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.finishedCallback.connect(progress.finish_progress)
     exporter.start()
@@ -164,7 +164,7 @@ class StockDataExporter(QThread):
             # 获取股票交易所
             market = Tools.get_trade_center(code)
             # 获取股票历史数据
-            result = baostock.query_history_k_data_plus(code=market + "." + code, fields="date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST",
+            result = baostock.query_history_k_data_plus(code=market + "." + code, fields="date,open,high,low,close,preclose,turn,tradestatus,isST",
                                                         start_date=self.startDate, end_date=self.today, frequency="d", adjustflag="2")
             save_stock_history_data(result, code)
             self.progressBarCallback.emit(index + 1, code, name)
