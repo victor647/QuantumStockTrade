@@ -8,7 +8,7 @@ import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
 import tushare, Tools
-import Data.DataAnalyzer as DataAnalyzer
+import Data.TechnicalAnalysis as DataAnalyzer
 
 
 stockFinderInstance = None
@@ -238,46 +238,41 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 重新生成图表
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            operator = "<" if item.operator == "小于" else ">"
+            if item.operator == "小于":
+                operator = "<"
+            elif item.operator == "大于":
+                operator = ">"
+            else:
+                operator = "="
             if item.comparedObject != "差值":
                 connector = operator
             else:
                 connector = "-"
             # 获取时间段数据
-            if item.queryPeriodBegin == item.queryPeriodEnd or item.queryLogic == "开盘":
+            if item.queryPeriodBegin == item.queryPeriodEnd:
                 if item.queryPeriodBegin == 1:
                     text = "最新"
                 else:
                     text = str(item.queryPeriodBegin) + "日前"
-            elif item.queryLogic == "收盘":
-                if item.queryPeriodEnd == 1:
-                    text = "最新"
-                else:
-                    text = str(item.queryPeriodEnd) + "日前"
             elif item.queryPeriodEnd == 1:
-                text = "最近" + str(item.queryPeriodBegin) + "日内"
+                text = "最近" + str(item.queryPeriodBegin) + "日内" + item.queryLogic
             else:
-                text = "最近" + str(item.queryPeriodBegin) + "到" + str(item.queryPeriodEnd) + "日之间"
-            text += item.queryLogic + item.field + connector
+                text = "最近" + str(item.queryPeriodBegin) + "日到" + str(item.queryPeriodEnd) + "日之间" + item.queryLogic
+            text += item.queryField + connector
 
             if item.comparedObject == "绝对值":
                 text += str(item.value)
             else:
-                if item.comparedPeriodBegin == item.comparedPeriodEnd or item.comparedLogic == "开盘":
+                if item.comparedPeriodBegin == item.comparedPeriodEnd:
                     if item.comparedPeriodBegin == 1:
                         text += "最新"
                     else:
                         text += str(item.comparedPeriodBegin) + "日前"
-                elif item.comparedLogic == "收盘":
-                    if item.comparedPeriodEnd == 1:
-                        text += "最新"
-                    else:
-                        text += str(item.comparedPeriodEnd) + "日前"
                 elif item.comparedPeriodEnd == 1:
-                    text += "最近" + str(item.comparedPeriodBegin) + "日内"
+                    text += "最近" + str(item.comparedPeriodBegin) + "日内" + item.comparedLogic
                 else:
-                    text += "最近" + str(item.comparedPeriodBegin) + "到" + str(item.comparedPeriodEnd) + "日之间"
-                text += item.comparedLogic + item.field
+                    text += "最近" + str(item.comparedPeriodBegin) + "日到" + str(item.comparedPeriodEnd) + "日之间" + item.comparedLogic
+                text += item.comparedField
 
                 if item.comparedObject == "比值" and item.value != 1:
                     text += "×" + str(item.value)
@@ -286,7 +281,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.lstCriteriaItems.addItem(text)
 
     # 新增自定义搜索条件
-    def add_criteria_item(self):
+    @staticmethod
+    def add_criteria_item():
         item = SearchCriteria.CriteriaItem()
         window = SearchCriteria.SearchCriteria(item)
         window.show()

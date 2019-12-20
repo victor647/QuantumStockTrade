@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage
 import FileManager as FileManager
-import Data.DataAnalyzer as DataAnalyzer
+import Data.TechnicalAnalysis as DataAnalyzer
 import webbrowser
 from datetime import date
 

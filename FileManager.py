@@ -3,7 +3,7 @@ import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
 from Windows.ProgressBar import ProgressBar
-import Data.DataAnalyzer as DataAnalyzer
+import Data.TechnicalAnalysis as DataAnalyzer
 
 
 # 默认全部股票列表存放路径

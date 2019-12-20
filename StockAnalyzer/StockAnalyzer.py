@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 import StockAnalyzer.TradeSimulator as TradeSimulator
 from StockAnalyzer.TradeStrategy import TradeStrategy
-import Data.DataAnalyzer as DataAnalyzer
+import Data.TechnicalAnalysis as DataAnalyzer
 import Tools, FileManager
 
 
@@ -53,12 +53,13 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         global marketDatabase
         marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
         # 分析大盘表现
-        DataAnalyzer.analyze_database(marketDatabase)
+        DataAnalyzer.get_percentage_data(marketDatabase)
         # 裁剪股票数据
         stockDatabase = stockDatabase.tail(marketDatabase.shape[0]).reset_index(drop=True)
         # 分析股票股性
-        DataAnalyzer.analyze_database(stockDatabase)
-
+        DataAnalyzer.get_percentage_data(stockDatabase)
+        DataAnalyzer.get_kdj_index(stockDatabase)
+        DataAnalyzer.get_bias_index(stockDatabase)
         self.analyze_data()
 
     # 显示股票股性

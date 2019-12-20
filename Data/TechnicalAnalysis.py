@@ -24,34 +24,11 @@ class AnalysisData:
     averageBounce = 1
 
 
-# 分析价格获得涨跌幅百分比数据
-def analyze_database(database: pandas.DataFrame):
-    database['open_pct'] = round((database['open'] / database['preclose'] - 1) * 100, 2)
-    database['high_pct'] = round((database['high'] / database['preclose'] - 1) * 100, 2)
-    database['low_pct'] = round((database['low'] / database['preclose'] - 1) * 100, 2)
-    database['close_pct'] = round((database['close'] / database['preclose'] - 1) * 100, 2)
-    database['amplitude'] = database['high_pct'] + abs(database['low_pct'])
-
-
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     stock_closes = stock_data['close']
     # 将价格数据转换为涨跌幅数据
-    analyze_database(stock_data)
-
-    # 计算KDJ曲线，至少上市13天
-    if stock_closes.shape[0] < 13:
-        return
-    low_list = stock_data['low'].rolling(window=9).min()
-    high_list = stock_data['high'].rolling(window=9).max()
-    # talib中KD的均线算法和通达信算法不同，手写覆盖
-    rsv = (stock_data['close'] - low_list) / (high_list - low_list) * 100
-    k = SMA(rsv, 3, 1)
-    d = SMA(k, 3, 1)
-    j = k * 3 - d * 2
-    stock_data['kdj_k'] = k
-    stock_data['kdj_d'] = d
-    stock_data['kdj_j'] = j
+    get_percentage_data(stock_data)
 
     # 计算BOLL轨道，至少上市20天
     if stock_closes.shape[0] < 20:
@@ -60,12 +37,6 @@ def get_technical_index(stock_data: pandas.DataFrame):
     stock_data['boll_upper'] = upper
     stock_data['boll_middle'] = middle
     stock_data['boll_lower'] = lower
-
-    # 计算BIAS折线，至少上市24天
-    if stock_closes.shape[0] < 24:
-        return
-    ma_24 = talib.MA(stock_closes, 24)
-    stock_data['bias_24'] = (stock_closes - ma_24) / ma_24 * 100
 
     # 计算MACD图形，至少上市34天
     if stock_closes.shape[0] < 34:
@@ -89,6 +60,39 @@ def get_technical_index(stock_data: pandas.DataFrame):
         return
     stock_data['expma_white'] = talib.EMA(stock_closes, 12)
     stock_data['expma_yellow'] = talib.EMA(stock_closes, 50)
+
+
+# 分析价格获得涨跌幅百分比数据
+def get_percentage_data(database: pandas.DataFrame):
+    database['open_pct'] = round((database['open'] / database['preclose'] - 1) * 100, 2)
+    database['high_pct'] = round((database['high'] / database['preclose'] - 1) * 100, 2)
+    database['low_pct'] = round((database['low'] / database['preclose'] - 1) * 100, 2)
+    database['close_pct'] = round((database['close'] / database['preclose'] - 1) * 100, 2)
+    database['amplitude'] = database['high_pct'] - database['low_pct']
+
+
+# 计算BIAS折线，至少上市24天
+def get_bias_index(stock_data: pandas.DataFrame):
+    if stock_data['close'].shape[0] < 24:
+        return
+    ma_24 = talib.MA(stock_data['close'], 24)
+    stock_data['bias_24'] = (stock_data['close'] - ma_24) / ma_24 * 100
+
+
+# 计算KDJ曲线，至少上市13天
+def get_kdj_index(stock_data: pandas.DataFrame):
+    if stock_data['close'].shape[0] < 13:
+        return
+    low_list = stock_data['low'].rolling(window=9).min()
+    high_list = stock_data['high'].rolling(window=9).max()
+    # talib中KD的均线算法和通达信算法不同，手写覆盖
+    rsv = (stock_data['close'] - low_list) / (high_list - low_list) * 100
+    k = SMA(rsv, 3, 1)
+    d = SMA(k, 3, 1)
+    j = k * 3 - d * 2
+    stock_data['kdj_k'] = k
+    stock_data['kdj_d'] = d
+    stock_data['kdj_j'] = j
 
 
 # 计算MA均线
