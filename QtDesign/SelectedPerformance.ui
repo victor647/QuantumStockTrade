@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SelectedPerformance</class>
+ <widget class="QDialog" name="SelectedPerformance">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1062</width>
+    <height>399</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>选股器回测</string>
+  </property>
+  <widget class="QTableWidget" name="tblStockList">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>48</y>
+     <width>1041</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei UI</family>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>60</number>
+   </attribute>
+   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+    <bool>true</bool>
+   </attribute>
+   <column>
+    <property name="text">
+     <string>股票代码</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>股票名称</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>当日收盘</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>次日开盘</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>次日收盘</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>3日表现</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>5日表现</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>10日表现</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>至今表现</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>最高涨幅</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>最大回撤</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>最佳策略</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>1041</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="lblSearchDate">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>选股日期（次日开盘买入）：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QDateEdit" name="dteSearchDate">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="displayFormat">
+       <string>yyyy-MM-dd</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblLoseThreshold">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>止损点</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spbLoseThreshold">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="value">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblWinThreshold">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>止盈点</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spbWinThreshold">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="maximum">
+       <number>9999</number>
+      </property>
+      <property name="singleStep">
+       <number>1</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblMaxHoldTime">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>最长持仓时间</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="spbMaxHoldTime">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="suffix">
+       <string>天</string>
+      </property>
+      <property name="minimum">
+       <number>2</number>
+      </property>
+      <property name="maximum">
+       <number>9999</number>
+      </property>
+      <property name="singleStep">
+       <number>1</number>
+      </property>
+      <property name="value">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnStartCalculation">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>获取回测数据</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>360</y>
+     <width>1041</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="lblNewStockCode">
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="text">
+       <string>股票代码</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="iptStockCode">
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="text">
+       <string>600519</string>
+      </property>
+      <property name="maxLength">
+       <number>6</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnAddStock">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>添加股票</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnRemoveStock">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>删除股票</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnImportStockList">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>导入股票列表</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnExportStockList">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>导出股票列表</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnClearStocks">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>清空列表</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>btnStartCalculation</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>get_stock_data()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>873</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnImportStockList</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>import_stock_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRemoveStock</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>remove_stock_code()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>504</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>513</x>
+     <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnAddStock</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>add_stock_code()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>453</x>
+     <y>42</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClearStocks</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>clear_stock_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>784</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>787</x>
+     <y>38</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnExportStockList</sender>
+   <signal>clicked()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>export_stock_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>687</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>701</x>
+     <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>get_stock_data()</slot>
+  <slot>import_stock_list()</slot>
+  <slot>remove_stock_code()</slot>
+  <slot>add_stock_code()</slot>
+  <slot>clear_stock_list()</slot>
+  <slot>export_stock_list()</slot>
+ </slots>
+</ui>

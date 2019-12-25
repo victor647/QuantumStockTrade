@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import StockAnalyzer.StockAnalyzer as StockAnalyzer
 import StockAnalyzer.TradeStrategy as TradeStrategy
-import Data.TechnicalAnalysis as DataAnalyzer
+import Data.TechnicalAnalysis as TechnicalAnalysis
 import Data.HistoryGraph as HistoryGraph
 import baostock, pandas, Tools
 
@@ -170,8 +170,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
         column += 1
         # 成交价格
-        Tools.add_price_item(self.tblTradeHistory, trade_price, pre_close, row_count, column)
-        column += 1
+        column = Tools.add_price_item(self.tblTradeHistory, trade_price, pre_close, row_count, column)
         # 成交股数
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
         column += 1
@@ -179,17 +178,13 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(remaining_share)))
         column += 1
         # 开盘
-        Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
-        column += 1
+        column = Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
         # 最高
-        Tools.add_price_item(self.tblTradeHistory, round(data['high'], 2), pre_close, row_count, column)
-        column += 1
+        column = Tools.add_price_item(self.tblTradeHistory, round(data['high'], 2), pre_close, row_count, column)
         # 最低
-        Tools.add_price_item(self.tblTradeHistory, round(data['low'], 2), pre_close, row_count, column)
-        column += 1
+        column = Tools.add_price_item(self.tblTradeHistory, round(data['low'], 2), pre_close, row_count, column)
         # 收盘
-        Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
-        column += 1
+        column = Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
         # 换手率
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
@@ -200,10 +195,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
         column += 1
         # 累计收益
-        Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
-        column += 1
+        column = Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
         # 盈亏比例
-        Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
+        column = Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
 
     # 累计获利百分比
     def profit_percentage(self, current_price: float):
@@ -295,8 +289,8 @@ class TradeByDay(QThread):
             self.__crossLong = "expma_yellow"
         # 均线交叉
         else:
-            self.__crossShort = DataAnalyzer.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaShort.value())
-            self.__crossLong = DataAnalyzer.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaLong.value())
+            self.__crossShort = TechnicalAnalysis.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaShort.value())
+            self.__crossLong = TechnicalAnalysis.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaLong.value())
 
         stock_initial = StockAnalyzer.stockDatabase.iloc[0]
         if stock_initial[self.__crossShort] > stock_initial[self.__crossLong]:
@@ -332,12 +326,12 @@ class TradeByDay(QThread):
         # 遍历当日5分钟K线数据
         for index, minute_data in minute_database.iterrows():
             # 5分钟最高和最低价与昨日收盘相比涨跌幅
-            minute_low = DataAnalyzer.get_percentage_from_price(minute_data['high'], pre_close)
-            minute_high = DataAnalyzer.get_percentage_from_price(minute_data['low'], pre_close)
+            minute_low = TechnicalAnalysis.get_percentage_from_price(minute_data['high'], pre_close)
+            minute_high = TechnicalAnalysis.get_percentage_from_price(minute_data['low'], pre_close)
             # 价格低于买点，执行买入操作
             if minute_low < current_buy_point:
                 # 计算买入价格
-                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, current_buy_point)
+                trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, current_buy_point)
                 if tradeSimulatorInstance.buy_stock(daily_data, "被动买入", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, self.__trend):
                     # 记录本次买入，为做T卖出参考
                     if tradeStrategyInstance.allowSameDayTrade:
@@ -347,7 +341,7 @@ class TradeByDay(QThread):
 
             # 价格高于卖点，执行卖出操作
             if minute_high > current_sell_point:
-                trade_price = DataAnalyzer.get_price_from_percentage(pre_close, current_sell_point)
+                trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, current_sell_point)
                 if tradeSimulatorInstance.sell_stock(daily_data, "被动卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade, self.__trend):
                     # 记录本次卖出，为做T买回参考
                     if tradeStrategyInstance.allowSameDayTrade:
@@ -366,7 +360,7 @@ class TradeByDay(QThread):
                         # 判断是否有可卖余额，避免出现T+0操作
                         if tradeSimulatorInstance.sellableShare >= tradeStrategyInstance.sharePerTrade:
                             # 计算做T卖出价格
-                            trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_sell_point)
+                            trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, t_sell_point)
                             if tradeSimulatorInstance.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade):
                                 # 抵消当日买入记录
                                 daily_buy_history.remove(history)
@@ -385,7 +379,7 @@ class TradeByDay(QThread):
                     # 价格低于做T买回盈利点，执行买入操作
                     if minute_low < t_buy_point:
                         # 计算做T买回价格
-                        trade_price = DataAnalyzer.get_price_from_percentage(pre_close, t_buy_point)
+                        trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, t_buy_point)
                         if tradeSimulatorInstance.buy_stock(daily_data, "做T买回", minute_data['time'], trade_price, tradeStrategyInstance.sharePerTrade):
                             # 抵消当日卖出记录
                             daily_sell_history.remove(history)

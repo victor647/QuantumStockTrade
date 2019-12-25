@@ -440,7 +440,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnAddCondition_2">
+      <widget class="QPushButton" name="btnEditCondition">
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
@@ -719,7 +719,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnAddCondition_2</sender>
+   <sender>btnEditCondition</sender>
    <signal>clicked()</signal>
    <receiver>LiveTracker</receiver>
    <slot>edit_condition()</slot>

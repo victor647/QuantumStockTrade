@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageB
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from StockFinder.SearchResult import SearchResult
+from StockFinder.SelectedPerformance import SelectedPerformance
 from Windows.ProgressBar import ProgressBar
-import FileManager as FileManager
 from datetime import datetime
 import StockFinder.SearchCriteria as SearchCriteria
-import tushare, Tools
+import tushare, Tools, FileManager
 import Data.TechnicalAnalysis as DataAnalyzer
 
 
@@ -337,6 +337,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def search_finished(self):
         self.__progressBar.close()
         self.__searchResult.update_found_stock_count()
+
+    # 回测选股表现
+    @staticmethod
+    def test_selected_performance():
+        selected_performance = SelectedPerformance()
+        selected_performance.show()
+        selected_performance.exec_()
 
     # 基本面指标分析
     def match_basic_criterias(self, row):

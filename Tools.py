@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage
 import FileManager as FileManager
-import Data.TechnicalAnalysis as DataAnalyzer
+import Data.TechnicalAnalysis as TechnicalAnalysis
 import webbrowser
 from datetime import date
 
@@ -86,14 +86,17 @@ def add_colored_item(table, value, row_count: int, column: int, symbol="", thres
     item = QTableWidgetItem(str(value) + symbol)
     item.setForeground(get_text_color(value, threshold))
     table.setItem(row_count, column, item)
+    return column + 1
 
 
 # 添加价格数据
 def add_price_item(table, price: float, pre_close: float, row_count: int, column: int):
     item = QTableWidgetItem()
     item.setForeground(get_price_color(price, pre_close))
-    item.setText(str(price) + " " + str(DataAnalyzer.get_percentage_from_price(price, pre_close)) + "%")
+    percentage = TechnicalAnalysis.get_percentage_from_price(price, pre_close)
+    item.setText(str(price) + " " + str(percentage) + "%")
     table.setItem(row_count, column, item)
+    return column + 1
 
 
 # 在东方财富网站打开股票主页

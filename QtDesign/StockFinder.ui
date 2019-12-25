@@ -172,6 +172,9 @@
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>5</number>
+      </property>
       <item>
        <widget class="QPushButton" name="btnAddCriteria">
         <property name="text">
@@ -252,7 +255,7 @@
       <rect>
        <x>10</x>
        <y>23</y>
-       <width>328</width>
+       <width>321</width>
        <height>306</height>
       </rect>
      </property>
@@ -1206,60 +1209,75 @@
      <string>每日请先获取最新K线图，16:00更新当日数据</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnStartSearch">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>490</y>
-      <width>271</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>开始搜索选股！</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>360</x>
       <y>458</y>
       <width>271</width>
-      <height>27</height>
+      <height>62</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_19">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="btnGetAllStockList">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取全部股票列表</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_19">
+       <item>
+        <widget class="QPushButton" name="btnGetAllStockList">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>获取全部股票列表</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnGetAllStockData">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>获取历史日K线</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="btnGetAllStockData">
-       <property name="font">
-        <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取历史日K线</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_20">
+       <item>
+        <widget class="QPushButton" name="btnStartSearch">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>开始搜索选股</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnHistoryPerformance">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>回测选股表现</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -1297,8 +1315,8 @@
    <slot>search_all_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>440</x>
-     <y>613</y>
+     <x>442</x>
+     <y>540</y>
     </hint>
     <hint type="destinationlabel">
      <x>451</x>
@@ -1313,8 +1331,8 @@
    <slot>export_all_stock_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>629</x>
-     <y>578</y>
+     <x>628</x>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
@@ -1505,7 +1523,7 @@
    <slot>export_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>419</x>
+     <x>385</x>
      <y>187</y>
     </hint>
     <hint type="destinationlabel">
@@ -1521,7 +1539,7 @@
    <slot>import_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
+     <x>459</x>
      <y>187</y>
     </hint>
     <hint type="destinationlabel">
@@ -1681,7 +1699,7 @@
    <slot>import_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
+     <x>338</x>
      <y>529</y>
     </hint>
     <hint type="destinationlabel">
@@ -1729,12 +1747,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>405</x>
-     <y>320</y>
+     <x>407</x>
+     <y>312</y>
     </hint>
     <hint type="destinationlabel">
-     <x>492</x>
-     <y>325</y>
+     <x>535</x>
+     <y>313</y>
     </hint>
    </hints>
   </connection>
@@ -1745,12 +1763,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>421</x>
-     <y>315</y>
+     <x>423</x>
+     <y>312</y>
     </hint>
     <hint type="destinationlabel">
-     <x>588</x>
-     <y>322</y>
+     <x>620</x>
+     <y>313</y>
     </hint>
    </hints>
   </connection>
@@ -1761,12 +1779,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>363</y>
+     <x>431</x>
+     <y>343</y>
     </hint>
     <hint type="destinationlabel">
-     <x>480</x>
-     <y>363</y>
+     <x>580</x>
+     <y>344</y>
     </hint>
    </hints>
   </connection>
@@ -1777,12 +1795,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>399</x>
-     <y>399</y>
+     <x>401</x>
+     <y>374</y>
     </hint>
     <hint type="destinationlabel">
-     <x>455</x>
-     <y>399</y>
+     <x>492</x>
+     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -1793,12 +1811,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>400</x>
-     <y>394</y>
+     <x>402</x>
+     <y>374</y>
     </hint>
     <hint type="destinationlabel">
-     <x>525</x>
-     <y>402</y>
+     <x>567</x>
+     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -1809,12 +1827,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>411</x>
-     <y>396</y>
+     <x>413</x>
+     <y>374</y>
     </hint>
     <hint type="destinationlabel">
-     <x>591</x>
-     <y>403</y>
+     <x>620</x>
+     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -1825,12 +1843,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>479</y>
+     <x>425</x>
+     <y>405</y>
     </hint>
     <hint type="destinationlabel">
-     <x>527</x>
-     <y>482</y>
+     <x>620</x>
+     <y>406</y>
     </hint>
    </hints>
   </connection>
@@ -1841,8 +1859,8 @@
    <slot>export_technical_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>438</x>
-     <y>521</y>
+     <x>440</x>
+     <y>439</y>
     </hint>
     <hint type="destinationlabel">
      <x>430</x>
@@ -1857,8 +1875,8 @@
    <slot>import_technical_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>614</x>
-     <y>514</y>
+     <x>620</x>
+     <y>439</y>
     </hint>
     <hint type="destinationlabel">
      <x>619</x>
@@ -1889,12 +1907,28 @@
    <slot>export_all_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>403</x>
-     <y>563</y>
+     <x>405</x>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>470</x>
      <y>595</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnHistoryPerformance</sender>
+   <signal>clicked()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>test_selected_performance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>560</x>
+     <y>534</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>566</x>
+     <y>552</y>
     </hint>
    </hints>
   </connection>
@@ -1915,5 +1949,6 @@
   <slot>export_custom_config()</slot>
   <slot>import_custom_config()</slot>
   <slot>export_all_stock_list()</slot>
+  <slot>test_selected_performance()</slot>
  </slots>
 </ui>

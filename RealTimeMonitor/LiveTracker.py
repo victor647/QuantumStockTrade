@@ -278,24 +278,19 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
             self.tblStockList.setItem(row, column, QTableWidgetItem(info))
             column += 1
             # 最新价格
-            Tools.add_colored_item(self.tblStockList, live_data.currentPrice, row, column, threshold=live_data.previousClose)
-            column += 1
+            column = Tools.add_colored_item(self.tblStockList, live_data.currentPrice, row, column, threshold=live_data.previousClose)
             # 涨跌幅
-            Tools.add_colored_item(self.tblStockList, live_data.percentChange, row, column, "%")
-            column += 1
+            column = Tools.add_colored_item(self.tblStockList, live_data.percentChange, row, column, "%")
             # 五档委比数据
             ratio = live_data.bidInfo.get_bid_ratio()
-            Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
-            column += 1
+            column = Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
             # 最近涨跌幅
             change = RealTimeStockData.get_recent_change(recent_transactions_list)
             ratio = round(change / live_data.previousClose * 100, 2)
-            Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
-            column += 1
+            column = Tools.add_colored_item(self.tblStockList, ratio, row, column, "%")
             # 最近成交外盘占比
             ratio = RealTimeStockData.get_active_buy_ratio(recent_transactions_list)
-            Tools.add_colored_item(self.tblStockList, ratio, row, column, "%", 50)
-            column += 1
+            column = Tools.add_colored_item(self.tblStockList, ratio, row, column, "%", 50)
             # 最近成交额
             amount = RealTimeStockData.get_total_amount(recent_transactions_list)
             self.tblStockList.setItem(row, column, QTableWidgetItem(str(amount) + "万"))

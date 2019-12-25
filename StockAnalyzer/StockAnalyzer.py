@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMainWindow
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 import StockAnalyzer.TradeSimulator as TradeSimulator
 from StockAnalyzer.TradeStrategy import TradeStrategy
-import Data.TechnicalAnalysis as DataAnalyzer
+import Data.TechnicalAnalysis as TechnicalAnalysis
 import Tools, FileManager
 
 
@@ -19,7 +19,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         super().__init__()
         self.setupUi(self)
         self.__tradeStrategy = TradeStrategy()
-        self.__analysisData = DataAnalyzer.AnalysisData()
+        self.__analysisData = TechnicalAnalysis.AnalysisData()
         # 初始化单例
         global stockAnalyzerInstance
         stockAnalyzerInstance = self
@@ -53,59 +53,59 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         global marketDatabase
         marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
         # 分析大盘表现
-        DataAnalyzer.get_percentage_data(marketDatabase)
+        TechnicalAnalysis.get_percentage_data(marketDatabase)
         # 裁剪股票数据
         stockDatabase = stockDatabase.tail(marketDatabase.shape[0]).reset_index(drop=True)
         # 分析股票股性
-        DataAnalyzer.get_percentage_data(stockDatabase)
-        DataAnalyzer.get_kdj_index(stockDatabase)
-        DataAnalyzer.get_bias_index(stockDatabase)
+        TechnicalAnalysis.get_percentage_data(stockDatabase)
+        TechnicalAnalysis.get_kdj_index(stockDatabase)
+        TechnicalAnalysis.get_bias_index(stockDatabase)
         self.analyze_data()
 
     # 显示股票股性
     def analyze_data(self):
-        self.__analysisData.averageTurn = DataAnalyzer.average_turn(stockDatabase)
-        self.__analysisData.averageCloseUp = DataAnalyzer.average_close_when_up(stockDatabase)
-        self.__analysisData.averageCloseDown = DataAnalyzer.average_close_when_down(stockDatabase)
-        self.__analysisData.averageHighWhenUp = DataAnalyzer.average_high_when_up(stockDatabase)
-        self.__analysisData.averageHighWhenDown = DataAnalyzer.average_high_when_down(stockDatabase)
-        self.__analysisData.averageLowWhenDown = DataAnalyzer.average_low_when_down(stockDatabase)
-        self.__analysisData.averageLowWhenUp = DataAnalyzer.average_low_when_up(stockDatabase)
-        self.__analysisData.averageFullAmp = DataAnalyzer.average_amplitude(stockDatabase)
-        self.__analysisData.averageFallback = DataAnalyzer.average_fallback(stockDatabase)
-        self.__analysisData.averageBounce = DataAnalyzer.average_bounce(stockDatabase)
+        self.__analysisData.averageTurn = TechnicalAnalysis.average_turn(stockDatabase)
+        self.__analysisData.averageCloseUp = TechnicalAnalysis.average_close_when_up(stockDatabase)
+        self.__analysisData.averageCloseDown = TechnicalAnalysis.average_close_when_down(stockDatabase)
+        self.__analysisData.averageHighWhenUp = TechnicalAnalysis.average_high_when_up(stockDatabase)
+        self.__analysisData.averageHighWhenDown = TechnicalAnalysis.average_high_when_down(stockDatabase)
+        self.__analysisData.averageLowWhenDown = TechnicalAnalysis.average_low_when_down(stockDatabase)
+        self.__analysisData.averageLowWhenUp = TechnicalAnalysis.average_low_when_up(stockDatabase)
+        self.__analysisData.averageFullAmp = TechnicalAnalysis.average_amplitude(stockDatabase)
+        self.__analysisData.averageFallback = TechnicalAnalysis.average_fallback(stockDatabase)
+        self.__analysisData.averageBounce = TechnicalAnalysis.average_bounce(stockDatabase)
 
         # 个股表现
-        self.lblStockIntervalOpen.setText("区间开盘价格：" + str(DataAnalyzer.interval_open_price(stockDatabase)))
-        self.lblStockIntervalClose.setText("区间收盘价格：" + str(DataAnalyzer.interval_close_price(stockDatabase)))
-        self.lblStockIntervalHigh.setText("区间最高价格：" + str(DataAnalyzer.interval_highest_price(stockDatabase)))
-        self.lblStockIntervalLow.setText("区间最低价格：" + str(DataAnalyzer.interval_lowest_price(stockDatabase)))
-        self.lblStockIntervalAverage.setText("区间平均价格：" + str(DataAnalyzer.interval_average_price(stockDatabase)))
-        self.lblStockIntervalTotal.setText("区间累计涨幅：" + str(DataAnalyzer.interval_total_performance(stockDatabase)) + "%")
-        self.lblStockIntervalAveragePoint.setText("平均每日涨幅：" + str(DataAnalyzer.interval_average_performance(stockDatabase)) + "%")
-        self.lblStockUpProbability.setText("每日上涨概率：" + str(DataAnalyzer.close_price_up(stockDatabase)) + "%")
+        self.lblStockIntervalOpen.setText("区间开盘价格：" + str(TechnicalAnalysis.interval_open_price(stockDatabase)))
+        self.lblStockIntervalClose.setText("区间收盘价格：" + str(TechnicalAnalysis.interval_close_price(stockDatabase)))
+        self.lblStockIntervalHigh.setText("区间最高价格：" + str(TechnicalAnalysis.interval_highest_price(stockDatabase)))
+        self.lblStockIntervalLow.setText("区间最低价格：" + str(TechnicalAnalysis.interval_lowest_price(stockDatabase)))
+        self.lblStockIntervalAverage.setText("区间平均价格：" + str(TechnicalAnalysis.interval_average_price(stockDatabase)))
+        self.lblStockIntervalTotal.setText("区间累计涨幅：" + str(TechnicalAnalysis.interval_total_performance(stockDatabase)) + "%")
+        self.lblStockIntervalAveragePoint.setText("平均每日涨幅：" + str(TechnicalAnalysis.interval_average_performance(stockDatabase)) + "%")
+        self.lblStockUpProbability.setText("每日上涨概率：" + str(TechnicalAnalysis.close_price_up(stockDatabase)) + "%")
 
         # 大盘表现
-        self.lblMarketIntervalOpen.setText("区间开盘点位：" + str(DataAnalyzer.interval_open_price(marketDatabase)))
-        self.lblMarketIntervalClose.setText("区间收盘点位：" + str(DataAnalyzer.interval_close_price(marketDatabase)))
-        self.lblMarketIntervalHigh.setText("区间最高点位：" + str(DataAnalyzer.interval_highest_price(marketDatabase)))
-        self.lblMarketIntervalLow.setText("区间最低点位：" + str(DataAnalyzer.interval_lowest_price(marketDatabase)))
-        self.lblMarketIntervalAverage.setText("区间平均点位：" + str(DataAnalyzer.interval_average_price(marketDatabase)))
-        self.lblMarketIntervalTotal.setText("区间累计涨幅：" + str(DataAnalyzer.interval_total_performance(marketDatabase)) + "%")
-        self.lblMarketIntervalAveragePoint.setText("平均每日涨幅：" + str(DataAnalyzer.interval_average_performance(marketDatabase)) + "%")
-        self.lblMarketUpProbability.setText("每日上涨概率：" + str(DataAnalyzer.close_price_up(marketDatabase)) + "%")
+        self.lblMarketIntervalOpen.setText("区间开盘点位：" + str(TechnicalAnalysis.interval_open_price(marketDatabase)))
+        self.lblMarketIntervalClose.setText("区间收盘点位：" + str(TechnicalAnalysis.interval_close_price(marketDatabase)))
+        self.lblMarketIntervalHigh.setText("区间最高点位：" + str(TechnicalAnalysis.interval_highest_price(marketDatabase)))
+        self.lblMarketIntervalLow.setText("区间最低点位：" + str(TechnicalAnalysis.interval_lowest_price(marketDatabase)))
+        self.lblMarketIntervalAverage.setText("区间平均点位：" + str(TechnicalAnalysis.interval_average_price(marketDatabase)))
+        self.lblMarketIntervalTotal.setText("区间累计涨幅：" + str(TechnicalAnalysis.interval_total_performance(marketDatabase)) + "%")
+        self.lblMarketIntervalAveragePoint.setText("平均每日涨幅：" + str(TechnicalAnalysis.interval_average_performance(marketDatabase)) + "%")
+        self.lblMarketUpProbability.setText("每日上涨概率：" + str(TechnicalAnalysis.close_price_up(marketDatabase)) + "%")
 
-        self.lblWinMarket.setText("跑赢大盘日数：" + str(DataAnalyzer.win_market(stockDatabase, marketDatabase)) + "%")
-        self.lblInverseMarketUp.setText("逆市上涨日数：" + str(DataAnalyzer.inverse_market_up(stockDatabase, marketDatabase)) + "%")
-        self.lblInverseMarketDown.setText("逆市下跌日数：" + str(DataAnalyzer.inverse_market_down(stockDatabase, marketDatabase)) + "%")
-        self.lblHighOpenHighClose.setText("高开高走概率：" + str(DataAnalyzer.high_open_high_close(stockDatabase)) + "%")
-        self.lblHighOpenLowClose.setText("高开低走概率：" + str(DataAnalyzer.high_open_low_close(stockDatabase)) + "%")
-        self.lblLowOpenLowClose.setText("低开低走概率：" + str(DataAnalyzer.low_open_low_close(stockDatabase)) + "%")
-        self.lblLowOpenHighClose.setText("低开高走概率：" + str(DataAnalyzer.low_open_high_close(stockDatabase)) + "%")
-        self.lblReachMaxProbability.setText("涨停触板概率：" + str(DataAnalyzer.reach_max_limit(stockDatabase)) + "%")
-        self.lblStayMaxProbability.setText("涨停收盘概率：" + str(DataAnalyzer.stay_max_limit(stockDatabase)) + "%")
-        self.lblReachMinProbability.setText("跌停触板概率：" + str(DataAnalyzer.reach_min_limit(stockDatabase)) + "%")
-        self.lblStayMinProbability.setText("跌停收盘概率：" + str(DataAnalyzer.stay_min_limit(stockDatabase)) + "%")
+        self.lblWinMarket.setText("跑赢大盘日数：" + str(TechnicalAnalysis.win_market(stockDatabase, marketDatabase)) + "%")
+        self.lblInverseMarketUp.setText("逆市上涨日数：" + str(TechnicalAnalysis.inverse_market_up(stockDatabase, marketDatabase)) + "%")
+        self.lblInverseMarketDown.setText("逆市下跌日数：" + str(TechnicalAnalysis.inverse_market_down(stockDatabase, marketDatabase)) + "%")
+        self.lblHighOpenHighClose.setText("高开高走概率：" + str(TechnicalAnalysis.high_open_high_close(stockDatabase)) + "%")
+        self.lblHighOpenLowClose.setText("高开低走概率：" + str(TechnicalAnalysis.high_open_low_close(stockDatabase)) + "%")
+        self.lblLowOpenLowClose.setText("低开低走概率：" + str(TechnicalAnalysis.low_open_low_close(stockDatabase)) + "%")
+        self.lblLowOpenHighClose.setText("低开高走概率：" + str(TechnicalAnalysis.low_open_high_close(stockDatabase)) + "%")
+        self.lblReachMaxProbability.setText("涨停触板概率：" + str(TechnicalAnalysis.reach_max_limit(stockDatabase)) + "%")
+        self.lblStayMaxProbability.setText("涨停收盘概率：" + str(TechnicalAnalysis.stay_max_limit(stockDatabase)) + "%")
+        self.lblReachMinProbability.setText("跌停触板概率：" + str(TechnicalAnalysis.reach_min_limit(stockDatabase)) + "%")
+        self.lblStayMinProbability.setText("跌停收盘概率：" + str(TechnicalAnalysis.stay_min_limit(stockDatabase)) + "%")
 
         # 股性指标
         self.lblAverageTurn.setText("平均换手率：" + str(self.__analysisData.averageTurn) + "%")
@@ -156,7 +156,6 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         trade_window.show()
         trade_window.start_trading()
         trade_window.exec_()
-        return
 
     def check_stock_data_exist(self):
         if self.__analysisData.averageTurn == 0:

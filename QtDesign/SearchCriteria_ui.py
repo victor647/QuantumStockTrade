@@ -175,7 +175,7 @@ class Ui_SearchCriteria(object):
         font.setPointSize(9)
         self.spbValue.setFont(font)
         self.spbValue.setSuffix("")
-        self.spbValue.setDecimals(1)
+        self.spbValue.setDecimals(2)
         self.spbValue.setMinimum(-10000.0)
         self.spbValue.setMaximum(10000.0)
         self.spbValue.setSingleStep(0.1)

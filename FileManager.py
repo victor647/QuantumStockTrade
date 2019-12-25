@@ -3,7 +3,7 @@ import Tools
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
 from Windows.ProgressBar import ProgressBar
-import Data.TechnicalAnalysis as DataAnalyzer
+import Data.TechnicalAnalysis as TechnicalAnalysis
 
 
 # 默认全部股票列表存放路径
@@ -68,6 +68,7 @@ def import_stock_list(import_func):
             code = line.rstrip('\n')
             import_func(code)
         file.close()
+    return file_path[0]
 
 
 # 导出全部股票信息列表
@@ -121,7 +122,7 @@ def read_stock_history_data(stock_code: str):
 # 保存单只股票历史数据到csv文件
 def save_stock_history_data(bs_result, stock_code: str):
     data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
-    DataAnalyzer.get_technical_index(data)
+    TechnicalAnalysis.get_technical_index(data)
     data.to_csv(stock_history_path(stock_code))
 
 

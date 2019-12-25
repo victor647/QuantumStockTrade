@@ -23,7 +23,7 @@ class CriteriaItem:
 def get_column_label(field: str):
     if field == "开盘价":
         return "open"
-    elif field == "最低价":
+    elif field == "收盘价":
         return "close"
     elif field == "最高价":
         return "high"
@@ -57,11 +57,16 @@ def get_data_value(logic: str, data: pandas.DataFrame):
 
 # 检测股票技术指标是否符合规定
 def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
+    # 上市天数少于指标范围则跳过
+    if data.shape[0] < item.queryPeriodBegin:
+        return False
     # 获取初始值类型
     query_label = get_column_label(item.queryField)
     # 获取初始值范围
     if item.queryPeriodEnd == 1:
         data_first = data[query_label].tail(item.queryPeriodBegin)
+    elif item.queryPeriodBegin == item.queryPeriodEnd:
+        data_first = data[query_label].iloc[-item.queryPeriodBegin]
     else:
         data_first = data[query_label].iloc[-item.queryPeriodBegin:-(item.queryPeriodEnd - 1)]
     # 获取初始值
@@ -72,9 +77,14 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     if item.comparedObject == "绝对值":
         value_second = item.value
     else:
+        # 上市天数少于指标范围则跳过
+        if data.shape[0] < item.comparedPeriodBegin:
+            return False
         # 获取参照值范围
         if item.comparedPeriodEnd == 1:
             data_second = data[compared_label].tail(item.comparedPeriodBegin)
+        elif item.comparedPeriodBegin == item.comparedPeriodEnd:
+            data_second = data[compared_label].iloc[-item.comparedPeriodBegin]
         else:
             data_second = data[compared_label].iloc[-item.comparedPeriodBegin:-(item.comparedPeriodEnd - 1)]
         # 获取参照值
