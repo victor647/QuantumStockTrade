@@ -66,12 +66,7 @@
    </column>
    <column>
     <property name="text">
-     <string>5日表现</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>10日表现</string>
+     <string>期满表现</string>
     </property>
    </column>
    <column>
@@ -96,7 +91,7 @@
    </column>
    <column>
     <property name="text">
-     <string>最终获利</string>
+     <string>实际操作</string>
     </property>
    </column>
   </widget>
@@ -116,7 +111,7 @@
     </font>
    </property>
    <property name="text">
-    <string>共成交0笔，其中盈利0笔，总成本0元，获利0元，收益率0%</string>
+    <string>共买入0只股票，其中0只盈利，总成本0元，获利0元，收益率0%</string>
    </property>
   </widget>
   <widget class="QWidget" name="">
@@ -329,7 +324,7 @@
          </font>
         </property>
         <property name="text">
-         <string>止损点</string>
+         <string>割肉止损</string>
         </property>
        </widget>
       </item>
@@ -363,7 +358,7 @@
          </font>
         </property>
         <property name="text">
-         <string>止盈点</string>
+         <string>获利止盈</string>
         </property>
        </widget>
       </item>
@@ -389,20 +384,22 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblDownAddPoint">
+       <widget class="QCheckBox" name="cbxAddWhenDown">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>下跌补仓点</string>
+         <string>下跌补仓</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbDownAddPoint">
+       <widget class="QSpinBox" name="spbAddThresholdDown">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -423,20 +420,22 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblUpAddPoint">
+       <widget class="QCheckBox" name="cbxAddWhenUp">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>上涨加仓点</string>
+         <string>上涨追进</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbUpAddPoint">
+       <widget class="QSpinBox" name="spbAddThresholdUp">
         <property name="font">
          <font>
           <family>Microsoft YaHei UI</family>
@@ -502,7 +501,7 @@
          </font>
         </property>
         <property name="text">
-         <string>最长持仓时间</string>
+         <string>清仓期限</string>
         </property>
        </widget>
       </item>
@@ -526,7 +525,7 @@
          <number>1</number>
         </property>
         <property name="value">
-         <number>20</number>
+         <number>5</number>
         </property>
        </widget>
       </item>
@@ -630,6 +629,38 @@
     <hint type="destinationlabel">
      <x>701</x>
      <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAddWhenUp</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbAddThresholdUp</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>646</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>689</x>
+     <y>56</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxAddWhenDown</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbAddThresholdDown</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>58</y>
     </hint>
    </hints>
   </connection>

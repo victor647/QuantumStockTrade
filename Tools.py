@@ -82,20 +82,20 @@ def get_price_color(price: float, pre_close: float):
 
 
 # 添加带有红绿正负颜色的数据
-def add_colored_item(table, value, row_count: int, column: int, symbol="", threshold=0):
+def add_colored_item(table, value, row: int, column: int, symbol="", threshold=0):
     item = QTableWidgetItem(str(value) + symbol)
     item.setForeground(get_text_color(value, threshold))
-    table.setItem(row_count, column, item)
+    table.setItem(row, column, item)
     return column + 1
 
 
 # 添加价格数据
-def add_price_item(table, price: float, pre_close: float, row_count: int, column: int):
+def add_price_item(table, price: float, pre_close: float, row: int, column: int):
     item = QTableWidgetItem()
     item.setForeground(get_price_color(price, pre_close))
     percentage = TechnicalAnalysis.get_percentage_from_price(price, pre_close)
     item.setText(str(price) + " " + str(percentage) + "%")
-    table.setItem(row_count, column, item)
+    table.setItem(row, column, item)
     return column + 1
 
 

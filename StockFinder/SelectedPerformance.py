@@ -2,13 +2,14 @@ from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
 import StockAnalyzer.TradeSimulator as TradeSimulator
+import Data.TechnicalAnalysis as TechnicalAnalysis
 from datetime import date
 import baostock, Tools, os.path, pandas, FileManager
 
 
+# 选股器回测工具
 class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
-    __startDate = ""
-    __endDate = ""
+    __startDate = QDate()
 
     def __init__(self):
         super().__init__()
@@ -22,8 +23,10 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
     def import_stock_list(self):
         file = FileManager.import_stock_list(self.fill_stock_list)
         # 通过文件创建时间获取选股日期
-        creation_date = date.fromtimestamp(os.path.getctime(file))
-        self.dteSearchDate.setDate(creation_date)
+        self.__startDate = QDate(date.fromtimestamp(os.path.getctime(file)))
+        if self.__startDate.addDays(self.spbMaxHoldTime.value()) > QDate.currentDate():
+            self.__startDate = QDate.currentDate().addDays(-self.spbMaxHoldTime.value())
+        self.dteSearchDate.setDate(self.__startDate)
 
     # 导出股票列表
     def export_stock_list(self):
@@ -59,19 +62,18 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         # 获取交易所信息
         market = Tools.get_trade_center(stock_code)
         result = baostock.query_history_k_data_plus(code=market + "." + stock_code, fields="date,open,high,low,close,preclose,pctChg",
-                                                    start_date=self.__startDate, end_date=self.__endDate, frequency="d", adjustflag="2")
+                                                    start_date=self.__startDate.toString('yyyy-MM-dd'), end_date=QDate.currentDate().toString('yyyy-MM-dd'), frequency="d", adjustflag="2")
         return pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
     # 获取列表中股票历史数据
     def start_trade_simulation(self):
-        self.__startDate = self.dteSearchDate.date().toString('yyyy-MM-dd')
-        self.__endDate = QDate.currentDate().toString('yyyy-MM-dd')
-        if self.__startDate == self.__endDate:
+        self.__startDate = self.dteSearchDate.date()
+        if self.__startDate == QDate.currentDate():
             Tools.show_error_dialog("回测开始时间不能为当日！")
             return
 
         # 初始化所有股票模拟交易数据
-        total_investment = total_transaction_fee = 0
+        total_investment = total_profit = successful_trade_count = 0
         # 遍历选到的每只股票
         for row in range(self.tblStockList.rowCount()):
             # 从表格中获取股票代码
@@ -89,10 +91,8 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             column = self.get_day_performance(1, column, row, data, buy_price)
             # 3日表现
             column = self.get_day_performance(3, column, row, data, buy_price)
-            # 5日表现
-            column = self.get_day_performance(5, column, row, data, buy_price)
-            # 10日表现
-            column = self.get_day_performance(10, column, row, data, buy_price)
+            # 期满表现
+            column = self.get_day_performance(self.spbMaxHoldTime.value() - 1, column, row, data, buy_price)
             # 至今表现
             column = self.get_day_performance(-1, column, row, data, buy_price)
             # 最高涨幅
@@ -101,80 +101,95 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             column = Tools.add_price_item(self.tblStockList, data['low'].iloc[1:].min(), buy_price, row, column)
 
             # 计算买入股数，至少买入100股
-            share = round(self.spbMoneyPerTrade.value() / (buy_price * 100)) * 100
-            if share == 0:
-                share = 100
+            share_per_trade = max(round(self.spbMoneyPerTrade.value() / (buy_price * 100)), 1) * 100
             # 计算买入实际市值
-            stock_investment = share * buy_price
-            total_investment += stock_investment
-            # 计算买入手续费
-            total_transaction_fee += TradeSimulator.buy_transaction_fee(stock_investment)
-
-            strategy = "选股失败，买入后连续下跌"
-            add_log = ""
+            stock_investment = share_per_trade * buy_price
+            # 初始化卖出时市值
+            stock_return = 0
+            # 初始化策略文本
+            best_strategy = add_log = ""
+            actual_behaviour = "末日卖出，"
+            # 初始化日均盈利
             best_earning_per_day = -10
-            transaction_finished = False
-            for day in range(2, self.spbMaxHoldTime.value()):
+            # 是否提前触发止损或止盈
+            sell_early = False
+            # 遍历选股后每个交易日执行操作
+            for day in range(1, self.spbMaxHoldTime.value()):
                 # 最大持仓时间超过回测时间
                 if data.shape[0] < day:
                     break
-                # 计算截止当日总盈亏
-                high_performance = (data['high'].iloc[day] - buy_price) / buy_price * 100
-                low_performance = (data['low'].iloc[day] - buy_price) / buy_price * 100
+                # 获取当日最高最低涨跌幅
+                high_performance = TechnicalAnalysis.get_percentage_from_price(data['high'].iloc[day], buy_price)
+                low_performance = TechnicalAnalysis.get_percentage_from_price(data['low'].iloc[day], buy_price)
 
-                # 在补仓期限之前
-                if day < self.spbAddDeadline.value():
+                # 在加仓期限之前可以进行加仓
+                if day < self.spbAddDeadline.value() and add_log == "":
                     # 达到补仓点，降低成本
-                    if low_performance < self.spbDownAddPoint.value():
-                        add_log = "持股第" + str(day) + "日下跌补仓，"
-                        additional_investment = share * round(buy_price * (1 + self.spbDownAddPoint.value() / 100), 2)
-                        total_transaction_fee += TradeSimulator.buy_transaction_fee(additional_investment)
-                        stock_investment += additional_investment
-                        total_investment += additional_investment
+                    if self.cbxAddWhenDown.isChecked() and low_performance < self.spbAddThresholdDown.value():
+                        add_log = "第" + str(day) + "日下跌补仓，"
+                        stock_investment += share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdDown.value())
                         continue
 
                     # 达到加仓点，强势追涨
-                    if high_performance > self.spbUpAddPoint.value():
-                        add_log = "持股第" + str(day) + "日上涨加仓，"
-                        additional_investment = share * round(buy_price * (1 + self.spbUpAddPoint.value() / 100), 2)
-                        total_transaction_fee += TradeSimulator.buy_transaction_fee(additional_investment)
-                        stock_investment += additional_investment
-                        total_investment += additional_investment
-                    continue
+                    if self.cbxAddWhenUp.isChecked() and high_performance > self.spbAddThresholdUp.value():
+                        add_log = "第" + str(day) + "日上涨加仓，"
+                        stock_investment += share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdUp.value())
+                        continue
 
-                # 达到止损点，割肉离场
-                if low_performance < self.spbLoseThreshold.value():
-                    strategy = "第" + str(day) + "日触发止损，割肉离场"
-                    transaction_finished = True
-                    break
+                # 买入首日无法卖出
+                if day > 1:
+                    # 计算日化单利
+                    earning_per_day = high_performance / day
+                    # 发现更优持仓时间
+                    if earning_per_day > best_earning_per_day:
+                        best_earning_per_day = earning_per_day
+                        best_strategy = "持股" + str(day) + "日, 获利" + str(round(high_performance, 2)) + "%"
 
-                # 达到止盈点，获利了结
-                if high_performance > self.spbWinThreshold.value():
-                    strategy = "第" + str(day) + "日触发止盈，获利了结"
-                    transaction_finished = True
-                    break
+                    # 达到止损点，割肉离场
+                    if low_performance < self.spbLoseThreshold.value():
+                        actual_behaviour = "第" + str(day) + "日触发止损，"
+                        stock_return = share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbLoseThreshold.value())
+                        if add_log != "":
+                            stock_return *= 2
+                        sell_early = True
 
-                # 计算日化单利
-                earning_per_day = high_performance / day
-                # 发现更优持仓时间
-                if earning_per_day > best_earning_per_day:
-                    best_earning_per_day = earning_per_day
-                    strategy = "共" + str(day - 1) + "日, 日化单利" + str(round(best_earning_per_day, 2)) + "%"
+                    # 达到止盈点，获利了结
+                    if high_performance > self.spbWinThreshold.value():
+                        actual_behaviour = "第" + str(day) + "日触发止盈，"
+                        stock_return = share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbWinThreshold.value())
+                        if add_log != "":
+                            stock_return *= 2
+                        sell_early = True
 
-            # 若发生加仓行为，添加记录
-            if add_log != "":
-                strategy = add_log + strategy
-            else:
-                strategy = "持股" + strategy
-            # 若日化单利过低
-            if not transaction_finished and 0 < best_earning_per_day < 0.5:
-                strategy = "选股失败，长期横盘获利太少"
-            self.tblStockList.setItem(row, column, QTableWidgetItem(strategy))
+                    # 若持股到最后一天，则收盘卖出清算
+                    if not sell_early and day == self.spbMaxHoldTime.value() - 1:
+                        stock_return = share_per_trade * round(data['close'].iloc[day], 2)
+                        if add_log != "":
+                            stock_return *= 2
+
+            # 计算扣除手续费后的卖出市值
+            stock_return -= TradeSimulator.buy_transaction_fee(stock_investment) + TradeSimulator.sell_transaction_fee(stock_return)
+            # 计算这只股票的盈利
+            final_profit = round(stock_return - stock_investment, 2)
+            if final_profit > 0:
+                successful_trade_count += 1
+            # 买在高位，无法盈利
+            if best_earning_per_day < 0:
+                best_strategy = "选股失败，无法盈利"
+            self.tblStockList.setItem(row, column, QTableWidgetItem(best_strategy))
+            column += 1
+            actual_behaviour += ("获利" if final_profit >= 0 else "亏损") + str(final_profit) + "元"
+            self.tblStockList.setItem(row, column, QTableWidgetItem(add_log + actual_behaviour))
+            # 计算总和投资与回报
+            total_investment += stock_investment
+            total_profit += final_profit
+        profit_text = "获利" if total_profit >= 0 else "亏损"
+        self.lblTradeSummary.setText("共买入{}只股票，其中{}只盈利，总成本{}元，{}{}元，收益率{}%"
+                                     .format(self.tblStockList.rowCount(), successful_trade_count, total_investment, profit_text, total_profit, round(total_profit / total_investment * 100, 2)))
 
     # 计算X日后的股价表现
     def get_day_performance(self, days: int, column: int, row: int, data: pandas.DataFrame, initial_price: float):
-        if data.shape[0] >= days or days == -1:
+        if data.shape[0] > days or days == -1:
             performance = round(data['close'].iloc[days], 2)
             Tools.add_price_item(self.tblStockList, performance, initial_price, row, column)
         return column + 1
-
