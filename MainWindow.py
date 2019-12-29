@@ -4,7 +4,6 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from Windows import StockReviewer
 from StockAnalyzer import StockAnalyzer
 from StockFinder import StockFinder
 from RealTimeMonitor import LiveTracker
@@ -21,7 +20,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     __stockAnalyzer = None
     __stockFinder = None
     __stockTracker = None
-    __stockReviewer = None
+    __selectedPerformance = None
 
     def __init__(self):
         super().__init__()
@@ -44,9 +43,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.__stockTracker = LiveTracker.LiveTracker()
         self.__stockTracker.show()
 
-    def show_stock_reviewer(self):
-        self.__stockReviewer = StockReviewer.StockReviewer()
-        self.__stockReviewer.show()
+    # 选股表现回测
+    def show_selected_performance(self):
+        self.__selectedPerformance = StockFinder.SelectedPerformance()
+        self.__selectedPerformance.show()
 
 
 sys.excepthook = traceback.print_exception

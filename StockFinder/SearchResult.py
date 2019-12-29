@@ -8,9 +8,12 @@ import FileManager as FileManager
 
 class SearchResult(QDialog, Ui_SearchResult):
 
-    def __init__(self):
+    def __init__(self, search_date: str):
         super().__init__()
         self.setupUi(self)
+        self.__searchDate = search_date
+        # 显示选股日期
+        self.lblSearchDate.setText("选股日期：" + search_date)
 
     # 快捷键设置
     def keyPressEvent(self, key: QKeyEvent):
@@ -48,4 +51,4 @@ class SearchResult(QDialog, Ui_SearchResult):
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):
-        FileManager.export_stock_list(self.tblStockList)
+        FileManager.export_stock_list(self.tblStockList, self.__searchDate)

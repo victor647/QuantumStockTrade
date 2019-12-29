@@ -19,6 +19,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     __stockSearcher = None
     __progressBar = None
     __criteriaItems = []
+    __searchDate = ""
 
     def __init__(self):
         super().__init__()
@@ -26,6 +27,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 初始化单例
         global stockFinderInstance
         stockFinderInstance = self
+        # 初始化选股日期
+        self.dteSearchDate.setDate(QDate.currentDate())
         # 初始化技术面指标下拉菜单
         self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿', '红柱缩短', '绿柱缩短'])
         self.cbbBollBehaviour.addItems(['上穿', '下穿'])
@@ -323,9 +326,16 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     # 开始搜索全部股票
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
-        self.__searchResult = SearchResult()
+        # 确保选股日期不是周末
+        while self.dteSearchDate.date().dayOfWeek() > 5:
+            self.dteSearchDate.setDate(self.dteSearchDate.date().addDays(-1))
+        self.__searchDate = self.dteSearchDate.date().toString('yyyy-MM-dd')
+        # 弹出搜索结果界面
+        self.__searchResult = SearchResult(self.__searchDate)
         self.__searchResult.show()
+        # 开始选股进程
         self.__stockSearcher = StockSearcher(stock_list)
+        # 弹出选股进度条
         self.__progressBar = ProgressBar(stock_list.shape[0], self.__stockSearcher)
         self.__progressBar.show()
         self.__stockSearcher.progressBarCallback.connect(self.__progressBar.update_search_progress)
@@ -337,13 +347,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def search_finished(self):
         self.__progressBar.close()
         self.__searchResult.update_found_stock_count()
-
-    # 回测选股表现
-    @staticmethod
-    def test_selected_performance():
-        selected_performance = SelectedPerformance()
-        selected_performance.show()
-        selected_performance.exec_()
 
     # 基本面指标分析
     def match_basic_criterias(self, row):
@@ -436,6 +439,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return True
         # 获得股票历史数据
         data = FileManager.read_stock_history_data(code)
+        # 将日期作为标识符
+        data.set_index("date", inplace=True)
+        # 剪去选股日期之后的数据
+        data = data.loc[:self.__searchDate]
         # 跳过还未上市新股
         if data.shape[0] == 0:
             return False

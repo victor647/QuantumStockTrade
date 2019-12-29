@@ -49,10 +49,12 @@ def monitor_config_path():
 
 
 # 导出找到的股票列表到txt文件
-def export_stock_list(stock_table: QTableWidget):
+def export_stock_list(stock_table: QTableWidget, date=""):
     file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
     if file_path[0] != "":
         file = open(file_path[0], "w")
+        if date != "":
+            file.write(date + "\n")
         for i in range(stock_table.rowCount()):
             text = stock_table.item(i, 0).text()
             file.write(text + "\n")
@@ -68,7 +70,21 @@ def import_stock_list(import_func):
             code = line.rstrip('\n')
             import_func(code)
         file.close()
-    return file_path[0]
+
+
+# 从txt文件导入股票列表并读取日期信息
+def import_stock_list_with_date(import_func):
+    file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+    date = QDate.currentDate().toString('yyyy-MM-dd')
+    if file_path[0] != "":
+        file = open(file_path[0], "r")
+        lines = file.readlines()
+        date = lines[0]
+        for line in lines[1:]:
+            code = line.rstrip('\n')
+            import_func(code)
+        file.close()
+    return file_path[0], date
 
 
 # 导出全部股票信息列表

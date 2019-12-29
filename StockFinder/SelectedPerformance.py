@@ -21,9 +21,9 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
 
     # 导入股票信息
     def import_stock_list(self):
-        file = FileManager.import_stock_list(self.fill_stock_list)
-        # 通过文件创建时间获取选股日期
-        self.__startDate = QDate(date.fromtimestamp(os.path.getctime(file)))
+        file, start_date = FileManager.import_stock_list_with_date(self.fill_stock_list)
+        # 读取股票列表文件中的日期信息
+        self.__startDate = QDate.fromString(start_date, 'yyyy-MM-dd\n')
         if self.__startDate.addDays(self.spbMaxHoldTime.value()) > QDate.currentDate():
             self.__startDate = QDate.currentDate().addDays(-self.spbMaxHoldTime.value())
         self.dteSearchDate.setDate(self.__startDate)

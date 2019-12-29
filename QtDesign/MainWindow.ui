@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>225</width>
+    <width>210</width>
     <height>143</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>201</width>
+      <width>191</width>
       <height>81</height>
      </rect>
     </property>
@@ -46,29 +46,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnStockFinder">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>指标选股工具</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
         <widget class="QPushButton" name="btnLiveTracker">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -87,8 +64,12 @@
          </property>
         </widget>
        </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QPushButton" name="btnStockReview">
+        <widget class="QPushButton" name="btnStockFinder">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -102,7 +83,26 @@
           </font>
          </property>
          <property name="text">
-          <string>今日牛股复盘</string>
+          <string>指标选股工具</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnSelectedPerformance">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei UI</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>选股表现回测</string>
          </property>
         </widget>
        </item>
@@ -116,8 +116,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>225</width>
-     <height>23</height>
+     <width>210</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -160,8 +160,8 @@
    <slot>show_stock_finder()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>59</y>
+     <x>102</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
@@ -176,8 +176,8 @@
    <slot>show_live_tracker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>33</x>
-     <y>93</y>
+     <x>132</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
      <x>34</x>
@@ -186,10 +186,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnStockReview</sender>
+   <sender>btnSelectedPerformance</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>show_stock_reviewer()</slot>
+   <slot>show_selected_performance()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>191</x>
@@ -197,7 +197,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>192</x>
-     <y>111</y>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -222,7 +222,7 @@
   <slot>show_stock_analyzer()</slot>
   <slot>show_stock_finder()</slot>
   <slot>show_live_tracker()</slot>
-  <slot>show_stock_reviewer()</slot>
+  <slot>show_selected_performance()</slot>
   <slot>reconnect_server()</slot>
  </slots>
 </ui>
