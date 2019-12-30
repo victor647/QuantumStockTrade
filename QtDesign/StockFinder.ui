@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
+    <width>652</width>
     <height>557</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>510</x>
       <y>12</y>
-      <width>111</width>
+      <width>131</width>
       <height>161</height>
      </rect>
     </property>
@@ -167,7 +167,7 @@
       <rect>
        <x>10</x>
        <y>127</y>
-       <width>471</width>
+       <width>477</width>
        <height>27</height>
       </rect>
      </property>
@@ -923,7 +923,7 @@
      <rect>
       <x>370</x>
       <y>180</y>
-      <width>251</width>
+      <width>271</width>
       <height>251</height>
      </rect>
     </property>
@@ -940,7 +940,7 @@
       <rect>
        <x>11</x>
        <y>24</y>
-       <width>231</width>
+       <width>246</width>
        <height>215</height>
       </rect>
      </property>
@@ -1149,8 +1149,8 @@
    <widget class="QCheckBox" name="cbxTechnicalCriteriasEnabled">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>181</y>
+      <x>440</x>
+      <y>180</y>
       <width>21</width>
       <height>16</height>
      </rect>
@@ -1193,7 +1193,7 @@
    <widget class="QLabel" name="lblGetStockReminder">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>380</x>
       <y>431</y>
       <width>243</width>
       <height>25</height>
@@ -1214,7 +1214,7 @@
      <rect>
       <x>370</x>
       <y>458</y>
-      <width>256</width>
+      <width>271</width>
       <height>62</height>
      </rect>
     </property>
@@ -1307,8 +1307,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>685</width>
-     <height>23</height>
+     <width>652</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="mnuOtherCriterias">

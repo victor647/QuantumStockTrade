@@ -44,7 +44,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
                                                     start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
         FileManager.save_stock_history_data(result, stock_code)
         global stockDatabase
-        stockDatabase = FileManager.read_stock_history_data(stock_code)
+        stockDatabase = FileManager.read_stock_history_data(stock_code, False)
         # 确保股票代码有效
         if stockDatabase is None:
             Tools.show_error_dialog("股票代码无效或网络无响应！")
@@ -125,14 +125,13 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.lblAverageLowWhenDown.setText("阴线平均最低：" + str(self.__analysisData.averageLowWhenDown) + "%")
         self.lblAverageBounceAmp.setText("阴线平均反弹：" + str(self.__analysisData.averageBounce) + "%")
 
+    # 根据平均涨跌幅自动获取交易策略
     def auto_get_strategy(self):
         if not self.check_stock_data_exist():
             return
         self.__tradeStrategy.auto_get_strategy(self.__analysisData)
         self.spbBuyPointBase.setValue(self.__tradeStrategy.buyPointBase)
-        self.spbBuyPointTrendBias.setValue(self.__tradeStrategy.buyPointTrendBias)
         self.spbSellPointBase.setValue(self.__tradeStrategy.sellPointBase)
-        self.spbSellPointTrendBias.setValue(self.__tradeStrategy.sellPointTrendBias)
         self.cbxAllowSameDayTrade.setChecked(self.__tradeStrategy.allowSameDayTrade)
         self.spbSameDayProfit.setValue(self.__tradeStrategy.sameDayProfit)
 
@@ -141,6 +140,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
             return
         self.__tradeStrategy.buyPointBase = self.spbBuyPointBase.value()
         self.__tradeStrategy.sellPointBase = self.spbSellPointBase.value()
+        self.__tradeStrategy.enableTrend = self.cbxTrendEnabled.isChecked()
         self.__tradeStrategy.buyPointTrendBias = self.spbBuyPointTrendBias.value()
         self.__tradeStrategy.sellPointTrendBias = self.spbSellPointTrendBias.value()
         self.__tradeStrategy.buyPointStep = self.spbBuyPointStep.value()
@@ -156,9 +156,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.__tradeStrategy.biasThreshold = self.spbBiasThreshold.value()
         stock_code = Tools.get_stock_code(self.iptStockNumber)
 
-        trade_window = TradeSimulator.TradeSimulator()
-        trade_window.setWindowTitle(stock_code + "模拟交易")
-        TradeSimulator.init_trade_strategy(self.__tradeStrategy, stock_code)
+        trade_window = TradeSimulator.TradeSimulator(stock_code, self.__tradeStrategy)
         trade_window.show()
         trade_window.start_trading()
         trade_window.exec_()

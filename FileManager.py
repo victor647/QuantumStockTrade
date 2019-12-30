@@ -166,8 +166,12 @@ def import_json_config(file_path: str, object_hook=None):
 
 
 # 从csv文件读取单只股票历史数据
-def read_stock_history_data(stock_code: str):
-    return pandas.read_csv(stock_history_path(stock_code))
+def read_stock_history_data(stock_code: str, set_date_index: bool):
+    data = pandas.read_csv(stock_history_path(stock_code))
+    # 以日期为键
+    if set_date_index:
+        data.set_index('date', inplace=True)
+    return data
 
 
 # 保存单只股票历史数据到csv文件

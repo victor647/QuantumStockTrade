@@ -761,9 +761,14 @@ class Ui_StockAnalyzer(object):
         self.btnStartTrade.setFont(font)
         self.btnStartTrade.setObjectName("btnStartTrade")
         self.verticalLayout_8.addWidget(self.btnStartTrade)
+        self.cbxTrendEnabled = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbxTrendEnabled.setGeometry(QtCore.QRect(451, 179, 16, 18))
+        self.cbxTrendEnabled.setText("")
+        self.cbxTrendEnabled.setChecked(True)
+        self.cbxTrendEnabled.setObjectName("cbxTrendEnabled")
         StockAnalyzer.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(StockAnalyzer)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 22))
         self.menubar.setObjectName("menubar")
         StockAnalyzer.setMenuBar(self.menubar)
 
@@ -775,6 +780,9 @@ class Ui_StockAnalyzer(object):
         self.rbnMa.toggled['bool'].connect(self.spbMaLong.setEnabled)
         self.cbxBiasEnabled.clicked['bool'].connect(self.spbBiasThreshold.setEnabled)
         self.btnStartTrade.clicked.connect(StockAnalyzer.start_trade)
+        self.cbxTrendEnabled.clicked['bool'].connect(self.grpTrendIndicator.setEnabled)
+        self.cbxTrendEnabled.clicked['bool'].connect(self.spbBuyPointTrendBias.setEnabled)
+        self.cbxTrendEnabled.clicked['bool'].connect(self.spbSellPointTrendBias.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(StockAnalyzer)
 
     def retranslateUi(self, StockAnalyzer):

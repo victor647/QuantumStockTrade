@@ -3,10 +3,6 @@ class TradeStrategy:
     buyPointBase = -2
     # 卖点涨幅
     sellPointBase = 2
-    # 买点趋势偏移
-    buyPointTrendBias = 1
-    # 卖点趋势偏移
-    sellPointTrendBias = 1
     # 每次买入间隔
     buyPointStep = 2
     # 每次卖出间隔
@@ -29,7 +25,14 @@ class TradeStrategy:
     trendChangeTradeShare = 1000
     # BIAS指标阈值
     biasThreshold = 10
+    # 允许趋势交易
+    enableTrend = True
+    # 买点趋势偏移
+    buyPointTrendBias = 1
+    # 卖点趋势偏移
+    sellPointTrendBias = 1
 
+    # 自动计算标准买卖点
     def auto_get_strategy(self, analysis_data):
         # 根据平均最低价获取买点
         self.buyPointBase = round((analysis_data.averageLowWhenUp + analysis_data.averageLowWhenDown) / 2, 1)

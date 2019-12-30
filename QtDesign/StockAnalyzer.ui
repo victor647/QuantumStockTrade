@@ -1546,6 +1546,22 @@
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="cbxTrendEnabled">
+    <property name="geometry">
+     <rect>
+      <x>451</x>
+      <y>179</y>
+      <width>16</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1553,7 +1569,7 @@
      <x>0</x>
      <y>0</y>
      <width>728</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -1599,12 +1615,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>406</x>
-     <y>179</y>
+     <x>408</x>
+     <y>178</y>
     </hint>
     <hint type="destinationlabel">
-     <x>639</x>
-     <y>179</y>
+     <x>705</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -1631,8 +1647,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>321</y>
+     <x>425</x>
+     <y>317</y>
     </hint>
     <hint type="destinationlabel">
      <x>462</x>
@@ -1669,6 +1685,54 @@
     <hint type="destinationlabel">
      <x>388</x>
      <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTrendEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>grpTrendIndicator</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTrendEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbBuyPointTrendBias</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>455</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>675</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxTrendEnabled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>spbSellPointTrendBias</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>676</x>
+     <y>135</y>
     </hint>
    </hints>
   </connection>

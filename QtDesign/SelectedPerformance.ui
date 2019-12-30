@@ -47,6 +47,11 @@
     </column>
     <column>
      <property name="text">
+      <string>选股日期</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>当日收盘</string>
      </property>
     </column>
@@ -62,37 +67,32 @@
     </column>
     <column>
      <property name="text">
-      <string>3日表现</string>
+      <string>加仓期限表现</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>期满表现</string>
+      <string>清仓期限表现</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>至今表现</string>
+      <string>期间最高涨幅</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>最高涨幅</string>
+      <string>期间最大回撤</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>最大回撤</string>
+      <string>最佳操作策略</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>最佳策略</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>实际操作</string>
+      <string>实际操作记录</string>
      </property>
     </column>
    </widget>
@@ -537,7 +537,7 @@
      <x>0</x>
      <y>0</y>
      <width>1011</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -555,7 +555,7 @@
   </action>
   <action name="actAutoTest">
    <property name="text">
-    <string>回测文件夹下所有选股结果</string>
+    <string>导入多个股票列表</string>
    </property>
   </action>
  </widget>
@@ -588,8 +588,8 @@
      <y>49</y>
     </hint>
     <hint type="destinationlabel">
-     <x>256</x>
-     <y>7</y>
+     <x>672</x>
+     <y>61</y>
     </hint>
    </hints>
   </connection>
@@ -664,12 +664,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>664</x>
-     <y>89</y>
+     <x>656</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
-     <x>729</x>
-     <y>90</y>
+     <x>724</x>
+     <y>86</y>
     </hint>
    </hints>
   </connection>
@@ -680,12 +680,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>521</x>
-     <y>89</y>
+     <x>515</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
-     <x>587</x>
-     <y>90</y>
+     <x>583</x>
+     <y>86</y>
     </hint>
    </hints>
   </connection>
@@ -705,6 +705,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>dteSearchDate</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>update_start_date()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>227</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>start_trade_simulation()</slot>
@@ -714,5 +730,6 @@
   <slot>clear_stock_list()</slot>
   <slot>export_stock_list()</slot>
   <slot>batch_test_performance()</slot>
+  <slot>update_start_date()</slot>
  </slots>
 </ui>

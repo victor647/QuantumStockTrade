@@ -28,19 +28,12 @@ def sell_transaction_fee(money: float):
     return round(broker_fee + tax, 2)
 
 
-# 初始化交易规则和股票代码
-def init_trade_strategy(trade_strategy: TradeStrategy, stock_code: str):
-    global tradeStrategyInstance
-    tradeStrategyInstance = trade_strategy
-    global stockCode
-    stockCode = stock_code
-
-
 tradeSimulatorInstance = None
 tradeStrategyInstance = None
 stockCode = ""
 
 
+# 长线模拟交易回测
 class TradeSimulator(QDialog, Ui_TradeSimulator):
     currentShare = 0
     sellableShare = 0
@@ -55,11 +48,17 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     totalSameDayTradeCount = 0
     successfulSameDayTradeCount = 0
 
-    def __init__(self):
+    def __init__(self, stock_code: str, trade_strategy: TradeStrategy):
         super().__init__()
         self.setupUi(self)
         global tradeSimulatorInstance
         tradeSimulatorInstance = self
+        global tradeStrategyInstance
+        tradeStrategyInstance = trade_strategy
+        global stockCode
+        stockCode = stock_code
+        # 设置窗口标题
+        self.setWindowTitle(stock_code + "模拟交易")
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
@@ -232,6 +231,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         graph.exec_()
 
 
+# 每日交易进程
 class TradeByDay(QThread):
     def __init__(self):
         super().__init__()
@@ -248,7 +248,9 @@ class TradeByDay(QThread):
 
         # 遍历每日历史数据
         for day_index, stock_today in StockAnalyzer.stockDatabase.iterrows():
-            self.update_trend_status(day_index, stock_today)
+            # 计算目前股价运行趋势
+            if tradeStrategyInstance.enableTrend:
+                self.update_trend_status(day_index, stock_today)
             # 获取当日可卖股份余额
             tradeSimulatorInstance.sellableShare = tradeSimulatorInstance.currentShare
             self.normal_trade(stock_today)
@@ -316,12 +318,13 @@ class TradeByDay(QThread):
         current_buy_point = tradeStrategyInstance.buyPointBase
         current_sell_point = tradeStrategyInstance.sellPointBase
         # 根据股票运行趋势调整买卖点
-        if self.__trend == "上升":
-            current_buy_point += tradeStrategyInstance.buyPointTrendBias
-            current_sell_point += tradeStrategyInstance.sellPointTrendBias
-        elif self.__trend == "下降":
-            current_buy_point -= tradeStrategyInstance.buyPointTrendBias
-            current_sell_point -= tradeStrategyInstance.sellPointTrendBias
+        if tradeStrategyInstance.enableTrend:
+            if self.__trend == "上升":
+                current_buy_point += tradeStrategyInstance.buyPointTrendBias
+                current_sell_point += tradeStrategyInstance.sellPointTrendBias
+            elif self.__trend == "下降":
+                current_buy_point -= tradeStrategyInstance.buyPointTrendBias
+                current_sell_point -= tradeStrategyInstance.sellPointTrendBias
 
         # 遍历当日5分钟K线数据
         for index, minute_data in minute_database.iterrows():

@@ -547,9 +547,7 @@ class StockSearcher(QThread):
                 continue
 
             # 获得股票历史数据
-            data = FileManager.read_stock_history_data(code)
-            # 将日期作为标识符
-            data.set_index("date", inplace=True)
+            data = FileManager.read_stock_history_data(code, True)
             # 剪去选股日期之后的数据
             data = data.loc[:stockFinderInstance.searchDate]
             # 技术面指标考察
