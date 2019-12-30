@@ -1,4 +1,5 @@
 from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage
 import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
@@ -10,6 +11,13 @@ from datetime import date
 def get_today_date():
     today = date.today()
     return today.strftime("%Y%M%D")
+
+
+# 获取离今天最近的交易日
+def get_nearest_trade_date(qdate: QDate):
+    while qdate.dayOfWeek() > 5:
+        qdate = qdate.addDays(-1)
+    return qdate.toString('yyyy-MM-dd')
 
 
 # 根据股票代码获取股票交易所信息

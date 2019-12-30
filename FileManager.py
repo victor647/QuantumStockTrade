@@ -6,6 +6,11 @@ from Windows.ProgressBar import ProgressBar
 import Data.TechnicalAnalysis as TechnicalAnalysis
 
 
+# 选取自动选股结果输出文件夹
+def select_folder():
+    return str(QFileDialog.getExistingDirectory(directory=selected_stock_list_path()))
+
+
 # 默认全部股票列表存放路径
 def full_stock_info_path():
     base_path = os.path.join(os.path.curdir, "StockData")
@@ -59,6 +64,18 @@ def export_stock_list(stock_table: QTableWidget, date=""):
             text = stock_table.item(i, 0).text()
             file.write(text + "\n")
         file.close()
+
+
+# 导出自动选股找到的股票列表到txt文件
+def export_auto_search_stock_list(stock_list: list, directory: str, name: str, date: str, callback_func):
+    file_path = os.path.join(directory, name + date + ".txt")
+    file = open(file_path, "w")
+    file.write(date + "\n")
+    for stock in stock_list:
+        file.write(stock + "\n")
+    file.close()
+    # 搜索结束后进入下一步
+    callback_func()
 
 
 # 从txt文件导入股票列表
@@ -146,7 +163,7 @@ def save_stock_history_data(bs_result, stock_code: str):
 def export_all_stock_data():
     stock_list = read_stock_list_file()
     exporter = StockDataExporter()
-    progress = ProgressBar(stock_list.shape[0], exporter)
+    progress = ProgressBar(stock_list.shape[0], "正在爬取股票历史数据", exporter)
     progress.show()
     exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.finishedCallback.connect(progress.finish_progress)

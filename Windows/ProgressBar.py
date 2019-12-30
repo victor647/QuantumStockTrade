@@ -3,11 +3,13 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import QThread
 
 
+# 进度条显示
 class ProgressBar(QDialog, Ui_ProgressBar):
 
-    def __init__(self, total: int, progress: QThread):
+    def __init__(self, total: int, title: str, progress: QThread):
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle(title)
         self.__total = total
         self.__progress = progress
 

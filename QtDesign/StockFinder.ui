@@ -255,7 +255,7 @@
       <rect>
        <x>10</x>
        <y>23</y>
-       <width>326</width>
+       <width>321</width>
        <height>306</height>
       </rect>
      </property>
@@ -1306,7 +1306,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="mnuOtherCriterias">
@@ -1315,12 +1315,24 @@
     </property>
     <addaction name="actHoldersStatus"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>自动选股</string>
+    </property>
+    <addaction name="actBatchSelector"/>
+   </widget>
    <addaction name="mnuOtherCriterias"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actHoldersStatus">
    <property name="text">
-    <string>股权结构</string>
+    <string>十大流通股东</string>
+   </property>
+  </action>
+  <action name="actBatchSelector">
+   <property name="text">
+    <string>定时批量选股</string>
    </property>
   </action>
  </widget>
@@ -1609,8 +1621,8 @@
      <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>179</x>
-     <y>401</y>
+     <x>177</x>
+     <y>405</y>
     </hint>
    </hints>
   </connection>
@@ -1625,8 +1637,8 @@
      <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>343</x>
-     <y>401</y>
+     <x>339</x>
+     <y>405</y>
     </hint>
    </hints>
   </connection>
@@ -1641,8 +1653,8 @@
      <y>432</y>
     </hint>
     <hint type="destinationlabel">
-     <x>343</x>
-     <y>432</y>
+     <x>338</x>
+     <y>436</y>
     </hint>
    </hints>
   </connection>
@@ -1673,8 +1685,8 @@
      <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>343</x>
-     <y>463</y>
+     <x>338</x>
+     <y>467</y>
     </hint>
    </hints>
   </connection>
@@ -1689,8 +1701,8 @@
      <y>86</y>
     </hint>
     <hint type="destinationlabel">
-     <x>298</x>
-     <y>28</y>
+     <x>299</x>
+     <y>26</y>
     </hint>
    </hints>
   </connection>
@@ -1717,8 +1729,8 @@
    <slot>import_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>343</x>
-     <y>528</y>
+     <x>338</x>
+     <y>529</y>
     </hint>
     <hint type="destinationlabel">
      <x>471</x>
@@ -1817,8 +1829,8 @@
      <y>372</y>
     </hint>
     <hint type="destinationlabel">
-     <x>493</x>
-     <y>373</y>
+     <x>492</x>
+     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -1934,6 +1946,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actBatchSelector</sender>
+   <signal>triggered()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>run_batch_searcher()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>search_all_stocks()</slot>
@@ -1952,5 +1980,6 @@
   <slot>import_custom_config()</slot>
   <slot>export_all_stock_list()</slot>
   <slot>test_selected_performance()</slot>
+  <slot>run_batch_searcher()</slot>
  </slots>
 </ui>
