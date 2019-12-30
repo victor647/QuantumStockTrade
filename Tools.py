@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage
+from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage, QLineEdit
 import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
 import webbrowser
@@ -43,11 +43,32 @@ def get_trade_center(stock_code: str):
 
 
 # 通过股票代码获取股票名称
-def get_stock_name(stock_code: str):
+def get_stock_name_from_code(stock_code: str):
     table = FileManager.read_stock_list_file()
     row = table[table['code'] == int(stock_code)]
     name = row.iloc[0]['name']
     return name
+
+
+# 通过股票代码获取股票名称
+def get_stock_code_from_name(stock_name: str):
+    table = FileManager.read_stock_list_file()
+    row = table[table['name'] == stock_name]
+    # 如果搜不到股票名称
+    if row.shape[0] == 0:
+        return ""
+    code = row.iloc[0]['code']
+    # 将深圳代码添加0
+    return str(code).zfill(6)
+
+
+# 从文本输入框获取股票代码
+def get_stock_code(input_field: QLineEdit):
+    # 获取股票代码
+    if input_field.text().isdigit():
+        return input_field.text()
+    else:
+        return get_stock_code_from_name(input_field.text())
 
 
 # 转换时间格式为可读

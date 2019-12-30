@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>601</height>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -127,19 +127,13 @@
        </item>
        <item>
         <widget class="QLabel" name="lblNewStockCode">
-         <property name="maximumSize">
-          <size>
-           <width>60</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="font">
           <font>
            <family>Microsoft YaHei UI</family>
           </font>
          </property>
          <property name="text">
-          <string>股票代码</string>
+          <string>股票代码/名称</string>
          </property>
         </widget>
        </item>
@@ -157,7 +151,7 @@
           </font>
          </property>
          <property name="text">
-          <string>600519</string>
+          <string>贵州茅台</string>
          </property>
          <property name="maxLength">
           <number>6</number>
@@ -357,9 +351,9 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>506</y>
+      <y>500</y>
       <width>221</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -368,7 +362,9 @@
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -381,7 +377,7 @@
        <property name="font">
         <font>
          <family>Microsoft YaHei UI</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -512,7 +508,6 @@
    </widget>
    <addaction name="menu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="MaxStockWatcher">
    <property name="text">
     <string>涨停板</string>

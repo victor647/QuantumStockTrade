@@ -96,12 +96,30 @@ def import_stock_list_with_date(import_func):
     if file_path[0] != "":
         file = open(file_path[0], "r")
         lines = file.readlines()
-        date = lines[0]
+        date = lines[0].rstrip('\n')
         for line in lines[1:]:
             code = line.rstrip('\n')
             import_func(code)
         file.close()
     return file_path[0], date
+
+
+# 从txt文件导入股票列表并读取日期信息
+def import_multiple_stock_lists():
+    files = QFileDialog.getOpenFileNames(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+    full_data = {}
+    for file_path in files[0]:
+        file = open(file_path, "r")
+        lines = file.readlines()
+        date = lines[0].rstrip('\n')
+        codes = []
+        for line in lines[1:]:
+            codes.append(line.rstrip('\n'))
+        full_data[date] = codes
+        file.close()
+    return full_data
+
+
 
 
 # 导出全部股票信息列表

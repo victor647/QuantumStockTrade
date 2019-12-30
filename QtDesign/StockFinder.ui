@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>578</height>
+    <width>685</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QGroupBox" name="grpSearchRange">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>510</x>
       <y>12</y>
-      <width>151</width>
+      <width>111</width>
       <height>161</height>
      </rect>
     </property>
@@ -37,7 +37,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>135</width>
+       <width>91</width>
        <height>131</height>
       </rect>
      </property>
@@ -57,7 +57,7 @@
          </font>
         </property>
         <property name="text">
-         <string>上海主板（60****）</string>
+         <string>上海主板</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -73,7 +73,7 @@
          </font>
         </property>
         <property name="text">
-         <string>深圳主板（000***）</string>
+         <string>深圳主板</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -89,7 +89,7 @@
          </font>
         </property>
         <property name="text">
-         <string>中小板（002***）</string>
+         <string>中小板</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -105,7 +105,7 @@
          </font>
         </property>
         <property name="text">
-         <string>创业板（300***）</string>
+         <string>创业板</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -121,7 +121,7 @@
          </font>
         </property>
         <property name="text">
-         <string>科创板（688***）</string>
+         <string>科创板</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -139,7 +139,7 @@
      <rect>
       <x>10</x>
       <y>12</y>
-      <width>461</width>
+      <width>491</width>
       <height>161</height>
      </rect>
     </property>
@@ -157,7 +157,7 @@
       <rect>
        <x>10</x>
        <y>21</y>
-       <width>440</width>
+       <width>471</width>
        <height>100</height>
       </rect>
      </property>
@@ -167,7 +167,7 @@
       <rect>
        <x>10</x>
        <y>127</y>
-       <width>441</width>
+       <width>471</width>
        <height>27</height>
       </rect>
      </property>
@@ -237,7 +237,7 @@
      <rect>
       <x>10</x>
       <y>180</y>
-      <width>341</width>
+      <width>351</width>
       <height>341</height>
      </rect>
     </property>
@@ -255,7 +255,7 @@
       <rect>
        <x>10</x>
        <y>23</y>
-       <width>321</width>
+       <width>328</width>
        <height>306</height>
       </rect>
      </property>
@@ -921,9 +921,9 @@
    <widget class="QGroupBox" name="grpTechnicalCriterias">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>370</x>
       <y>180</y>
-      <width>271</width>
+      <width>251</width>
       <height>251</height>
      </rect>
     </property>
@@ -940,7 +940,7 @@
       <rect>
        <x>11</x>
        <y>24</y>
-       <width>252</width>
+       <width>231</width>
        <height>215</height>
       </rect>
      </property>
@@ -1149,7 +1149,7 @@
    <widget class="QCheckBox" name="cbxTechnicalCriteriasEnabled">
     <property name="geometry">
      <rect>
-      <x>437</x>
+      <x>450</x>
       <y>181</y>
       <width>21</width>
       <height>16</height>
@@ -1212,9 +1212,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>370</x>
       <y>458</y>
-      <width>271</width>
+      <width>256</width>
       <height>62</height>
      </rect>
     </property>
@@ -1288,6 +1288,8 @@
           <font>
            <family>Microsoft YaHei UI</family>
            <pointsize>9</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -1305,7 +1307,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>641</width>
+     <width>685</width>
      <height>23</height>
     </rect>
    </property>
@@ -1324,7 +1326,6 @@
    <addaction name="mnuOtherCriterias"/>
    <addaction name="menu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actHoldersStatus">
    <property name="text">
     <string>十大流通股东</string>

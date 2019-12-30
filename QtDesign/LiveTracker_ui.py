@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'LiveTracker.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LiveTracker(object):
     def setupUi(self, LiveTracker):
         LiveTracker.setObjectName("LiveTracker")
-        LiveTracker.resize(715, 601)
+        LiveTracker.resize(715, 564)
         self.centralwidget = QtWidgets.QWidget(LiveTracker)
         self.centralwidget.setObjectName("centralwidget")
         self.tblStockList = QtWidgets.QTableWidget(self.centralwidget)
@@ -69,7 +69,6 @@ class Ui_LiveTracker(object):
         self.btnExportStockList.setObjectName("btnExportStockList")
         self.horizontalLayout.addWidget(self.btnExportStockList)
         self.lblNewStockCode = QtWidgets.QLabel(self.layoutWidget)
-        self.lblNewStockCode.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         self.lblNewStockCode.setFont(font)
@@ -159,7 +158,7 @@ class Ui_LiveTracker(object):
         self.trwMonitorConditions.header().setDefaultSectionSize(150)
         self.trwMonitorConditions.header().setMinimumSectionSize(150)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(220, 506, 221, 41))
+        self.layoutWidget1.setGeometry(QtCore.QRect(220, 500, 221, 31))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -167,14 +166,16 @@ class Ui_LiveTracker(object):
         self.btnStartTracking = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
-        font.setPointSize(12)
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
         self.btnStartTracking.setFont(font)
         self.btnStartTracking.setObjectName("btnStartTracking")
         self.horizontalLayout_3.addWidget(self.btnStartTracking)
         self.btnStopTracking = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
-        font.setPointSize(12)
+        font.setPointSize(9)
         self.btnStopTracking.setFont(font)
         self.btnStopTracking.setObjectName("btnStopTracking")
         self.horizontalLayout_3.addWidget(self.btnStopTracking)
@@ -239,9 +240,6 @@ class Ui_LiveTracker(object):
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
         LiveTracker.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(LiveTracker)
-        self.statusbar.setObjectName("statusbar")
-        LiveTracker.setStatusBar(self.statusbar)
         self.MaxStockWatcher = QtWidgets.QAction(LiveTracker)
         self.MaxStockWatcher.setObjectName("MaxStockWatcher")
         self.MinStockWatcher = QtWidgets.QAction(LiveTracker)
@@ -291,8 +289,8 @@ class Ui_LiveTracker(object):
         item.setText(_translate("LiveTracker", "成交额"))
         self.btnImportStockList.setText(_translate("LiveTracker", "导入股票列表"))
         self.btnExportStockList.setText(_translate("LiveTracker", "导出股票列表"))
-        self.lblNewStockCode.setText(_translate("LiveTracker", "股票代码"))
-        self.iptStockCode.setText(_translate("LiveTracker", "600519"))
+        self.lblNewStockCode.setText(_translate("LiveTracker", "股票代码/名称"))
+        self.iptStockCode.setText(_translate("LiveTracker", "贵州茅台"))
         self.btnAddStock.setText(_translate("LiveTracker", "添加股票"))
         self.btnRemoveStock.setText(_translate("LiveTracker", "删除股票"))
         self.btnClearStocks.setText(_translate("LiveTracker", "清空列表"))

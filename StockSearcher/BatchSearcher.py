@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from QtDesign.BatchSearcher_ui import Ui_BatchSearcher
-import StockFinder.StockFinder as StockFinder
+import StockSearcher.StockFinder as StockFinder
 import FileManager
 
 

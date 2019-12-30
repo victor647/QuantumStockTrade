@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>728</width>
-    <height>568</height>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
     <property name="title">
      <string>区间个股表现</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>12</x>
@@ -321,7 +321,7 @@
         </font>
        </property>
        <property name="text">
-        <string>股票代码</string>
+        <string>股票代码/名称</string>
        </property>
       </widget>
      </item>
@@ -340,7 +340,7 @@
         </font>
        </property>
        <property name="text">
-        <string>601933</string>
+        <string>贵州茅台</string>
        </property>
        <property name="maxLength">
         <number>6</number>
@@ -404,7 +404,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>321</width>
+       <width>328</width>
        <height>101</height>
       </rect>
      </property>
@@ -886,7 +886,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -1059,7 +1059,7 @@
     <property name="title">
      <string>多空趋势信号</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>11</x>
@@ -1205,7 +1205,7 @@
     <property name="title">
      <string>仓位控制策略</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1403,7 +1403,7 @@
     <property name="title">
      <string>超买超卖信号</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1493,7 +1493,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -1535,6 +1535,8 @@
         <font>
          <family>Microsoft YaHei UI</family>
          <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -1555,7 +1557,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections>

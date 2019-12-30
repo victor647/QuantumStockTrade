@@ -24,9 +24,15 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         global stockAnalyzerInstance
         stockAnalyzerInstance = self
 
+    # 获取股票历史数据
     def get_history_data(self):
         # 获取股票代码
-        stock_code = self.iptStockNumber.text()
+        stock_code = Tools.get_stock_code(self.iptStockNumber)
+        # 无效的输入
+        if stock_code == "":
+            Tools.show_error_dialog("股票代码或名称无效！")
+            return
+
         # 获取交易所信息
         market = Tools.get_trade_center(stock_code)
         now = QDate.currentDate()
@@ -148,7 +154,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.__tradeStrategy.signalTradeShare = self.__tradeStrategy.sharePerTrade * self.spbSignalTradeUnit.value()
         self.__tradeStrategy.trendChangeTradeShare = self.__tradeStrategy.sharePerTrade * self.spbTrendChangeTradeUnit.value()
         self.__tradeStrategy.biasThreshold = self.spbBiasThreshold.value()
-        stock_code = self.iptStockNumber.text()
+        stock_code = Tools.get_stock_code(self.iptStockNumber)
 
         trade_window = TradeSimulator.TradeSimulator()
         trade_window.setWindowTitle(stock_code + "模拟交易")

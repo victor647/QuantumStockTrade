@@ -67,7 +67,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
         # 获取股票名称
-        name = Tools.get_stock_name(code)
+        name = Tools.get_stock_name_from_code(code)
         # 加入盯盘代码列表
         self.__stocksToMonitor.append(code)
         # 生成盯盘指标根节点
@@ -79,10 +79,13 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
 
     # 添加股票按钮
     def add_stock_code(self):
-        code = self.iptStockCode.text()
-        self.add_stock_to_watch_list(code)
-        if isMonitoring:
-            self.__StockMonitor.update_stock_watch_list(self.__stocksToMonitor)
+        stock_code = Tools.get_stock_code(self.iptStockCode)
+        if stock_code == "":
+            Tools.show_error_dialog("股票代码或名称无效！")
+        else:
+            self.add_stock_to_watch_list(stock_code)
+            if isMonitoring:
+                self.__StockMonitor.update_stock_watch_list(self.__stocksToMonitor)
 
     # 移除一只股票
     def remove_stock_code(self):
@@ -302,7 +305,7 @@ class LiveTracker(QMainWindow, Ui_LiveTracker):
 
     # 发布异动提示消息
     def add_message_log(self, code: str, message: str):
-        name = Tools.get_stock_name(code)
+        name = Tools.get_stock_name_from_code(code)
         QMessageBox.information(self, "个股异动提示", code + name + message)
 
     # 得到实时行情的回调

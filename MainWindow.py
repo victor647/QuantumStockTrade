@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
 from StockAnalyzer import StockAnalyzer
-from StockFinder import StockFinder
+from StockSearcher import StockFinder, SelectedPerformance
 from RealTimeMonitor import LiveTracker
 
 
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # 选股表现回测
     def show_selected_performance(self):
-        self.__selectedPerformance = StockFinder.SelectedPerformance()
+        self.__selectedPerformance = SelectedPerformance.SelectedPerformance()
         self.__selectedPerformance.show()
 
 

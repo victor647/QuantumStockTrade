@@ -2,11 +2,11 @@ from PyQt5.QtCore import QThread, pyqtSignal, Qt, QDate
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageBox
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
-from StockFinder.SearchResult import SearchResult
-from StockFinder.BatchSearcher import BatchSearcher
+from StockSearcher.SearchResult import SearchResult
+from StockSearcher.BatchSearcher import BatchSearcher
 from Windows.ProgressBar import ProgressBar
 from datetime import datetime
-import StockFinder.SearchCriteria as SearchCriteria
+import StockSearcher.SearchCriteria as SearchCriteria
 import tushare, Tools, FileManager, pandas
 import Data.TechnicalAnalysis as DataAnalyzer
 
