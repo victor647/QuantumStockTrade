@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TradeSimulator.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -128,15 +128,30 @@ class Ui_TradeSimulator(object):
         self.lblTotalFee.setObjectName("lblTotalFee")
         self.horizontalLayout_3.addWidget(self.lblTotalFee)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        self.btnShowDiagram = QtWidgets.QPushButton(TradeSimulator)
-        self.btnShowDiagram.setGeometry(QtCore.QRect(560, 10, 91, 23))
+        self.widget = QtWidgets.QWidget(TradeSimulator)
+        self.widget.setGeometry(QtCore.QRect(560, 10, 111, 58))
+        self.widget.setObjectName("widget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.btnStartTrading = QtWidgets.QPushButton(self.widget)
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        font.setBold(True)
+        font.setWeight(75)
+        self.btnStartTrading.setFont(font)
+        self.btnStartTrading.setObjectName("btnStartTrading")
+        self.verticalLayout.addWidget(self.btnStartTrading)
+        self.btnShowDiagram = QtWidgets.QPushButton(self.widget)
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         self.btnShowDiagram.setFont(font)
         self.btnShowDiagram.setObjectName("btnShowDiagram")
+        self.verticalLayout.addWidget(self.btnShowDiagram)
 
         self.retranslateUi(TradeSimulator)
         self.btnShowDiagram.clicked.connect(TradeSimulator.show_history_diagram)
+        self.btnStartTrading.clicked.connect(TradeSimulator.start_trading)
         QtCore.QMetaObject.connectSlotsByName(TradeSimulator)
 
     def retranslateUi(self, TradeSimulator):
@@ -178,4 +193,5 @@ class Ui_TradeSimulator(object):
         self.lblTotalProfit.setText(_translate("TradeSimulator", "累计收益："))
         self.lblTotalReturn.setText(_translate("TradeSimulator", "盈亏比例："))
         self.lblTotalFee.setText(_translate("TradeSimulator", "总手续费："))
+        self.btnStartTrading.setText(_translate("TradeSimulator", "开始模拟交易"))
         self.btnShowDiagram.setText(_translate("TradeSimulator", "显示K线图"))

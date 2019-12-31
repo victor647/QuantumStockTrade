@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
 import StockAnalyzer.TradeSimulator as TradeSimulator
 import Data.TechnicalAnalysis as TechnicalAnalysis
-import baostock, Tools, pandas, FileManager
+import Tools, pandas, FileManager
 
 
 # 选股器回测工具
@@ -19,14 +19,13 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         # 为表格自动设置列宽
         self.tblStockList.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-    # 导入股票信息
+    # 读取股票列表（可多选）
     def import_stock_list(self):
-        file, start_date = FileManager.import_stock_list_with_date(self.fill_stock_list)
-        # 读取股票列表文件中的日期信息
-        date = QDate.fromString(start_date, 'yyyy-MM-dd')
-        if date.addDays(self.spbMaxHoldTime.value()) > QDate.currentDate():
-            date = QDate.currentDate().addDays(-self.spbMaxHoldTime.value())
-        self.dteSearchDate.setDate(date)
+        full_data = FileManager.import_multiple_stock_lists()
+        for date, codes in full_data.items():
+            self.__startDate = date
+            for code in codes:
+                self.fill_stock_list(code)
 
     # 导出股票列表
     def export_stock_list(self):
@@ -52,6 +51,13 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         index = selection[0].row()
         self.tblStockList.removeRow(index)
 
+    # 在东方财富网站打开股票主页
+    def open_stock_page(self, row: int, column: int):
+        if column != 0:
+            return
+        code = self.tblStockList.item(row, 0).text()
+        Tools.open_stock_page(code)
+
     # 根据导入的选股列表文件填表
     def fill_stock_list(self, code: str):
         row_count = self.tblStockList.rowCount()
@@ -61,59 +67,46 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
         self.tblStockList.setItem(row_count, 2, QTableWidgetItem(self.__startDate))
+        self.tblStockList.repaint()
 
     # 根据日期组件显示更新后台选股日期
     def update_start_date(self):
         self.__startDate = self.dteSearchDate.date().toString('yyyy-MM-dd')
 
-    # 获取股票历史数据
-    def get_stock_history(self, stock_code: str):
-        market = Tools.get_trade_center(stock_code)
-        result = baostock.query_history_k_data_plus(code=market + "." + stock_code, fields="date,open,high,low,close,preclose,pctChg",
-                                                    start_date=self.__startDate, end_date=QDate.currentDate().toString('yyyy-MM-dd'), frequency="d", adjustflag="2")
-        return pandas.DataFrame(result.data, columns=result.fields, dtype=float)
-
-    # 读取多个选股列表回测
-    def batch_test_performance(self):
-        full_data = FileManager.import_multiple_stock_lists()
-        for date, codes in full_data.items():
-            self.__startDate = date
-            for code in codes:
-                self.fill_stock_list(code)
-
-    # 获取列表中股票历史数据
+    # 开始回测
     def start_trade_simulation(self):
         # 初始化所有股票模拟交易数据
-        total_investment = total_profit = successful_trade_count = 0
+        total_spent = total_profit = win_stocks = 0
         # 遍历选到的每只股票
         for row in range(self.tblStockList.rowCount()):
             # 从表格中获取股票代码
             stock_code = self.tblStockList.item(row, 0).text()
             # 从表格中读取开始时间
-            self.__startDate = self.tblStockList.item(row, 2).text()
+            start_date = self.tblStockList.item(row, 2).text()
             # 获取股票历史K线数据
-            data = self.get_stock_history(stock_code)
+            data = FileManager.read_stock_history_data(stock_code, True)
+            # 截取回测日期内的数据
+            data = data.loc[start_date:].head(self.spbMaxHoldTime.value() + 1)
             # 最大持仓时间超过回测时间
-            if self.spbMaxHoldTime.value() > data.shape[0]:
+            if data.shape[0] <= self.spbMaxHoldTime.value():
                 continue
+            # 次日开盘买入价
+            buy_price = round(data['open'].iloc[1], 2)
             # 选股日收盘价
             initial_price = data['close'].iloc[0]
             self.tblStockList.setItem(row, 3, QTableWidgetItem(str(initial_price)))
             # 次日开盘买入价
-            buy_price = round(data['open'].iloc[1], 2)
-            column = 4
-            column = Tools.add_price_item(self.tblStockList, buy_price, initial_price, row, column)
+            column = Tools.add_price_item(self.tblStockList, buy_price, initial_price, row, 4)
             # 次日收盘表现
             column = self.get_day_performance(1, column, row, data, buy_price)
             # 加仓期满表现
-            column = self.get_day_performance(self.spbAddDeadline.value() - 1, column, row, data, buy_price)
+            column = self.get_day_performance(self.spbAddDeadline.value(), column, row, data, buy_price)
             # 清仓期满表现
-            column = self.get_day_performance(self.spbMaxHoldTime.value() - 1, column, row, data, buy_price)
-            # 最高涨幅
+            column = self.get_day_performance(-1, column, row, data, buy_price)
+            # 期间最高涨幅
             column = Tools.add_price_item(self.tblStockList, data['high'].iloc[1:].max(), buy_price, row, column)
-            # 最大回撤
+            # 期间最大回撤
             column = Tools.add_price_item(self.tblStockList, data['low'].iloc[1:].min(), buy_price, row, column)
-
             # 计算买入股数，至少买入100股
             share_per_trade = max(round(self.spbMoneyPerTrade.value() / (buy_price * 100)), 1) * 100
             # 计算买入实际市值
@@ -126,9 +119,9 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 初始化日均盈利
             best_earning_per_day = -10
             # 是否提前触发止损或止盈
-            sell_early = False
+            sold_early = False
             # 遍历选股后每个交易日执行操作
-            for day in range(1, self.spbMaxHoldTime.value()):
+            for day in range(1, self.spbMaxHoldTime.value() + 1):
                 # 获取当日最高最低涨跌幅
                 high_performance = TechnicalAnalysis.get_percentage_from_price(data['high'].iloc[day], buy_price)
                 low_performance = TechnicalAnalysis.get_percentage_from_price(data['low'].iloc[day], buy_price)
@@ -162,7 +155,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                         stock_return = share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbLoseThreshold.value())
                         if add_log != "":
                             stock_return *= 2
-                        sell_early = True
+                        sold_early = True
 
                     # 达到止盈点，获利了结
                     if high_performance > self.spbWinThreshold.value():
@@ -170,10 +163,10 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                         stock_return = share_per_trade * TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbWinThreshold.value())
                         if add_log != "":
                             stock_return *= 2
-                        sell_early = True
+                        sold_early = True
 
                     # 若持股到最后一天，则收盘卖出清算
-                    if not sell_early and day == self.spbMaxHoldTime.value() - 1:
+                    if not sold_early and day == self.spbMaxHoldTime.value():
                         stock_return = share_per_trade * round(data['close'].iloc[day], 2)
                         if add_log != "":
                             stock_return *= 2
@@ -183,22 +176,25 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 计算这只股票的盈利
             final_profit = round(stock_return - stock_investment, 2)
             if final_profit > 0:
-                successful_trade_count += 1
+                win_stocks += 1
             # 买在高位，无法盈利
             if best_earning_per_day < 0:
                 best_strategy = "选股失败，无法盈利"
+            actual_behaviour = add_log + actual_behaviour + ("获利" if final_profit >= 0 else "亏损") + str(final_profit) + "元"
             self.tblStockList.setItem(row, column, QTableWidgetItem(best_strategy))
             column += 1
-            actual_behaviour += ("获利" if final_profit >= 0 else "亏损") + str(final_profit) + "元"
-            self.tblStockList.setItem(row, column, QTableWidgetItem(add_log + actual_behaviour))
+            self.tblStockList.setItem(row, column, QTableWidgetItem(actual_behaviour))
+            # 刷新表格显示
+            self.tblStockList.repaint()
             # 计算总和投资与回报
-            total_investment += stock_investment
+            total_spent += stock_investment
             total_profit += final_profit
-        profit_text = "获利" if total_profit >= 0 else "亏损"
-        # 确保有股票被测试
-        if total_investment > 0:
-            self.lblTradeSummary.setText("共买入{}只股票，其中{}只盈利，总成本{}元，{}{}元，收益率{}%"
-                                        .format(self.tblStockList.rowCount(), successful_trade_count, round(total_investment, 2), profit_text, round(total_profit, 2), round(total_profit / total_investment * 100, 2)))
+            # 更新底部总获利文字显示
+            profit_text = ("获利" if total_profit >= 0 else "亏损") + str(round(total_profit, 2))
+            # 确保有股票被测试
+            if total_spent > 0:
+                self.lblTradeSummary.setText("共买入{}只股票，盈利{}只，成本{}元，{}元，收益率{}%"
+                                             .format(row + 1, win_stocks, round(total_spent, 2), profit_text, round(total_profit / total_spent * 100, 2)))
 
     # 计算X日后的股价表现
     def get_day_performance(self, days: int, column: int, row: int, data: pandas.DataFrame, initial_price: float):
@@ -206,3 +202,4 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             performance = round(data['close'].iloc[days], 2)
             Tools.add_price_item(self.tblStockList, performance, initial_price, row, column)
         return column + 1
+

@@ -245,23 +245,43 @@
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="btnShowDiagram">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>560</x>
      <y>10</y>
-     <width>91</width>
-     <height>23</height>
+     <width>111</width>
+     <height>58</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI</family>
-    </font>
-   </property>
-   <property name="text">
-    <string>显示K线图</string>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="btnStartTrading">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>开始模拟交易</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnShowDiagram">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+       </font>
+      </property>
+      <property name="text">
+       <string>显示K线图</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
@@ -273,8 +293,8 @@
    <slot>show_history_diagram()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>622</x>
-     <y>22</y>
+     <x>623</x>
+     <y>54</y>
     </hint>
     <hint type="destinationlabel">
      <x>673</x>
@@ -282,8 +302,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnStartTrading</sender>
+   <signal>clicked()</signal>
+   <receiver>TradeSimulator</receiver>
+   <slot>start_trading()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_history_diagram()</slot>
+  <slot>start_trading()</slot>
  </slots>
 </ui>

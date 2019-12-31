@@ -158,7 +158,6 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
 
         trade_window = TradeSimulator.TradeSimulator(stock_code, self.__tradeStrategy)
         trade_window.show()
-        trade_window.start_trading()
         trade_window.exec_()
 
     def check_stock_data_exist(self):

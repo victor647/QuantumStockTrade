@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1011</width>
+    <width>1092</width>
     <height>437</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>991</width>
+      <width>1071</width>
       <height>301</height>
      </rect>
     </property>
@@ -112,7 +112,7 @@
      </font>
     </property>
     <property name="text">
-     <string>共买入0只股票，其中0只盈利，总成本0元，获利0元，收益率0%</string>
+     <string>共买入0只股票，盈利0只，成本0元，获利0元，收益率0%</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -120,7 +120,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>989</width>
+      <width>1071</width>
       <height>60</height>
      </rect>
     </property>
@@ -536,17 +536,10 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1011</width>
-     <height>22</height>
+     <width>1092</width>
+     <height>23</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>批量回测</string>
-    </property>
-    <addaction name="actAutoTest"/>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <action name="actHoldersStatus">
    <property name="text">
@@ -690,22 +683,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actAutoTest</sender>
-   <signal>triggered()</signal>
-   <receiver>SelectedPerformance</receiver>
-   <slot>batch_test_performance()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>505</x>
-     <y>230</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>dteSearchDate</sender>
    <signal>editingFinished()</signal>
    <receiver>SelectedPerformance</receiver>
@@ -721,6 +698,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tblStockList</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>SelectedPerformance</receiver>
+   <slot>open_stock_page()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>711</x>
+     <y>412</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>start_trade_simulation()</slot>
@@ -731,5 +724,6 @@
   <slot>export_stock_list()</slot>
   <slot>batch_test_performance()</slot>
   <slot>update_start_date()</slot>
+  <slot>open_stock_page()</slot>
  </slots>
 </ui>
