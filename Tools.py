@@ -17,7 +17,7 @@ def get_today_date():
 def get_nearest_trade_date(qdate: QDate):
     while qdate.dayOfWeek() > 5:
         qdate = qdate.addDays(-1)
-    return qdate.toString('yyyy-MM-dd')
+    return qdate
 
 
 # 根据股票代码获取股票交易所信息

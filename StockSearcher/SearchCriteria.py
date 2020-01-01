@@ -29,9 +29,9 @@ def get_column_label(field: str):
         return "high"
     elif field == "最低价":
         return "low"
-    elif field == "开盘涨幅":
+    elif field == "开盘涨跌幅":
         return "close_pct"
-    elif field == "收盘涨幅":
+    elif field == "收盘涨跌幅":
         return "close_pct"
     elif field == "最高涨幅":
         return "high_pct"
@@ -128,8 +128,8 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.cbbQueryLogic.addItems(['平均', '累计', '最高', '最低'])
         self.cbbComparedLogic.addItems(['平均', '累计', '最高', '最低'])
         self.cbbOperator.addItems(['大于', '小于', '等于'])
-        self.cbbQueryField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨幅', '收盘涨幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
-        self.cbbComparedField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨幅', '收盘涨幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
+        self.cbbQueryField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
+        self.cbbComparedField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
         self.criteriaItem = criteria_item
         self.read_item_data()
 

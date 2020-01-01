@@ -7,9 +7,6 @@ import FileManager
 
 # 批量选股工具
 class BatchSearcher(QDialog, Ui_BatchSearcher):
-    current_searching_date = QDate()
-    output_folder = ""
-    criteriaName = ""
 
     def __init__(self):
         super().__init__()
@@ -23,32 +20,21 @@ class BatchSearcher(QDialog, Ui_BatchSearcher):
 
     # 开始选股
     def start_searching(self):
-        # 设定选股条件名称作为导出文件名
-        self.criteriaName = self.iptCriteriaName.text()
-        # 设定首个选股日期
-        self.current_searching_date = self.dteStartDate.date()
-        # 选取选股结果输出文件夹
-        self.output_folder = FileManager.select_folder()
-        if self.output_folder == "":
-            return
         # 从开始日期开始每经过间隔日期选股一次
-        StockFinder.stockFinderInstance.auto_search(self)
+        StockFinder.stockFinderInstance.auto_search(self, self.dteStartDate.date(), self.dteEndDate.date())
 
     # 进入下一个选股日期
-    def move_to_next_date(self):
+    def move_to_next_date(self, current_searching_date: QDate):
         if self.cbbIntervalType.currentText() == "日":
-            self.current_searching_date = self.current_searching_date.addDays(self.spbInterval.value())
+            current_searching_date = current_searching_date.addDays(self.spbInterval.value())
+            # 若不是交易日则继续往下加日期
+            while current_searching_date.dayOfWeek() > 5:
+                current_searching_date = current_searching_date.addDays(1)
         elif self.cbbIntervalType.currentText() == "周":
-            self.current_searching_date = self.current_searching_date.addDays(self.spbInterval.value() * 7)
+            current_searching_date = current_searching_date.addDays(self.spbInterval.value() * 7)
         else:
-            self.current_searching_date = self.current_searching_date.addMonths(self.spbInterval.value())
-        # 日期没达到结束点，继续选股
-        if self.current_searching_date < self.dteEndDate.date():
-            StockFinder.stockFinderInstance.auto_search(self)
-        else:
-            StockFinder.stockFinderInstance.progressBar.close()
-            QMessageBox.information(self, "成功", "批量自动选股已完成！")
-            self.close()
+            current_searching_date = current_searching_date.addMonths(self.spbInterval.value())
+        return current_searching_date
 
 
 

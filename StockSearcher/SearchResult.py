@@ -25,8 +25,8 @@ class SearchResult(QDialog, Ui_SearchResult):
             self.delete_selected_stocks()
 
     # 更新已找到的股票数量
-    def update_found_stock_count(self):
-        self.lblTotalStockFound.setText("共找到" + str(self.tblStockList.rowCount()) + "只股票!")
+    def update_found_stock_count(self, stock_count: int):
+        self.lblTotalStockFound.setText("共找到" + str(stock_count) + "只股票!")
 
     # 在列表中添加一只找到的股票
     def add_stock_item(self, items: list):
@@ -35,7 +35,7 @@ class SearchResult(QDialog, Ui_SearchResult):
         for i in range(len(items)):
             item = QTableWidgetItem(str(items[i]))
             self.tblStockList.setItem(row_count, i, item)
-        self.update_found_stock_count()
+        self.update_found_stock_count(row_count)
 
     # 在东方财富网站打开股票主页
     def open_stock_page(self, row: int, column: int):

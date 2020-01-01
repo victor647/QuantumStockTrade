@@ -1,0 +1,67 @@
+[
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6362\u624b\u7387",
+        "comparedField": "\u6362\u624b\u7387",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 20,
+        "comparedPeriodEnd": 4,
+        "operator": "\u5927\u4e8e",
+        "comparedObject": "\u6bd4\u503c",
+        "value": 2.0
+    },
+    {
+        "queryLogic": "\u7d2f\u8ba1",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u6da8\u5e45",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 1,
+        "operator": "\u5927\u4e8e",
+        "comparedObject": "\u7edd\u5bf9\u503c",
+        "value": 2.0
+    },
+    {
+        "queryLogic": "\u7d2f\u8ba1",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u6da8\u5e45",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 1,
+        "operator": "\u5c0f\u4e8e",
+        "comparedObject": "\u7edd\u5bf9\u503c",
+        "value": 5.0
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u4ef7",
+        "comparedField": "\u5f00\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 3,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 10,
+        "operator": "\u5927\u4e8e",
+        "comparedObject": "\u6bd4\u503c",
+        "value": 0.95
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u4ef7",
+        "comparedField": "\u5f00\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 3,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 10,
+        "operator": "\u5c0f\u4e8e",
+        "comparedObject": "\u6bd4\u503c",
+        "value": 1.05
+    }
+]

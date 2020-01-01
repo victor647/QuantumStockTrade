@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QDate
+from PyQt5.QtCore import pyqtSignal, Qt, QDate, QThread
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageBox
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
@@ -16,10 +16,7 @@ stockFinderInstance = None
 
 class StockFinder(QMainWindow, Ui_StockFinder):
     __searchResult = None
-    __stockSearcher = None
-    progressBar = None
     __criteriaItems = []
-    searchDate = ""
 
     def __init__(self):
         super().__init__()
@@ -271,7 +268,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             text += item.queryField + connector
 
             if item.comparedObject == "绝对值":
-                text += str(item.value)
+                text += str(item.value) + ("元" if "价" in item.queryField else "%")
             else:
                 if item.comparedPeriodBegin == item.comparedPeriodEnd:
                     if item.comparedPeriodBegin == 1:
@@ -288,6 +285,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                     text += "×" + str(item.value)
                 if item.comparedObject == "差值":
                     text += operator + str(item.value)
+                    if "价" in item.queryField and "价" in item.comparedField:
+                        text += "元"
+                    if "价" not in item.queryField and "价" not in item.comparedField:
+                        text += "%"
             self.lstCriteriaItems.addItem(text)
 
     # 新增自定义搜索条件
@@ -334,42 +335,29 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def search_all_stocks(self):
         stock_list = FileManager.read_stock_list_file()
         # 确保选股日期不是周末
-        self.searchDate = Tools.get_nearest_trade_date(self.dteSearchDate.date())
+        search_date = Tools.get_nearest_trade_date(self.dteSearchDate.date()).toString('yyyy-MM-dd')
         # 弹出搜索结果界面
-        self.__searchResult = SearchResult(self.searchDate)
+        self.__searchResult = SearchResult(search_date)
         self.__searchResult.show()
         # 开始选股进程
-        self.__stockSearcher = StockSearcher(stock_list)
-        # 弹出选股进度条
-        self.progressBar = ProgressBar(stock_list.shape[0], "正在选股", self.__stockSearcher)
-        self.progressBar.show()
-        self.__stockSearcher.progressBarCallback.connect(self.progressBar.update_search_progress)
-        self.__stockSearcher.addItemCallback.connect(self.__searchResult.add_stock_item)
-        self.__stockSearcher.finishedCallback.connect(self.search_finished)
-        self.__stockSearcher.start()
+        search_process = StockSearcher(stock_list, search_date, False)
+        search_process.addItemCallback.connect(self.__searchResult.add_stock_item)
+        search_process.start()
 
     # 批量选股器自动选股接口
-    def auto_search(self, searcher: BatchSearcher):
+    @staticmethod
+    def auto_search(searcher: BatchSearcher, start_date: QDate, end_date: QDate):
         stock_list = FileManager.read_stock_list_file()
+        current_searching_date = start_date
         # 初始化选股结果列表
-        selected_stocks = []
-        # 确保选股日期不是周末
-        self.searchDate = Tools.get_nearest_trade_date(searcher.current_searching_date)
-        # 开始选股进程
-        self.__stockSearcher = StockSearcher(stock_list)
-        # 弹出选股进度条
-        self.progressBar = ProgressBar(stock_list.shape[0], searcher.criteriaName + "选股：" + self.searchDate, self.__stockSearcher)
-        self.progressBar.show()
-        self.__stockSearcher.progressBarCallback.connect(self.progressBar.update_search_progress)
-        self.__stockSearcher.addItemCallback.connect(lambda item: selected_stocks.append(item[0]))
-        self.__stockSearcher.finishedCallback.connect(
-            lambda: FileManager.export_auto_search_stock_list(selected_stocks, searcher.output_folder, searcher.criteriaName, self.searchDate, searcher.move_to_next_date))
-        self.__stockSearcher.start()
-
-    # 搜索完毕回调
-    def search_finished(self):
-        self.progressBar.close()
-        self.__searchResult.update_found_stock_count()
+        while current_searching_date < end_date:
+            # 确保选股日期不是周末
+            current_searching_date = Tools.get_nearest_trade_date(current_searching_date)
+            date_string = current_searching_date.toString('yyyy-MM-dd')
+            # 开始选股进程
+            search_process = StockSearcher(stock_list, date_string, True, searcher.iptCriteriaName.text())
+            search_process.start()
+            current_searching_date = searcher.move_to_next_date(current_searching_date)
 
     # 基本面指标分析
     def match_basic_criterias(self, row):
@@ -522,16 +510,27 @@ class StockSearcher(QThread):
     progressBarCallback = pyqtSignal(int, str, str)
     finishedCallback = pyqtSignal()
 
-    def __init__(self, stock_list):
+    def __init__(self, stock_list, search_date: str, export_to_file: bool, folder_name=''):
         super().__init__()
-        self.stock_list = stock_list
+        self.stockList = stock_list
+        self.selectedStocks = []
+        self.searchDate = search_date
+        # 弹出选股进度条
+        progress_bar = ProgressBar(stock_list.shape[0], search_date + "选股", self)
+        progress_bar.show()
+        self.progressBarCallback.connect(progress_bar.update_search_progress)
+        self.finishedCallback.connect(progress_bar.destroy)
+        if export_to_file:
+            self.finishedCallback.connect(
+                lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate)
+            )
 
     def __del__(self):
         self.work = False
         self.terminate()
 
     def run(self):
-        for index, row in self.stock_list.iterrows():
+        for index, row in self.stockList.iterrows():
             code_num = row['code']
             # 将股票代码固定为6位数
             code = str(code_num).zfill(6)
@@ -549,7 +548,7 @@ class StockSearcher(QThread):
             # 获得股票历史数据
             data = FileManager.read_stock_history_data(code, True)
             # 剪去选股日期之后的数据
-            data = data.loc[:stockFinderInstance.searchDate]
+            data = data.loc[:self.searchDate]
             # 技术面指标考察
             if stockFinderInstance.cbxTechnicalCriteriasEnabled.isChecked() and not stockFinderInstance.match_technical_criterias(data):
                 continue
@@ -570,5 +569,6 @@ class StockSearcher(QThread):
             items = [code, name, industry, area, pe, pb, assets]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
+            self.selectedStocks.append(code)
         # 搜索结束回调
         self.finishedCallback.emit()

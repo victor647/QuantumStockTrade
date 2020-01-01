@@ -67,15 +67,18 @@ def export_stock_list(stock_table: QTableWidget, date=""):
 
 
 # 导出自动选股找到的股票列表到txt文件
-def export_auto_search_stock_list(stock_list: list, directory: str, name: str, date: str, callback_func):
-    file_path = os.path.join(directory, name + date + ".txt")
+def export_auto_search_stock_list(stock_list: list, name: str, date: str):
+    # 通过条件组名称新建文件夹存放选股列表
+    folder = os.path.join(selected_stock_list_path(), name)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    # 以日期为名称命名选股列表
+    file_path = os.path.join(folder, date + ".txt")
     file = open(file_path, "w")
     file.write(date + "\n")
     for stock in stock_list:
         file.write(stock + "\n")
     file.close()
-    # 搜索结束后进入下一步
-    callback_func()
 
 
 # 从txt文件导入股票列表
