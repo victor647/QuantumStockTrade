@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import StockAnalyzer.StockAnalyzer as StockAnalyzer
 import StockAnalyzer.TradeStrategy as TradeStrategy
+import StockAnalyzer.TradeSettings as TradeSettings
 import Data.TechnicalAnalysis as TechnicalAnalysis
 import Data.HistoryGraph as HistoryGraph
 import baostock, pandas, Tools
@@ -10,20 +11,16 @@ import baostock, pandas, Tools
 # 计算买入费用
 def buy_transaction_fee(money: float):
     # 券商佣金
-    broker_fee = money * 0.00025
-    if broker_fee < 5:
-        broker_fee = 5
+    broker_fee = max(money * TradeSettings.brokerFeePercentage, TradeSettings.minBrokerFee)
     return round(broker_fee, 2)
 
 
 # 计算卖出费用
 def sell_transaction_fee(money: float):
     # 券商佣金
-    broker_fee = money * 0.00025
-    if broker_fee < 5:
-        broker_fee = 5
+    broker_fee = max(money * TradeSettings.brokerFeePercentage, TradeSettings.minBrokerFee)
     # 印花税
-    tax = money * 0.001
+    tax = money * TradeSettings.stampDuty
     return round(broker_fee + tax, 2)
 
 

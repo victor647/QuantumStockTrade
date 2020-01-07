@@ -125,12 +125,18 @@
      <string>设置</string>
     </property>
     <addaction name="actReconnect"/>
+    <addaction name="actTradeSettings"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <action name="actReconnect">
    <property name="text">
     <string>断线重连</string>
+   </property>
+  </action>
+  <action name="actTradeSettings">
+   <property name="text">
+    <string>交易设置</string>
    </property>
   </action>
  </widget>
@@ -147,8 +153,8 @@
      <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>56</x>
-     <y>86</y>
+     <x>44</x>
+     <y>29</y>
     </hint>
    </hints>
   </connection>
@@ -159,12 +165,12 @@
    <slot>show_stock_finder()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>105</y>
+     <x>82</x>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
-     <x>179</x>
-     <y>34</y>
+     <x>77</x>
+     <y>74</y>
     </hint>
    </hints>
   </connection>
@@ -179,8 +185,8 @@
      <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>34</x>
-     <y>109</y>
+     <x>136</x>
+     <y>32</y>
     </hint>
    </hints>
   </connection>
@@ -195,8 +201,8 @@
      <y>92</y>
     </hint>
     <hint type="destinationlabel">
-     <x>192</x>
-     <y>112</y>
+     <x>162</x>
+     <y>117</y>
     </hint>
    </hints>
   </connection>
@@ -216,6 +222,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actTradeSettings</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_trade_settings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>104</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_stock_analyzer()</slot>
@@ -223,5 +245,6 @@
   <slot>show_live_tracker()</slot>
   <slot>show_selected_performance()</slot>
   <slot>reconnect_server()</slot>
+  <slot>show_trade_settings()</slot>
  </slots>
 </ui>

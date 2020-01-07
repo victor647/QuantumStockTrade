@@ -4,7 +4,7 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from StockAnalyzer import StockAnalyzer
+from StockAnalyzer import StockAnalyzer, TradeSettings
 from StockSearcher import StockFinder, SelectedPerformance
 from RealTimeMonitor import LiveTracker
 
@@ -47,6 +47,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def show_selected_performance(self):
         self.__selectedPerformance = SelectedPerformance.SelectedPerformance()
         self.__selectedPerformance.show()
+
+    # 交易费用设置
+    @staticmethod
+    def show_trade_settings():
+        settings = TradeSettings.TradeSettings()
+        settings.show()
+        settings.exec_()
 
 
 sys.excepthook = traceback.print_exception

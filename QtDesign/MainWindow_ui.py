@@ -85,7 +85,10 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
         self.actReconnect = QtWidgets.QAction(MainWindow)
         self.actReconnect.setObjectName("actReconnect")
+        self.actTradeSettings = QtWidgets.QAction(MainWindow)
+        self.actTradeSettings.setObjectName("actTradeSettings")
         self.menu.addAction(self.actReconnect)
+        self.menu.addAction(self.actTradeSettings)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -94,6 +97,7 @@ class Ui_MainWindow(object):
         self.btnLiveTracker.clicked.connect(MainWindow.show_live_tracker)
         self.btnSelectedPerformance.clicked.connect(MainWindow.show_selected_performance)
         self.actReconnect.triggered.connect(MainWindow.reconnect_server)
+        self.actTradeSettings.triggered.connect(MainWindow.show_trade_settings)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -105,3 +109,4 @@ class Ui_MainWindow(object):
         self.btnSelectedPerformance.setText(_translate("MainWindow", "选股表现回测"))
         self.menu.setTitle(_translate("MainWindow", "设置"))
         self.actReconnect.setText(_translate("MainWindow", "断线重连"))
+        self.actTradeSettings.setText(_translate("MainWindow", "交易设置"))
