@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
-    <height>557</height>
+    <width>651</width>
+    <height>555</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -930,6 +930,7 @@
     <property name="font">
      <font>
       <family>Microsoft YaHei UI</family>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="title">
@@ -939,9 +940,9 @@
      <property name="geometry">
       <rect>
        <x>11</x>
-       <y>24</y>
+       <y>20</y>
        <width>246</width>
-       <height>215</height>
+       <height>221</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1057,9 +1058,15 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_14">
         <item>
-         <widget class="QCheckBox" name="cbxKdjEnabled">
+         <widget class="QCheckBox" name="cbxMaEnabled">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
-           <string>KDJ</string>
+           <string>均线</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -1067,30 +1074,38 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbbKdjItem"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbKdjBehaviour"/>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbKdjThreshold">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
+         <widget class="QSpinBox" name="spbMaShort">
           <property name="suffix">
-           <string/>
+           <string>日</string>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>5</number>
           </property>
           <property name="maximum">
-           <number>100</number>
+           <number>20</number>
           </property>
-          <property name="value">
-           <number>0</number>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbbMaBehaviour">
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spbMaLong">
+          <property name="suffix">
+           <string>日</string>
+          </property>
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>60</number>
           </property>
          </widget>
         </item>
@@ -1149,7 +1164,7 @@
    <widget class="QCheckBox" name="cbxTechnicalCriteriasEnabled">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>446</x>
       <y>180</y>
       <width>21</width>
       <height>16</height>
@@ -1307,7 +1322,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>652</width>
+     <width>651</width>
      <height>22</height>
     </rect>
    </property>
@@ -1373,7 +1388,7 @@
   </connection>
   <connection>
    <sender>cbxPriceEarning</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbPriceEarningMin</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1389,7 +1404,7 @@
   </connection>
   <connection>
    <sender>cbxPriceEarning</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbPriceEarningMax</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1405,7 +1420,7 @@
   </connection>
   <connection>
    <sender>cbxTotalShare</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalShareMin</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1421,7 +1436,7 @@
   </connection>
   <connection>
    <sender>cbxTotalShare</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalShareMax</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1437,7 +1452,7 @@
   </connection>
   <connection>
    <sender>cbxTotalAssets</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalAssetsMin</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1453,7 +1468,7 @@
   </connection>
   <connection>
    <sender>cbxTotalAssets</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalAssetsMax</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1469,7 +1484,7 @@
   </connection>
   <connection>
    <sender>cbxBasicCriteriasEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>grpBasicCriterias</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1581,7 +1596,7 @@
   </connection>
   <connection>
    <sender>cbxGrossProfit</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbGrossProfit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1597,7 +1612,7 @@
   </connection>
   <connection>
    <sender>cbxNetProfit</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbNetProfit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1613,7 +1628,7 @@
   </connection>
   <connection>
    <sender>cbxIncomeIncrease</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbIncomeIncrease</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1622,14 +1637,14 @@
      <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>177</x>
-     <y>405</y>
+     <x>180</x>
+     <y>401</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>cbxProfitIncrease</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbProfitIncrease</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1638,14 +1653,14 @@
      <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>339</x>
-     <y>405</y>
+     <x>345</x>
+     <y>401</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>cbxNetAssetProfit</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbNetAssetProfit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1654,14 +1669,14 @@
      <y>432</y>
     </hint>
     <hint type="destinationlabel">
-     <x>338</x>
-     <y>436</y>
+     <x>345</x>
+     <y>432</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>cbxTotalHolders</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalHoldersMin</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1677,7 +1692,7 @@
   </connection>
   <connection>
    <sender>cbxTotalHolders</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>spbTotalHoldersMax</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1686,8 +1701,8 @@
      <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>338</x>
-     <y>467</y>
+     <x>345</x>
+     <y>463</y>
     </hint>
    </hints>
   </connection>
@@ -1730,8 +1745,8 @@
    <slot>import_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>529</y>
+     <x>345</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>471</x>
@@ -1757,7 +1772,7 @@
   </connection>
   <connection>
    <sender>cbxMacdEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>cbbMacdBehaviour</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1773,7 +1788,7 @@
   </connection>
   <connection>
    <sender>cbxBollEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>cbbBollBehaviour</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1789,7 +1804,7 @@
   </connection>
   <connection>
    <sender>cbxBollEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>cbbBollTrack</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1805,7 +1820,7 @@
   </connection>
   <connection>
    <sender>cbxExpmaEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>cbbExpmaBehaviour</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1820,56 +1835,8 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxKdjEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbKdjItem</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>403</x>
-     <y>372</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>492</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxKdjEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>cbbKdjBehaviour</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>404</x>
-     <y>372</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>566</x>
-     <y>373</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxKdjEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbKdjThreshold</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>415</x>
-     <y>372</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>620</x>
-     <y>373</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>cbxTrixEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>cbbTrixBehaviour</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1917,7 +1884,7 @@
   </connection>
   <connection>
    <sender>cbxTechnicalCriteriasEnabled</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>grpTechnicalCriterias</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -1943,7 +1910,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>470</x>
-     <y>577</y>
+     <y>554</y>
     </hint>
    </hints>
   </connection>
@@ -1960,6 +1927,54 @@
     <hint type="destinationlabel">
      <x>320</x>
      <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxMaEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbMaShort</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>410</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>453</x>
+     <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxMaEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbbMaBehaviour</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxMaEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbMaLong</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>616</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>

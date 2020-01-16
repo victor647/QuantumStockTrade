@@ -28,6 +28,9 @@
      <pointsize>9</pointsize>
     </font>
    </property>
+   <property name="sortingEnabled">
+    <bool>true</bool>
+   </property>
    <attribute name="horizontalHeaderDefaultSectionSize">
     <number>60</number>
    </attribute>
@@ -108,7 +111,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>21</x>

@@ -13,24 +13,31 @@ def select_folder():
 
 # 默认全部股票列表存放路径
 def full_stock_info_path():
-    base_path = os.path.join(os.path.curdir, "StockData")
+    base_path = os.path.join(os.path.curdir, 'StockData')
     if not os.path.exists(base_path):
         os.makedirs(base_path)
-    file_path = os.path.join(base_path, "full_stock_info.csv")
+    file_path = os.path.join(base_path, 'full_stock_info.csv')
     return file_path
 
 
 # 选股器导出的股票列表文件夹
 def selected_stock_list_path():
-    base_path = os.path.join(os.path.curdir, "StockData", "SelectedStocks")
-    if not os.path.exists(base_path):
-        os.makedirs(base_path)
-    return base_path
+    return stock_data_path('SelectedStocks')
 
 
 # 选股条件储存路径
 def search_config_path():
-    base_path = os.path.join(os.path.curdir, "StockData", "SearchConfigs")
+    return stock_data_path('SearchConfigs')
+
+
+# 交易策略储存路径
+def trade_strategy_path():
+    return stock_data_path('TradeStrategyConfigs')
+
+
+# 股票数据文件夹下的子文件夹
+def stock_data_path(folder: str):
+    base_path = os.path.join(os.path.curdir, 'StockData', folder)
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     return base_path
@@ -38,54 +45,57 @@ def search_config_path():
 
 # 默认股票历史数据存放路径
 def stock_history_path(stock_code: str):
-    base_path = os.path.join(os.path.curdir, "StockData", "StockHistory")
+    base_path = os.path.join(os.path.curdir, 'StockData', 'StockHistory')
     if not os.path.exists(base_path):
         os.makedirs(base_path)
-    file_path = os.path.join(base_path, stock_code + ".csv")
+    file_path = os.path.join(base_path, stock_code + '.csv')
     return file_path
 
 
 # 盯盘指标存储文件夹
 def monitor_config_path():
-    base_path = os.path.join(os.path.curdir, "StockData", "MonitorConfigs")
+    base_path = os.path.join(os.path.curdir, 'StockData', 'MonitorConfigs')
     if not os.path.exists(base_path):
         os.makedirs(base_path)
     return base_path
 
 
 # 导出找到的股票列表到txt文件
-def export_stock_list(stock_table: QTableWidget, date=""):
+def export_stock_list(stock_table: QTableWidget, date=''):
     file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
-    if file_path[0] != "":
-        file = open(file_path[0], "w")
-        if date != "":
-            file.write(date + "\n")
+    if file_path[0] != '':
+        file = open(file_path[0], 'w')
+        if date != '':
+            file.write(date + '\n')
         for i in range(stock_table.rowCount()):
             text = stock_table.item(i, 0).text()
-            file.write(text + "\n")
+            file.write(text + '\n')
         file.close()
 
 
 # 导出自动选股找到的股票列表到txt文件
 def export_auto_search_stock_list(stock_list: list, name: str, date: str):
+    # 如果没有找到股票则跳过
+    if len(stock_list) == 0:
+        return
     # 通过条件组名称新建文件夹存放选股列表
     folder = os.path.join(selected_stock_list_path(), name)
     if not os.path.exists(folder):
         os.makedirs(folder)
     # 以日期为名称命名选股列表
-    file_path = os.path.join(folder, date + ".txt")
-    file = open(file_path, "w")
-    file.write(date + "\n")
+    file_path = os.path.join(folder, date + '.txt')
+    file = open(file_path, 'w')
+    file.write(date + '\n')
     for stock in stock_list:
-        file.write(stock + "\n")
+        file.write(stock + '\n')
     file.close()
 
 
 # 从txt文件导入股票列表
 def import_stock_list(import_func):
     file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
-    if file_path[0] != "":
-        file = open(file_path[0], "r")
+    if file_path[0] != '':
+        file = open(file_path[0], 'r')
         for line in file:
             code = line.rstrip('\n')
             import_func(code)
@@ -96,8 +106,8 @@ def import_stock_list(import_func):
 def import_stock_list_with_date(import_func):
     file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
     date = QDate.currentDate().toString('yyyy-MM-dd')
-    if file_path[0] != "":
-        file = open(file_path[0], "r")
+    if file_path[0] != '':
+        file = open(file_path[0], 'r')
         lines = file.readlines()
         date = lines[0].rstrip('\n')
         for line in lines[1:]:
@@ -112,7 +122,7 @@ def import_multiple_stock_lists():
     files = QFileDialog.getOpenFileNames(directory=selected_stock_list_path(), filter='TXT(*.txt)')
     full_data = {}
     for file_path in files[0]:
-        file = open(file_path, "r")
+        file = open(file_path, 'r')
         lines = file.readlines()
         date = lines[0].rstrip('\n')
         codes = []
@@ -140,14 +150,14 @@ def read_stock_list_file():
 # 导出盯盘指标
 def export_monitor_conditions(groups: list):
     file_path = QFileDialog.getSaveFileName(directory=monitor_config_path(), filter='JSON(*.json)')
-    if file_path[0] != "":
+    if file_path[0] != '':
         export_config_as_json(groups, file_path[0])
 
 
 # 导入盯盘指标
 def import_monitor_conditions():
     file_path = QFileDialog.getOpenFileName(directory=monitor_config_path(), filter='JSON(*.json)')
-    if file_path[0] != "":
+    if file_path[0] != '':
         return import_json_config(file_path[0])
     return None
 
@@ -188,7 +198,7 @@ def save_stock_history_data(bs_result, stock_code: str):
 def export_all_stock_data():
     stock_list = read_stock_list_file()
     exporter = StockDataExporter()
-    progress = ProgressBar(stock_list.shape[0], "正在爬取股票历史数据", exporter)
+    progress = ProgressBar(stock_list.shape[0], '正在爬取股票历史数据', exporter)
     progress.show()
     exporter.progressBarCallback.connect(progress.update_search_progress)
     exporter.finishedCallback.connect(progress.finish_progress)
@@ -223,8 +233,8 @@ class StockDataExporter(QThread):
             # 获取股票交易所
             market = Tools.get_trade_center(code)
             # 获取股票历史数据
-            result = baostock.query_history_k_data_plus(code=market + "." + code, fields="date,open,high,low,close,preclose,turn,tradestatus,isST",
-                                                        start_date=self.startDate, end_date=self.today, frequency="d", adjustflag="2")
+            result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,preclose,turn,tradestatus,isST',
+                                                        start_date=self.startDate, end_date=self.today, frequency='d', adjustflag='2')
             save_stock_history_data(result, code)
             self.progressBarCallback.emit(index + 1, code, name)
         self.finishedCallback.emit()

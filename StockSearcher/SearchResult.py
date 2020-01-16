@@ -33,7 +33,8 @@ class SearchResult(QDialog, Ui_SearchResult):
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
         for i in range(len(items)):
-            item = QTableWidgetItem(str(items[i]))
+            item = QTableWidgetItem()
+            item.setData(Qt.DisplayRole, items[i])
             self.tblStockList.setItem(row_count, i, item)
         self.update_found_stock_count(row_count)
 

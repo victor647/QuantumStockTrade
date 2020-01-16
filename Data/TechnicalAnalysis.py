@@ -310,6 +310,25 @@ def get_price_from_percentage(pre_close: float, percentage: float):
     return round(pre_close * (1 + percentage / 100), 2)
 
 
+# 计算是否符合TRIX图形
+def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int, behaviour: str):
+    key_short = calculate_ma_curve(stock_data, period_short)
+    key_long = calculate_ma_curve(stock_data, period_long)
+    # 获取短线和长线
+    short = stock_data[key_short]
+    long = stock_data[key_long]
+    # 获取最近和几日前的均价
+    ahead_short = short.iloc[-days_ahead]
+    ahead_long = long.iloc[-days_ahead]
+    newest_short = short.iloc[-1]
+    newest_long = long.iloc[-1]
+
+    if behaviour == '金叉':
+        return ahead_short < ahead_long and newest_short > newest_long
+    else:
+        return ahead_short > ahead_long and newest_short < newest_long
+
+
 # 计算是否符合MACD图形
 def match_macd(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     if 'macd_white' not in stock_data.columns:
@@ -319,18 +338,18 @@ def match_macd(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     yellow = stock_data['macd_yellow']
 
     # 白线上穿黄线
-    if behaviour == "金叉":
+    if behaviour == '金叉':
         return white.iloc[-days_ahead] < yellow.iloc[-days_ahead] and white.iloc[-1] > yellow.iloc[-1]
     # 白线下穿黄线
-    elif behaviour == "死叉":
+    elif behaviour == '死叉':
         return white.iloc[-days_ahead] > yellow.iloc[-days_ahead] and white.iloc[-1] < yellow.iloc[-1]
     else:
         column = stock_data['macd_column']
-        if behaviour == "翻红":
+        if behaviour == '翻红':
             return column.iloc[-days_ahead] < 0 < column.iloc[-1]
-        elif behaviour == "翻绿":
+        elif behaviour == '翻绿':
             return column.iloc[-days_ahead] > 0 > column.iloc[-1]
-        elif behaviour == "绿柱缩短":
+        elif behaviour == '绿柱缩短':
             return column.iloc[-days_ahead] < column.iloc[-1] < 0
         else:
             return column.iloc[-days_ahead] > column.iloc[-1] > 0
@@ -347,9 +366,9 @@ def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behavi
     stock_closes = stock_data['close']
 
     # 获取对应轨道价格
-    if track == "上轨":
+    if track == '上轨':
         line = upper
-    elif track == "中轨":
+    elif track == '中轨':
         line = middle
     else:
         line = lower
@@ -360,9 +379,9 @@ def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behavi
     newest_stock = stock_closes.iloc[-1]
     newest_line = line.iloc[-1]
 
-    if behaviour == "上穿":
+    if behaviour == '上穿':
         return ahead_stock < ahead_line and newest_stock > newest_line
-    elif behaviour == "下穿":
+    elif behaviour == '下穿':
         return ahead_stock > ahead_line and newest_stock < newest_line
     return False
 
@@ -377,14 +396,14 @@ def match_expma(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     stock_closes = stock_data['close']
 
     # 白线在上为多头排列，否则为空头排列
-    if "多头" in behaviour and white.iloc[-1] < yellow.iloc[-1]:
+    if '多头' in behaviour and white.iloc[-1] < yellow.iloc[-1]:
         return False
-    elif "空头" in behaviour and white.iloc[-1] > yellow.iloc[-1]:
+    elif '空头' in behaviour and white.iloc[-1] > yellow.iloc[-1]:
         return False
 
     # 获取被比较的两个价格
-    first = stock_closes if "穿" in behaviour else white
-    second = white if "白线" in behaviour else yellow
+    first = stock_closes if '穿' in behaviour else white
+    second = white if '白线' in behaviour else yellow
 
     # 获取最近和几日前的价格
     ahead_first = first.iloc[-days_ahead]
@@ -392,9 +411,9 @@ def match_expma(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     newest_first = first.iloc[-1]
     newest_second = second.iloc[-1]
 
-    if "下" or "金叉" in behaviour:
+    if '下' or '金叉' in behaviour:
         return ahead_first > ahead_second and newest_first < newest_second
-    if "上" or "死叉" in behaviour:
+    if '上' or '死叉' in behaviour:
         return ahead_first < ahead_second and newest_first > newest_second
     return False
 
@@ -409,15 +428,15 @@ def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold
     line_j = stock_data['kdj_j']
 
     # 获取用户需要的值
-    if "K" in line:
+    if 'K' in line:
         value = line_k
-    elif "D" in line:
+    elif 'D' in line:
         value = line_d
     # 计算J值
     else:
         value = line_j
 
-    if behaviour == "大于":
+    if behaviour == '大于':
         return value.iloc[-1] > threshold
     else:
         return value.iloc[-1] < threshold
@@ -436,7 +455,7 @@ def match_trix(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     newest_white = white.iloc[-1]
     newest_yellow = yellow.iloc[-1]
 
-    if behaviour == "金叉":
+    if behaviour == '金叉':
         return ahead_white < ahead_yellow and newest_white > newest_yellow
     else:
         return ahead_white > ahead_yellow and newest_white < newest_yellow

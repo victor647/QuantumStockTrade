@@ -31,8 +31,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.cbbBollBehaviour.addItems(['上穿', '下穿'])
         self.cbbBollTrack.addItems(['上轨', '中轨', '下轨'])
         self.cbbExpmaBehaviour.addItems(['多头下穿白线', '多头下穿黄线', '空头上穿白线', '空头上穿黄线', '金叉转为多头', '死叉转为空头'])
-        self.cbbKdjItem.addItems(['K值', 'D值', 'J值'])
-        self.cbbKdjBehaviour.addItems(['大于', '小于'])
+        self.cbbMaBehaviour.addItems(['金叉', '死叉'])
         self.cbbTrixBehaviour.addItems(['金叉', '死叉'])
 
     # 快捷键设置
@@ -81,7 +80,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             count = 0
             for i, row_holder in under_five.iterrows():
                 # 排除公司持股和限售情况
-                if "有限公司" in row_holder['name'] or row_holder['sharetype'] == "限售流通股":
+                if '有限公司' in row_holder['name'] or row_holder['sharetype'] == '限售流通股':
                     continue
                 count += 1
                 # 股权结构优秀，加入选中列表
@@ -92,10 +91,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 break
 
         file_path = QFileDialog.getSaveFileName(directory=FileManager.selected_stock_list_path(), filter='TXT(*.txt)')
-        if file_path[0] != "":
-            file = open(file_path[0], "w")
+        if file_path[0] != '':
+            file = open(file_path[0], 'w')
             for code in search_result:
-                file.write(code + "\n")
+                file.write(code + '\n')
             file.close()
 
     # 获取并导出全部股票K线
@@ -106,50 +105,50 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     # 获取两市全部股票列表
     def export_all_stock_list(self):
         FileManager.save_stock_list_file()
-        QMessageBox.information(self, "成功", "导出全部股票列表成功！")
+        QMessageBox.information(self, '成功', '导出全部股票列表成功！')
 
     # 保存基本面指标搜索条件
     def export_basic_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
-            "peOn": self.cbxPriceEarning.isChecked(),
-            "peMin": self.spbPriceEarningMin.value(),
-            "peMax": self.spbPriceEarningMax.value(),
-            "pbOn": self.cbxPriceBook.isChecked(),
-            "pbMin": self.spbPriceBookMin.value(),
-            "pbMax": self.spbPriceBookMax.value(),
-            "totalShareOn": self.cbxTotalShare.isChecked(),
-            "totalShareMin": self.spbTotalShareMin.value(),
-            "totalShareMax": self.spbTotalShareMax.value(),
-            "totalAssetsOn": self.cbxTotalAssets.isChecked(),
-            "totalAssetsMin": self.spbTotalAssetsMin.value(),
-            "totalAssetsMax": self.spbTotalAssetsMax.value(),
-            "grossProfitOn": self.cbxGrossProfit.isChecked(),
-            "grossProfit": self.spbGrossProfit.value(),
-            "netProfitOn": self.cbxNetProfit.isChecked(),
-            "netProfit": self.spbNetProfit.value(),
-            "incomeIncreaseOn": self.cbxIncomeIncrease.isChecked(),
-            "incomeIncrease": self.spbIncomeIncrease.value(),
-            "profitIncreaseOn": self.cbxProfitIncrease.isChecked(),
-            "profitIncrease": self.spbProfitIncrease.value(),
-            "netAssetProfitOn": self.cbxNetAssetProfit.isChecked(),
-            "netAssetProfit": self.spbNetAssetProfit.value(),
-            "totalHoldersOn": self.cbxTotalHolders.isChecked(),
-            "totalHoldersMin": self.spbTotalHoldersMin.value(),
-            "totalHoldersMax": self.spbTotalHoldersMax.value(),
-            "includeSt": self.cbxIncludeStStock.isChecked(),
-            "includeNew": self.cbxIncludeNewStock.isChecked()
+            'peOn': self.cbxPriceEarning.isChecked(),
+            'peMin': self.spbPriceEarningMin.value(),
+            'peMax': self.spbPriceEarningMax.value(),
+            'pbOn': self.cbxPriceBook.isChecked(),
+            'pbMin': self.spbPriceBookMin.value(),
+            'pbMax': self.spbPriceBookMax.value(),
+            'totalShareOn': self.cbxTotalShare.isChecked(),
+            'totalShareMin': self.spbTotalShareMin.value(),
+            'totalShareMax': self.spbTotalShareMax.value(),
+            'totalAssetsOn': self.cbxTotalAssets.isChecked(),
+            'totalAssetsMin': self.spbTotalAssetsMin.value(),
+            'totalAssetsMax': self.spbTotalAssetsMax.value(),
+            'grossProfitOn': self.cbxGrossProfit.isChecked(),
+            'grossProfit': self.spbGrossProfit.value(),
+            'netProfitOn': self.cbxNetProfit.isChecked(),
+            'netProfit': self.spbNetProfit.value(),
+            'incomeIncreaseOn': self.cbxIncomeIncrease.isChecked(),
+            'incomeIncrease': self.spbIncomeIncrease.value(),
+            'profitIncreaseOn': self.cbxProfitIncrease.isChecked(),
+            'profitIncrease': self.spbProfitIncrease.value(),
+            'netAssetProfitOn': self.cbxNetAssetProfit.isChecked(),
+            'netAssetProfit': self.spbNetAssetProfit.value(),
+            'totalHoldersOn': self.cbxTotalHolders.isChecked(),
+            'totalHoldersMin': self.spbTotalHoldersMin.value(),
+            'totalHoldersMax': self.spbTotalHoldersMax.value(),
+            'includeSt': self.cbxIncludeStStock.isChecked(),
+            'includeNew': self.cbxIncludeNewStock.isChecked()
         }
-        if file_path[0] != "":
+        if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
 
     # 载入基本面指标搜索条件
     def import_basic_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
-        if file_path[0] != "":
+        if file_path[0] != '':
             data = FileManager.import_json_config(file_path[0])
-            if "peOn" not in data:
-                Tools.show_error_dialog("选取的配置文件格式不对！")
+            if 'peOn' not in data:
+                Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
             self.cbxPriceEarning.setChecked(data['peOn'])
             self.spbPriceEarningMin.setValue(data['peMin'])
@@ -183,31 +182,31 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def export_technical_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
-            "timePeriod": self.spbTechnicalTimePeriod.value(),
-            "macdOn": self.cbxMacdEnabled.isChecked(),
-            "macdBehaviour": self.cbbMacdBehaviour.currentText(),
-            "bollOn": self.cbxBollEnabled.isChecked(),
-            "bollBehaviour": self.cbbBollBehaviour.currentText(),
-            "bollTrack": self.cbbBollTrack.currentText(),
-            "expmaOn": self.cbxExpmaEnabled.isChecked(),
-            "expmaBehaviour": self.cbbExpmaBehaviour.currentText(),
-            "kdjOn": self.cbxKdjEnabled.isChecked(),
-            "kdjItem": self.cbbKdjItem.currentText(),
-            "kdjBehaviour": self.cbbKdjBehaviour.currentText(),
-            "kdjThreshold": self.spbKdjThreshold.value(),
-            "trixOn": self.cbxTrixEnabled.isChecked(),
-            "trixBehaviour": self.cbbTrixBehaviour.currentText()
+            'timePeriod': self.spbTechnicalTimePeriod.value(),
+            'macdOn': self.cbxMacdEnabled.isChecked(),
+            'macdBehaviour': self.cbbMacdBehaviour.currentText(),
+            'bollOn': self.cbxBollEnabled.isChecked(),
+            'bollBehaviour': self.cbbBollBehaviour.currentText(),
+            'bollTrack': self.cbbBollTrack.currentText(),
+            'expmaOn': self.cbxExpmaEnabled.isChecked(),
+            'expmaBehaviour': self.cbbExpmaBehaviour.currentText(),
+            'maOn': self.cbxMaEnabled.isChecked(),
+            'maShort': self.spbMaShort.value(),
+            'maBehaviour': self.cbbMaBehaviour.currentText(),
+            'maLong': self.spbMaLong.value(),
+            'trixOn': self.cbxTrixEnabled.isChecked(),
+            'trixBehaviour': self.cbbTrixBehaviour.currentText()
         }
-        if file_path[0] != "":
+        if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
 
     # 载入技术面指标搜索条件
     def import_technical_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
-        if file_path[0] != "":
+        if file_path[0] != '':
             data = FileManager.import_json_config(file_path[0])
-            if "timePeriod" not in data:
-                Tools.show_error_dialog("选取的配置文件格式不对！")
+            if 'timePeriod' not in data:
+                Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
             self.spbTechnicalTimePeriod.setValue(data['timePeriod'])
             self.cbxMacdEnabled.setChecked(data['macdOn'])
@@ -217,23 +216,23 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbbBollTrack.setCurrentText(data['bollTrack'])
             self.cbxExpmaEnabled.setChecked(data['expmaOn'])
             self.cbbExpmaBehaviour.setCurrentText(data['expmaBehaviour'])
-            self.cbxKdjEnabled.setChecked(data['kdjOn'])
-            self.cbbKdjItem.setCurrentText(data['kdjItem'])
-            self.cbbKdjBehaviour.setCurrentText(data['kdjBehaviour'])
-            self.spbKdjThreshold.setValue(data['kdjThreshold'])
+            self.cbxMaEnabled.setChecked(data['maOn'])
+            self.spbMaShort.setValue(data['maShort'])
+            self.cbbMaBehaviour.setCurrentText(data['maBehaviour'])
+            self.spbMaLong.setValue(data['maLong'])
             self.cbxTrixEnabled.setChecked(data['trixOn'])
             self.cbbTrixBehaviour.setCurrentText(data['trixBehaviour'])
 
     # 保存自定义指标搜索条件
     def export_custom_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
-        if file_path[0] != "":
+        if file_path[0] != '':
             FileManager.export_config_as_json(self.__criteriaItems, file_path[0])
 
     # 载入自定义指标搜索条件
     def import_custom_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
-        if file_path[0] != "":
+        if file_path[0] != '':
             self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.import_criteria_item)
             self.update_criteria_list()
 
@@ -245,50 +244,50 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 重新生成图表
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            if item.operator == "小于":
-                operator = "<"
-            elif item.operator == "大于":
-                operator = ">"
+            if item.operator == '小于':
+                operator = '<'
+            elif item.operator == '大于':
+                operator = '>'
             else:
-                operator = "="
-            if item.comparedObject != "差值":
+                operator = '='
+            if item.comparedObject != '差值':
                 connector = operator
             else:
-                connector = "-"
+                connector = '-'
             # 获取时间段数据
             if item.queryPeriodBegin == item.queryPeriodEnd:
                 if item.queryPeriodBegin == 1:
-                    text = "最新"
+                    text = '最新'
                 else:
-                    text = str(item.queryPeriodBegin) + "日前"
+                    text = str(item.queryPeriodBegin) + '日前'
             elif item.queryPeriodEnd == 1:
-                text = "最近" + str(item.queryPeriodBegin) + "日内" + item.queryLogic
+                text = '最近' + str(item.queryPeriodBegin) + '日内' + item.queryLogic
             else:
-                text = "最近" + str(item.queryPeriodBegin) + "日到" + str(item.queryPeriodEnd) + "日之间" + item.queryLogic
+                text = '最近' + str(item.queryPeriodBegin) + '日到' + str(item.queryPeriodEnd) + '日之间' + item.queryLogic
             text += item.queryField + connector
 
-            if item.comparedObject == "绝对值":
-                text += str(item.value) + ("元" if "价" in item.queryField else "%")
+            if item.comparedObject == '绝对值':
+                text += str(item.value) + ('元' if '价' in item.queryField else '%')
             else:
                 if item.comparedPeriodBegin == item.comparedPeriodEnd:
                     if item.comparedPeriodBegin == 1:
-                        text += "最新"
+                        text += '最新'
                     else:
-                        text += str(item.comparedPeriodBegin) + "日前"
+                        text += str(item.comparedPeriodBegin) + '日前'
                 elif item.comparedPeriodEnd == 1:
-                    text += "最近" + str(item.comparedPeriodBegin) + "日内" + item.comparedLogic
+                    text += '最近' + str(item.comparedPeriodBegin) + '日内' + item.comparedLogic
                 else:
-                    text += "最近" + str(item.comparedPeriodBegin) + "日到" + str(item.comparedPeriodEnd) + "日之间" + item.comparedLogic
+                    text += '最近' + str(item.comparedPeriodBegin) + '日到' + str(item.comparedPeriodEnd) + '日之间' + item.comparedLogic
                 text += item.comparedField
 
-                if item.comparedObject == "比值" and item.value != 1:
-                    text += "×" + str(item.value)
-                if item.comparedObject == "差值":
+                if item.comparedObject == '比值' and item.value != 1:
+                    text += '×' + str(item.value)
+                if item.comparedObject == '差值':
                     text += operator + str(item.value)
-                    if "价" in item.queryField and "价" in item.comparedField:
-                        text += "元"
-                    if "价" not in item.queryField and "价" not in item.comparedField:
-                        text += "%"
+                    if '价' in item.queryField and '价' in item.comparedField:
+                        text += '元'
+                    if '价' not in item.queryField and '价' not in item.comparedField:
+                        text += '%'
             self.lstCriteriaItems.addItem(text)
 
     # 新增自定义搜索条件
@@ -364,7 +363,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 检测股票是否是ST股
         if not self.cbxIncludeStStock.isChecked():
             name = row['name']
-            if "ST" in name:
+            if 'ST' in name:
                 return False
 
         # 检测股票是否为次新股
@@ -374,7 +373,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             if date == 0:
                 return False
             # 从数字获取日期
-            start_date = datetime.strptime(str(date), "%Y%M%d")
+            start_date = datetime.strptime(str(date), '%Y%M%d')
             # 排除上市半年内股票
             if (datetime.today() - start_date).days < 180:
                 return False
@@ -476,8 +475,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 检测EXPMA图形
         if self.cbxExpmaEnabled.isChecked() and not DataAnalyzer.match_expma(data, period, self.cbbExpmaBehaviour.currentText()):
             return False
-        # 检测KDJ图形
-        if self.cbxKdjEnabled.isChecked() and not DataAnalyzer.match_kdj(data, self.cbbKdjItem.currentText(), self.cbbKdjBehaviour.currentText(), self.spbKdjThreshold.value()):
+        # 检测均线交叉
+        if self.cbxMaEnabled.isChecked() and not DataAnalyzer.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
             return False
         # 检测TRIX图形
         if self.cbxTrixEnabled.isChecked() and not DataAnalyzer.match_trix(data, period, self.cbbTrixBehaviour.currentText()):
@@ -516,7 +515,7 @@ class StockSearcher(QThread):
         self.selectedStocks = []
         self.searchDate = search_date
         # 弹出选股进度条
-        progress_bar = ProgressBar(stock_list.shape[0], search_date + "选股", self)
+        progress_bar = ProgressBar(stock_list.shape[0], search_date + '选股', self)
         progress_bar.show()
         self.progressBarCallback.connect(progress_bar.update_search_progress)
         self.finishedCallback.connect(progress_bar.destroy)

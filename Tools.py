@@ -1,8 +1,9 @@
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QTableWidgetItem, QErrorMessage, QLineEdit
+from PyQt5.QtWidgets import QErrorMessage, QLineEdit, QTableWidget
 import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
+from Data.CustomSortingTableData import CustomSortingTableData
 import webbrowser
 from datetime import date
 
@@ -10,7 +11,7 @@ from datetime import date
 # 获取今天日期，格式‘20190101’
 def get_today_date():
     today = date.today()
-    return today.strftime("%Y%M%D")
+    return today.strftime('%Y%M%D')
 
 
 # 获取离今天最近的交易日
@@ -23,22 +24,22 @@ def get_nearest_trade_date(qdate: QDate):
 # 根据股票代码获取股票交易所信息
 def get_trade_center(stock_code: str):
     code = int(stock_code)
-    market = ""
+    market = ''
     # 深圳主板
     if 0 < code < 100000:
-        market = "sz"
+        market = 'sz'
     # 创业板
     elif 300000 < code < 400000:
-        market = "sz"
+        market = 'sz'
     # 上海主板
     elif 600000 <= code < 700000:
-        market = "sh"
+        market = 'sh'
     # 深圳可转债
     elif 128000 <= code <= 129000:
-        market = "sz"
+        market = 'sz'
     # 上海可转债
     elif 113500 <= code <= 113600:
-        market = "sh"
+        market = 'sh'
     return market
 
 
@@ -56,7 +57,7 @@ def get_stock_code_from_name(stock_name: str):
     row = table[table['name'] == stock_name]
     # 如果搜不到股票名称
     if row.shape[0] == 0:
-        return ""
+        return ''
     code = row.iloc[0]['code']
     # 将深圳代码添加0
     return str(code).zfill(6)
@@ -83,13 +84,13 @@ def reformat_time(time):
     day = time_string[6:8]
     hour = time_string[8:10]
     minute = time_string[10:12]
-    return year + "/" + month + "/" + day + " " + hour + ":" + minute
+    return year + '/' + month + '/' + day + ' ' + hour + ':' + minute
 
 
 # 六位数时间转字符串
 def time_int_to_string(time: int):
     time_string = str(time)
-    return time_string[:2] + ":" + time_string[2:4] + ":" + time_string[-2:]
+    return time_string[:2] + ':' + time_string[2:4] + ':' + time_string[-2:]
 
 
 # 正数显示红色，负数显示绿色
@@ -111,19 +112,32 @@ def get_price_color(price: float, pre_close: float):
 
 
 # 添加带有红绿正负颜色的数据
-def add_colored_item(table, value, row: int, column: int, symbol="", threshold=0):
-    item = QTableWidgetItem(str(value) + symbol)
+def add_colored_item(table: QTableWidget, value: float, row: int, column: int, symbol='', threshold=0):
+    item = CustomSortingTableData(str(value) + symbol)
+    # 以数字作为隐藏排序值
+    item.set_sorting_data(value)
     item.setForeground(get_text_color(value, threshold))
     table.setItem(row, column, item)
     return column + 1
 
 
+# 添加可排序的数据
+def add_sortable_item(table: QTableWidget, value: float, text: str, row: int, column: int):
+    strategy_item = CustomSortingTableData(text)
+    strategy_item.set_sorting_data(value)
+    table.setItem(row, column, strategy_item)
+    return column + 1
+
+
 # 添加价格数据
-def add_price_item(table, price: float, pre_close: float, row: int, column: int):
-    item = QTableWidgetItem()
+def add_price_item(table: QTableWidget, price: float, pre_close: float, row: int, column: int):
+    item = CustomSortingTableData()
     item.setForeground(get_price_color(price, pre_close))
     percentage = TechnicalAnalysis.get_percentage_from_price(price, pre_close)
-    item.setText(str(price) + " " + str(percentage) + "%")
+    # 显示全部数据
+    item.setText(str(price) + ' ' + str(percentage) + '%')
+    # 以百分比数据作为隐藏排序值
+    item.set_sorting_data(percentage)
     table.setItem(row, column, item)
     return column + 1
 
@@ -131,12 +145,12 @@ def add_price_item(table, price: float, pre_close: float, row: int, column: int)
 # 在东方财富网站打开股票主页
 def open_stock_page(code: str):
     market = get_trade_center(code)
-    webbrowser.open("http://quote.eastmoney.com/" + market + code + ".html")
+    webbrowser.open('http://quote.eastmoney.com/' + market + code + '.html')
 
 
 # 显示报错信息
 def show_error_dialog(message: str):
     error_dialog = QErrorMessage()
-    error_dialog.setWindowTitle("错误")
+    error_dialog.setWindowTitle('错误')
     error_dialog.showMessage(message)
     error_dialog.exec_()

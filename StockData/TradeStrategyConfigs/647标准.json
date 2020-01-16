@@ -1,0 +1,13 @@
+{
+    "moneyPerTrade": 20000,
+    "winThresholdOn": true,
+    "winThreshold": 2000,
+    "loseThresholdOn": true,
+    "loseThreshold": -1000,
+    "addWhenDown": true,
+    "addThresholdDown": -2,
+    "addWhenUp": true,
+    "addThresholdUp": 2,
+    "addDeadline": 3,
+    "maxHoldTime": 5
+}
