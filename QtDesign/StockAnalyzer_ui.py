@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'StockAnalyzer.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -206,7 +206,7 @@ class Ui_StockAnalyzer(object):
         self.grpNormalTradeRule.setFont(font)
         self.grpNormalTradeRule.setObjectName("grpNormalTradeRule")
         self.layoutWidget3 = QtWidgets.QWidget(self.grpNormalTradeRule)
-        self.layoutWidget3.setGeometry(QtCore.QRect(10, 20, 321, 101))
+        self.layoutWidget3.setGeometry(QtCore.QRect(10, 20, 325, 101))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
@@ -700,20 +700,21 @@ class Ui_StockAnalyzer(object):
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.cbxKdjEnabled = QtWidgets.QCheckBox(self.layoutWidget8)
-        self.cbxKdjEnabled.setChecked(True)
+        self.cbxKdjEnabled.setChecked(False)
         self.cbxKdjEnabled.setObjectName("cbxKdjEnabled")
         self.verticalLayout_7.addWidget(self.cbxKdjEnabled)
         self.cbxBollEnabled = QtWidgets.QCheckBox(self.layoutWidget8)
-        self.cbxBollEnabled.setChecked(True)
+        self.cbxBollEnabled.setChecked(False)
         self.cbxBollEnabled.setObjectName("cbxBollEnabled")
         self.verticalLayout_7.addWidget(self.cbxBollEnabled)
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.cbxBiasEnabled = QtWidgets.QCheckBox(self.layoutWidget8)
-        self.cbxBiasEnabled.setChecked(True)
+        self.cbxBiasEnabled.setChecked(False)
         self.cbxBiasEnabled.setObjectName("cbxBiasEnabled")
         self.horizontalLayout_12.addWidget(self.cbxBiasEnabled)
         self.spbBiasThreshold = QtWidgets.QSpinBox(self.layoutWidget8)
+        self.spbBiasThreshold.setEnabled(False)
         self.spbBiasThreshold.setMinimum(5)
         self.spbBiasThreshold.setMaximum(20)
         self.spbBiasThreshold.setProperty("value", 10)
@@ -768,7 +769,7 @@ class Ui_StockAnalyzer(object):
         self.cbxTrendEnabled.setObjectName("cbxTrendEnabled")
         StockAnalyzer.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(StockAnalyzer)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 22))
         self.menubar.setObjectName("menubar")
         StockAnalyzer.setMenuBar(self.menubar)
 

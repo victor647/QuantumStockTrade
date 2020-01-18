@@ -133,8 +133,6 @@ def import_multiple_stock_lists():
     return full_data
 
 
-
-
 # 导出全部股票信息列表
 def save_stock_list_file():
     stock_list = tushare.get_stock_basics()

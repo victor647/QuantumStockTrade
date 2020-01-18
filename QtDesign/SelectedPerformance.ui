@@ -632,8 +632,8 @@
    <slot>import_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>709</x>
-     <y>49</y>
+     <x>874</x>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
      <x>672</x>
@@ -696,7 +696,7 @@
    <slot>export_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>855</x>
+     <x>785</x>
      <y>57</y>
     </hint>
     <hint type="destinationlabel">
@@ -716,8 +716,8 @@
      <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>814</x>
-     <y>86</y>
+     <x>881</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>
@@ -757,7 +757,7 @@
    <sender>tblStockList</sender>
    <signal>cellDoubleClicked(int,int)</signal>
    <receiver>SelectedPerformance</receiver>
-   <slot>open_stock_page()</slot>
+   <slot>show_stock_graph()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -765,7 +765,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>711</x>
-     <y>412</y>
+     <y>410</y>
     </hint>
    </hints>
   </connection>
@@ -843,7 +843,7 @@
   <slot>export_stock_list()</slot>
   <slot>batch_test_performance()</slot>
   <slot>update_start_date()</slot>
-  <slot>open_stock_page()</slot>
+  <slot>show_stock_graph()</slot>
   <slot>import_trade_strategy()</slot>
   <slot>export_trade_strategy()</slot>
  </slots>

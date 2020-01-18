@@ -4,7 +4,7 @@ import StockAnalyzer.StockAnalyzer as StockAnalyzer
 import StockAnalyzer.TradeStrategy as TradeStrategy
 import StockAnalyzer.TradeSettings as TradeSettings
 import Data.TechnicalAnalysis as TechnicalAnalysis
-import Data.HistoryGraph as HistoryGraph
+from Data.HistoryGraph import HistoryGraph
 import baostock, pandas, Tools
 
 
@@ -395,7 +395,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 显示交易记录K线图
     def show_history_diagram(self):
-        graph = HistoryGraph.HistoryGraph(StockAnalyzer.stockDatabase)
-        graph.show()
+        # 复制一份以日期作为key的数据
+        stock_data = pandas.DataFrame.copy(StockAnalyzer.stockDatabase)
+        stock_data.set_index('date', inplace=True)
+        graph = HistoryGraph(self.__stockCode, stock_data)
+        graph.plot_price()
+        graph.plot_volume()
+        # 画布林线
+        if StockAnalyzer.stockAnalyzerInstance.cbxBollEnabled.isChecked():
+            graph.plot_boll()
         graph.exec_()
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>210</width>
-    <height>130</height>
+    <width>230</width>
+    <height>136</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>191</width>
-      <height>81</height>
+      <width>211</width>
+      <height>90</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -46,7 +46,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnLiveTracker">
+        <widget class="QPushButton" name="btnGroupTest">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -60,7 +60,7 @@
           </font>
          </property>
          <property name="text">
-          <string>实时盯盘助手</string>
+          <string>持仓组合表现</string>
          </property>
         </widget>
        </item>
@@ -108,6 +108,25 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="QPushButton" name="btnLiveTracker">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>实时盯盘助手</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -116,8 +135,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>210</width>
-     <height>23</height>
+     <width>230</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

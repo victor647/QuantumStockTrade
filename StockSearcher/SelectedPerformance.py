@@ -4,6 +4,7 @@ from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
 import StockAnalyzer.TradeSimulator as TradeSimulator
 import Data.TechnicalAnalysis as TechnicalAnalysis
 import Tools, pandas, FileManager
+from Data.HistoryGraph import HistoryGraph
 
 
 # 选股器回测工具
@@ -53,11 +54,21 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         self.tblStockList.removeRow(index)
 
     # 在东方财富网站打开股票主页
-    def open_stock_page(self, row: int, column: int):
-        if column > 1:
-            return
+    def show_stock_graph(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
-        Tools.open_stock_page(code)
+        if 0 <= column <= 1:
+            Tools.open_stock_page(code)
+        else:
+            # 从表格中读取开始时间
+            start_date = self.tblStockList.item(row, 2).text()
+            # 获取股票历史K线数据
+            data = FileManager.read_stock_history_data(code, True)
+            # 截取回测日期内的数据
+            data = data.loc[start_date:].head(self.spbMaxHoldTime.value() + 1)
+            graph = HistoryGraph(code, data)
+            graph.plot_price()
+            graph.plot_volume()
+            graph.exec_()
 
     # 根据导入的选股列表文件填表
     def fill_stock_list(self, code: str):

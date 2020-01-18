@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'SelectedPerformance.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -309,7 +309,7 @@ class Ui_SelectedPerformance(object):
         self.cbxAddWhenUp.toggled['bool'].connect(self.spbAddThresholdUp.setEnabled)
         self.cbxAddWhenDown.toggled['bool'].connect(self.spbAddThresholdDown.setEnabled)
         self.dteSearchDate.editingFinished.connect(SelectedPerformance.update_start_date)
-        self.tblStockList.cellDoubleClicked['int','int'].connect(SelectedPerformance.open_stock_page)
+        self.tblStockList.cellDoubleClicked['int','int'].connect(SelectedPerformance.show_stock_graph)
         self.cbxLoseThreshold.toggled['bool'].connect(self.spbLoseThreshold.setEnabled)
         self.cbxWinThreshold.toggled['bool'].connect(self.spbWinThreshold.setEnabled)
         self.btnExportStrategy.clicked.connect(SelectedPerformance.export_trade_strategy)
