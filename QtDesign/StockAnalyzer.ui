@@ -1552,8 +1552,8 @@
    <widget class="QCheckBox" name="cbxTrendEnabled">
     <property name="geometry">
      <rect>
-      <x>459</x>
-      <y>180</y>
+      <x>450</x>
+      <y>179</y>
       <width>16</width>
       <height>18</height>
      </rect>

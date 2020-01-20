@@ -396,22 +396,25 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 显示交易记录K线图
     def show_history_diagram(self):
+        if self.__tradeStrategy.enableTrend:
+            self.get_trend_type()
         # 复制一份以日期作为key的数据
         stock_data = pandas.DataFrame.copy(StockAnalyzer.stockDatabase)
         stock_data.set_index('date', inplace=True)
         graph = HistoryGraph(self.__stockCode, stock_data)
-        graph.plot_price()
+        # 画成交量
         graph.plot_volume()
-        # 画布林线
+        # 画布林轨道
         if StockAnalyzer.stockAnalyzerInstance.cbxBollEnabled.isChecked():
             graph.plot_boll()
-        elif StockAnalyzer.stockAnalyzerInstance.rbnMacd.isChecked():
-            graph.plot_macd()
-        elif StockAnalyzer.stockAnalyzerInstance.rbnExpma.isChecked():
-            graph.plot_expma()
-        elif StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked():
-            graph.plot_trix()
-        elif StockAnalyzer.stockAnalyzerInstance.rbnMa.isChecked():
-            graph.plot_ma()
+        # 画趋势线
+        if self.__tradeStrategy.enableTrend:
+            # 画MACD线
+            if StockAnalyzer.stockAnalyzerInstance.rbnMacd.isChecked():
+                graph.plot_macd()
+            # 画其他趋势线
+            else:
+                graph.plot_ma(self.__crossShort, self.__crossLong, StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked())
+        graph.plot_price()
         graph.exec_()
 
