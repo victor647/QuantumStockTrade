@@ -4,8 +4,8 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from StockAnalyzer import StockAnalyzer, TradeSettings
-from StockSearcher import StockFinder, SelectedPerformance
+from LongTermTrading import StockAnalyzer, TradeSettings, ScheduledInvestment
+from ShortTermTrading import StockFinder, SelectedPerformance
 from RealTimeMonitor import LiveTracker
 
 
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     __stockFinder = None
     __stockTracker = None
     __selectedPerformance = None
+    __scheduledInvestment = None
 
     def __init__(self):
         super().__init__()
@@ -47,6 +48,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def show_selected_performance(self):
         self.__selectedPerformance = SelectedPerformance.SelectedPerformance()
         self.__selectedPerformance.show()
+
+    # 定投组合表现
+    def show_scheduled_investment(self):
+        self.__scheduledInvestment = ScheduledInvestment.ScheduledInvestment()
+        self.__scheduledInvestment.show()
 
     # 交易费用设置
     @staticmethod

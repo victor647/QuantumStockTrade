@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,11 +13,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(210, 130)
+        MainWindow.resize(230, 136)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 191, 81))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 211, 93))
         self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -36,18 +36,18 @@ class Ui_MainWindow(object):
         self.btnStockAnalyzer.setFont(font)
         self.btnStockAnalyzer.setObjectName("btnStockAnalyzer")
         self.horizontalLayout.addWidget(self.btnStockAnalyzer)
-        self.btnLiveTracker = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnScheduledInvestment = QtWidgets.QPushButton(self.layoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btnLiveTracker.sizePolicy().hasHeightForWidth())
-        self.btnLiveTracker.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.btnScheduledInvestment.sizePolicy().hasHeightForWidth())
+        self.btnScheduledInvestment.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
-        self.btnLiveTracker.setFont(font)
-        self.btnLiveTracker.setObjectName("btnLiveTracker")
-        self.horizontalLayout.addWidget(self.btnLiveTracker)
+        self.btnScheduledInvestment.setFont(font)
+        self.btnScheduledInvestment.setObjectName("btnScheduledInvestment")
+        self.horizontalLayout.addWidget(self.btnScheduledInvestment)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -76,9 +76,21 @@ class Ui_MainWindow(object):
         self.btnSelectedPerformance.setObjectName("btnSelectedPerformance")
         self.horizontalLayout_2.addWidget(self.btnSelectedPerformance)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.btnLiveTracker = QtWidgets.QPushButton(self.layoutWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btnLiveTracker.sizePolicy().hasHeightForWidth())
+        self.btnLiveTracker.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        font.setPointSize(9)
+        self.btnLiveTracker.setFont(font)
+        self.btnLiveTracker.setObjectName("btnLiveTracker")
+        self.verticalLayout.addWidget(self.btnLiveTracker)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 210, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 230, 23))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
@@ -98,15 +110,17 @@ class Ui_MainWindow(object):
         self.btnSelectedPerformance.clicked.connect(MainWindow.show_selected_performance)
         self.actReconnect.triggered.connect(MainWindow.reconnect_server)
         self.actTradeSettings.triggered.connect(MainWindow.show_trade_settings)
+        self.btnScheduledInvestment.clicked.connect(MainWindow.show_scheduled_investment)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "647炒股神器"))
         self.btnStockAnalyzer.setText(_translate("MainWindow", "分析模拟交易"))
-        self.btnLiveTracker.setText(_translate("MainWindow", "实时盯盘助手"))
+        self.btnScheduledInvestment.setText(_translate("MainWindow", "定投组合表现"))
         self.btnStockFinder.setText(_translate("MainWindow", "指标选股工具"))
         self.btnSelectedPerformance.setText(_translate("MainWindow", "选股表现回测"))
+        self.btnLiveTracker.setText(_translate("MainWindow", "实时盯盘助手"))
         self.menu.setTitle(_translate("MainWindow", "设置"))
         self.actReconnect.setText(_translate("MainWindow", "断线重连"))
         self.actTradeSettings.setText(_translate("MainWindow", "交易设置"))

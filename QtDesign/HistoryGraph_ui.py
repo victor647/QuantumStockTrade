@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'HistoryGraph.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,22 +13,29 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_HistoryGraph(object):
     def setupUi(self, HistoryGraph):
         HistoryGraph.setObjectName("HistoryGraph")
-        HistoryGraph.resize(735, 401)
+        HistoryGraph.resize(1117, 444)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(HistoryGraph.sizePolicy().hasHeightForWidth())
         HistoryGraph.setSizePolicy(sizePolicy)
-        self.horizontalLayout = QtWidgets.QHBoxLayout(HistoryGraph)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.crtCandleStick = QChartView(HistoryGraph)
+        self.verticalLayout = QtWidgets.QVBoxLayout(HistoryGraph)
+        self.verticalLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.crtMainGraph = QChartView(HistoryGraph)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.crtCandleStick.sizePolicy().hasHeightForWidth())
-        self.crtCandleStick.setSizePolicy(sizePolicy)
-        self.crtCandleStick.setObjectName("crtCandleStick")
-        self.horizontalLayout.addWidget(self.crtCandleStick)
+        sizePolicy.setHeightForWidth(self.crtMainGraph.sizePolicy().hasHeightForWidth())
+        self.crtMainGraph.setSizePolicy(sizePolicy)
+        self.crtMainGraph.setMinimumSize(QtCore.QSize(0, 300))
+        self.crtMainGraph.setObjectName("crtMainGraph")
+        self.verticalLayout.addWidget(self.crtMainGraph)
+        self.crtSecondaryGraph = QChartView(HistoryGraph)
+        self.crtSecondaryGraph.setMinimumSize(QtCore.QSize(0, 120))
+        self.crtSecondaryGraph.setMaximumSize(QtCore.QSize(16777215, 150))
+        self.crtSecondaryGraph.setObjectName("crtSecondaryGraph")
+        self.verticalLayout.addWidget(self.crtSecondaryGraph)
 
         self.retranslateUi(HistoryGraph)
         QtCore.QMetaObject.connectSlotsByName(HistoryGraph)

@@ -1,10 +1,9 @@
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from QtDesign.LiveTracker_ui import Ui_LiveTracker
 from PyQt5.QtCore import QThread, pyqtSignal
-import FileManager as FileManager
 from RealTimeMonitor.MonitorCondition import *
 import time
-import Tools
+from Tools import Tools, FileManager as FileManager
 import urllib.request as url
 
 

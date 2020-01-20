@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>211</width>
-      <height>90</height>
+      <height>93</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -46,7 +46,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnGroupTest">
+        <widget class="QPushButton" name="btnScheduledInvestment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -60,7 +60,7 @@
           </font>
          </property>
          <property name="text">
-          <string>持仓组合表现</string>
+          <string>定投组合表现</string>
          </property>
         </widget>
        </item>
@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>230</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -168,8 +168,8 @@
    <slot>show_stock_analyzer()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>55</x>
-     <y>62</y>
+     <x>57</x>
+     <y>59</y>
     </hint>
     <hint type="destinationlabel">
      <x>44</x>
@@ -200,8 +200,8 @@
    <slot>show_live_tracker()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>132</x>
-     <y>62</y>
+     <x>133</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
      <x>136</x>
@@ -257,6 +257,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnScheduledInvestment</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show_scheduled_investment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>146</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_stock_analyzer()</slot>
@@ -265,5 +281,6 @@
   <slot>show_selected_performance()</slot>
   <slot>reconnect_server()</slot>
   <slot>show_trade_settings()</slot>
+  <slot>show_scheduled_investment()</slot>
  </slots>
 </ui>
