@@ -283,7 +283,7 @@ class Ui_SelectedPerformance(object):
         font.setPointSize(9)
         self.spbMaxHoldTime.setFont(font)
         self.spbMaxHoldTime.setMinimum(2)
-        self.spbMaxHoldTime.setMaximum(250)
+        self.spbMaxHoldTime.setMaximum(20)
         self.spbMaxHoldTime.setSingleStep(1)
         self.spbMaxHoldTime.setProperty("value", 5)
         self.spbMaxHoldTime.setObjectName("spbMaxHoldTime")

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'StockAnalyzer.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.2
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -561,22 +561,20 @@ class Ui_StockAnalyzer(object):
         self.lblMaShort = QtWidgets.QLabel(self.layoutWidget6)
         self.lblMaShort.setObjectName("lblMaShort")
         self.horizontalLayout_11.addWidget(self.lblMaShort)
-        self.spbMaShort = QtWidgets.QSpinBox(self.layoutWidget6)
-        self.spbMaShort.setMinimum(5)
-        self.spbMaShort.setMaximum(20)
-        self.spbMaShort.setObjectName("spbMaShort")
-        self.horizontalLayout_11.addWidget(self.spbMaShort)
+        self.cbbMaShort = QtWidgets.QComboBox(self.layoutWidget6)
+        self.cbbMaShort.setEnabled(False)
+        self.cbbMaShort.setObjectName("cbbMaShort")
+        self.horizontalLayout_11.addWidget(self.cbbMaShort)
         self.verticalLayout_4.addLayout(self.horizontalLayout_11)
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
         self.lblMaLong = QtWidgets.QLabel(self.layoutWidget6)
         self.lblMaLong.setObjectName("lblMaLong")
         self.horizontalLayout_14.addWidget(self.lblMaLong)
-        self.spbMaLong = QtWidgets.QSpinBox(self.layoutWidget6)
-        self.spbMaLong.setMinimum(10)
-        self.spbMaLong.setMaximum(60)
-        self.spbMaLong.setObjectName("spbMaLong")
-        self.horizontalLayout_14.addWidget(self.spbMaLong)
+        self.cbbMaLong = QtWidgets.QComboBox(self.layoutWidget6)
+        self.cbbMaLong.setEnabled(False)
+        self.cbbMaLong.setObjectName("cbbMaLong")
+        self.horizontalLayout_14.addWidget(self.cbbMaLong)
         self.verticalLayout_4.addLayout(self.horizontalLayout_14)
         self.horizontalLayout_16 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_16.setObjectName("horizontalLayout_16")
@@ -769,7 +767,7 @@ class Ui_StockAnalyzer(object):
         self.cbxTrendEnabled.setObjectName("cbxTrendEnabled")
         StockAnalyzer.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(StockAnalyzer)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 22))
         self.menubar.setObjectName("menubar")
         StockAnalyzer.setMenuBar(self.menubar)
 
@@ -777,13 +775,13 @@ class Ui_StockAnalyzer(object):
         self.btnGetData.clicked.connect(StockAnalyzer.get_history_data)
         self.btnAutoFindStrategy.clicked.connect(StockAnalyzer.auto_get_strategy)
         self.cbxAllowSameDayTrade.clicked['bool'].connect(self.spbSameDayProfit.setEnabled)
-        self.rbnMa.toggled['bool'].connect(self.spbMaShort.setEnabled)
-        self.rbnMa.toggled['bool'].connect(self.spbMaLong.setEnabled)
         self.cbxBiasEnabled.clicked['bool'].connect(self.spbBiasThreshold.setEnabled)
         self.btnStartTrade.clicked.connect(StockAnalyzer.start_trade)
         self.cbxTrendEnabled.clicked['bool'].connect(self.grpTrendIndicator.setEnabled)
         self.cbxTrendEnabled.clicked['bool'].connect(self.spbBuyPointTrendBias.setEnabled)
         self.cbxTrendEnabled.clicked['bool'].connect(self.spbSellPointTrendBias.setEnabled)
+        self.rbnMa.toggled['bool'].connect(self.cbbMaShort.setEnabled)
+        self.rbnMa.toggled['bool'].connect(self.cbbMaLong.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(StockAnalyzer)
 
     def retranslateUi(self, StockAnalyzer):
@@ -855,9 +853,7 @@ class Ui_StockAnalyzer(object):
         self.rbnExpma.setText(_translate("StockAnalyzer", "EXPMA交叉"))
         self.rbnMa.setText(_translate("StockAnalyzer", "短长期均线交叉"))
         self.lblMaShort.setText(_translate("StockAnalyzer", "短期均线"))
-        self.spbMaShort.setSuffix(_translate("StockAnalyzer", "日"))
         self.lblMaLong.setText(_translate("StockAnalyzer", "长期均线"))
-        self.spbMaLong.setSuffix(_translate("StockAnalyzer", "日"))
         self.lblTrendChangeTradeUnit.setText(_translate("StockAnalyzer", "趋势扭转时交易"))
         self.spbTrendChangeTradeUnit.setSuffix(_translate("StockAnalyzer", "笔"))
         self.grpShareAllowed.setTitle(_translate("StockAnalyzer", "仓位控制策略"))

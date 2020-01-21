@@ -8,7 +8,6 @@ from Data.HistoryGraph import HistoryGraph
 import baostock, pandas
 from Tools import Tools
 
-
 # 计算买入费用
 def buy_transaction_fee(money: float):
     # 券商佣金
@@ -48,21 +47,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 获取多空趋势转变信号
     def get_trend_type(self):
         # MACD交叉
-        if StockAnalyzer.stockAnalyzerInstance.rbnMacd.isChecked():
+        if StockAnalyzer.instance.rbnMacd.isChecked():
             self.__crossShort = "macd_white"
             self.__crossLong = "macd_yellow"
         # TRIX交叉
-        elif StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked():
+        elif StockAnalyzer.instance.rbnTrix.isChecked():
             self.__crossShort = "trix_white"
             self.__crossLong = "trix_yellow"
         # EXPMA交叉
-        elif StockAnalyzer.stockAnalyzerInstance.rbnExpma.isChecked():
+        elif StockAnalyzer.instance.rbnExpma.isChecked():
             self.__crossShort = "expma_white"
             self.__crossLong = "expma_yellow"
         # 均线交叉
         else:
-            self.__crossShort = TechnicalAnalysis.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaShort.value())
-            self.__crossLong = TechnicalAnalysis.calculate_ma_curve(StockAnalyzer.stockDatabase, StockAnalyzer.stockAnalyzerInstance.spbMaLong.value())
+            self.__crossShort = 'ma_' + StockAnalyzer.instance.cbbMaShort.currentText()
+            self.__crossLong = 'ma_' + StockAnalyzer.instance.cbbMaLong.currentText()
 
         stock_initial = StockAnalyzer.stockDatabase.iloc[0]
         if stock_initial[self.__crossShort] > stock_initial[self.__crossLong]:
@@ -240,7 +239,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         net_buy_share = 0
         message = ""
         # KDJ极值信号
-        if StockAnalyzer.stockAnalyzerInstance.cbxKdjEnabled.isChecked():
+        if StockAnalyzer.instance.cbxKdjEnabled.isChecked():
             if stock_today['kdj_j'] < 0:
                 net_buy_share += self.__tradeStrategy.signalTradeShare
                 message += "KDJ中J<0 "
@@ -248,7 +247,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 net_buy_share -= self.__tradeStrategy.signalTradeShare
                 message += "KDJ中J>100 "
         # BOLL轨道信号
-        if StockAnalyzer.stockAnalyzerInstance.cbxBollEnabled.isChecked():
+        if StockAnalyzer.instance.cbxBollEnabled.isChecked():
             if stock_today['low'] < stock_today['boll_lower']:
                 net_buy_share += self.__tradeStrategy.signalTradeShare
                 message += "BOLL下穿下轨 "
@@ -256,7 +255,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 net_buy_share -= self.__tradeStrategy.signalTradeShare
                 message += "BOLL上穿上轨 "
         # BIAS极值信号
-        if StockAnalyzer.stockAnalyzerInstance.cbxBiasEnabled.isChecked():
+        if StockAnalyzer.instance.cbxBiasEnabled.isChecked():
             if stock_today['bias_24'] < -self.__tradeStrategy.biasThreshold:
                 net_buy_share += self.__tradeStrategy.signalTradeShare
                 message += "BIAS < -" + str(self.__tradeStrategy.biasThreshold)
@@ -418,16 +417,16 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 画成交量
         graph.plot_volume()
         # 画布林轨道
-        if StockAnalyzer.stockAnalyzerInstance.cbxBollEnabled.isChecked():
+        if StockAnalyzer.instance.cbxBollEnabled.isChecked():
             graph.plot_boll()
         # 画趋势线
         if self.__tradeStrategy.enableTrend:
             # 画MACD线
-            if StockAnalyzer.stockAnalyzerInstance.rbnMacd.isChecked():
+            if StockAnalyzer.instance.rbnMacd.isChecked():
                 graph.plot_macd()
             # 画其他趋势线
             else:
-                graph.plot_ma(self.__crossShort, self.__crossLong, StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked())
+                graph.plot_ma_pair(self.__crossShort, self.__crossLong, StockAnalyzer.instance.rbnTrix.isChecked())
         graph.plot_price()
         graph.plot_trade_history(self.__tradeHistory)
         graph.exec_()

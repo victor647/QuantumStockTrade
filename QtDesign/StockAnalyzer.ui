@@ -1114,15 +1114,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbMaShort">
-          <property name="suffix">
-           <string>日</string>
-          </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
+         <widget class="QComboBox" name="cbbMaShort">
+          <property name="enabled">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1138,15 +1132,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spbMaLong">
-          <property name="suffix">
-           <string>日</string>
-          </property>
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>60</number>
+         <widget class="QComboBox" name="cbbMaLong">
+          <property name="enabled">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1572,7 +1560,7 @@
      <x>0</x>
      <y>0</y>
      <width>728</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -1624,38 +1612,6 @@
     <hint type="destinationlabel">
      <x>705</x>
      <y>178</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rbnMa</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbMaShort</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>403</x>
-     <y>315</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>466</x>
-     <y>346</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rbnMa</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbMaLong</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>425</x>
-     <y>317</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>462</x>
-     <y>376</y>
     </hint>
    </hints>
   </connection>
@@ -1714,8 +1670,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>455</x>
-     <y>208</y>
+     <x>458</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
      <x>675</x>
@@ -1736,6 +1692,38 @@
     <hint type="destinationlabel">
      <x>676</x>
      <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbnMa</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbbMaShort</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>419</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>473</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rbnMa</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbbMaLong</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>442</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>379</y>
     </hint>
    </hints>
   </connection>

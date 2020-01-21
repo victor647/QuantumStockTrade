@@ -9,7 +9,7 @@ from Tools import Tools, FileManager
 
 stockDatabase = pandas.DataFrame()
 marketDatabase = pandas.DataFrame()
-stockAnalyzerInstance = None
+instance = None
     
 
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
@@ -20,8 +20,11 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.__tradeStrategy = TradeStrategy()
         self.__analysisData = TechnicalAnalysis.AnalysisData()
         # 初始化单例
-        global stockAnalyzerInstance
-        stockAnalyzerInstance = self
+        global instance
+        instance = self
+        # 均线取值初始化
+        self.cbbMaShort.addItems(['5', '10', '20', '30'])
+        self.cbbMaLong.addItems(['10', '20', '30', '60'])
 
     # 获取股票历史数据
     def get_history_data(self):
