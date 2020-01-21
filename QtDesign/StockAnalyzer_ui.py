@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'StockAnalyzer.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -206,7 +206,7 @@ class Ui_StockAnalyzer(object):
         self.grpNormalTradeRule.setFont(font)
         self.grpNormalTradeRule.setObjectName("grpNormalTradeRule")
         self.layoutWidget3 = QtWidgets.QWidget(self.grpNormalTradeRule)
-        self.layoutWidget3.setGeometry(QtCore.QRect(10, 20, 325, 101))
+        self.layoutWidget3.setGeometry(QtCore.QRect(10, 20, 328, 101))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setPointSize(9)
@@ -585,9 +585,9 @@ class Ui_StockAnalyzer(object):
         self.horizontalLayout_16.addWidget(self.lblTrendChangeTradeUnit)
         self.spbTrendChangeTradeUnit = QtWidgets.QSpinBox(self.layoutWidget6)
         self.spbTrendChangeTradeUnit.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.spbTrendChangeTradeUnit.setMinimum(1)
-        self.spbTrendChangeTradeUnit.setMaximum(100)
-        self.spbTrendChangeTradeUnit.setProperty("value", 2)
+        self.spbTrendChangeTradeUnit.setMinimum(0)
+        self.spbTrendChangeTradeUnit.setMaximum(10)
+        self.spbTrendChangeTradeUnit.setProperty("value", 1)
         self.spbTrendChangeTradeUnit.setObjectName("spbTrendChangeTradeUnit")
         self.horizontalLayout_16.addWidget(self.spbTrendChangeTradeUnit)
         self.verticalLayout_4.addLayout(self.horizontalLayout_16)
@@ -728,7 +728,7 @@ class Ui_StockAnalyzer(object):
         self.horizontalLayout_13.addWidget(self.lblSignalTradeUnit)
         self.spbSignalTradeUnit = QtWidgets.QSpinBox(self.layoutWidget8)
         self.spbSignalTradeUnit.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.spbSignalTradeUnit.setMinimum(1)
+        self.spbSignalTradeUnit.setMinimum(0)
         self.spbSignalTradeUnit.setMaximum(100)
         self.spbSignalTradeUnit.setObjectName("spbSignalTradeUnit")
         self.horizontalLayout_13.addWidget(self.spbSignalTradeUnit)
@@ -763,13 +763,13 @@ class Ui_StockAnalyzer(object):
         self.btnStartTrade.setObjectName("btnStartTrade")
         self.verticalLayout_8.addWidget(self.btnStartTrade)
         self.cbxTrendEnabled = QtWidgets.QCheckBox(self.centralwidget)
-        self.cbxTrendEnabled.setGeometry(QtCore.QRect(450, 179, 16, 18))
+        self.cbxTrendEnabled.setGeometry(QtCore.QRect(458, 180, 16, 18))
         self.cbxTrendEnabled.setText("")
         self.cbxTrendEnabled.setChecked(True)
         self.cbxTrendEnabled.setObjectName("cbxTrendEnabled")
         StockAnalyzer.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(StockAnalyzer)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 23))
         self.menubar.setObjectName("menubar")
         StockAnalyzer.setMenuBar(self.menubar)
 

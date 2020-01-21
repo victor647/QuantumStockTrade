@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QDialog
-from PyQt5.QtChart import QCandlestickSeries, QCandlestickSet, QBarSeries, QStackedBarSeries, QBarSet, QChart, QValueAxis, QBarCategoryAxis, QLineSeries
+from PyQt5.QtChart import QCandlestickSeries, QCandlestickSet, QScatterSeries, QStackedBarSeries, QBarSet, QChart, QValueAxis, QBarCategoryAxis, QLineSeries
 from PyQt5.QtCore import Qt
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 import pandas
@@ -18,20 +18,17 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 隐藏图例
         self.chart.legend().hide()
         # 初始化日期显示
-        dates = []
+        self.__dates = []
         for index, day_data in self.stockData.iterrows():
-            dates.append(index[5:])
+            self.__dates.append(index[5:7] + index[8:10])
         # 创建日期x轴
         self.x_axis = QBarCategoryAxis()
-        self.x_axis.setCategories(dates)
+        self.x_axis.setCategories(self.__dates)
         self.chart.addAxis(self.x_axis, Qt.AlignBottom)
         # 添加股价Y轴
         self.price_axis = QValueAxis()
         self.price_axis.setTickCount(6)
         self.chart.addAxis(self.price_axis, Qt.AlignLeft)
-        # 根据数据数量决定是否隐藏x轴
-        if len(dates) > 20:
-            self.x_axis.hide()
         # 显示图表
         self.crtGraph.setChart(self.chart)
         self.show()
@@ -172,3 +169,38 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         else:
             ma_short.attachAxis(self.price_axis)
             ma_long.attachAxis(self.price_axis)
+
+    # 画出买卖记录
+    def plot_trade_history(self, trade_history: list):
+        buy_history = QScatterSeries()
+        sell_history = QScatterSeries()
+        # 设置散点颜色
+        buy_history.setColor(Qt.magenta)
+        buy_history.setBorderColor(Qt.darkMagenta)
+        sell_history.setColor(Qt.cyan)
+        sell_history.setBorderColor(Qt.darkCyan)
+        # 设置笔刷大小
+        buy_history.setMarkerSize(7)
+        sell_history.setMarkerSize(7)
+        for history in trade_history:
+            date = self.get_date_number(history[0])
+            if '买' in history[1]:
+                buy_history.append(date, history[2])
+            else:
+                sell_history.append(date, history[2])
+
+        self.chart.addSeries(buy_history)
+        self.chart.addSeries(sell_history)
+        buy_history.attachAxis(self.price_axis)
+        buy_history.attachAxis(self.x_axis)
+        sell_history.attachAxis(self.price_axis)
+        sell_history.attachAxis(self.x_axis)
+
+    # 通过日期获取第几个交易日
+    def get_date_number(self, date_time: str):
+        # 得到MMDD格式日期
+        month_day = date_time[3:5] + date_time[6:8]
+        for i in range(len(self.__dates)):
+            if month_day == self.__dates[i]:
+                return i
+        return 0

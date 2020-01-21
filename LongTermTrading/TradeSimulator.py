@@ -43,6 +43,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.__tradeStrategy = trade_strategy
         self.__stockCode = stock_code
+        self.__tradeHistory = []
 
     # 获取多空趋势转变信号
     def get_trend_type(self):
@@ -71,6 +72,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 开始模拟交易
     def start_trading(self):
+        self.__tradeHistory = []
         self.trade_first_day()
         if self.__tradeStrategy.enableTrend:
             self.get_trend_type()
@@ -122,10 +124,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         stock_before = StockAnalyzer.stockDatabase.iloc[index - 2]
         if stock_before[self.__crossShort] < stock_before[self.__crossLong] and stock_after[self.__crossShort] > stock_after[self.__crossLong]:
             self.__trend = "上升"
-            self.buy_stock(stock_today, "抄底买入", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为上升趋势")
+            # 立刻买入
+            if self.__tradeStrategy.trendChangeTradeShare > 0:
+                self.buy_stock(stock_today, "抄底买入", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为上升趋势")
         if stock_before[self.__crossShort] > stock_before[self.__crossLong] and stock_after[self.__crossShort] < stock_after[self.__crossLong]:
             self.__trend = "下降"
-            self.sell_stock(stock_today, "见顶卖出", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为下降趋势")
+            # 立刻卖出
+            if self.__tradeStrategy.trendChangeTradeShare > 0:
+                self.sell_stock(stock_today, "见顶卖出", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为下降趋势")
 
     # 普通交易策略
     def normal_trade(self, daily_data: pandas.DataFrame):
@@ -160,6 +166,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             minute_high = TechnicalAnalysis.get_percentage_from_price(minute_data['low'], pre_close)
             # 价格低于买点，执行买入操作
             if minute_low < current_buy_point:
+                # 确保买入价格高于5分钟最低价
+                current_buy_point = min(minute_high, current_buy_point)
                 # 计算买入价格
                 trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, current_buy_point)
                 if self.buy_stock(daily_data, "被动买入", minute_data['time'], trade_price, self.__tradeStrategy.sharePerTrade, self.__trend):
@@ -171,6 +179,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
             # 价格高于卖点，执行卖出操作
             if minute_high > current_sell_point:
+                # 确保卖出价格高于5分钟最高价
+                current_sell_point = max(minute_low, current_sell_point)
                 trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, current_sell_point)
                 if self.sell_stock(daily_data, "被动卖出", minute_data['time'], trade_price, self.__tradeStrategy.sharePerTrade, self.__trend):
                     # 记录本次卖出，为做T买回参考
@@ -331,9 +341,10 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.insertRow(row_count)
         # 缓存昨日收盘价
         pre_close = data['preclose']
+        time = Tools.reformat_time(time)
         column = 0
         # 交易时间
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(Tools.reformat_time(time)))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(time))
         column += 1
         # 操作
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
@@ -367,6 +378,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         column = Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
         # 盈亏比例
         column = Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
+        # 记录交易数据作图用
+        self.__tradeHistory.append([time, action, trade_price])
 
     # 累计获利百分比
     def profit_percentage(self, current_price: float):
@@ -416,5 +429,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             else:
                 graph.plot_ma(self.__crossShort, self.__crossLong, StockAnalyzer.stockAnalyzerInstance.rbnTrix.isChecked())
         graph.plot_price()
+        graph.plot_trade_history(self.__tradeHistory)
         graph.exec_()
 
