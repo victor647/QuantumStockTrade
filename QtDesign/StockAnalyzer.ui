@@ -25,8 +25,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -46,8 +46,8 @@
        <widget class="QLabel" name="lblStockIntervalOpen">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -59,8 +59,8 @@
        <widget class="QLabel" name="lblStockIntervalClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -72,8 +72,8 @@
        <widget class="QLabel" name="lblStockIntervalHigh">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -85,8 +85,8 @@
        <widget class="QLabel" name="lblStockIntervalLow">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -98,8 +98,8 @@
        <widget class="QLabel" name="lblStockIntervalAverage">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -111,8 +111,8 @@
        <widget class="QLabel" name="lblStockIntervalTotal">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -124,8 +124,8 @@
        <widget class="QLabel" name="lblStockIntervalAveragePoint">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -137,8 +137,8 @@
        <widget class="QLabel" name="lblStockUpProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -160,8 +160,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -178,8 +178,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
+       <family>Helvetica</family>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -187,8 +187,8 @@
        <widget class="QLabel" name="lblMarketIntervalOpen">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -200,8 +200,8 @@
        <widget class="QLabel" name="lblMarketIntervalClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -213,8 +213,8 @@
        <widget class="QLabel" name="lblMarketIntervalHigh">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -226,8 +226,8 @@
        <widget class="QLabel" name="lblMarketIntervalLow">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -239,8 +239,8 @@
        <widget class="QLabel" name="lblMarketIntervalAverage">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -252,8 +252,8 @@
        <widget class="QLabel" name="lblMarketIntervalTotal">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -265,8 +265,8 @@
        <widget class="QLabel" name="lblMarketIntervalAveragePoint">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -278,8 +278,8 @@
        <widget class="QLabel" name="lblMarketUpProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -301,8 +301,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -316,8 +316,8 @@
        </property>
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -335,8 +335,8 @@
        </property>
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -351,8 +351,8 @@
       <widget class="QLabel" name="lblAnalyzeMonths">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -392,8 +392,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -410,8 +410,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
+       <family>Helvetica</family>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -421,8 +421,8 @@
          <widget class="QLabel" name="lblUpTrendBuyPoint">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -434,8 +434,8 @@
          <widget class="QDoubleSpinBox" name="spbBuyPointBase">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -462,8 +462,8 @@
          <widget class="QLabel" name="lblBuyPointStep">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -475,8 +475,8 @@
          <widget class="QDoubleSpinBox" name="spbBuyPointStep">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -503,8 +503,8 @@
          <widget class="QLabel" name="lblBuyPointTrendBias">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -516,8 +516,8 @@
          <widget class="QDoubleSpinBox" name="spbBuyPointTrendBias">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -548,8 +548,8 @@
          <widget class="QLabel" name="lblUpTrendSellPoint">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -561,8 +561,8 @@
          <widget class="QDoubleSpinBox" name="spbSellPointBase">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -589,8 +589,8 @@
          <widget class="QLabel" name="lblSellPointStep">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -602,8 +602,8 @@
          <widget class="QDoubleSpinBox" name="spbSellPointStep">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -630,8 +630,8 @@
          <widget class="QLabel" name="lblSellPointTrendBias">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -643,8 +643,8 @@
          <widget class="QDoubleSpinBox" name="spbSellPointTrendBias">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -675,8 +675,8 @@
          <widget class="QCheckBox" name="cbxAllowSameDayTrade">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -691,8 +691,8 @@
          <widget class="QDoubleSpinBox" name="spbSameDayProfit">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -731,8 +731,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -749,8 +749,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>9</pointsize>
+       <family>Helvetica</family>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -758,8 +758,8 @@
        <widget class="QLabel" name="lblAverageTurn">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -771,8 +771,8 @@
        <widget class="QLabel" name="lblAverageAmplitude">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -784,8 +784,8 @@
        <widget class="QLabel" name="lblAverageCloseUp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -797,8 +797,8 @@
        <widget class="QLabel" name="lblAverageHighWhenUp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -810,8 +810,8 @@
        <widget class="QLabel" name="lblAverageLowWhenUp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -823,8 +823,8 @@
        <widget class="QLabel" name="lblAverageFallbackAmp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -836,8 +836,8 @@
        <widget class="QLabel" name="lblAverageCloseDown">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -849,8 +849,8 @@
        <widget class="QLabel" name="lblAverageHighWhenDown">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -862,8 +862,8 @@
        <widget class="QLabel" name="lblAverageLowWhenDown">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -875,8 +875,8 @@
        <widget class="QLabel" name="lblAverageBounceAmp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -900,8 +900,8 @@
        <widget class="QLabel" name="lblWinMarket">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -913,8 +913,8 @@
        <widget class="QLabel" name="lblInverseMarketUp">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -926,8 +926,8 @@
        <widget class="QLabel" name="lblInverseMarketDown">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -939,8 +939,8 @@
        <widget class="QLabel" name="lblHighOpenHighClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -952,8 +952,8 @@
        <widget class="QLabel" name="lblHighOpenLowClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -965,8 +965,8 @@
        <widget class="QLabel" name="lblLowOpenLowClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -978,8 +978,8 @@
        <widget class="QLabel" name="lblLowOpenHighClose">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -991,8 +991,8 @@
        <widget class="QLabel" name="lblReachMaxProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -1004,8 +1004,8 @@
        <widget class="QLabel" name="lblStayMaxProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -1017,8 +1017,8 @@
        <widget class="QLabel" name="lblReachMinProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -1030,8 +1030,8 @@
        <widget class="QLabel" name="lblStayMinProbability">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -1053,7 +1053,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="title">
@@ -1187,7 +1187,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="title">
@@ -1209,8 +1209,8 @@
          <widget class="QLabel" name="lblInitialShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -1222,8 +1222,8 @@
          <widget class="QSpinBox" name="spbInitialShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -1251,8 +1251,8 @@
          <widget class="QLabel" name="lblSharePerTrade">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -1264,8 +1264,8 @@
          <widget class="QSpinBox" name="spbSharePerTrade">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -1293,8 +1293,8 @@
          <widget class="QLabel" name="lblMaxShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -1306,8 +1306,8 @@
          <widget class="QSpinBox" name="spbMaxShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -1335,8 +1335,8 @@
          <widget class="QLabel" name="lblMinShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="text">
@@ -1348,8 +1348,8 @@
          <widget class="QSpinBox" name="spbMinShare">
           <property name="font">
            <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>9</pointsize>
+            <family>Helvetica</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="suffix">
@@ -1385,7 +1385,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="title">
@@ -1498,8 +1498,8 @@
       <widget class="QPushButton" name="btnGetData">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -1511,8 +1511,8 @@
       <widget class="QPushButton" name="btnAutoFindStrategy">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -1524,8 +1524,8 @@
       <widget class="QPushButton" name="btnStartTrade">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>

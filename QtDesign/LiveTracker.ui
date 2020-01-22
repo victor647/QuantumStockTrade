@@ -25,8 +25,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="editTriggers">
@@ -103,8 +103,8 @@
         <widget class="QPushButton" name="btnImportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -116,8 +116,8 @@
         <widget class="QPushButton" name="btnExportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -129,7 +129,7 @@
         <widget class="QLabel" name="lblNewStockCode">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="text">
@@ -147,7 +147,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="text">
@@ -162,8 +162,8 @@
         <widget class="QPushButton" name="btnAddStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -175,8 +175,8 @@
         <widget class="QPushButton" name="btnRemoveStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -188,8 +188,8 @@
         <widget class="QPushButton" name="btnClearStocks">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -211,7 +211,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="text">
@@ -229,7 +229,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="text">
@@ -247,7 +247,7 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="suffix">
@@ -271,7 +271,7 @@
         <widget class="QLabel" name="lblRecentMeasurement">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="text">
@@ -283,8 +283,8 @@
         <widget class="QSpinBox" name="spbRecentMeasureCount">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -361,8 +361,8 @@
       <widget class="QPushButton" name="btnStartTracking">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -376,8 +376,8 @@
       <widget class="QPushButton" name="btnStopTracking">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -401,7 +401,7 @@
       <widget class="QLabel" name="lblMonitorConditions">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
+         <family>Helvetica</family>
         </font>
        </property>
        <property name="text">
@@ -413,8 +413,8 @@
       <widget class="QPushButton" name="btnAddCondition">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -426,8 +426,8 @@
       <widget class="QPushButton" name="btnDeleteCondition">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -439,8 +439,8 @@
       <widget class="QPushButton" name="btnEditCondition">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -452,8 +452,8 @@
       <widget class="QPushButton" name="btnImportMonitorConditions">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -465,8 +465,8 @@
       <widget class="QPushButton" name="btnImportGenericConditions">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -478,8 +478,8 @@
       <widget class="QPushButton" name="btnExportMonitorConditions">
        <property name="font">
         <font>
-         <family>Microsoft YaHei UI</family>
-         <pointsize>9</pointsize>
+         <family>Helvetica</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">

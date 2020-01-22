@@ -27,7 +27,7 @@
      <widget class="QProgressBar" name="pgbSearching">
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="value">
@@ -39,8 +39,8 @@
      <widget class="QLabel" name="lblCurrentWorking">
       <property name="font">
        <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>9</pointsize>
+        <family>Helvetica</family>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="text">

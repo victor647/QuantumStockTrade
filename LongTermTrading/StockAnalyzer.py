@@ -69,6 +69,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         TechnicalAnalysis.get_kdj_index(stockDatabase)
         TechnicalAnalysis.get_bias_index(stockDatabase)
         self.analyze_data()
+        self.repaint()
 
     # 显示股票股性
     def analyze_data(self):

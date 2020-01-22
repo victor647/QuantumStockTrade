@@ -29,8 +29,8 @@
        <widget class="QLabel" name="lblGroupName">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -42,8 +42,8 @@
        <widget class="QLineEdit" name="txtGroupName">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -58,7 +58,7 @@
        <widget class="QLabel" name="lblCoolDownTime">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
+          <family>Helvetica</family>
          </font>
         </property>
         <property name="text">
@@ -70,8 +70,8 @@
        <widget class="QSpinBox" name="spbCoolDownTime">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="suffix">
@@ -96,8 +96,8 @@
        <widget class="QPushButton" name="btnAddItem">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -109,8 +109,8 @@
        <widget class="QPushButton" name="btnDeleteItem">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
-          <pointsize>9</pointsize>
+          <family>Helvetica</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
@@ -149,7 +149,7 @@
        <widget class="QPushButton" name="btnSave">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
+          <family>Helvetica</family>
          </font>
         </property>
         <property name="text">
@@ -161,7 +161,7 @@
        <widget class="QPushButton" name="btnDiscard">
         <property name="font">
          <font>
-          <family>Microsoft YaHei UI</family>
+          <family>Helvetica</family>
          </font>
         </property>
         <property name="text">

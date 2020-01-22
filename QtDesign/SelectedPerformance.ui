@@ -25,8 +25,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="sortingEnabled">
@@ -110,8 +110,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -129,7 +129,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -139,8 +139,8 @@
         <widget class="QLabel" name="lblSearchDate">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -152,8 +152,8 @@
         <widget class="QDateEdit" name="dteSearchDate">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="displayFormat">
@@ -165,8 +165,8 @@
         <widget class="QLabel" name="lblNewStockCode">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -184,8 +184,8 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -200,8 +200,8 @@
         <widget class="QPushButton" name="btnAddStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -213,8 +213,8 @@
         <widget class="QPushButton" name="btnRemoveStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -226,8 +226,8 @@
         <widget class="QPushButton" name="btnClearStocks">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -239,8 +239,8 @@
         <widget class="QPushButton" name="btnExportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -252,8 +252,8 @@
         <widget class="QPushButton" name="btnImportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -265,8 +265,8 @@
         <widget class="QPushButton" name="btnExportStrategy">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -278,8 +278,8 @@
         <widget class="QPushButton" name="btnImporttrategy">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -297,8 +297,8 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -316,8 +316,8 @@
         <widget class="QLabel" name="lblMoneyPerTrade">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -329,8 +329,8 @@
         <widget class="QSpinBox" name="spbMoneyPerTrade">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -354,8 +354,8 @@
         <widget class="QCheckBox" name="cbxLoseThreshold">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -370,8 +370,8 @@
         <widget class="QSpinBox" name="spbLoseThreshold">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -392,8 +392,8 @@
         <widget class="QCheckBox" name="cbxWinThreshold">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -408,8 +408,8 @@
         <widget class="QSpinBox" name="spbWinThreshold">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -433,8 +433,8 @@
         <widget class="QCheckBox" name="cbxAddWhenDown">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -449,8 +449,8 @@
         <widget class="QSpinBox" name="spbAddThresholdDown">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -471,8 +471,8 @@
         <widget class="QCheckBox" name="cbxAddWhenUp">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -487,8 +487,8 @@
         <widget class="QSpinBox" name="spbAddThresholdUp">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -509,8 +509,8 @@
         <widget class="QLabel" name="lblAddDeadline">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -522,8 +522,8 @@
         <widget class="QSpinBox" name="spbAddDeadline">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -547,8 +547,8 @@
         <widget class="QLabel" name="lblMaxHoldTime">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -560,8 +560,8 @@
         <widget class="QSpinBox" name="spbMaxHoldTime">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="suffix">

@@ -250,7 +250,15 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         self.chart.addSeries(ma_line)
         ma_line.attachAxis(self.price_axis)
 
-    # 画出买卖记录
+    # 画所有均线
+    def plot_all_ma_lines(self):
+        self.plot_ma(60, QColor(0, 127, 255))
+        self.plot_ma(30, Qt.green)
+        self.plot_ma(20, Qt.magenta)
+        self.plot_ma(10, Qt.yellow)
+        self.plot_ma(5, Qt.white)
+
+        # 画出买卖记录
     def plot_trade_history(self, trade_history: list):
         buy_history = QScatterSeries()
         sell_history = QScatterSeries()

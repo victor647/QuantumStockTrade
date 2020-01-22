@@ -2,7 +2,8 @@ from QtDesign.SearchResult_ui import Ui_SearchResult
 from PyQt5.QtWidgets import QDialog, QTableWidgetItem
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
-from Tools import Tools, FileManager as FileManager
+from Tools import Tools, FileManager
+from Data.HistoryGraph import HistoryGraph
 
 
 class SearchResult(QDialog, Ui_SearchResult):
@@ -39,10 +40,21 @@ class SearchResult(QDialog, Ui_SearchResult):
 
     # 在东方财富网站打开股票主页
     def open_stock_page(self, row: int, column: int):
-        if column != 0:
-            return
         code = self.tblStockList.item(row, 0).text()
-        Tools.open_stock_page(code)
+        # 通过网页打开
+        if column > 1:
+            Tools.open_stock_page(code)
+        # 直接画K线图
+        else:
+            # 获取股票历史K线数据
+            data = FileManager.read_stock_history_data(code, True)
+            # 截取回测日期内的数据
+            data = data.tail(60)
+            graph = HistoryGraph(code, data)
+            graph.plot_all_ma_lines()
+            graph.plot_price()
+            graph.plot_volume()
+            graph.exec_()
 
     # 删除所选中的股票
     def delete_selected_stocks(self):

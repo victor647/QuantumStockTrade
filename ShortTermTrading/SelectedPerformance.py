@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
 import LongTermTrading.TradeSimulator as TradeSimulator
@@ -59,10 +59,10 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
     def show_stock_graph(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
-        if 0 <= column <= 1:
+        if column < 2:
             Tools.open_stock_page(code)
         # 直接画K线图
-        elif column > 2:
+        else:
             # 从表格中读取开始时间
             start_date = self.tblStockList.item(row, 2).text()
             # 获取股票历史K线数据
@@ -70,11 +70,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 截取回测日期内的数据
             data = pandas.concat([data.loc[:start_date].tail(20), data.loc[start_date:].head(20)])
             graph = HistoryGraph(code, data)
-            graph.plot_ma(5, Qt.white)
-            graph.plot_ma(10, Qt.yellow)
-            graph.plot_ma(20, Qt.magenta)
-            graph.plot_ma(30, Qt.green)
-            graph.plot_ma(60, Qt.gray)
+            graph.plot_all_ma_lines()
             graph.plot_price()
             graph.plot_volume()
             graph.plot_trade_history(self.__tradeHistory[code])

@@ -63,8 +63,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Microsoft YaHei UI</family>
-      <pointsize>9</pointsize>
+      <family>Helvetica</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -87,8 +87,8 @@
         <widget class="QLabel" name="lblInitialInvestment">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -100,7 +100,7 @@
         <widget class="QSpinBox" name="spbInitialInvestment">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="suffix">
@@ -124,8 +124,8 @@
         <widget class="QLabel" name="lblInterval">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -137,7 +137,7 @@
         <widget class="QSpinBox" name="spbInterval">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="prefix">
@@ -155,7 +155,7 @@
         <widget class="QComboBox" name="cbbIntervalType">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
         </widget>
@@ -164,8 +164,8 @@
         <widget class="QLabel" name="lblEachInvestment">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -177,7 +177,7 @@
         <widget class="QSpinBox" name="spbEachInvestment">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
+           <family>Helvetica</family>
           </font>
          </property>
          <property name="suffix">
@@ -205,8 +205,8 @@
         <widget class="QLabel" name="lblStartDate">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -218,8 +218,8 @@
         <widget class="QDateEdit" name="dteStartDate">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="displayFormat">
@@ -231,8 +231,8 @@
         <widget class="QPushButton" name="btnExportPlan">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -244,8 +244,8 @@
         <widget class="QPushButton" name="btnImportPlan">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -257,8 +257,8 @@
         <widget class="QPushButton" name="btnExportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -270,8 +270,8 @@
         <widget class="QPushButton" name="btnImportStockList">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -287,8 +287,8 @@
         <widget class="QLabel" name="lblNewStockCode">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -306,8 +306,8 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -322,8 +322,8 @@
         <widget class="QPushButton" name="btnAddStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -335,8 +335,8 @@
         <widget class="QPushButton" name="btnRemoveStock">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -348,8 +348,8 @@
         <widget class="QPushButton" name="btnClearStocks">
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -367,8 +367,8 @@
          </property>
          <property name="font">
           <font>
-           <family>Microsoft YaHei UI</family>
-           <pointsize>9</pointsize>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
