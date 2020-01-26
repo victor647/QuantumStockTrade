@@ -2,33 +2,16 @@ from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import LongTermTrading.StockAnalyzer as StockAnalyzer
 import LongTermTrading.TradeStrategy as TradeStrategy
-import LongTermTrading.TradeSettings as TradeSettings
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.HistoryGraph import HistoryGraph
+from Data.InvestmentStatus import StockInvestment
 import baostock, pandas
 from Tools import Tools
-
-# 计算买入费用
-def buy_transaction_fee(money: float):
-    # 券商佣金
-    broker_fee = max(money * TradeSettings.brokerFeePercentage, TradeSettings.minBrokerFee)
-    return round(broker_fee, 2)
-
-
-# 计算卖出费用
-def sell_transaction_fee(money: float):
-    # 券商佣金
-    broker_fee = max(money * TradeSettings.brokerFeePercentage, TradeSettings.minBrokerFee)
-    # 印花税
-    tax = money * TradeSettings.stampDuty
-    return round(broker_fee + tax, 2)
 
 
 # 长线模拟交易回测
 class TradeSimulator(QDialog, Ui_TradeSimulator):
-    __currentShare = __sellableShare = 0
-    __initialAsset = __totalMoneySpent = __totalMoneyBack = __totalFeePaid = 0
-    __totalBuyCount = __successfulBuyCount = __totalSellCount = __successfulSellCount = 0
+    __successfulBuyCount = __successfulSellCount = 0
     totalSameDayTradeCount = successfulSameDayTradeCount = 0
     __crossShort = __crossLong = ""
     __trend = "无"
@@ -36,13 +19,12 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def __init__(self, stock_code: str, trade_strategy: TradeStrategy):
         super().__init__()
         self.setupUi(self)
+        self.__tradeStrategy = trade_strategy
+        self.__stockInvestment = StockInvestment(stock_code)
         # 设置窗口标题
         self.setWindowTitle(stock_code + "模拟交易")
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.__tradeStrategy = trade_strategy
-        self.__stockCode = stock_code
-        self.__tradeHistory = []
 
     # 获取多空趋势转变信号
     def get_trend_type(self):
@@ -71,17 +53,17 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 开始模拟交易
     def start_trading(self):
-        self.__tradeHistory = []
         self.trade_first_day()
         if self.__tradeStrategy.enableTrend:
             self.get_trend_type()
         # 遍历每日历史数据
-        for day_index, stock_today in StockAnalyzer.stockDatabase.iterrows():
+        for day_index in range(1, StockAnalyzer.stockDatabase.shape[0] - 1):
+            # 获取当日数据
+            stock_today = StockAnalyzer.stockDatabase.iloc[day_index]
             # 计算目前股价运行趋势
             if self.__tradeStrategy.enableTrend:
                 self.update_trend_status(day_index, stock_today)
             # 获取当日可卖股份余额
-            self.__sellableShare = self.__currentShare
             self.normal_trade(stock_today)
             self.trade_by_signal(day_index, stock_today)
             # 更新表格显示
@@ -93,18 +75,18 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 获取首个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[0]
         price = round(data['open'], 2)
-        # 计算底仓资产折现
-        self.__initialAsset = round(price * self.__tradeStrategy.initialShare, 2)
         trade_time = str.replace(data['date'][2:], "-", "/") + " 09:30"
         self.buy_stock(data, "首次买入", trade_time, price, self.__tradeStrategy.initialShare)
-        self.lblOriginalInvestment.setText("初始成本：" + str(self.__initialAsset))
+        # 得到初始成本
+        self.__stockInvestment.initial_invest()
+        self.lblOriginalInvestment.setText("初始成本：" + str(self.__stockInvestment.initialAsset))
 
     # 末日收盘价计算仓位差补齐
     def trade_last_day(self):
         # 获取最后一个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[-1]
         # 获取需要买回或者卖出的股份数，保持结束底仓
-        last_trade_share = self.__tradeStrategy.initialShare - self.__currentShare
+        last_trade_share = self.__tradeStrategy.initialShare - self.__stockInvestment.currentShare
         if last_trade_share > 0:
             self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
@@ -141,8 +123,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         pre_close = daily_data['preclose']
         date = daily_data['date']
         # 获取当日5分钟K线数据
-        market = Tools.get_trade_center(self.__stockCode)
-        result = baostock.query_history_k_data(code=market + "." + self.__stockCode, fields="time,high,low",
+        market = Tools.get_trade_center(self.__stockInvestment.stockCode)
+        result = baostock.query_history_k_data(code=market + "." + self.__stockInvestment.stockCode, fields="time,high,low",
                                                start_date=date, end_date=date, frequency="5", adjustflag="2")
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
@@ -196,20 +178,18 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                     t_sell_point = history + self.__tradeStrategy.sameDayProfit
                     # 价格高于做T卖出盈利点，执行卖出操作
                     if minute_high > t_sell_point:
-                        # 判断是否有可卖余额，避免出现T+0操作
-                        if self.__sellableShare >= self.__tradeStrategy.sharePerTrade:
-                            # 计算做T卖出价格
-                            trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, t_sell_point)
-                            if self.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, self.__tradeStrategy.sharePerTrade):
-                                # 抵消当日买入记录
-                                daily_buy_history.remove(history)
-                                # 回溯再次买入点价格，跌到该买点会再次买入
-                                current_buy_point += self.__tradeStrategy.buyPointStep
-                                # 累计做T次数
-                                self.totalSameDayTradeCount += 1
-                                # 收盘价低于做T卖出价，做T成功
-                                if daily_data['close'] < trade_price:
-                                    self.successfulSameDayTradeCount += 1
+                        # 计算做T卖出价格
+                        trade_price = TechnicalAnalysis.get_price_from_percentage(pre_close, t_sell_point)
+                        if self.sell_stock(daily_data, "做T卖出", minute_data['time'], trade_price, self.__tradeStrategy.sharePerTrade):
+                            # 抵消当日买入记录
+                            daily_buy_history.remove(history)
+                            # 回溯再次买入点价格，跌到该买点会再次买入
+                            current_buy_point += self.__tradeStrategy.buyPointStep
+                            # 累计做T次数
+                            self.totalSameDayTradeCount += 1
+                            # 收盘价低于做T卖出价，做T成功
+                            if daily_data['close'] < trade_price:
+                                self.successfulSameDayTradeCount += 1
 
                 # 遍历当日卖出记录
                 for history in daily_sell_history:
@@ -271,76 +251,64 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 更新交易记录并计算资产变化
     def update_trade_count(self, data: pandas.DataFrame):
-        self.lblBuyCount.setText("共买入" + str(self.__totalBuyCount) + "次，成功" + str(self.__successfulBuyCount) + "次")
-        self.lblSellCount.setText("共卖出" + str(self.__totalSellCount) + "次，成功" + str(self.__successfulSellCount) + "次")
+        self.lblBuyCount.setText("共买入" + str(len(self.__stockInvestment.buyTransactions)) + "次，成功" + str(self.__successfulBuyCount) + "次")
+        self.lblSellCount.setText("共卖出" + str(len(self.__stockInvestment.sellTransactions)) + "次，成功" + str(self.__successfulSellCount) + "次")
         self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
-        self.lblTotalFee.setText("总手续费：" + str(round(self.__totalFeePaid, 2)))
-        self.lblFinalAsset.setText("最终资产：" + str(self.net_worth(data['close'])))
-        self.lblTotalProfit.setText("累计收益：" + str(self.net_profit(data['close'])))
-        self.lblTotalReturn.setText("盈亏比例：" + str(self.profit_percentage(data['close'])) + "%")
+        self.lblTotalFee.setText("总手续费：" + str(self.__stockInvestment.totalFee))
+        self.lblFinalAsset.setText("最终资产：" + str(self.__stockInvestment.net_worth(data['close'])))
+        self.lblTotalProfit.setText("累计收益：" + str(self.__stockInvestment.net_profit(data['close'])))
+        self.lblTotalReturn.setText("盈亏比例：" + str(self.__stockInvestment.profit_percentage(data['close'])) + "%")
 
     # 模拟买入股票操作
-    def buy_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, signal="无"):
+    def buy_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, share: int, signal="无"):
         # 最大买入额度已满，放弃买入
-        if self.__currentShare >= self.__tradeStrategy.maxShare:
+        if self.__stockInvestment.currentShare >= self.__tradeStrategy.maxShare:
             return False
         # 准备买入额度超过最大可持仓额度，减少买入额度
-        if self.__tradeStrategy.maxShare - self.__currentShare < trade_share:
-            trade_share = self.__tradeStrategy.maxShare - self.__currentShare
-
-        self.__currentShare += trade_share
-        trade_price = round(trade_price, 2)
-        money = trade_share * trade_price
-        fee = buy_transaction_fee(money)
-        self.__totalMoneySpent += money + fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, signal)
-        # 累加交易手续费
-        self.__totalFeePaid += fee
-        # 累加买入次数记录
-        self.__totalBuyCount += 1
+        if self.__tradeStrategy.maxShare - self.__stockInvestment.currentShare < share:
+            share = self.__tradeStrategy.maxShare - self.__stockInvestment.currentShare
+        # 修复日期格式
+        time = Tools.reformat_time(time)
+        # 进行实际买入操作
+        self.__stockInvestment.buy_stock(price, share, time[:8])
+        # 添加交易记录
+        self.add_trade_log(data, time, action, price, share, signal)
         # 收盘价高于买入价，买入成功
-        if data['close'] > trade_price:
+        if data['close'] > price:
             self.__successfulBuyCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
 
-    # # 模拟卖出股票操作
-    def sell_stock(self, data: pandas.DataFrame, action: str, time: str, trade_price: float, trade_share: int, signal="无"):
+    # 模拟卖出股票操作
+    def sell_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, share: int, signal="无"):
         # 最小持仓额度已到，放弃卖出
-        if self.__currentShare <= self.__tradeStrategy.minShare:
+        if self.__stockInvestment.currentShare <= self.__tradeStrategy.minShare:
             return False
         # 准备卖出额度超过最小可持仓额度，减少卖出额度
-        if self.__currentShare - self.__tradeStrategy.minShare < trade_share:
-            trade_share = self.__currentShare - self.__tradeStrategy.minShare
-
-        self.__currentShare -= trade_share
-        self.__sellableShare -= trade_share
-        trade_price = round(trade_price, 2)
-        money = trade_share * trade_price
-        fee = sell_transaction_fee(money)
-        self.__totalMoneyBack += money - fee
-        self.add_trade_log(data, time, action, trade_price, trade_share, self.__currentShare, signal)
-        # 累加交易手续费
-        self.__totalFeePaid += fee
-        # 累加卖出次数记录
-        self.__totalSellCount += 1
+        if self.__stockInvestment.currentShare - self.__tradeStrategy.minShare < share:
+            share = self.__stockInvestment.currentShare - self.__tradeStrategy.minShare
+        # 修复日期格式
+        time = Tools.reformat_time(time)
+        # 进行实际卖出操作
+        self.__stockInvestment.sell_stock(price, share, time[:8])
+        # 添加交易记录
+        self.add_trade_log(data, time, action, price, share, signal)
         # 收盘价低于卖出价，卖出成功
-        if data['close'] < trade_price:
+        if data['close'] < price:
             self.__successfulSellCount += 1
         # 更新交易记录显示
         self.update_trade_count(data)
         return True
 
     # 在表格中添加交易记录
-    def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, remaining_share: int, signal: str):
+    def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, signal: str):
         # 获取当前表格总行数
         row_count = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
         self.tblTradeHistory.insertRow(row_count)
         # 缓存昨日收盘价
         pre_close = data['preclose']
-        time = Tools.reformat_time(time)
         column = 0
         # 交易时间
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(time))
@@ -354,7 +322,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
         column += 1
         # 持仓股数
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(remaining_share)))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.__stockInvestment.currentShare)))
         column += 1
         # 开盘
         column = Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
@@ -371,40 +339,12 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(signal)))
         column += 1
         # 持仓成本
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.average_cost(data['close']))))
+        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.__stockInvestment.average_cost(data['close']))))
         column += 1
         # 累计收益
-        column = Tools.add_colored_item(self.tblTradeHistory, self.net_profit(data['close']), row_count, column)
+        column = Tools.add_colored_item(self.tblTradeHistory, self.__stockInvestment.net_profit(data['close']), row_count, column)
         # 盈亏比例
-        column = Tools.add_colored_item(self.tblTradeHistory, self.profit_percentage(data['close']), row_count, column, "%")
-        # 记录交易数据作图用
-        self.__tradeHistory.append([time, action, trade_price])
-
-    # 累计获利百分比
-    def profit_percentage(self, current_price: float):
-        return round(self.net_profit(current_price) / self.__initialAsset * 100, 2)
-
-    # 累计获利金额
-    def net_profit(self, current_price: float):
-        return round(self.cash_worth() + self.stock_worth(current_price), 2)
-
-    # 股票与现金总资产
-    def net_worth(self, current_price: float):
-        return round(self.net_profit(current_price) + self.__initialAsset, 2)
-
-    # 现金总资产
-    def cash_worth(self):
-        return round(self.__totalMoneyBack - self.__totalMoneySpent, 2)
-
-    # 股票折现总资产
-    def stock_worth(self, current_price: float):
-        return round(self.__currentShare * current_price, 2)
-
-    # 持仓平均成本
-    def average_cost(self, current_price: float):
-        if self.__currentShare == 0:
-            return 0.00
-        return round(current_price - self.net_profit(current_price) / self.__currentShare, 2)
+        column = Tools.add_colored_item(self.tblTradeHistory, self.__stockInvestment.profit_percentage(data['close']), row_count, column, "%")
 
     # 显示交易记录K线图
     def show_history_diagram(self):
@@ -413,7 +353,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 复制一份以日期作为key的数据
         stock_data = pandas.DataFrame.copy(StockAnalyzer.stockDatabase)
         stock_data.set_index('date', inplace=True)
-        graph = HistoryGraph(self.__stockCode, stock_data)
+        graph = HistoryGraph(self.__stockInvestment.stockCode, stock_data)
         # 画成交量
         graph.plot_volume()
         # 画布林轨道
@@ -428,6 +368,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             else:
                 graph.plot_ma_pair(self.__crossShort, self.__crossLong, StockAnalyzer.instance.rbnTrix.isChecked())
         graph.plot_price()
-        graph.plot_trade_history(self.__tradeHistory)
+        graph.plot_trade_history(self.__stockInvestment)
         graph.exec_()
 

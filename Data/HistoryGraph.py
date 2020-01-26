@@ -3,6 +3,7 @@ from PyQt5.QtChart import *
 from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
+from Data.InvestmentStatus import StockInvestment
 import pandas
 
 
@@ -259,22 +260,28 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         self.plot_ma(5, Qt.white)
 
         # 画出买卖记录
-    def plot_trade_history(self, trade_history: list):
+    def plot_trade_history(self, trade_history: StockInvestment):
         buy_history = QScatterSeries()
         sell_history = QScatterSeries()
         # 设置格式
         decorate_scatter_series(buy_history, 'B', QColor(255, 127, 0))
         decorate_scatter_series(sell_history, 'S', QColor(0, 255, 127))
 
-        for history in trade_history:
-            date = self.get_date_number(history[0])
+        # 遍历买入记录
+        for history in trade_history.buyTransactions:
+            date = self.get_date_number(history.date)
             # 找不到日期，跳过此次交易
             if date == -1:
                 continue
-            if '买' in history[1]:
-                buy_history.append(date, history[2])
-            else:
-                sell_history.append(date, history[2])
+            buy_history.append(date, history.price)
+
+        # 遍历卖出记录
+        for history in trade_history.sellTransactions:
+            date = self.get_date_number(history.date)
+            # 找不到日期，跳过此次交易
+            if date == -1:
+                continue
+            sell_history.append(date, history.price)
 
         self.chart.addSeries(buy_history)
         self.chart.addSeries(sell_history)

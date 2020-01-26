@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>353</height>
+    <width>575</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,11 @@
     </column>
     <column>
      <property name="text">
+      <string>年化复利</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>投入成本</string>
      </property>
     </column>
@@ -71,18 +76,24 @@
      <string>共计成本0元，至今获利0元，收益率0%</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>9</y>
       <width>551</width>
-      <height>93</height>
+      <height>103</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QLabel" name="lblInitialInvestment">
          <property name="font">
@@ -201,6 +212,9 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QLabel" name="lblStartDate">
          <property name="font">
@@ -283,6 +297,9 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
        <item>
         <widget class="QLabel" name="lblNewStockCode">
          <property name="font">
@@ -388,8 +405,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>574</width>
-     <height>23</height>
+     <width>575</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

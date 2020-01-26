@@ -1,7 +1,8 @@
 from QtDesign.ScheduledInvestment_ui import Ui_ScheduledInvestment
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate
 from Tools import Tools, FileManager
+import baostock, pandas, math
 
 
 # 定投组合模拟
@@ -10,6 +11,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.cbbIntervalType.addItems(['周', '月'])
 
     # 读取股票列表（可多选）
     def import_stock_list(self):
@@ -32,6 +34,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             Tools.show_error_dialog('股票代码或名称无效！')
         else:
             self.fill_stock_list(stock_code, 0)
+        self.tblStockList.repaint()
 
     # 移除一只股票
     def remove_stock_code(self):
@@ -40,6 +43,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             return
         index = selection[0].row()
         self.tblStockList.removeRow(index)
+        self.tblStockList.repaint()
 
     # 根据导入的选股列表文件填表
     def fill_stock_list(self, code: str, share: int):
@@ -81,5 +85,36 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
 
     # 开始定投模拟
     def start_investing(self):
-        start_date = self.dteStartDate.date().toString()
+        start_date = self.dteStartDate.date().toString('yyyy-MM-dd')
+        end_date = QDate.currentDate().toString('yyyy-MM-dd')
+        frequency = 'w' if self.cbbIntervalType.currentText() == '周' else 'y'
+        for row in range(self.tblStockList.rowCount()):
+            stock_code = self.tblStockList.item(row, 0).text()
+            market = Tools.get_trade_center(stock_code)
+            bs_result = baostock.query_history_k_data(code=market + '.' + stock_code, fields='date,open,high,low,close,pctChg',
+                                                      start_date=start_date, end_date=end_date, frequency=frequency, adjustflag='2')
+            stock_data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
+            # 开始价格
+            start_price = stock_data.iloc[0]['open']
+            # 当前价格
+            end_price = stock_data.iloc[-1]['close']
+            years = int(stock_data.iloc[-1]['date'][:4]) - int(stock_data.iloc[0]['date'][:4]) + 1
+            # 年化复利
+            annual_profit = round((math.pow(end_price / start_price, 1 / years) - 1) * 100, 2)
+            Tools.add_colored_item(self.tblStockList, annual_profit, row, 3, '%')
+            # 初始投资
+            percentage = int(self.tblStockList.item(row, 2).text())
+            self.buy_stock(stock_code, start_price, percentage, self.spbInitialInvestment.value())
+
+    def buy_stock(self, code: str, price: float, percentage: int, total_money: int):
+        allocated_money = total_money * percentage / 100
+        # 计算买入股数，至少买入100股
+        share = max(round(allocated_money / (price * 100)), 1) * 100
+        actual_money = share * price
+
+
+
+
+
+
 

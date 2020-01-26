@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TradeSimulator.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -54,7 +54,7 @@ class Ui_TradeSimulator(object):
         self.tblTradeHistory.horizontalHeader().setDefaultSectionSize(70)
         self.tblTradeHistory.verticalHeader().setDefaultSectionSize(25)
         self.layoutWidget = QtWidgets.QWidget(TradeSimulator)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 531, 71))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 531, 79))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(12)
@@ -128,13 +128,13 @@ class Ui_TradeSimulator(object):
         self.lblTotalFee.setObjectName("lblTotalFee")
         self.horizontalLayout_3.addWidget(self.lblTotalFee)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        self.widget = QtWidgets.QWidget(TradeSimulator)
-        self.widget.setGeometry(QtCore.QRect(560, 10, 111, 58))
-        self.widget.setObjectName("widget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.layoutWidget1 = QtWidgets.QWidget(TradeSimulator)
+        self.layoutWidget1.setGeometry(QtCore.QRect(560, 10, 120, 66))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.btnStartTrading = QtWidgets.QPushButton(self.widget)
+        self.btnStartTrading = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setBold(True)
@@ -142,7 +142,7 @@ class Ui_TradeSimulator(object):
         self.btnStartTrading.setFont(font)
         self.btnStartTrading.setObjectName("btnStartTrading")
         self.verticalLayout.addWidget(self.btnStartTrading)
-        self.btnShowDiagram = QtWidgets.QPushButton(self.widget)
+        self.btnShowDiagram = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         self.btnShowDiagram.setFont(font)
@@ -178,7 +178,7 @@ class Ui_TradeSimulator(object):
         item = self.tblTradeHistory.horizontalHeaderItem(9)
         item.setText(_translate("TradeSimulator", "当日换手"))
         item = self.tblTradeHistory.horizontalHeaderItem(10)
-        item.setText(_translate("TradeSimulator", "运行趋势 / 多空信号"))
+        item.setText(_translate("TradeSimulator", "趋势信号"))
         item = self.tblTradeHistory.horizontalHeaderItem(11)
         item.setText(_translate("TradeSimulator", "平均成本"))
         item = self.tblTradeHistory.horizontalHeaderItem(12)

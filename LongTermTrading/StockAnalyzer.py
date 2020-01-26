@@ -42,7 +42,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         end_date = now.toString('yyyy-MM-dd')
 
         # 获取股票历史数据
-        result = baostock.query_history_k_data_plus(code=market + "." + stock_code, fields="date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST",
+        result = baostock.query_history_k_data(code=market + "." + stock_code, fields="date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST",
                                                     start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
         FileManager.save_stock_history_data(result, stock_code)
         global stockDatabase
