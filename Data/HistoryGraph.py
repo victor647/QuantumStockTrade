@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
-import pandas
+import pandas, math
 
 
 # 美化散点图
@@ -28,7 +28,7 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 # 显示K线图
 class HistoryGraph(QDialog, Ui_HistoryGraph):
 
-    def __init__(self, code: str, stock_data: pandas.DataFrame):
+    def __init__(self, code: str, stock_data: pandas.DataFrame, show_year=False):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(code + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
@@ -41,7 +41,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 初始化日期显示
         self.__dates = []
         for index, day_data in self.stockData.iterrows():
-            self.__dates.append(index[5:7] + index[8:10])
+            self.__dates.append(index)
         # 根据数据数量调节宽度
         self.resize(len(self.__dates) * 15, 550)
         self.setMinimumSize(len(self.__dates) * 10 + 100, 400)
@@ -54,7 +54,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             self.x_axis.hide()
             date_axis = QDateTimeAxis()
             date_axis.setTickCount(11)
-            date_axis.setFormat('MM/dd')
+            date_axis.setFormat('yy/MM/dd' if show_year else 'MM/dd')
             date_axis.setGridLineColor(Qt.black)
             date_axis.setLabelsColor(Qt.lightGray)
             date_axis.setMin(QDateTime.fromString(self.stockData.index[0], 'yyyy-MM-dd'))
@@ -83,17 +83,17 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 添加数据
         for index, day_data in self.stockData.iterrows():
             candlestick_set = QCandlestickSet(day_data['open'], day_data['high'], day_data['low'], day_data['close'])
-            # 给线条上色
+            # 给线条上色，默认为白色
+            candlestick_set.setPen(Qt.white)
             if day_data['close'] > day_data['open']:
                 candlestick_set.setPen(Qt.red)
             elif day_data['close'] < day_data['open']:
                 candlestick_set.setPen(Qt.cyan)
-            elif day_data['close'] > day_data['preclose']:
-                candlestick_set.setPen(Qt.red)
-            elif day_data['close'] < day_data['preclose']:
-                candlestick_set.setPen(Qt.cyan)
-            else:
-                candlestick_set.setPen(Qt.white)
+            elif 'preclose' in day_data:
+                if day_data['close'] > day_data['preclose']:
+                    candlestick_set.setPen(Qt.red)
+                elif day_data['close'] < day_data['preclose']:
+                    candlestick_set.setPen(Qt.cyan)
             price_series.append(candlestick_set)
         # 创建图表
         self.chart.addSeries(price_series)
@@ -118,12 +118,21 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 添加数据
         for index, day_data in self.stockData.iterrows():
             # 给成交量柱子上色
-            if day_data['close'] >= day_data['preclose']:
-                volume_bar_up.append(day_data['turn'])
-                volume_bar_down.append(0)
+            if 'preclose' in day_data:
+                if day_data['close'] >= day_data['preclose']:
+                    volume_bar_up.append(day_data['turn'])
+                    volume_bar_down.append(0)
+                else:
+                    volume_bar_down.append(day_data['turn'])
+                    volume_bar_up.append(0)
+            # 若没有昨日收盘信息，则根据当日表现填色
             else:
-                volume_bar_down.append(day_data['turn'])
-                volume_bar_up.append(0)
+                if day_data['close'] >= day_data['open']:
+                    volume_bar_up.append(day_data['turn'])
+                    volume_bar_down.append(0)
+                else:
+                    volume_bar_down.append(day_data['turn'])
+                    volume_bar_up.append(0)
         self.chart.addSeries(volume_series)
         # 创建成交量Y轴在右侧
         volume_axis = QValueAxis()
@@ -245,11 +254,16 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         ma_line.setColor(color)
         label = 'ma_' + str(period)
         i = 0
+        is_valid = False
         for index, day_data in self.stockData.iterrows():
+            # 避免部分数值因数据不够不存在
+            if not math.isnan(day_data[label]):
+                is_valid = True
             ma_line.append(i, day_data[label])
             i += 1
-        self.chart.addSeries(ma_line)
-        ma_line.attachAxis(self.price_axis)
+        if is_valid:
+            self.chart.addSeries(ma_line)
+            ma_line.attachAxis(self.price_axis)
 
     # 画所有均线
     def plot_all_ma_lines(self):
@@ -291,10 +305,8 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         sell_history.attachAxis(self.x_axis)
 
     # 通过日期获取第几个交易日
-    def get_date_number(self, date_time: str):
-        # 得到MMDD格式日期
-        month_day = date_time[3:5] + date_time[6:8]
+    def get_date_number(self, date: str):
         for i in range(len(self.__dates)):
-            if month_day == self.__dates[i]:
+            if date == self.__dates[i]:
                 return i
         return -1

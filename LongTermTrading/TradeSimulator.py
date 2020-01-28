@@ -20,11 +20,12 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         super().__init__()
         self.setupUi(self)
         self.__tradeStrategy = trade_strategy
-        self.__stockInvestment = StockInvestment(stock_code)
+        self.__stockInvestment = StockInvestment()
         # 设置窗口标题
         self.setWindowTitle(stock_code + "模拟交易")
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.__stockCode = stock_code
 
     # 获取多空趋势转变信号
     def get_trend_type(self):
@@ -123,8 +124,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         pre_close = daily_data['preclose']
         date = daily_data['date']
         # 获取当日5分钟K线数据
-        market = Tools.get_trade_center(self.__stockInvestment.stockCode)
-        result = baostock.query_history_k_data(code=market + "." + self.__stockInvestment.stockCode, fields="time,high,low",
+        market = Tools.get_trade_center(self.__stockCode)
+        result = baostock.query_history_k_data(code=market + "." + self.__stockCode, fields="time,high,low",
                                                start_date=date, end_date=date, frequency="5", adjustflag="2")
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
@@ -304,47 +305,47 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 在表格中添加交易记录
     def add_trade_log(self, data: pandas.DataFrame, time: str, action: str, trade_price: float, trade_share: int, signal: str):
         # 获取当前表格总行数
-        row_count = self.tblTradeHistory.rowCount()
+        row = self.tblTradeHistory.rowCount()
         # 在表格末尾添加一行新纪录
-        self.tblTradeHistory.insertRow(row_count)
+        self.tblTradeHistory.insertRow(row)
         # 缓存昨日收盘价
         pre_close = data['preclose']
         column = 0
         # 交易时间
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(time))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(time))
         column += 1
         # 操作
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(action))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(action))
         column += 1
         # 成交价格
-        column = Tools.add_price_item(self.tblTradeHistory, trade_price, pre_close, row_count, column)
+        column = Tools.add_price_item(self.tblTradeHistory, row, column, trade_price, pre_close)
         # 成交股数
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(trade_share)))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(trade_share)))
         column += 1
         # 持仓股数
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.__stockInvestment.currentShare)))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.__stockInvestment.currentShare)))
         column += 1
         # 开盘
-        column = Tools.add_price_item(self.tblTradeHistory, round(data['open'], 2), pre_close, row_count, column)
+        column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['open'], 2), pre_close)
         # 最高
-        column = Tools.add_price_item(self.tblTradeHistory, round(data['high'], 2), pre_close, row_count, column)
+        column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['high'], 2), pre_close)
         # 最低
-        column = Tools.add_price_item(self.tblTradeHistory, round(data['low'], 2), pre_close, row_count, column)
+        column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['low'], 2), pre_close)
         # 收盘
-        column = Tools.add_price_item(self.tblTradeHistory, round(data['close'], 2), pre_close, row_count, column)
+        column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['close'], 2), pre_close)
         # 换手率
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
         column += 1
         # 多空信号
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(signal)))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(signal)))
         column += 1
         # 持仓成本
-        self.tblTradeHistory.setItem(row_count, column, QTableWidgetItem(str(self.__stockInvestment.average_cost(data['close']))))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.__stockInvestment.average_cost(data['close']))))
         column += 1
         # 累计收益
-        column = Tools.add_colored_item(self.tblTradeHistory, self.__stockInvestment.net_profit(data['close']), row_count, column)
+        column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.net_profit(data['close']))
         # 盈亏比例
-        column = Tools.add_colored_item(self.tblTradeHistory, self.__stockInvestment.profit_percentage(data['close']), row_count, column, "%")
+        column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), "%")
 
     # 显示交易记录K线图
     def show_history_diagram(self):
@@ -353,7 +354,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 复制一份以日期作为key的数据
         stock_data = pandas.DataFrame.copy(StockAnalyzer.stockDatabase)
         stock_data.set_index('date', inplace=True)
-        graph = HistoryGraph(self.__stockInvestment.stockCode, stock_data)
+        graph = HistoryGraph(self.__stockCode, stock_data)
         # 画成交量
         graph.plot_volume()
         # 画布林轨道

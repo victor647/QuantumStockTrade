@@ -1,8 +1,8 @@
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
-import LongTermTrading.TradeSimulator as TradeSimulator
 import Data.TechnicalAnalysis as TechnicalAnalysis
+from Data.InvestmentStatus import StockInvestment
 import pandas
 from Tools import Tools, FileManager
 from Data.HistoryGraph import HistoryGraph
@@ -11,7 +11,6 @@ from Data.HistoryGraph import HistoryGraph
 # 选股器回测工具
 class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
     __startDate = ''
-    __stockShare = __stockInvestment = __remainingInvestment = __stockReturn = 0
 
     def __init__(self):
         super().__init__()
@@ -55,7 +54,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         index = selection[0].row()
         self.tblStockList.removeRow(index)
 
-    # 在东方财富网站打开股票主页
+    # 股票详细信息
     def show_stock_graph(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
@@ -68,7 +67,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 获取股票历史K线数据
             data = FileManager.read_stock_history_data(code, True)
             # 截取回测日期内的数据
-            data = pandas.concat([data.loc[:start_date].tail(20), data.loc[start_date:].head(20)])
+            data = pandas.concat([data.loc[:start_date].iloc[-20:-2], data.loc[start_date:].head(20)])
             graph = HistoryGraph(code, data)
             graph.plot_all_ma_lines()
             graph.plot_price()
@@ -95,24 +94,8 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
     def get_day_performance(self, days: int, column: int, row: int, data: pandas.DataFrame, initial_price: float):
         if data.shape[0] > days or days == -1:
             performance = round(data['close'].iloc[days], 2)
-            Tools.add_price_item(self.tblStockList, performance, initial_price, row, column)
+            Tools.add_price_item(self.tblStockList, row, column, performance, initial_price)
         return column + 1
-
-    # 模拟买入股票操作
-    def buy_stock(self, trade_price: float, trade_share: int):
-        self.__stockShare += trade_share
-        investment = trade_price * trade_share
-        # 计算买入金额和手续费
-        self.__stockInvestment += investment + TradeSimulator.buy_transaction_fee(investment)
-        self.__remainingInvestment += investment
-
-    # 模拟卖出股票操作
-    def sell_stock(self, trade_price: float, trade_share: int):
-        self.__stockShare -= trade_share
-        revenue = trade_price * trade_share
-        # 计算卖出回报，扣除手续费
-        self.__stockReturn += revenue - TradeSimulator.sell_transaction_fee(revenue)
-        self.__remainingInvestment -= revenue
 
     # 开始回测
     def start_trade_simulation(self):
@@ -120,14 +103,12 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         total_spent = total_profit = win_stocks = 0
         # 遍历选到的每只股票
         for row in range(self.tblStockList.rowCount()):
-            # 初始化股票交易记录
-            self.__stockInvestment = self.__stockReturn = self.__stockShare = self.__remainingInvestment = 0
             # 从表格中获取股票代码
             stock_code = self.tblStockList.item(row, 0).text()
+            # 初始化股票交易记录
+            self.__stockInvestments[stock_code] = StockInvestment()
             # 从表格中读取开始时间
             start_date = self.tblStockList.item(row, 2).text()
-            # 初始化交易记录
-            self.__stockInvestments[stock_code] = []
             # 获取股票历史K线数据
             data = FileManager.read_stock_history_data(stock_code, True)
             # 截取回测日期内的数据
@@ -137,16 +118,16 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                 continue
             # 选股日收盘价
             initial_price = round(data['close'].iloc[0], 2)
-            column = Tools.add_price_item(self.tblStockList, initial_price, data['preclose'].iloc[0], row, 3)
+            column = Tools.add_price_item(self.tblStockList, row, 3, initial_price, data['preclose'].iloc[0])
             # 次日开盘买入价
             buy_price = round(data['open'].iloc[1], 2)
             # 计算买入股数，至少买入100股
             share_per_trade = max(round(self.spbMoneyPerTrade.value() / (buy_price * 100)), 1) * 100
             # 次日开盘买入股票
-            self.buy_stock(buy_price, share_per_trade)
-            self.__stockInvestments[stock_code].append([data.index[1][2:], '买', buy_price])
+            self.__stockInvestments[stock_code].buy_stock(buy_price, share_per_trade, data.index[1][2:])
+            self.__stockInvestments[stock_code].initial_invest()
             # 次日开盘买入价
-            column = Tools.add_price_item(self.tblStockList, buy_price, initial_price, row, column)
+            column = Tools.add_price_item(self.tblStockList, row, column, buy_price, initial_price)
             # 次日收盘表现
             column = self.get_day_performance(1, column, row, data, buy_price)
             # 加仓期满表现
@@ -154,9 +135,9 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 清仓期满表现
             column = self.get_day_performance(-1, column, row, data, buy_price)
             # 期间最高涨幅
-            column = Tools.add_price_item(self.tblStockList, round(data['high'].iloc[1:].max(), 2), buy_price, row, column)
+            column = Tools.add_price_item(self.tblStockList, row, column, round(data['high'].iloc[1:].max(), 2), buy_price)
             # 期间最大回撤
-            column = Tools.add_price_item(self.tblStockList, round(data['low'].iloc[1:].min(), 2), buy_price, row, column)
+            column = Tools.add_price_item(self.tblStockList, row, column, round(data['low'].iloc[1:].min(), 2), buy_price)
 
             # 初始化策略文本
             best_strategy = '选股失败，无法盈利'
@@ -179,16 +160,14 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                     if self.cbxAddWhenDown.isChecked() and low_percentage < self.spbAddThresholdDown.value():
                         # 若开盘价低于补仓点，则以开盘价补仓
                         add_price = min(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdDown.value()), open_price)
-                        self.buy_stock(add_price, share_per_trade)
-                        self.__stockInvestments[stock_code].append([data.index[day][2:], '买', add_price])
+                        self.__stockInvestments[stock_code].buy_stock(add_price, share_per_trade, data.index[day][2:])
                         add_day = day
                         actual_behaviour = '第' + str(day) + '日下跌补仓，'
                     # 达到加仓点，强势追涨
                     elif self.cbxAddWhenUp.isChecked() and high_percentage > self.spbAddThresholdUp.value():
                         # 若开盘价高于加仓点，则以开盘价加仓
                         add_price = max(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdUp.value()), open_price)
-                        self.buy_stock(add_price, share_per_trade)
-                        self.__stockInvestments[stock_code].append([data.index[day][2:], '买', add_price])
+                        self.__stockInvestments[stock_code].buy_stock(add_price, share_per_trade, data.index[day][2:])
                         add_day = day
                         actual_behaviour = '第' + str(day) + '日上涨加仓，'
 
@@ -201,52 +180,45 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                         best_earning_per_day = earning_per_day
                         best_strategy = '持股' + str(day) + '日, 获利' + str(round(high_percentage, 2)) + '%'
 
-                    if self.__stockShare > 0:
+                    if self.__stockInvestments[stock_code].currentShare > 0:
                         # 达到止盈点，获利了结
-                        if self.cbxWinThreshold.isChecked() and self.__stockShare * high_price > self.__remainingInvestment + self.spbWinThreshold.value():
-                            sell_price = max(open_price, round((self.__remainingInvestment + self.spbWinThreshold.value()) / self.__stockShare, 2))
+                        if self.cbxWinThreshold.isChecked() and self.__stockInvestments[stock_code].net_profit(high_price) > self.spbWinThreshold.value():
+                            sell_price = max(open_price, self.__stockInvestments[stock_code].threshold_price(self.spbWinThreshold.value()))
+                            self.__stockInvestments[stock_code].sell_all(sell_price, data.index[day][2:])
                             # 当日加仓过，只卖出底仓
                             if add_day == day:
-                                self.sell_stock(sell_price, share_per_trade)
-                                self.__stockInvestments[stock_code].append([data.index[day][2:], '卖', sell_price])
                                 actual_behaviour += '第' + str(day) + '日止盈卖出一半，'
                             else:
-                                self.sell_stock(sell_price, self.__stockShare)
-                                self.__stockInvestments[stock_code].append([data.index[day][2:], '卖', sell_price])
                                 actual_behaviour += '第' + str(day) + '日止盈，'
                         # 达到止损点，割肉离场
-                        elif self.cbxLoseThreshold.isChecked() and self.__stockShare * low_price < self.__remainingInvestment + self.spbLoseThreshold.value():
-                            sell_price = min(open_price, round((self.__remainingInvestment + self.spbLoseThreshold.value()) / self.__stockShare, 2))
+                        elif self.cbxLoseThreshold.isChecked() and self.__stockInvestments[stock_code].net_profit(low_price) < self.spbLoseThreshold.value():
+                            sell_price = min(open_price, self.__stockInvestments[stock_code].threshold_price(self.spbLoseThreshold.value()))
+                            self.__stockInvestments[stock_code].sell_all(sell_price, data.index[day][2:])
                             if add_day == day:
-                                self.sell_stock(sell_price, share_per_trade)
-                                self.__stockInvestments[stock_code].append([data.index[day][2:], '卖', sell_price])
                                 actual_behaviour += '第' + str(day) + '日止损卖出一半，'
                             else:
-                                self.sell_stock(sell_price, self.__stockShare)
-                                self.__stockInvestments[stock_code].append([data.index[day][2:], '卖', sell_price])
                                 actual_behaviour += '第' + str(day) + '日止损，'
 
                     # 若持股到最后一天，则收盘卖出清算
-                    if day == self.spbMaxHoldTime.value() and self.__stockShare > 0:
+                    if day == self.spbMaxHoldTime.value() and self.__stockInvestments[stock_code].currentShare > 0:
                         sell_price = round(data['close'].iloc[day], 2)
-                        self.sell_stock(sell_price, self.__stockShare)
-                        self.__stockInvestments[stock_code].append([data.index[day][2:], '卖', sell_price])
+                        self.__stockInvestments[stock_code].sell_all(sell_price, data.index[day][2:])
                         actual_behaviour += '末日卖出，'
 
-            # 计算这只股票的盈利
-            final_profit = round(self.__stockReturn - self.__stockInvestment, 2)
+            # 计算这只股票的最终盈利
+            final_profit = self.__stockInvestments[stock_code].final_profit()
             if final_profit > 0:
                 win_stocks += 1
             actual_behaviour += ('获利' if final_profit >= 0 else '亏损') + str(final_profit) + '元'
 
             # 按照日化单利排序最佳策略
-            column = Tools.add_sortable_item(self.tblStockList, best_earning_per_day, best_strategy, row, column)
+            column = Tools.add_sortable_item(self.tblStockList, row, column, best_earning_per_day, best_strategy)
             # 按照收益额排序实际操作
-            Tools.add_sortable_item(self.tblStockList, final_profit, actual_behaviour, row, column)
+            Tools.add_sortable_item(self.tblStockList, row, column, final_profit, actual_behaviour)
             # 刷新表格显示
             self.tblStockList.repaint()
             # 计算总和投资与回报
-            total_spent += self.__stockInvestment
+            total_spent += self.__stockInvestments[stock_code].totalInvestment
             total_profit += final_profit
             # 确保有股票被测试，更新底部总获利文字显示
             if total_spent > 0:

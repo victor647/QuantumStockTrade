@@ -112,7 +112,7 @@ def get_price_color(price: float, pre_close: float):
 
 
 # 添加带有红绿正负颜色的数据
-def add_colored_item(table: QTableWidget, value: float, row: int, column: int, symbol='', threshold=0):
+def add_colored_item(table: QTableWidget, row: int, column: int, value: float, symbol='', threshold=0):
     item = CustomSortingTableData(str(value) + symbol)
     # 以数字作为隐藏排序值
     item.set_sorting_data(value)
@@ -122,15 +122,15 @@ def add_colored_item(table: QTableWidget, value: float, row: int, column: int, s
 
 
 # 添加可排序的数据
-def add_sortable_item(table: QTableWidget, value: float, text: str, row: int, column: int):
-    strategy_item = CustomSortingTableData(text)
+def add_sortable_item(table: QTableWidget, row: int, column: int, value: float, text=''):
+    strategy_item = CustomSortingTableData(text if text != '' else str(value))
     strategy_item.set_sorting_data(value)
     table.setItem(row, column, strategy_item)
     return column + 1
 
 
 # 添加价格数据
-def add_price_item(table: QTableWidget, price: float, pre_close: float, row: int, column: int):
+def add_price_item(table: QTableWidget, row: int, column: int, price: float, pre_close: float):
     item = CustomSortingTableData()
     item.setForeground(get_price_color(price, pre_close))
     percentage = TechnicalAnalysis.get_percentage_from_price(price, pre_close)

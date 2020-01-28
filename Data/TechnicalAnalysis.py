@@ -115,6 +115,16 @@ def get_kdj_index(stock_data: pandas.DataFrame):
     stock_data['kdj_j'] = j
 
 
+# 计算所有MA均线
+def calculate_all_ma_curves(stock_data: pandas.DataFrame):
+    stock_closes = stock_data['close']
+    stock_data['ma_5'] = talib.MA(stock_closes, 5)
+    stock_data['ma_10'] = talib.MA(stock_closes, 10)
+    stock_data['ma_20'] = talib.MA(stock_closes, 20)
+    stock_data['ma_30'] = talib.MA(stock_closes, 30)
+    stock_data['ma_60'] = talib.MA(stock_closes, 60)
+
+
 # 计算MA均线
 def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
     key = 'ma_' + str(period)
