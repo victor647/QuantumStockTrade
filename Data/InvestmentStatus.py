@@ -53,6 +53,8 @@ class StockInvestment:
         self.cashValue = 0.0
         # 总手续费
         self.totalFee = 0.0
+        # 查询某个日期的持仓情况
+        self.shareAtDate = {}
 
     # 初始建仓
     def initial_invest(self):
@@ -73,6 +75,7 @@ class StockInvestment:
         self.totalFee += buy_transaction.fee
         # 增加持仓股数
         self.currentShare += share
+        self.shareAtDate[date] = self.currentShare
 
     # 模拟买入股票，按照金额
     def buy_stock_by_money(self, price: float, money: int, date: str):
@@ -99,11 +102,12 @@ class StockInvestment:
         sell_transaction = Transaction('S', price, share, date)
         self.sellTransactions.append(sell_transaction)
         # 增加账上现金价值
-        self.cashValue += sell_transaction.full_investment()
+        self.cashValue += sell_transaction.full_return()
         # 累计手续费
         self.totalFee += sell_transaction.fee
         # 减少持仓股数
         self.currentShare -= share
+        self.shareAtDate[date] = self.currentShare
         return True
 
     # 清仓卖出可卖出部分

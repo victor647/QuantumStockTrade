@@ -79,12 +79,12 @@ def reformat_time(time):
     time_string = str(time / 10000)
     if len(time_string) < 12:
         return time_string
-    year = time_string[2:4]
+    year = time_string[:4]
     month = time_string[4:6]
     day = time_string[6:8]
     hour = time_string[8:10]
     minute = time_string[10:12]
-    return year + '/' + month + '/' + day + ' ' + hour + ':' + minute
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute
 
 
 # 六位数时间转字符串

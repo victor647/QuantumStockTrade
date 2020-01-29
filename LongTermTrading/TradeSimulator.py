@@ -76,7 +76,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 获取首个交易日数据
         data = StockAnalyzer.stockDatabase.iloc[0]
         price = round(data['open'], 2)
-        trade_time = str.replace(data['date'][2:], "-", "/") + " 09:30"
+        trade_time = data['date'] + " 09:30"
         self.buy_stock(data, "首次买入", trade_time, price, self.__tradeStrategy.initialShare)
         # 得到初始成本
         self.__stockInvestment.initial_invest()
@@ -89,9 +89,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 获取需要买回或者卖出的股份数，保持结束底仓
         last_trade_share = self.__tradeStrategy.initialShare - self.__stockInvestment.currentShare
         if last_trade_share > 0:
-            self.buy_stock(data, "末日买入", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], last_trade_share)
+            self.buy_stock(data, "末日买入", data['date'] + " 15:00", data['close'], last_trade_share)
         if last_trade_share < 0:
-            self.sell_stock(data, "末日卖出", str.replace(data['date'][2:], "-", "/") + " 15:00", data['close'], -last_trade_share)
+            self.sell_stock(data, "末日卖出", data['date'] + " 15:00", data['close'], -last_trade_share)
 
     # 更新多空趋势情况
     def update_trend_status(self, index: int, stock_today: pandas.DataFrame):
@@ -99,7 +99,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         if index < 2:
             return
         # 获得开盘时间
-        start_time = str.replace(stock_today['date'][2:], "-", "/") + " 09:30"
+        start_time = stock_today['date'] + " 09:30"
 
         # 根据前两日指标变化计算多空趋势
         stock_after = StockAnalyzer.stockDatabase.iloc[index - 1]
@@ -108,12 +108,12 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             self.__trend = "上升"
             # 立刻买入
             if self.__tradeStrategy.trendChangeTradeShare > 0:
-                self.buy_stock(stock_today, "抄底买入", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为上升趋势")
+                self.buy_stock(stock_today, "抄底买入", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为上升")
         if stock_before[self.__crossShort] > stock_before[self.__crossLong] and stock_after[self.__crossShort] < stock_after[self.__crossLong]:
             self.__trend = "下降"
             # 立刻卖出
             if self.__tradeStrategy.trendChangeTradeShare > 0:
-                self.sell_stock(stock_today, "见顶卖出", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为下降趋势")
+                self.sell_stock(stock_today, "见顶卖出", start_time, stock_today['open'], self.__tradeStrategy.trendChangeTradeShare, "转为下降")
 
     # 普通交易策略
     def normal_trade(self, daily_data: pandas.DataFrame):
@@ -271,7 +271,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 修复日期格式
         time = Tools.reformat_time(time)
         # 进行实际买入操作
-        self.__stockInvestment.buy_stock(price, share, time[:8])
+        self.__stockInvestment.buy_stock(price, share, time[:10])
         # 添加交易记录
         self.add_trade_log(data, time, action, price, share, signal)
         # 收盘价高于买入价，买入成功
@@ -292,7 +292,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 修复日期格式
         time = Tools.reformat_time(time)
         # 进行实际卖出操作
-        self.__stockInvestment.sell_stock(price, share, time[:8])
+        self.__stockInvestment.sell_stock(price, share, time[:10])
         # 添加交易记录
         self.add_trade_log(data, time, action, price, share, signal)
         # 收盘价低于卖出价，卖出成功
@@ -368,6 +368,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             # 画其他趋势线
             else:
                 graph.plot_ma_pair(self.__crossShort, self.__crossLong, StockAnalyzer.instance.rbnTrix.isChecked())
+        else:
+            graph.plot_all_ma_lines()
         graph.plot_price()
         graph.plot_trade_history(self.__stockInvestment)
         graph.exec_()

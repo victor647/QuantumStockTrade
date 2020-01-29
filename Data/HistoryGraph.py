@@ -27,6 +27,7 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 
 # 显示K线图
 class HistoryGraph(QDialog, Ui_HistoryGraph):
+    volumeSeries = None
 
     def __init__(self, code: str, stock_data: pandas.DataFrame, show_year=False):
         super().__init__()
@@ -107,14 +108,14 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
 
     # 画成交量柱状图
     def plot_volume(self):
-        volume_series = QStackedBarSeries()
-        volume_series.setBarWidth(0.7)
+        self.volumeSeries = QStackedBarSeries()
+        self.volumeSeries.setBarWidth(0.7)
         volume_bar_up = QBarSet('up')
         volume_bar_down = QBarSet('down')
         decorate_bar_series(volume_bar_up, Qt.red, True)
         decorate_bar_series(volume_bar_down, Qt.cyan)
-        volume_series.append(volume_bar_up)
-        volume_series.append(volume_bar_down)
+        self.volumeSeries.append(volume_bar_up)
+        self.volumeSeries.append(volume_bar_down)
         # 添加数据
         for index, day_data in self.stockData.iterrows():
             # 给成交量柱子上色
@@ -133,7 +134,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
                 else:
                     volume_bar_down.append(day_data['turn'])
                     volume_bar_up.append(0)
-        self.chart.addSeries(volume_series)
+        self.chart.addSeries(self.volumeSeries)
         # 创建成交量Y轴在右侧
         volume_axis = QValueAxis()
         volume_axis.setGridLineColor(Qt.darkGray)
@@ -142,8 +143,8 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 将成交量图形置于最下方
         volume_axis.setMax(self.stockData['turn'].max() * 4)
         self.chart.addAxis(volume_axis, Qt.AlignRight)
-        volume_series.attachAxis(volume_axis)
-        volume_series.attachAxis(self.x_axis)
+        self.volumeSeries.attachAxis(volume_axis)
+        self.volumeSeries.attachAxis(self.x_axis)
 
     # 画布林线轨道
     def plot_boll(self):
@@ -180,6 +181,8 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 创建差值柱
         macd_column = QStackedBarSeries()
         macd_column.setBarWidth(0.1)
+        # 增粗成交量柱形图
+        self.volumeSeries.setBarWidth(1.4)
         macd_column_positive = QBarSet('red')
         macd_column_negative = QBarSet('green')
         macd_column.append(macd_column_positive)
@@ -274,7 +277,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         self.plot_ma(5, Qt.white)
 
         # 画出买卖记录
-    def plot_trade_history(self, trade_history: StockInvestment):
+    def plot_trade_history(self, trade_history: StockInvestment, show_share_change=True):
         buy_history = QScatterSeries()
         sell_history = QScatterSeries()
         # 设置格式
@@ -296,6 +299,31 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             if date == -1:
                 continue
             sell_history.append(date, history.price)
+
+        if show_share_change:
+            share_series = QLineSeries()
+            share_series.setColor(QColor(255, 191, 127))
+            max_share = last_share = 0
+            # 记录每日的持仓情况
+            for date, share in trade_history.shareAtDate.items():
+                date_number = self.get_date_number(date)
+                # 绘制阶梯型折线，确保昨日发生变化
+                if date_number > 1:
+                    share_series.append(date_number - 1, last_share)
+                share_series.append(date_number, share)
+                last_share = share
+                # 获取最大持股数量
+                if share > max_share:
+                    max_share = share
+            # 创建持仓量Y轴
+            share_axis = QValueAxis()
+            share_axis.setVisible(False)
+            # 将持仓量折线置于最下方
+            share_axis.setRange(0, max_share * 4)
+            self.chart.addAxis(share_axis, Qt.AlignRight)
+            self.chart.addSeries(share_series)
+            share_series.attachAxis(share_axis)
+            share_series.attachAxis(self.x_axis)
 
         self.chart.addSeries(buy_history)
         self.chart.addSeries(sell_history)

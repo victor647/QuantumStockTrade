@@ -15,6 +15,8 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         super().__init__()
         self.setupUi(self)
         self.cbbIntervalType.addItems(['周', '月'])
+        # 期始则开盘买入，期尾则收盘买入
+        self.cbbInvestTime.addItems(['期始', '期尾'])
         # 默认以月定投
         self.cbbIntervalType.setCurrentText('月')
         # 默认开始日期为10年前
@@ -90,6 +92,9 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             'interval': self.spbInterval.value(),
             'intervalType': self.cbbIntervalType.currentText(),
             'eachInvestment': self.spbEachInvestment.value(),
+            'investTime': self.cbbInvestTime.currentText(),
+            'smartInvestOn': self.cbxSmartInvesting.isChecked(),
+            'smartInvestFactor': self.spbSmartInvestFactor.value()
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -107,17 +112,19 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             self.spbInterval.setValue(data['interval'])
             self.cbbIntervalType.setCurrentText(data['intervalType'])
             self.spbEachInvestment.setValue(data['eachInvestment'])
+            self.cbbInvestTime.setCurrentText(data['investTime'])
+            self.cbxSmartInvesting.setChecked(data['smartInvestOn'])
+            self.spbSmartInvestFactor.setValue(data['smartInvestFactor'])
 
     # 开始定投模拟
     def start_investing(self):
         start_date = self.dteStartDate.date()
         end_date = QDate.currentDate()
         frequency = 'w' if self.cbbIntervalType.currentText() == '周' else 'm'
-        total_share_ratio = 0
+        # 所有股票总计
+        total_share_ratio = total_spent = total_profit = 0
         for row in range(self.tblStockList.rowCount()):
             stock_code = self.tblStockList.item(row, 0).text()
-            self.__stockInvestments[stock_code] = StockInvestment()
-
             market = Tools.get_trade_center(stock_code)
             bs_result = baostock.query_history_k_data(code=market + '.' + stock_code, fields='date,open,high,low,close,turn',
                                                       start_date=start_date.toString('yyyy-MM-dd'), end_date=end_date.toString('yyyy-MM-dd'), frequency=frequency, adjustflag='2')
@@ -127,6 +134,8 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             stock_data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
             stock_data.set_index('date', inplace=True)
             self.__stockData[stock_code] = stock_data
+            investment = StockInvestment()
+            self.__stockInvestments[stock_code] = investment
             # 获取均线数据
             TechnicalAnalysis.calculate_all_ma_curves(stock_data)
             # 开始价格
@@ -151,10 +160,12 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
                 share_ratio += 1 - total_share_ratio
                 self.tblStockList.item(row, 2).setText(str(share_ratio * 100) + '%')
             # 进行首笔投资
-            self.__stockInvestments[stock_code].buy_stock_by_money(start_price, share_ratio * self.spbInitialInvestment.value() * 10000, start_date.toString('yyyy-MM-dd'))
-            self.__stockInvestments[stock_code].initial_invest()
+            investment.buy_stock_by_money(start_price, share_ratio * self.spbInitialInvestment.value() * 10000, start_date.toString('yyyy-MM-dd'))
+            investment.initial_invest()
             # 当前交易日期
             current_date = QDate(start_date)
+            # 记录上次定投的价格，以
+            last_price = start_price
             # 进行每次定投
             while current_date < end_date:
                 if self.cbbIntervalType.currentText() == '周':
@@ -171,17 +182,29 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
                 data = stock_data.loc[current_date.toString('yyyy-MM-dd'):].head(1)
                 # 跳过停牌股票
                 if data.shape[0] > 0 and data.iloc[0]['high'] != data.iloc[0]['low']:
-                    self.__stockInvestments[stock_code].buy_stock_by_money(data.iloc[0]['open'], share_ratio * self.spbEachInvestment.value() * 10000, data.index[0])
+                    buy_price = data.iloc[0]['open' if self.cbbInvestTime.currentText() == '期始' else 'close']
+                    money = share_ratio * self.spbEachInvestment.value() * 10000
+                    # 若开启智能定投，则下跌时多买
+                    if self.cbxSmartInvesting.isChecked():
+                        percent_change = TechnicalAnalysis.get_percentage_from_price(buy_price, last_price)
+                        # 计算实际投入金钱
+                        money *= min(0, (100 - self.spbSmartInvestFactor.value() * percent_change) / 100)
+                    last_price = buy_price
+                    investment.buy_stock_by_money(buy_price, money, data.index[0])
 
-            # 总计投入
-            total_investment = round(self.__stockInvestments[stock_code].totalInvestment, 2)
-            column = Tools.add_sortable_item(self.tblStockList, row, column, total_investment)
-            # 当前价格
+            column = Tools.add_sortable_item(self.tblStockList, row, column, round(investment.totalInvestment, 2))
+            # 最终价格
             final_price = round(stock_data.iloc[-1]['close'], 2)
-            column = Tools.add_colored_item(self.tblStockList, row, column, self.__stockInvestments[stock_code].net_profit(final_price))
-            profit_percentage = self.__stockInvestments[stock_code].profit_percentage(final_price)
+            # 卖出全部以计算利润
+            investment.sell_all(final_price, end_date)
+            column = Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit())
+            # 计算收益率
+            profit_percentage = investment.profit_percentage(final_price)
             Tools.add_colored_item(self.tblStockList, row, column, profit_percentage, '%')
-
+            # 累计所有股票成本与利润
+            total_spent += round(investment.totalInvestment, 2)
+            total_profit += investment.final_profit()
+        self.lblTradeSummary.setText('共计成本{}元，至今获利{}元，收益率{}%'.format(total_spent, total_profit, TechnicalAnalysis.get_profit_percentage(total_profit, total_spent)))
 
 
 

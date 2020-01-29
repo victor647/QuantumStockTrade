@@ -340,6 +340,11 @@ def get_price_from_percentage(pre_close: float, percentage: float):
     return round(pre_close * (1 + percentage / 100), 2)
 
 
+# 通过盈利和本金计算收益率
+def get_profit_percentage(profit: float, investment: float):
+    return round(profit / investment * 100, 2)
+
+
 # 计算是否符合TRIX图形
 def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int, behaviour: str):
     key_short = calculate_ma_curve(stock_data, period_short)

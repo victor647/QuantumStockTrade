@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>355</height>
+    <width>708</width>
+    <height>391</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
-      <width>621</width>
-      <height>192</height>
+      <y>118</y>
+      <width>691</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="sortingEnabled">
@@ -66,7 +66,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>303</y>
+      <y>340</y>
       <width>611</width>
       <height>25</height>
      </rect>
@@ -86,7 +86,7 @@
      <rect>
       <x>10</x>
       <y>9</y>
-      <width>621</width>
+      <width>691</width>
       <height>103</height>
      </rect>
     </property>
@@ -108,7 +108,7 @@
           </font>
          </property>
          <property name="text">
-          <string>初始金额</string>
+          <string>初始总金额</string>
          </property>
         </widget>
        </item>
@@ -169,6 +169,27 @@
        </item>
        <item>
         <widget class="QComboBox" name="cbbIntervalType">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbbInvestTime">
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <family>Helvetica</family>
@@ -185,7 +206,7 @@
           </font>
          </property>
          <property name="text">
-          <string>每期金额</string>
+          <string>每期总金额</string>
          </property>
         </widget>
        </item>
@@ -247,6 +268,40 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbxSmartInvesting">
+         <property name="text">
+          <string>智能定投：每涨跌1%减少增加投资额</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spbSmartInvestFactor">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+          </font>
+         </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnExportPlan">
          <property name="font">
           <font>
@@ -269,32 +324,6 @@
          </property>
          <property name="text">
           <string>导入策略</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnExportStockList">
-         <property name="font">
-          <font>
-           <family>Helvetica</family>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>导出列表</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnImportStockList">
-         <property name="font">
-          <font>
-           <family>Helvetica</family>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>导入列表</string>
          </property>
         </widget>
        </item>
@@ -380,13 +409,33 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnStartInvesting">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>0</height>
-          </size>
+        <widget class="QPushButton" name="btnImportStockList">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
+         <property name="text">
+          <string>导入列表</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnExportStockList">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>导出列表</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnStartInvesting">
          <property name="font">
           <font>
            <family>Helvetica</family>
@@ -410,7 +459,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>642</width>
+     <width>708</width>
      <height>22</height>
     </rect>
    </property>
@@ -425,7 +474,7 @@
    <slot>export_investment_plan()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>229</x>
+     <x>549</x>
      <y>75</y>
     </hint>
     <hint type="destinationlabel">
@@ -441,7 +490,7 @@
    <slot>import_investment_plan()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>355</x>
+     <x>675</x>
      <y>77</y>
     </hint>
     <hint type="destinationlabel">
@@ -457,8 +506,8 @@
    <slot>export_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>438</x>
-     <y>75</y>
+     <x>583</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>454</x>
@@ -473,8 +522,8 @@
    <slot>import_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>537</x>
-     <y>81</y>
+     <x>505</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>562</x>
@@ -537,7 +586,7 @@
    <slot>start_investing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>544</x>
+     <x>699</x>
      <y>111</y>
     </hint>
     <hint type="destinationlabel">
@@ -559,6 +608,22 @@
     <hint type="destinationlabel">
      <x>568</x>
      <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartInvesting</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSmartInvestFactor</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>364</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
