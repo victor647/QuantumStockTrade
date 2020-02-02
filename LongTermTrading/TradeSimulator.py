@@ -258,7 +258,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.lblTotalFee.setText("总手续费：" + str(self.__stockInvestment.totalFee))
         self.lblFinalAsset.setText("最终资产：" + str(self.__stockInvestment.net_worth(data['close'])))
         self.lblTotalProfit.setText("累计收益：" + str(self.__stockInvestment.net_profit(data['close'])))
-        self.lblTotalReturn.setText("盈亏比例：" + str(self.__stockInvestment.profit_percentage(data['close'])) + "%")
+        self.lblTotalReturn.setText("盈亏比例：" + str(self.__stockInvestment.profit_percentage_from_init(data['close'])) + "%")
 
     # 模拟买入股票操作
     def buy_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, share: int, signal="无"):

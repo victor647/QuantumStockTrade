@@ -43,15 +43,15 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         self.__dates = []
         for index, day_data in self.stockData.iterrows():
             self.__dates.append(index)
-        # 根据数据数量调节宽度
-        self.resize(len(self.__dates) * 15, 550)
-        self.setMinimumSize(len(self.__dates) * 10 + 100, 400)
         # 创建日期x轴
         self.x_axis = QBarCategoryAxis()
         self.x_axis.setCategories(self.__dates)
         self.chart.addAxis(self.x_axis, Qt.AlignBottom)
         # 若日期过多，则创建专门的日期显示X轴
         if len(self.__dates) > 20:
+            # 根据数据数量调节宽度
+            self.resize(len(self.__dates) * 15 + 100, 550)
+            self.setMinimumSize(len(self.__dates) * 10 + 250, 400)
             self.x_axis.hide()
             date_axis = QDateTimeAxis()
             date_axis.setTickCount(11)
@@ -62,6 +62,8 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             date_axis.setMax(QDateTime.fromString(self.stockData.index[-1], 'yyyy-MM-dd'))
             self.chart.addAxis(date_axis, Qt.AlignBottom)
         else:
+            self.resize(500, 500)
+            self.setMinimumSize(400, 400)
             self.x_axis.setGridLineColor(Qt.black)
             self.x_axis.setLabelsColor(Qt.lightGray)
 

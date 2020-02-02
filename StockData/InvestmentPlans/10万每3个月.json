@@ -1,0 +1,10 @@
+{
+    "startDate": "2010-02-02",
+    "initialInvestment": 20,
+    "interval": 3,
+    "intervalType": "\u6708",
+    "eachInvestment": 10,
+    "investTime": "\u671f\u59cb",
+    "smartInvestOn": true,
+    "smartInvestFactor": 5
+}

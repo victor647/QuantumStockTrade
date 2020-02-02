@@ -26,7 +26,7 @@
     <property name="font">
      <font>
       <family>Helvetica</family>
-      <pointsize>12</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="editTriggers">
@@ -104,7 +104,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -117,7 +117,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -163,7 +163,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -176,7 +176,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -189,7 +189,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -284,7 +284,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="suffix">
@@ -362,7 +362,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -377,7 +377,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -414,7 +414,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -427,7 +427,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -440,7 +440,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -453,7 +453,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -466,7 +466,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
@@ -479,7 +479,7 @@
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>12</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">

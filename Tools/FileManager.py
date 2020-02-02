@@ -113,26 +113,28 @@ def export_scheduled_investment_stocks(stock_table: QTableWidget):
 # 从txt文件导入股票列表
 def import_stock_list(import_func):
     file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
-    if file_path[0] != '':
-        file = open(file_path[0], 'r')
-        for line in file:
-            code = line.rstrip('\n')
-            import_func(code)
-        file.close()
+    if file_path[0] == '':
+        return
+    file = open(file_path[0], 'r')
+    for line in file:
+        code = line.rstrip('\n')
+        import_func(code)
+    file.close()
 
 
 # 从txt文件导入股票列表并读取日期信息
 def import_stock_list_with_date(import_func):
     file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
     date = QDate.currentDate().toString('yyyy-MM-dd')
-    if file_path[0] != '':
-        file = open(file_path[0], 'r')
-        lines = file.readlines()
-        date = lines[0].rstrip('\n')
-        for line in lines[1:]:
-            code = line.rstrip('\n')
-            import_func(code)
-        file.close()
+    if file_path[0] == '':
+        return '', date
+    file = open(file_path[0], 'r')
+    lines = file.readlines()
+    date = lines[0].rstrip('\n')
+    for line in lines[1:]:
+        code = line.rstrip('\n')
+        import_func(code)
+    file.close()
     return file_path[0], date
 
 
@@ -155,13 +157,19 @@ def import_multiple_stock_lists():
 # 从txt文件导入定投组合股票列表
 def import_scheduled_investment_stock_list():
     file_path = QFileDialog.getOpenFileName(directory=investment_plan_path(), filter='TXT(*.txt)')
-    file = open(file_path, 'r')
+    if file_path[0] == '':
+        return
+    file = open(file_path[0], 'r')
     lines = file.readlines()
     data = []
     for line in lines:
-        line = line.rstrip('\n')
-        code = line.split('\t')[0]
-        share = line.split('\t')[1]
+        items = line.rstrip('\n').split('\t')
+        code = items[0]
+        # 格式错误，跳过
+        if len(code) != 6:
+            continue
+        # 若没有持仓信息则默认为0
+        share = items[1] if len(items) > 1 else '0'
         data.append((code, share))
     file.close()
     return data

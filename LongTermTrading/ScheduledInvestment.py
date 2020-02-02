@@ -1,6 +1,7 @@
 from QtDesign.ScheduledInvestment_ui import Ui_ScheduledInvestment
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog, QHeaderView
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtGui import QKeyEvent
 from Data.InvestmentStatus import StockInvestment
 from Data.HistoryGraph import HistoryGraph
 import Data.TechnicalAnalysis as TechnicalAnalysis
@@ -28,8 +29,8 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
     # 读取股票列表（可多选）
     def import_stock_list(self):
         full_data = FileManager.import_scheduled_investment_stock_list()
-        for code, share in full_data.items():
-            self.fill_stock_list(code, int(share))
+        for code, share in full_data:
+            self.fill_stock_list(code, share)
 
     # 导出股票列表
     def export_stock_list(self):
@@ -45,8 +46,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         if stock_code == '':
             Tools.show_error_dialog('股票代码或名称无效！')
         else:
-            self.fill_stock_list(stock_code, 0)
-        self.tblStockList.repaint()
+            self.fill_stock_list(stock_code, '0')
 
     # 移除一只股票
     def remove_stock_code(self):
@@ -55,18 +55,32 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             return
         index = selection[0].row()
         self.tblStockList.removeRow(index)
-        self.tblStockList.repaint()
 
     # 根据导入的选股列表文件填表
-    def fill_stock_list(self, code: str, share: int):
+    def fill_stock_list(self, code: str, share: str):
         row = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row)
         # 获取股票名称
         name = Tools.get_stock_name_from_code(code)
         self.tblStockList.setItem(row, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row, 1, QTableWidgetItem(name))
-        Tools.add_sortable_item(self.tblStockList, row, 2, share, str(share) + '%')
-        self.tblStockList.repaint()
+        Tools.add_sortable_item(self.tblStockList, row, 2, float(share.strip('%')), share)
+        # 获取上市日期
+        stock_list = FileManager.read_stock_list_file()
+        stock_list.set_index('name', inplace=True)
+        time_to_market = str(stock_list.loc[name]['timeToMarket'])
+        # 优化日期格式
+        time_to_market = time_to_market[:4] + '-' + time_to_market[4:6] + '-' + time_to_market[6:]
+        self.tblStockList.setItem(row, 3, QTableWidgetItem(time_to_market))
+
+    # 快捷键设置
+    def keyPressEvent(self, key: QKeyEvent):
+        # 回车键添加股票
+        if key.key() == Qt.Key_Enter or key.key() == Qt.Key_Return:
+            self.add_stock_code()
+        # 按删除键删除股票或指标组
+        elif key.key() == Qt.Key_Delete or key.key() == Qt.Key_Backspace:
+            self.remove_stock_code()
 
     # 股票详细信息
     def show_stock_graph(self, row: int, column: int):
@@ -87,7 +101,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
     def export_investment_plan(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.investment_plan_path(), filter='JSON(*.json)')
         data = {
-            'startDate': self.dteStartDate.date(),
+            'startDate': self.dteStartDate.date().toString('yyyy-MM-dd'),
             'initialInvestment': self.spbInitialInvestment.value(),
             'interval': self.spbInterval.value(),
             'intervalType': self.cbbIntervalType.currentText(),
@@ -104,10 +118,10 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.investment_plan_path(), filter='JSON(*.json)')
         if file_path[0] != '':
             data = FileManager.import_json_config(file_path[0])
-            if 'moneyPerTrade' not in data:
+            if 'eachInvestment' not in data:
                 Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
-            self.dteStartDate.setDate(data['startDate'])
+            self.dteStartDate.setDate(QDate.fromString(data['startDate'], 'yyyy-MM-dd'))
             self.spbInitialInvestment.setValue(data['initialInvestment'])
             self.spbInterval.setValue(data['interval'])
             self.cbbIntervalType.setCurrentText(data['intervalType'])
@@ -115,6 +129,15 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             self.cbbInvestTime.setCurrentText(data['investTime'])
             self.cbxSmartInvesting.setChecked(data['smartInvestOn'])
             self.spbSmartInvestFactor.setValue(data['smartInvestFactor'])
+
+    # 平均分配持股仓位
+    def auto_split_ratio(self):
+        # 获取股票数量
+        stock_count = self.tblStockList.rowCount()
+        # 计算平均仓位
+        share = round(100 / stock_count, 2)
+        for row in range(stock_count):
+            Tools.add_sortable_item(self.tblStockList, row, 2, share, str(share) + '%')
 
     # 开始定投模拟
     def start_investing(self):
@@ -143,31 +166,32 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             # 当前价格
             end_price = stock_data.iloc[-1]['close']
             # 获取实际k线开始和截止日期
-            start_date = QDate.fromString(stock_data.index[0], 'yyyy-MM-dd')
-            end_date = QDate.fromString(stock_data.index[-1], 'yyyy-MM-dd')
+            actual_start_date = QDate.fromString(stock_data.index[0], 'yyyy-MM-dd')
+            actual_end_date = QDate.fromString(stock_data.index[-1], 'yyyy-MM-dd')
             years = int(stock_data.index[-1][:4]) - int(stock_data.index[0][:4]) + 1
             # 年化复利
             annual_profit = round((math.pow(end_price / start_price, 1 / years) - 1) * 100, 2)
-            column = Tools.add_colored_item(self.tblStockList, row, 3,  annual_profit, '%')
+            column = Tools.add_colored_item(self.tblStockList, row, 4,  annual_profit, '%')
             # 仓位百分比
             share_ratio = float(self.tblStockList.item(row, 2).text().strip('%')) / 100
             total_share_ratio += share_ratio
             # 超过100%仓位则跳过
-            if total_share_ratio > 1:
+            if round(total_share_ratio, 2) > 1:
                 continue
             # 最后一只股票，仍然未满仓，则补齐
             elif row == self.tblStockList.rowCount() - 1 and total_share_ratio < 1:
                 share_ratio += 1 - total_share_ratio
-                self.tblStockList.item(row, 2).setText(str(share_ratio * 100) + '%')
-            # 进行首笔投资
-            investment.buy_stock_by_money(start_price, share_ratio * self.spbInitialInvestment.value() * 10000, start_date.toString('yyyy-MM-dd'))
-            investment.initial_invest()
+                self.tblStockList.item(row, 2).setText(str(round(share_ratio * 100, 2)) + '%')
+            # 进行首笔投资，上市日期晚于定投开始日期的新股跳过
+            time_to_market = QDate.fromString(self.tblStockList.item(row, 3).text(), 'yyyy-MM-dd')
+            if time_to_market < start_date:
+                investment.buy_stock_by_money(start_price, share_ratio * self.spbInitialInvestment.value() * 10000, actual_start_date.toString('yyyy-MM-dd'))
             # 当前交易日期
-            current_date = QDate(start_date)
+            current_date = QDate(actual_start_date)
             # 记录上次定投的价格，以
             last_price = start_price
             # 进行每次定投
-            while current_date < end_date:
+            while current_date < actual_end_date:
                 if self.cbbIntervalType.currentText() == '周':
                     current_date = current_date.addDays(7 * self.spbInterval.value())
                     # 确保每周一买入
@@ -188,7 +212,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
                     if self.cbxSmartInvesting.isChecked():
                         percent_change = TechnicalAnalysis.get_percentage_from_price(buy_price, last_price)
                         # 计算实际投入金钱
-                        money *= min(0, (100 - self.spbSmartInvestFactor.value() * percent_change) / 100)
+                        money *= max(0, (100 - self.spbSmartInvestFactor.value() * percent_change) / 100)
                     last_price = buy_price
                     investment.buy_stock_by_money(buy_price, money, data.index[0])
 
@@ -199,12 +223,11 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             investment.sell_all(final_price, end_date)
             column = Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit())
             # 计算收益率
-            profit_percentage = investment.profit_percentage(final_price)
-            Tools.add_colored_item(self.tblStockList, row, column, profit_percentage, '%')
+            Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit_percentage(), '%')
             # 累计所有股票成本与利润
-            total_spent += round(investment.totalInvestment, 2)
+            total_spent += investment.totalInvestment
             total_profit += investment.final_profit()
-        self.lblTradeSummary.setText('共计成本{}元，至今获利{}元，收益率{}%'.format(total_spent, total_profit, TechnicalAnalysis.get_profit_percentage(total_profit, total_spent)))
+        self.lblTradeSummary.setText('共计成本{}元，至今获利{}元，收益率{}%'.format(round(total_spent, 2), round(total_profit, 2), TechnicalAnalysis.get_profit_percentage(total_profit, total_spent)))
 
 
 

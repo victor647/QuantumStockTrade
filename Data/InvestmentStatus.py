@@ -122,12 +122,6 @@ class StockInvestment:
     def net_profit(self, current_price: float):
         return round(self.cashValue + self.stock_value(current_price) - self.totalInvestment, 2)
 
-    # 累计获利百分比
-    def profit_percentage(self, current_price: float):
-        if self.initialAsset == 0:
-            return 0.00
-        return round(self.net_profit(current_price) / self.initialAsset * 100, 2)
-
     # 总资产：累计利润+初始投入
     def net_worth(self, current_price: float):
         return round(self.stock_value(current_price) + self.cashValue, 2)
@@ -145,4 +139,20 @@ class StockInvestment:
     # 卖出全部后最终盈利
     def final_profit(self):
         return round(self.cashValue - self.totalInvestment, 2)
+
+    # 获利百分比（按照当前价格计算）
+    def profit_percentage(self, current_price: float):
+        if self.stock_value(current_price) == 0:
+            return 0.00
+        return round(self.net_profit(current_price) / self.stock_value(current_price) * 100, 2)
+
+    # 获利百分比（按照初始投入计算）
+    def profit_percentage_from_init(self, current_price: float):
+        if self.initialAsset == 0:
+            return 0.00
+        return round(self.net_profit(current_price) / self.initialAsset * 100, 2)
+
+    # 获利百分比(按照最终价格计算）
+    def final_profit_percentage(self):
+        return round(self.final_profit() / self.totalInvestment * 100, 2)
 

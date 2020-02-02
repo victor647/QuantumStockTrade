@@ -43,6 +43,11 @@
     </column>
     <column>
      <property name="text">
+      <string>上市日期</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>年化复利</string>
      </property>
     </column>
@@ -74,7 +79,7 @@
     <property name="font">
      <font>
       <family>Helvetica</family>
-      <pointsize>12</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
@@ -104,7 +109,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -141,7 +146,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -202,7 +207,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -246,7 +251,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -259,7 +264,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="displayFormat">
@@ -302,11 +307,24 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="btnAutoSplitRatio">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>平分仓位</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnExportPlan">
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -319,7 +337,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -339,7 +357,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -358,7 +376,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -374,7 +392,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -387,7 +405,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -400,7 +418,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -413,7 +431,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -426,7 +444,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="text">
@@ -439,7 +457,7 @@
          <property name="font">
           <font>
            <family>Helvetica</family>
-           <pointsize>12</pointsize>
+           <pointsize>9</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -586,8 +604,8 @@
    <slot>start_investing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>699</x>
-     <y>111</y>
+     <x>698</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel">
      <x>562</x>
@@ -627,6 +645,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnAutoSplitRatio</sender>
+   <signal>clicked()</signal>
+   <receiver>ScheduledInvestment</receiver>
+   <slot>auto_split_ratio()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>523</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>export_investment_plan()</slot>
@@ -638,5 +672,6 @@
   <slot>clear_stock_list()</slot>
   <slot>start_investing()</slot>
   <slot>show_stock_graph()</slot>
+  <slot>auto_split_ratio()</slot>
  </slots>
 </ui>

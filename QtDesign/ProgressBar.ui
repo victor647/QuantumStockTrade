@@ -27,7 +27,7 @@
      <widget class="QProgressBar" name="pgbSearching">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>9</pointsize>
        </font>
       </property>
       <property name="value">
@@ -40,7 +40,7 @@
       <property name="font">
        <font>
         <family>Helvetica</family>
-        <pointsize>12</pointsize>
+        <pointsize>9</pointsize>
        </font>
       </property>
       <property name="text">

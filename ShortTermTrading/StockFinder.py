@@ -555,18 +555,20 @@ class StockSearcher(QThread):
             # 自定义指标考察
             if not stockFinderInstance.match_custom_criterias(data):
                 continue
+            # 获得股票行业信息
+            industry = row['industry']
+            # 获得股票上市地区
+            area = row['area']
             # 获得股票市盈率
             pe = row['pe']
             # 获得股票市净率
             pb = row['pb']
             # 获得股票总市值
             assets = row['totalAssets']
-            # 获得股票行业信息
-            industry = row['industry']
-            # 获得股票上市地区
-            area = row['area']
+            # 净资产收益率
+            roe = str(round(row['esp'] / row['bvps'] * 100, 2)) + '%'
             # 将符合要求的股票信息打包
-            items = [code, name, industry, area, pe, pb, assets]
+            items = [code, name, industry, area, pe, pb, assets, roe]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(code)

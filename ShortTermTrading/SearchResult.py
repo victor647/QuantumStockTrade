@@ -1,5 +1,5 @@
 from QtDesign.SearchResult_ui import Ui_SearchResult
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
 from Tools import Tools, FileManager
@@ -14,6 +14,8 @@ class SearchResult(QDialog, Ui_SearchResult):
         self.__searchDate = search_date
         # 显示选股日期
         self.lblSearchDate.setText("选股日期：" + search_date)
+        # 为表格自动设置列宽
+        self.tblStockList.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     # 快捷键设置
     def keyPressEvent(self, key: QKeyEvent):
@@ -49,7 +51,7 @@ class SearchResult(QDialog, Ui_SearchResult):
             # 获取股票历史K线数据
             data = FileManager.read_stock_history_data(code, True)
             # 截取回测日期内的数据
-            data = data.tail(60)
+            data = data.tail(100)
             graph = HistoryGraph(code, data)
             graph.plot_all_ma_lines()
             graph.plot_price()
@@ -60,6 +62,7 @@ class SearchResult(QDialog, Ui_SearchResult):
     def delete_selected_stocks(self):
         for item in self.tblStockList.selectedItems():
             self.tblStockList.removeRow(item.row())
+        self.update_found_stock_count(self.tblStockList.rowCount())
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):
