@@ -30,9 +30,11 @@ def get_column_label(field: str):
     elif field == "最低价":
         return "low"
     elif field == "开盘涨跌幅":
-        return "close_pct"
+        return "open_pct"
     elif field == "收盘涨跌幅":
         return "close_pct"
+    elif field == "日内涨跌幅":
+        return "daily_pct"
     elif field == "最高涨幅":
         return "high_pct"
     elif field == "最低跌幅":
@@ -125,11 +127,13 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         super().__init__()
         self.setupUi(self)
         # 初始化指标下拉列表内容
-        self.cbbQueryLogic.addItems(['平均', '累计', '最高', '最低'])
-        self.cbbComparedLogic.addItems(['平均', '累计', '最高', '最低'])
+        logic_items = ['平均', '累计', '最高', '最低']
+        self.cbbQueryLogic.addItems(logic_items)
+        self.cbbComparedLogic.addItems(logic_items)
         self.cbbOperator.addItems(['大于', '小于', '等于'])
-        self.cbbQueryField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
-        self.cbbComparedField.addItems(['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
+        field_items = ['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '日内涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率']
+        self.cbbQueryField.addItems(field_items)
+        self.cbbComparedField.addItems(field_items)
         self.criteriaItem = criteria_item
         self.read_item_data()
 
@@ -171,7 +175,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         else:
             self.criteriaItem.comparedObject = "比值"
         self.criteriaItem.value = self.spbValue.value()
-        StockFinder.stockFinderInstance.update_criteria_list(self.criteriaItem)
+        StockFinder.Instance.update_criteria_list(self.criteriaItem)
         self.close()
 
     # 根据数据情况更新GUI显示

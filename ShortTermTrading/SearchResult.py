@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
 from Tools import Tools, FileManager
 from Data.HistoryGraph import HistoryGraph
+import pandas
 
 
 class SearchResult(QDialog, Ui_SearchResult):
@@ -50,12 +51,15 @@ class SearchResult(QDialog, Ui_SearchResult):
         else:
             # 获取股票历史K线数据
             data = FileManager.read_stock_history_data(code, True)
-            # 截取回测日期内的数据
-            data = data.tail(100)
-            graph = HistoryGraph(code, data)
+            # 选股日期后的数据
+            data_after = data.loc[self.__searchDate:].head(20)
+            # 选股日期前的数据
+            data_before = data.loc[:self.__searchDate].iloc[-100 + data_after.shape[0]:-2]
+            graph = HistoryGraph(code, pandas.concat([data_before, data_after]))
             graph.plot_all_ma_lines()
             graph.plot_price()
             graph.plot_volume()
+            graph.plot_search_date(data_after.index[0])
             graph.exec_()
 
     # 删除所选中的股票

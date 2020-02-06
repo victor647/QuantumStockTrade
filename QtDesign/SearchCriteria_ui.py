@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'SearchCriteria.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SearchCriteria(object):
     def setupUi(self, SearchCriteria):
         SearchCriteria.setObjectName("SearchCriteria")
-        SearchCriteria.resize(363, 148)
+        SearchCriteria.resize(378, 148)
         self.layoutWidget = QtWidgets.QWidget(SearchCriteria)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 350, 91))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 361, 91))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -35,6 +35,7 @@ class Ui_SearchCriteria(object):
         self.lblRecent.setObjectName("lblRecent")
         self.horizontalLayout.addWidget(self.lblRecent)
         self.spbQueryPeriodBegin = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spbQueryPeriodBegin.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -53,6 +54,7 @@ class Ui_SearchCriteria(object):
         self.lblTo1.setObjectName("lblTo1")
         self.horizontalLayout.addWidget(self.lblTo1)
         self.spbQueryPeriodEnd = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spbQueryPeriodEnd.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -62,6 +64,7 @@ class Ui_SearchCriteria(object):
         self.spbQueryPeriodEnd.setObjectName("spbQueryPeriodEnd")
         self.horizontalLayout.addWidget(self.spbQueryPeriodEnd)
         self.cbbQueryLogic = QtWidgets.QComboBox(self.layoutWidget)
+        self.cbbQueryLogic.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -79,7 +82,7 @@ class Ui_SearchCriteria(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.lblComparison = QtWidgets.QLabel(self.layoutWidget)
-        self.lblComparison.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.lblComparison.setMaximumSize(QtCore.QSize(30, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -87,6 +90,7 @@ class Ui_SearchCriteria(object):
         self.lblComparison.setObjectName("lblComparison")
         self.horizontalLayout_2.addWidget(self.lblComparison)
         self.spbComparedPeriodBegin = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spbComparedPeriodBegin.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -105,6 +109,7 @@ class Ui_SearchCriteria(object):
         self.lblTo2.setObjectName("lblTo2")
         self.horizontalLayout_2.addWidget(self.lblTo2)
         self.spbComparedPeriodEnd = QtWidgets.QSpinBox(self.layoutWidget)
+        self.spbComparedPeriodEnd.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -115,6 +120,7 @@ class Ui_SearchCriteria(object):
         self.spbComparedPeriodEnd.setObjectName("spbComparedPeriodEnd")
         self.horizontalLayout_2.addWidget(self.spbComparedPeriodEnd)
         self.cbbComparedLogic = QtWidgets.QComboBox(self.layoutWidget)
+        self.cbbComparedLogic.setMaximumSize(QtCore.QSize(60, 16777215))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -224,7 +230,7 @@ class Ui_SearchCriteria(object):
         self.spbQueryPeriodBegin.setSuffix(_translate("SearchCriteria", "日"))
         self.lblTo1.setText(_translate("SearchCriteria", "到"))
         self.spbQueryPeriodEnd.setSuffix(_translate("SearchCriteria", "日"))
-        self.lblComparison.setText(_translate("SearchCriteria", "相比过去"))
+        self.lblComparison.setText(_translate("SearchCriteria", "相比"))
         self.spbComparedPeriodBegin.setSuffix(_translate("SearchCriteria", "日"))
         self.lblTo2.setText(_translate("SearchCriteria", "到"))
         self.spbComparedPeriodEnd.setSuffix(_translate("SearchCriteria", "日"))

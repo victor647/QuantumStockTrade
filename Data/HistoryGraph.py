@@ -8,10 +8,10 @@ import pandas, math
 
 
 # 美化散点图
-def decorate_scatter_series(series: QScatterSeries, text: str, color: QColor):
+def decorate_scatter_series(series: QScatterSeries, text: str, color: QColor, label_size=12):
     series.setPointLabelsVisible(True)
     series.setPointLabelsFormat(text)
-    series.setPointLabelsFont(QFont("Helvetica", 12, QFont.Bold))
+    series.setPointLabelsFont(QFont("Helvetica", label_size, QFont.Bold))
     series.setPointLabelsColor(color)
     series.setMarkerSize(5)
     series.setColor(color)
@@ -47,25 +47,18 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         self.x_axis = QBarCategoryAxis()
         self.x_axis.setCategories(self.__dates)
         self.chart.addAxis(self.x_axis, Qt.AlignBottom)
-        # 若日期过多，则创建专门的日期显示X轴
-        if len(self.__dates) > 20:
-            # 根据数据数量调节宽度
-            self.resize(len(self.__dates) * 15 + 100, 550)
-            self.setMinimumSize(len(self.__dates) * 10 + 250, 400)
-            self.x_axis.hide()
-            date_axis = QDateTimeAxis()
-            date_axis.setTickCount(11)
-            date_axis.setFormat('yy/MM/dd' if show_year else 'MM/dd')
-            date_axis.setGridLineColor(Qt.black)
-            date_axis.setLabelsColor(Qt.lightGray)
-            date_axis.setMin(QDateTime.fromString(self.stockData.index[0], 'yyyy-MM-dd'))
-            date_axis.setMax(QDateTime.fromString(self.stockData.index[-1], 'yyyy-MM-dd'))
-            self.chart.addAxis(date_axis, Qt.AlignBottom)
-        else:
-            self.resize(500, 500)
-            self.setMinimumSize(400, 400)
-            self.x_axis.setGridLineColor(Qt.black)
-            self.x_axis.setLabelsColor(Qt.lightGray)
+        # 创建专门的日期显示X轴
+        self.resize(len(self.__dates) * 15 + 100, 550)
+        self.setMinimumSize(len(self.__dates) * 10 + 200, 400)
+        self.x_axis.hide()
+        date_axis = QDateTimeAxis()
+        date_axis.setTickCount(len(self.__dates) / 5 + 1)
+        date_axis.setFormat('yy/MM/dd' if show_year else 'MM/dd')
+        date_axis.setGridLineColor(Qt.black)
+        date_axis.setLabelsColor(Qt.lightGray)
+        date_axis.setMin(QDateTime.fromString(self.stockData.index[0], 'yyyy-MM-dd'))
+        date_axis.setMax(QDateTime.fromString(self.stockData.index[-1], 'yyyy-MM-dd'))
+        self.chart.addAxis(date_axis, Qt.AlignBottom)
 
         # 添加股价Y轴
         self.price_axis = QValueAxis()
@@ -100,11 +93,17 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             price_series.append(candlestick_set)
         # 创建图表
         self.chart.addSeries(price_series)
-        # 避开成交量图形区域
+        # 计算价格轴范围
         max_price = self.stockData['high'].max()
         min_price = self.stockData['low'].min()
-        self.price_axis.setMax(max_price)
-        self.price_axis.setMin(min_price - (max_price - min_price) / 3)
+        # 若振幅过小，压缩绘图区域
+        stretch_ratio = 1.5 / (max_price / min_price)
+        if stretch_ratio > 1:
+            max_price *= (stretch_ratio - 1) * 0.25 + 1
+            min_price /= (stretch_ratio - 1) * 0.75 + 1
+        # 避开成交量图形区域
+        min_price -= (max_price - min_price) / 3
+        self.price_axis.setRange(min_price, max_price)
         price_series.attachAxis(self.x_axis)
         price_series.attachAxis(self.price_axis)
 
@@ -255,16 +254,21 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
 
     # 画单条均线
     def plot_ma(self, period: int, color):
+        label = 'ma_' + str(period)
+        # 若均线指标不在数据中（上市日期不够）
+        if label not in self.stockData:
+            return
         ma_line = QLineSeries()
         ma_line.setColor(color)
-        label = 'ma_' + str(period)
         i = 0
         is_valid = False
         for index, day_data in self.stockData.iterrows():
             # 避免部分数值因数据不够不存在
             if not math.isnan(day_data[label]):
                 is_valid = True
-            ma_line.append(i, day_data[label])
+                ma_line.append(i, day_data[label])
+            elif i == 0:
+                ma_line.append(i, day_data['close'])
             i += 1
         if is_valid:
             self.chart.addSeries(ma_line)
@@ -333,6 +337,20 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         buy_history.attachAxis(self.x_axis)
         sell_history.attachAxis(self.price_axis)
         sell_history.attachAxis(self.x_axis)
+
+    # 绘制选股日期标记
+    def plot_search_date(self, date: str):
+        search_mark = QScatterSeries()
+        date_number = self.get_date_number(date)
+        # 找不到日期，跳过
+        if date_number == -1:
+            return
+        search_mark.append(date_number, self.stockData['close'][date])
+        # 设置格式
+        decorate_scatter_series(search_mark, 'F', QColor(255, 255, 0), 20)
+        self.chart.addSeries(search_mark)
+        search_mark.attachAxis(self.price_axis)
+        search_mark.attachAxis(self.x_axis)
 
     # 通过日期获取第几个交易日
     def get_date_number(self, date: str):

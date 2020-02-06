@@ -13,7 +13,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_HistoryGraph(object):
     def setupUi(self, HistoryGraph):
         HistoryGraph.setObjectName("HistoryGraph")
-        HistoryGraph.resize(500, 550)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -30,7 +29,6 @@ class Ui_HistoryGraph(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.crtGraph.sizePolicy().hasHeightForWidth())
         self.crtGraph.setSizePolicy(sizePolicy)
-        self.crtGraph.setMinimumSize(QtCore.QSize(500, 400))
         self.crtGraph.setObjectName("crtGraph")
         self.verticalLayout.addWidget(self.crtGraph)
 

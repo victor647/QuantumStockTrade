@@ -12,7 +12,7 @@ from Tools import Tools, FileManager
 import Data.TechnicalAnalysis as DataAnalyzer
 
 
-stockFinderInstance = None
+Instance = None
 
 
 class StockFinder(QMainWindow, Ui_StockFinder):
@@ -23,8 +23,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         super().__init__()
         self.setupUi(self)
         # 初始化单例
-        global stockFinderInstance
-        stockFinderInstance = self
+        global Instance
+        Instance = self
         # 初始化选股日期
         self.dteSearchDate.setDate(QDate.currentDate())
         # 初始化技术面指标下拉菜单
@@ -138,7 +138,9 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             'totalHoldersMin': self.spbTotalHoldersMin.value(),
             'totalHoldersMax': self.spbTotalHoldersMax.value(),
             'includeSt': self.cbxIncludeStStock.isChecked(),
-            'includeNew': self.cbxIncludeNewStock.isChecked()
+            'timeToMarketOn': self.cbxTimeToMarket.isChecked(),
+            'timeToMarketMin': self.spbTimeToMarketMin.value(),
+            'timeToMarketMax': self.spbTimeToMarketMax.value(),
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -177,7 +179,9 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.spbTotalHoldersMin.setValue(data['totalHoldersMin'])
             self.spbTotalHoldersMax.setValue(data['totalHoldersMax'])
             self.cbxIncludeStStock.setChecked(data['includeSt'])
-            self.cbxIncludeNewStock.setChecked(data['includeNew'])
+            self.cbxTimeToMarket.setChecked(data['timeToMarketOn'])
+            self.spbTimeToMarketMin.setValue(data['timeToMarketMin'])
+            self.spbTimeToMarketMax.setValue(data['timeToMarketMax'])
 
     # 保存技术面指标搜索条件
     def export_technical_config(self):
@@ -360,23 +364,25 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             current_searching_date = searcher.move_to_next_date(current_searching_date)
 
     # 基本面指标分析
-    def match_basic_criterias(self, row):
+    def match_basic_criterias(self, row: pandas.DataFrame, search_date: str):
         # 检测股票是否是ST股
         if not self.cbxIncludeStStock.isChecked():
             name = row['name']
             if 'ST' in name:
                 return False
 
-        # 检测股票是否为次新股
-        if not self.cbxIncludeNewStock.isChecked():
+        # 检测股票上市时间是否符合范围
+        if self.cbxTimeToMarket.isChecked():
             date = row['timeToMarket']
             # 去除还未上市的股票
             if date == 0:
                 return False
-            # 从数字获取日期
-            start_date = datetime.strptime(str(date), '%Y%M%d')
-            # 排除上市半年内股票
-            if (datetime.today() - start_date).days < 180:
+            # 获取上市和搜索日期
+            date_to_market = datetime.strptime(str(date), '%Y%m%d')
+            date_at_search = datetime.strptime(search_date, '%Y-%m-%d')
+            # 获取上市月数
+            months_to_market = (date_at_search - date_to_market).days / 30.45
+            if months_to_market < self.spbTimeToMarketMin.value() or months_to_market > self.spbTimeToMarketMax.value():
                 return False
 
         # 检测股票市盈率是否符合范围
@@ -521,9 +527,7 @@ class StockSearcher(QThread):
         self.progressBarCallback.connect(progress_bar.update_search_progress)
         self.finishedCallback.connect(progress_bar.destroy)
         if export_to_file:
-            self.finishedCallback.connect(
-                lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate)
-            )
+            self.finishedCallback.connect(lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate))
 
     def __del__(self):
         self.work = False
@@ -539,10 +543,10 @@ class StockSearcher(QThread):
             # 更新窗口进度条
             self.progressBarCallback.emit(index, code, name)
             # 判断股票是否在选中的交易所中
-            if not stockFinderInstance.code_in_search_range(code_num):
+            if not Instance.code_in_search_range(code_num):
                 continue
             # 基本面指标考察
-            if stockFinderInstance.cbxBasicCriteriasEnabled.isChecked() and not stockFinderInstance.match_basic_criterias(row):
+            if Instance.cbxBasicCriteriasEnabled.isChecked() and not Instance.match_basic_criterias(row, self.searchDate):
                 continue
 
             # 获得股票历史数据
@@ -550,10 +554,10 @@ class StockSearcher(QThread):
             # 剪去选股日期之后的数据
             data = data.loc[:self.searchDate]
             # 技术面指标考察
-            if stockFinderInstance.cbxTechnicalCriteriasEnabled.isChecked() and not stockFinderInstance.match_technical_criterias(data):
+            if Instance.cbxTechnicalCriteriasEnabled.isChecked() and not Instance.match_technical_criterias(data):
                 continue
             # 自定义指标考察
-            if not stockFinderInstance.match_custom_criterias(data):
+            if not Instance.match_custom_criterias(data):
                 continue
             # 获得股票行业信息
             industry = row['industry']

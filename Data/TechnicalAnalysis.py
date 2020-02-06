@@ -66,7 +66,7 @@ def get_technical_index(stock_data: pandas.DataFrame):
     if stock_closes.shape[0] < 43:
         return
     white = talib.TRIX(stock_closes, 12)
-    yellow = talib.MA(white, 9)
+    yellow = talib.SMA(white, 9)
     stock_data['trix_white'] = white
     stock_data['trix_yellow'] = yellow
 
@@ -84,10 +84,11 @@ def get_technical_index(stock_data: pandas.DataFrame):
 
 # 分析价格获得涨跌幅百分比数据
 def get_percentage_data(database: pandas.DataFrame):
-    database['open_pct'] = round((database['open'] / database['preclose'] - 1) * 100, 2)
-    database['high_pct'] = round((database['high'] / database['preclose'] - 1) * 100, 2)
-    database['low_pct'] = round((database['low'] / database['preclose'] - 1) * 100, 2)
-    database['close_pct'] = round((database['close'] / database['preclose'] - 1) * 100, 2)
+    database['open_pct'] = get_percentage_from_price(database['open'], database['preclose'])
+    database['high_pct'] = get_percentage_from_price(database['high'], database['preclose'])
+    database['low_pct'] = get_percentage_from_price(database['low'], database['preclose'])
+    database['close_pct'] = get_percentage_from_price(database['close'], database['preclose'])
+    database['daily_pct'] = get_percentage_from_price(database['close'], database['open'])
     database['amplitude'] = database['high_pct'] - database['low_pct']
 
 
@@ -95,7 +96,7 @@ def get_percentage_data(database: pandas.DataFrame):
 def get_bias_index(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 24:
         return
-    ma_24 = talib.MA(stock_data['close'], 24)
+    ma_24 = talib.SMA(stock_data['close'], 24)
     stock_data['bias_24'] = (stock_data['close'] - ma_24) / ma_24 * 100
 
 
@@ -118,17 +119,17 @@ def get_kdj_index(stock_data: pandas.DataFrame):
 # 计算所有MA均线
 def calculate_all_ma_curves(stock_data: pandas.DataFrame):
     stock_closes = stock_data['close']
-    stock_data['ma_5'] = talib.MA(stock_closes, 5)
-    stock_data['ma_10'] = talib.MA(stock_closes, 10)
-    stock_data['ma_20'] = talib.MA(stock_closes, 20)
-    stock_data['ma_30'] = talib.MA(stock_closes, 30)
-    stock_data['ma_60'] = talib.MA(stock_closes, 60)
+    stock_data['ma_5'] = talib.SMA(stock_closes, 5)
+    stock_data['ma_10'] = talib.SMA(stock_closes, 10)
+    stock_data['ma_20'] = talib.SMA(stock_closes, 20)
+    stock_data['ma_30'] = talib.SMA(stock_closes, 30)
+    stock_data['ma_60'] = talib.SMA(stock_closes, 60)
 
 
 # 计算MA均线
 def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
     key = 'ma_' + str(period)
-    stock_data[key] = talib.MA(stock_data['close'], period)
+    stock_data[key] = talib.SMA(stock_data['close'], period)
     return key
 
 
@@ -295,7 +296,7 @@ def interval_average_price(database: pandas.DataFrame):
 
 # 区间总涨幅
 def interval_total_performance(database: pandas.DataFrame):
-    return round((interval_close_price(database) / interval_open_price(database) - 1) * 100, 2)
+    return get_percentage_from_price(interval_close_price(database), interval_open_price(database))
 
 
 # 区间每日平均涨幅
@@ -331,13 +332,13 @@ def inverse_market_down(stock_database: pandas.DataFrame, market_database: panda
 
 
 # 通过价格计算涨跌幅
-def get_percentage_from_price(price: float, pre_close: float):
-    return round((price / pre_close - 1) * 100, 2)
+def get_percentage_from_price(price: float, base_price: float):
+    return round((price / base_price - 1) * 100, 2)
 
 
 # 通过涨跌幅计算价格
-def get_price_from_percentage(pre_close: float, percentage: float):
-    return round(pre_close * (1 + percentage / 100), 2)
+def get_price_from_percentage(base_price: float, percentage: float):
+    return round(base_price * (1 + percentage / 100), 2)
 
 
 # 通过盈利和本金计算收益率
@@ -345,7 +346,7 @@ def get_profit_percentage(profit: float, investment: float):
     return round(profit / investment * 100, 2)
 
 
-# 计算是否符合TRIX图形
+# 计算是否符合均线图形
 def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int, behaviour: str):
     key_short = calculate_ma_curve(stock_data, period_short)
     key_long = calculate_ma_curve(stock_data, period_long)

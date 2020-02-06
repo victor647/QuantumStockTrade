@@ -20,7 +20,7 @@ class BatchSearcher(QDialog, Ui_BatchSearcher):
     # 开始选股
     def start_searching(self):
         # 从开始日期开始每经过间隔日期选股一次
-        StockFinder.stockFinderInstance.auto_search(self, self.dteStartDate.date(), self.dteEndDate.date())
+        StockFinder.Instance.auto_search(self, self.dteStartDate.date(), self.dteEndDate.date())
 
     # 进入下一个选股日期
     def move_to_next_date(self, current_searching_date: QDate):
