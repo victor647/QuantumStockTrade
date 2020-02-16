@@ -152,82 +152,79 @@
     <property name="title">
      <string>自定义指标</string>
     </property>
-    <widget class="QListWidget" name="lstCriteriaItems">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>21</y>
-       <width>481</width>
-       <height>100</height>
+       <x>11</x>
+       <y>18</y>
+       <width>479</width>
+       <height>131</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>127</y>
-       <width>481</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>5</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
-       <widget class="QPushButton" name="btnAddCriteria">
-        <property name="text">
-         <string>添加</string>
-        </property>
-       </widget>
+       <widget class="QListWidget" name="lstCriteriaItems"/>
       </item>
       <item>
-       <widget class="QPushButton" name="btnRemoveCriteria">
-        <property name="text">
-         <string>删除</string>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>5</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnEditCriteria">
-        <property name="text">
-         <string>编辑</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnResetCriteria">
-        <property name="text">
-         <string>清空</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnExportCustomConfig">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>导出</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnImportCustomConfig">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>导入</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="QPushButton" name="btnAddCriteria">
+          <property name="text">
+           <string>添加</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnRemoveCriteria">
+          <property name="text">
+           <string>删除</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnEditCriteria">
+          <property name="text">
+           <string>编辑</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnResetCriteria">
+          <property name="text">
+           <string>清空</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnExportCustomConfig">
+          <property name="font">
+           <font>
+            <family>Helvetica</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>导出</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnImportCustomConfig">
+          <property name="font">
+           <font>
+            <family>Helvetica</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>导入</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -1442,6 +1439,7 @@
      <string>其他指标</string>
     </property>
     <addaction name="actHoldersStatus"/>
+    <addaction name="actFiveDaysFinder"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -1460,6 +1458,11 @@
   <action name="actBatchSelector">
    <property name="text">
     <string>定时批量选股</string>
+   </property>
+  </action>
+  <action name="actFiveDaysFinder">
+   <property name="text">
+    <string>五日图形选股</string>
    </property>
   </action>
  </widget>
