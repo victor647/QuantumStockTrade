@@ -6,283 +6,245 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1122</width>
-    <height>763</height>
+    <width>1072</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>模拟交易</string>
   </property>
-  <widget class="QTableWidget" name="tblTradeHistory">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>90</y>
-     <width>1101</width>
-     <height>661</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Helvetica</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="rowCount">
-    <number>0</number>
-   </property>
-   <property name="columnCount">
-    <number>14</number>
-   </property>
-   <attribute name="horizontalHeaderDefaultSectionSize">
-    <number>70</number>
-   </attribute>
-   <attribute name="verticalHeaderDefaultSectionSize">
-    <number>25</number>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>交易时间</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>交易操作</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>成交价格</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>成交数量</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>持仓股数</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>当日开盘</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>当日最高</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>当日最低</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>当日收盘</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>当日换手</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>趋势信号</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>平均成本</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>累计收益</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>盈亏比例</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>531</width>
-     <height>79</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Helvetica</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="lblBuyCount">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>买入次数：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSellCount">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>卖出次数：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSameDayPerformance">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>做T次数：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="lblOriginalInvestment">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>初始成本：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblFinalAsset">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>最终资产：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblTotalProfit">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>累计收益：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLabel" name="lblTotalReturn">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>盈亏比例：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblTotalFee">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>总手续费：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>560</x>
-     <y>10</y>
-     <width>120</width>
-     <height>66</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPushButton" name="btnStartTrading">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblBuyCount">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>买入次数：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblSellCount">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>卖出次数：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblSameDayPerformance">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>做T次数：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStartTrading">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>开始模拟交易</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnShowDiagram">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>显示K线图</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="lblOriginalInvestment">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>初始成本：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblFinalAsset">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>最终资产：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblTotalProfit">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>累计收益：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblTotalFee">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>总手续费：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblTotalReturn">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>盈亏比例：</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tblTradeHistory">
+     <property name="font">
+      <font>
+       <family>Helvetica</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>14</number>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>70</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>25</number>
+     </attribute>
+     <column>
       <property name="text">
-       <string>开始模拟交易</string>
+       <string>交易时间</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btnShowDiagram">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
+     </column>
+     <column>
       <property name="text">
-       <string>显示K线图</string>
+       <string>交易操作</string>
       </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+     </column>
+     <column>
+      <property name="text">
+       <string>成交价格</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>成交数量</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>持仓股数</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当日开盘</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当日最高</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当日最低</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当日收盘</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当日换手</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>趋势信号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>平均成本</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>累计收益</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>盈亏比例</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

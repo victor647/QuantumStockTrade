@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ProgressBar.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,21 +13,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ProgressBar(object):
     def setupUi(self, ProgressBar):
         ProgressBar.setObjectName("ProgressBar")
-        ProgressBar.resize(348, 73)
-        self.layoutWidget = QtWidgets.QWidget(ProgressBar)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 10, 311, 51))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        ProgressBar.resize(342, 62)
+        self.verticalLayout = QtWidgets.QVBoxLayout(ProgressBar)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.pgbSearching = QtWidgets.QProgressBar(self.layoutWidget)
+        self.pgbSearching = QtWidgets.QProgressBar(ProgressBar)
         font = QtGui.QFont()
         font.setPointSize(9)
         self.pgbSearching.setFont(font)
         self.pgbSearching.setProperty("value", 0)
         self.pgbSearching.setObjectName("pgbSearching")
         self.verticalLayout.addWidget(self.pgbSearching)
-        self.lblCurrentWorking = QtWidgets.QLabel(self.layoutWidget)
+        self.lblCurrentWorking = QtWidgets.QLabel(ProgressBar)
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FiveDayMatches</class>
+ <widget class="QDialog" name="FiveDayMatches">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>473</width>
+    <height>246</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>五日图形选股结果</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lblTotalMatchesFound">
+     <property name="font">
+      <font>
+       <family>Helvetica</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>共出现0次图形匹配，出现后平均5日涨幅0%</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>60</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>股票代码</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>股票名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>出现日期</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>次日涨幅</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>3日涨幅</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>5日涨幅</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>10日涨幅</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.2
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -16,15 +16,11 @@ class Ui_MainWindow(object):
         MainWindow.resize(230, 136)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 211, 93))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.btnStockAnalyzer = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnStockAnalyzer = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -36,7 +32,7 @@ class Ui_MainWindow(object):
         self.btnStockAnalyzer.setFont(font)
         self.btnStockAnalyzer.setObjectName("btnStockAnalyzer")
         self.horizontalLayout.addWidget(self.btnStockAnalyzer)
-        self.btnScheduledInvestment = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnScheduledInvestment = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -51,7 +47,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.btnStockFinder = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnStockFinder = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -63,7 +59,7 @@ class Ui_MainWindow(object):
         self.btnStockFinder.setFont(font)
         self.btnStockFinder.setObjectName("btnStockFinder")
         self.horizontalLayout_2.addWidget(self.btnStockFinder)
-        self.btnSelectedPerformance = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnSelectedPerformance = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -76,7 +72,7 @@ class Ui_MainWindow(object):
         self.btnSelectedPerformance.setObjectName("btnSelectedPerformance")
         self.horizontalLayout_2.addWidget(self.btnSelectedPerformance)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.btnLiveTracker = QtWidgets.QPushButton(self.layoutWidget)
+        self.btnLiveTracker = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -90,7 +86,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.btnLiveTracker)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 230, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 230, 22))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")

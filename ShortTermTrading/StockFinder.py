@@ -4,6 +4,7 @@ from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from ShortTermTrading.SearchResult import SearchResult
 from ShortTermTrading.BatchSearcher import BatchSearcher
+from ShortTermTrading.FiveDayFinder import FiveDayFinder
 from Tools.ProgressBar import ProgressBar
 from datetime import datetime
 import ShortTermTrading.SearchCriteria as SearchCriteria
@@ -50,6 +51,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         batch_searcher = BatchSearcher()
         batch_searcher.show()
         batch_searcher.exec_()
+
+    # 五日图形选股
+    @staticmethod
+    def five_day_search():
+        finder = FiveDayFinder()
+        finder.show()
+        finder.exec_()
 
     # 根据十大流通股东结构选股
     @staticmethod
@@ -249,51 +257,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 重新生成图表
         self.lstCriteriaItems.clear()
         for item in self.__criteriaItems:
-            if item.operator == '小于':
-                operator = '<'
-            elif item.operator == '大于':
-                operator = '>'
-            else:
-                operator = '='
-            if item.comparedObject != '差值':
-                connector = operator
-            else:
-                connector = '-'
-            # 获取时间段数据
-            if item.queryPeriodBegin == item.queryPeriodEnd:
-                if item.queryPeriodBegin == 1:
-                    text = '最新'
-                else:
-                    text = str(item.queryPeriodBegin) + '日前'
-            elif item.queryPeriodEnd == 1:
-                text = '最近' + str(item.queryPeriodBegin) + '日内' + item.queryLogic
-            else:
-                text = '最近' + str(item.queryPeriodBegin) + '日到' + str(item.queryPeriodEnd) + '日之间' + item.queryLogic
-            text += item.queryField + connector
-
-            if item.comparedObject == '绝对值':
-                text += str(item.value) + ('元' if '价' in item.queryField else '%')
-            else:
-                if item.comparedPeriodBegin == item.comparedPeriodEnd:
-                    if item.comparedPeriodBegin == 1:
-                        text += '最新'
-                    else:
-                        text += str(item.comparedPeriodBegin) + '日前'
-                elif item.comparedPeriodEnd == 1:
-                    text += '最近' + str(item.comparedPeriodBegin) + '日内' + item.comparedLogic
-                else:
-                    text += '最近' + str(item.comparedPeriodBegin) + '日到' + str(item.comparedPeriodEnd) + '日之间' + item.comparedLogic
-                text += item.comparedField
-
-                if item.comparedObject == '比值' and item.value != 1:
-                    text += '×' + str(item.value)
-                if item.comparedObject == '差值':
-                    text += operator + str(item.value)
-                    if '价' in item.queryField and '价' in item.comparedField:
-                        text += '元'
-                    if '价' not in item.queryField and '价' not in item.comparedField:
-                        text += '%'
-            self.lstCriteriaItems.addItem(text)
+            self.lstCriteriaItems.addItem(item.to_display_text())
 
     # 新增自定义搜索条件
     @staticmethod
@@ -328,7 +292,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return
         index = selection[0].row()
         self.__criteriaItems.pop(index)
-        self.update_criteria_list()
+        self.lstCriteriaItems.takeItem(index)
 
     # 清空自定义搜索条件
     def reset_criteria_items(self):

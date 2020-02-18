@@ -6,52 +6,100 @@ import pandas
 
 # 自定义技术指标内容
 class CriteriaItem:
-    queryLogic = "平均"
-    comparedLogic = "平均"
-    queryField = "收盘价"
-    comparedField = "收盘价"
+    queryLogic = '平均'
+    comparedLogic = '平均'
+    queryField = '收盘价'
+    comparedField = '收盘价'
     queryPeriodBegin = 3
     queryPeriodEnd = 1
     comparedPeriodBegin = 10
     comparedPeriodEnd = 1
-    comparedObject = "比值"
-    operator = "大于"
+    comparedObject = '比值'
+    operator = '大于'
     value = 1
+
+    # 转换为界面上显示的文字
+    def to_display_text(self):
+        if self.operator == '小于':
+            operator = '<'
+        elif self.operator == '大于':
+            operator = '>'
+        else:
+            operator = '='
+        if self.comparedObject != '差值':
+            connector = operator
+        else:
+            connector = '-'
+        # 获取时间段数据
+        if self.queryPeriodBegin == self.queryPeriodEnd:
+            if self.queryPeriodBegin == 1:
+                text = '最新'
+            else:
+                text = str(self.queryPeriodBegin) + '日前'
+        elif self.queryPeriodEnd == 1:
+            text = '最近' + str(self.queryPeriodBegin) + '日内' + self.queryLogic
+        else:
+            text = '最近' + str(self.queryPeriodBegin) + '日到' + str(self.queryPeriodEnd) + '日之间' + self.queryLogic
+        text += self.queryField + connector
+    
+        if self.comparedObject == '绝对值':
+            text += str(self.value) + ('元' if '价' in self.queryField else '%')
+        else:
+            if self.comparedPeriodBegin == self.comparedPeriodEnd:
+                if self.comparedPeriodBegin == 1:
+                    text += '最新'
+                else:
+                    text += str(self.comparedPeriodBegin) + '日前'
+            elif self.comparedPeriodEnd == 1:
+                text += '最近' + str(self.comparedPeriodBegin) + '日内' + self.comparedLogic
+            else:
+                text += '最近' + str(self.comparedPeriodBegin) + '日到' + str(self.comparedPeriodEnd) + '日之间' + self.comparedLogic
+            text += self.comparedField
+    
+            if self.comparedObject == '比值' and self.value != 1:
+                text += '×' + str(self.value)
+            if self.comparedObject == '差值':
+                text += operator + str(self.value)
+                if '价' in self.queryField and '价' in self.comparedField:
+                    text += '元'
+                if '价' not in self.queryField and '价' not in self.comparedField:
+                    text += '%'
+        return text
 
 
 # 获取数据库对应列表
 def get_column_label(field: str):
-    if field == "开盘价":
-        return "open"
-    elif field == "收盘价":
-        return "close"
-    elif field == "最高价":
-        return "high"
-    elif field == "最低价":
-        return "low"
-    elif field == "开盘涨跌幅":
-        return "open_pct"
-    elif field == "收盘涨跌幅":
-        return "close_pct"
-    elif field == "日内涨跌幅":
-        return "daily_pct"
-    elif field == "最高涨幅":
-        return "high_pct"
-    elif field == "最低跌幅":
-        return "low_pct"
-    elif field == "振幅":
-        return "amplitude"
+    if field == '开盘价':
+        return 'open'
+    elif field == '收盘价':
+        return 'close'
+    elif field == '最高价':
+        return 'high'
+    elif field == '最低价':
+        return 'low'
+    elif field == '开盘涨跌幅':
+        return 'open_pct'
+    elif field == '收盘涨跌幅':
+        return 'close_pct'
+    elif field == '日内涨跌幅':
+        return 'daily_pct'
+    elif field == '最高涨幅':
+        return 'high_pct'
+    elif field == '最低跌幅':
+        return 'low_pct'
+    elif field == '振幅':
+        return 'amplitude'
     else:
-        return "turn"
+        return 'turn'
 
 
 # 根据逻辑获取数据值
 def get_data_value(logic: str, data: pandas.DataFrame):
-    if logic == "平均":
+    if logic == '平均':
         return data.mean()
-    elif logic == "累计":
+    elif logic == '累计':
         return data.sum()
-    elif logic == "最高":
+    elif logic == '最高':
         return data.max()
     else:
         return data.min()
@@ -76,7 +124,7 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
     # 获取参照值类型
     compared_label = get_column_label(item.comparedField)
     # 获取参照数据
-    if item.comparedObject == "绝对值":
+    if item.comparedObject == '绝对值':
         value_second = item.value
     else:
         # 上市天数少于指标范围则跳过
@@ -90,15 +138,15 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
         else:
             data_second = data[compared_label].iloc[-item.comparedPeriodBegin:-(item.comparedPeriodEnd - 1)]
         # 获取参照值
-        if item.comparedObject == "差值":
+        if item.comparedObject == '差值':
             value_second = get_data_value(item.comparedLogic, data_second) + item.value
         else:
             value_second = get_data_value(item.comparedLogic, data_second) * item.value
 
     # 返回比较结果
-    if item.operator == "大于":
+    if item.operator == '大于':
         return value_first > value_second
-    elif item.operator == "小于":
+    elif item.operator == '小于':
         return value_first < value_second
     else:
         return value_first == value_second
@@ -148,9 +196,9 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.spbComparedPeriodEnd.setValue(self.criteriaItem.comparedPeriodEnd)
         self.cbbComparedLogic.setCurrentText(self.criteriaItem.comparedLogic)
         self.cbbComparedField.setCurrentText(self.criteriaItem.comparedField)
-        if self.criteriaItem.comparedObject == "绝对值":
+        if self.criteriaItem.comparedObject == '绝对值':
             self.rbnAbsValue.setChecked(True)
-        elif self.criteriaItem.comparedObject == "差值":
+        elif self.criteriaItem.comparedObject == '差值':
             self.rbnDifference.setChecked(True)
         else:
             self.rbnRatio.setChecked(True)
@@ -169,11 +217,11 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.criteriaItem.operator = self.cbbOperator.currentText()
 
         if self.rbnAbsValue.isChecked():
-            self.criteriaItem.comparedObject = "绝对值"
+            self.criteriaItem.comparedObject = '绝对值'
         elif self.rbnDifference.isChecked():
-            self.criteriaItem.comparedObject = "差值"
+            self.criteriaItem.comparedObject = '差值'
         else:
-            self.criteriaItem.comparedObject = "比值"
+            self.criteriaItem.comparedObject = '比值'
         self.criteriaItem.value = self.spbValue.value()
         StockFinder.Instance.update_criteria_list(self.criteriaItem)
         self.close()

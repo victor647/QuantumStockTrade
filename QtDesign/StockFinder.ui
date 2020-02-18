@@ -124,7 +124,7 @@
          <string>科创板</string>
         </property>
         <property name="checked">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -152,7 +152,7 @@
     <property name="title">
      <string>自定义指标</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>11</x>
@@ -1683,8 +1683,8 @@
    <slot>export_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>385</x>
-     <y>185</y>
+     <x>417</x>
+     <y>180</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
@@ -1699,8 +1699,8 @@
    <slot>import_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>185</y>
+     <x>497</x>
+     <y>180</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -2124,6 +2124,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actFiveDaysFinder</sender>
+   <signal>triggered()</signal>
+   <receiver>StockFinder</receiver>
+   <slot>five_day_search()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>276</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>search_all_stocks()</slot>
@@ -2143,5 +2159,6 @@
   <slot>export_all_stock_list()</slot>
   <slot>test_selected_performance()</slot>
   <slot>run_batch_searcher()</slot>
+  <slot>five_day_search()</slot>
  </slots>
 </ui>

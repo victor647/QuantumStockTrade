@@ -6,253 +6,254 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
+    <width>451</width>
     <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>五日图形选股</string>
   </property>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>479</width>
-     <height>287</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QListWidget" name="lstCriteriaItems"/>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_11">
-      <property name="spacing">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="btnAddCriteria">
-        <property name="text">
-         <string>添加</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnRemoveCriteria">
-        <property name="text">
-         <string>删除</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnEditCriteria">
-        <property name="text">
-         <string>编辑</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnResetCriteria">
-        <property name="text">
-         <string>清空</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnExportConfig">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>导出</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnImportConfig">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>导入</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QSpinBox" name="spbQueryPeriodBegin">
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>日</string>
-        </property>
-        <property name="prefix">
-         <string>第</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>5</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbbQueryField">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbValueMin">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="prefix">
-         <string>最低</string>
-        </property>
-        <property name="minimum">
-         <number>-100</number>
-        </property>
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="value">
-         <number>-2</number>
-        </property>
-        <property name="displayIntegerBase">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbValueMax">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="prefix">
-         <string>最高</string>
-        </property>
-        <property name="minimum">
-         <number>-100</number>
-        </property>
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="value">
-         <number>2</number>
-        </property>
-        <property name="displayIntegerBase">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnSaveCriteria">
-        <property name="text">
-         <string>保存</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_21">
-      <item>
-       <widget class="QRadioButton" name="rbnSingleStock">
-        <property name="text">
-         <string>单只股票</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="iptStockCode">
-        <property name="maximumSize">
-         <size>
-          <width>120</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>贵州茅台</string>
-        </property>
-        <property name="maxLength">
-         <number>6</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbnAllStocks">
-        <property name="text">
-         <string>全部股票</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnStartSearching">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>开始寻找</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QListWidget" name="lstCriteriaItems"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="btnRemoveCriteria">
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnResetCriteria">
+       <property name="text">
+        <string>清空</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnExportConfig">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导出</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnImportConfig">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>导入</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSpinBox" name="spbDayIndex">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="suffix">
+        <string>日</string>
+       </property>
+       <property name="prefix">
+        <string>第</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbbQueryField">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnGreaterThan">
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>大于</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">grpOperators</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnLessThan">
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>小于</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">grpOperators</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spbCriteriaValue">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+       <property name="minimum">
+        <number>-100</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSaveCriteria">
+       <property name="text">
+        <string>保存 / 添加</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_21">
+     <item>
+      <widget class="QRadioButton" name="rbnSingleStock">
+       <property name="text">
+        <string>单只股票</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">grpSearchMode</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="iptStockCode">
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>贵州茅台</string>
+       </property>
+       <property name="maxLength">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnAllStocks">
+       <property name="text">
+        <string>全部股票</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">grpSearchMode</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStartSearching">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>开始寻找</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>
@@ -273,50 +274,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnAddCriteria</sender>
-   <signal>clicked()</signal>
-   <receiver>FiveDayShapeFinder</receiver>
-   <slot>add_criteria()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>44</x>
-     <y>218</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>56</x>
-     <y>236</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>btnRemoveCriteria</sender>
    <signal>clicked()</signal>
    <receiver>FiveDayShapeFinder</receiver>
    <slot>remove_criteria()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>144</x>
+     <x>64</x>
      <y>219</y>
     </hint>
     <hint type="destinationlabel">
      <x>151</x>
      <y>206</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnEditCriteria</sender>
-   <signal>clicked()</signal>
-   <receiver>FiveDayShapeFinder</receiver>
-   <slot>edit_criteria()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>211</x>
-     <y>222</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>237</y>
     </hint>
    </hints>
   </connection>
@@ -327,7 +296,7 @@
    <slot>clear_criterias()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>299</x>
+     <x>167</x>
      <y>217</y>
     </hint>
     <hint type="destinationlabel">
@@ -343,7 +312,7 @@
    <slot>export_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>395</x>
+     <x>291</x>
      <y>217</y>
     </hint>
     <hint type="destinationlabel">
@@ -359,11 +328,11 @@
    <slot>import_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>466</x>
+     <x>390</x>
      <y>217</y>
     </hint>
     <hint type="destinationlabel">
-     <x>493</x>
+     <x>450</x>
      <y>217</y>
     </hint>
    </hints>
@@ -375,11 +344,11 @@
    <slot>save_criteria()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
+     <x>431</x>
      <y>250</y>
     </hint>
     <hint type="destinationlabel">
-     <x>495</x>
+     <x>450</x>
      <y>253</y>
     </hint>
    </hints>
@@ -400,6 +369,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lstCriteriaItems</sender>
+   <signal>itemDoubleClicked(QListWidgetItem*)</signal>
+   <receiver>FiveDayShapeFinder</receiver>
+   <slot>edit_criteria()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>21</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lstCriteriaItems</sender>
+   <signal>itemClicked(QListWidgetItem*)</signal>
+   <receiver>FiveDayShapeFinder</receiver>
+   <slot>select_criteria()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>22</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>add_criteria()</slot>
@@ -410,5 +411,10 @@
   <slot>import_config()</slot>
   <slot>save_criteria()</slot>
   <slot>start_searching()</slot>
+  <slot>select_criteria()</slot>
  </slots>
+ <buttongroups>
+  <buttongroup name="grpOperators"/>
+  <buttongroup name="grpSearchMode"/>
+ </buttongroups>
 </ui>
