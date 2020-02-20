@@ -3,8 +3,7 @@ from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeyEvent
 from Tools import Tools, FileManager
-from Data.HistoryGraph import HistoryGraph
-import pandas
+import Data.HistoryGraph as HistoryGraph
 
 
 class SearchResult(QDialog, Ui_SearchResult):
@@ -14,7 +13,7 @@ class SearchResult(QDialog, Ui_SearchResult):
         self.setupUi(self)
         self.__searchDate = search_date
         # 显示选股日期
-        self.lblSearchDate.setText("选股日期：" + search_date)
+        self.lblSearchDate.setText('选股日期：' + search_date)
         # 为表格自动设置列宽
         self.tblStockList.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
@@ -28,8 +27,8 @@ class SearchResult(QDialog, Ui_SearchResult):
             self.delete_selected_stocks()
 
     # 更新已找到的股票数量
-    def update_found_stock_count(self, stock_count: int):
-        self.lblTotalStockFound.setText("共找到" + str(stock_count) + "只股票!")
+    def update_found_stock_count(self):
+        self.lblTotalStockFound.setText('共找到{}只股票!'.format(self.tblStockList.rowCount()))
 
     # 在列表中添加一只找到的股票
     def add_stock_item(self, items: list):
@@ -39,34 +38,23 @@ class SearchResult(QDialog, Ui_SearchResult):
             item = QTableWidgetItem()
             item.setData(Qt.DisplayRole, items[i])
             self.tblStockList.setItem(row_count, i, item)
-        self.update_found_stock_count(row_count)
+        self.update_found_stock_count()
 
-    # 在东方财富网站打开股票主页
-    def open_stock_page(self, row: int, column: int):
+    # 显示股票详细数据
+    def stock_detailed_info(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
         if column > 1:
             Tools.open_stock_page(code)
         # 直接画K线图
         else:
-            # 获取股票历史K线数据
-            data = FileManager.read_stock_history_data(code, True)
-            # 选股日期后的数据
-            data_after = data.loc[self.__searchDate:].head(20)
-            # 选股日期前的数据
-            data_before = data.loc[:self.__searchDate].iloc[-100 + data_after.shape[0]:-2]
-            graph = HistoryGraph(code, pandas.concat([data_before, data_after]))
-            graph.plot_all_ma_lines()
-            graph.plot_price()
-            graph.plot_volume()
-            graph.plot_search_date(data_after.index[0])
-            graph.exec_()
+            HistoryGraph.plot_stock_search_status(code, self.__searchDate)
 
     # 删除所选中的股票
     def delete_selected_stocks(self):
         for item in self.tblStockList.selectedItems():
             self.tblStockList.removeRow(item.row())
-        self.update_found_stock_count(self.tblStockList.rowCount())
+        self.update_found_stock_count()
 
     # 导出找到的股票列表到txt文件
     def export_stock_list(self):

@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
+from Tools import FileManager
 import pandas, math
 
 
@@ -25,14 +26,29 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
     bar_set.setBorderColor(color)
 
 
+# 画选股日期附近的K线
+def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, days_total=100):
+    stock_data = FileManager.read_stock_history_data(stock_code, True)
+    # 选股日期后的数据
+    data_after = stock_data.loc[search_date:].head(days_after)
+    # 选股日期前的数据
+    data_before = stock_data.loc[:search_date].iloc[-days_total + data_after.shape[0]:-2]
+    graph = HistoryGraph(stock_code, pandas.concat([data_before, data_after]))
+    graph.plot_all_ma_lines()
+    graph.plot_price()
+    graph.plot_volume()
+    graph.plot_search_date(data_after.index[0])
+    graph.exec_()
+
+
 # 显示K线图
 class HistoryGraph(QDialog, Ui_HistoryGraph):
     volumeSeries = None
 
-    def __init__(self, code: str, stock_data: pandas.DataFrame, show_year=False):
+    def __init__(self, stock_code: str, stock_data: pandas.DataFrame, show_year=False):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(code + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
+        self.setWindowTitle(stock_code + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
         self.stockData = stock_data
         # 创建图表
         self.chart = QChart()

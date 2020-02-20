@@ -52,6 +52,7 @@ class Ui_SearchResult(object):
         font.setFamily("Helvetica")
         font.setPointSize(9)
         self.tblStockList.setFont(font)
+        self.tblStockList.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tblStockList.setObjectName("tblStockList")
         self.tblStockList.setColumnCount(8)
         self.tblStockList.setRowCount(0)
@@ -76,7 +77,7 @@ class Ui_SearchResult(object):
         self.verticalLayout.addWidget(self.tblStockList)
 
         self.retranslateUi(SearchResult)
-        self.tblStockList.cellDoubleClicked['int','int'].connect(SearchResult.open_stock_page)
+        self.tblStockList.cellDoubleClicked['int','int'].connect(SearchResult.stock_detailed_info)
         self.btnExportStockList.clicked.connect(SearchResult.export_stock_list)
         self.btnDeleteStock.clicked.connect(SearchResult.delete_selected_stocks)
         QtCore.QMetaObject.connectSlotsByName(SearchResult)

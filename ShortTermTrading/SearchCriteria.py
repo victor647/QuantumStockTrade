@@ -4,6 +4,32 @@ import ShortTermTrading.StockFinder as StockFinder
 import pandas
 
 
+# 五日选股指标内容
+class FiveDayCriteriaItem:
+    dayIndex = 1
+    field = '收盘价'
+    operator = '大于'
+    value = -2
+
+    # 自定义排序算法
+    def __lt__(self, other):
+        return self.dayIndex < other.dayIndex
+
+    # 转换为界面上显示的文字
+    def to_display_text(self):
+        return '第{}天{}{}{}%'.format(self.dayIndex, self.field, self.operator, self.value)
+
+    # 通过json导入搜索条件
+    @staticmethod
+    def import_criteria_item(json_data: dict):
+        item = FiveDayCriteriaItem()
+        item.dayIndex = json_data['dayIndex']
+        item.field = json_data['field']
+        item.operator = json_data['operator']
+        item.value = json_data['value']
+        return item
+
+
 # 自定义技术指标内容
 class CriteriaItem:
     queryLogic = '平均'
@@ -65,6 +91,23 @@ class CriteriaItem:
                 if '价' not in self.queryField and '价' not in self.comparedField:
                     text += '%'
         return text
+
+    # 通过json导入搜索条件
+    @staticmethod
+    def import_criteria_item(json_data: dict):
+        item = CriteriaItem()
+        item.queryLogic = json_data['queryLogic']
+        item.comparedLogic = json_data['comparedLogic']
+        item.queryField = json_data['queryField']
+        item.comparedField = json_data['comparedField']
+        item.queryPeriodBegin = json_data['queryPeriodBegin']
+        item.queryPeriodEnd = json_data['queryPeriodEnd']
+        item.comparedPeriodBegin = json_data['comparedPeriodBegin']
+        item.comparedPeriodEnd = json_data['comparedPeriodEnd']
+        item.comparedObject = json_data['comparedObject']
+        item.operator = json_data['operator']
+        item.value = json_data['value']
+        return item
 
 
 # 获取数据库对应列表
@@ -150,23 +193,6 @@ def match_criteria_item(data: pandas.DataFrame, item: CriteriaItem):
         return value_first < value_second
     else:
         return value_first == value_second
-
-
-# 通过json导入搜索条件
-def import_criteria_item(json_data: dict):
-    item = CriteriaItem()
-    item.queryLogic = json_data['queryLogic']
-    item.comparedLogic = json_data['comparedLogic']
-    item.queryField = json_data['queryField']
-    item.comparedField = json_data['comparedField']
-    item.queryPeriodBegin = json_data['queryPeriodBegin']
-    item.queryPeriodEnd = json_data['queryPeriodEnd']
-    item.comparedPeriodBegin = json_data['comparedPeriodBegin']
-    item.comparedPeriodEnd = json_data['comparedPeriodEnd']
-    item.comparedObject = json_data['comparedObject']
-    item.operator = json_data['operator']
-    item.value = json_data['value']
-    return item
 
 
 class SearchCriteria(QDialog, Ui_SearchCriteria):

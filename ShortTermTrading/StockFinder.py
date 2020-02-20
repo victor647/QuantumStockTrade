@@ -246,7 +246,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     def import_custom_config(self):
         file_path = QFileDialog.getOpenFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         if file_path[0] != '':
-            self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.import_criteria_item)
+            self.__criteriaItems = FileManager.import_json_config(file_path[0], SearchCriteria.CriteriaItem.import_criteria_item)
             self.update_criteria_list()
 
     # 更新自定义搜索条件列表显示
@@ -307,7 +307,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 弹出搜索结果界面
         self.__searchResult = SearchResult(search_date)
         self.__searchResult.show()
-        # 开始选股进程
+        # 开始选股线程
         search_process = StockSearcher(stock_list, search_date, False)
         search_process.addItemCallback.connect(self.__searchResult.add_stock_item)
         search_process.start()

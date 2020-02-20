@@ -1,0 +1,14 @@
+[
+    {
+        "dayIndex": 1,
+        "field": "\u6536\u76d8\u6da8\u8dcc\u5e45",
+        "operator": "\u5927\u4e8e",
+        "value": 9
+    },
+    {
+        "dayIndex": 2,
+        "field": "\u5f00\u76d8\u6da8\u8dcc\u5e45",
+        "operator": "\u5c0f\u4e8e",
+        "value": -2
+    }
+]

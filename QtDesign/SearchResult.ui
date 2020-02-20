@@ -78,6 +78,9 @@
        <pointsize>9</pointsize>
       </font>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
@@ -137,7 +140,7 @@
    <sender>tblStockList</sender>
    <signal>cellDoubleClicked(int,int)</signal>
    <receiver>SearchResult</receiver>
-   <slot>open_stock_page(int,int)</slot>
+   <slot>stock_detailed_info(int,int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>286</x>
@@ -172,8 +175,8 @@
    <slot>delete_selected_stocks()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>392</x>
-     <y>21</y>
+     <x>379</x>
+     <y>31</y>
     </hint>
     <hint type="destinationlabel">
      <x>314</x>
@@ -184,7 +187,7 @@
  </connections>
  <slots>
   <slot>stop_searching()</slot>
-  <slot>open_stock_page(int,int)</slot>
+  <slot>stock_detailed_info(int,int)</slot>
   <slot>export_stock_list()</slot>
   <slot>delete_selected_stocks()</slot>
  </slots>

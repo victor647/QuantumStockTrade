@@ -387,17 +387,17 @@
   </connection>
   <connection>
    <sender>lstCriteriaItems</sender>
-   <signal>itemClicked(QListWidgetItem*)</signal>
+   <signal>itemSelectionChanged()</signal>
    <receiver>FiveDayShapeFinder</receiver>
    <slot>select_criteria()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>22</x>
-     <y>112</y>
+     <x>37</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel">
-     <x>6</x>
-     <y>107</y>
+     <x>1</x>
+     <y>48</y>
     </hint>
    </hints>
   </connection>
@@ -414,7 +414,7 @@
   <slot>select_criteria()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="grpOperators"/>
   <buttongroup name="grpSearchMode"/>
+  <buttongroup name="grpOperators"/>
  </buttongroups>
 </ui>
