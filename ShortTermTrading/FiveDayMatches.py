@@ -7,6 +7,7 @@ import Data.HistoryGraph as HistoryGraph
 
 # 五日选股结果列表
 class FiveDayMatches(QDialog, Ui_FiveDayMatches):
+    __totalFiveDayPerformance = 0
 
     def __init__(self):
         super().__init__()
@@ -25,8 +26,8 @@ class FiveDayMatches(QDialog, Ui_FiveDayMatches):
             HistoryGraph.plot_stock_search_status(code, self.tblMatches.item(row, 2).text())
 
     # 更新已找到的股票数量
-    def update_matches_count(self):
-        self.lblMatchesSummary.setText('共出现{}次图形匹配，出现后平均5日涨幅{}%'.format(self.tblMatches.rowCount(), 0))
+    def update_matches_count(self, average_performance: float):
+        self.lblMatchesSummary.setText('共出现{}次图形匹配，出现后平均5日涨幅{}%'.format(self.tblMatches.rowCount(), average_performance))
 
     # 在列表中添加一只找到的股票
     def add_match(self, items: list):
@@ -41,4 +42,6 @@ class FiveDayMatches(QDialog, Ui_FiveDayMatches):
                 item = QTableWidgetItem()
                 item.setData(Qt.DisplayRole, items[i])
                 self.tblMatches.setItem(row_count, i, item)
-        self.update_matches_count()
+        # 计算平均五日表现
+        self.__totalFiveDayPerformance += items[-2]
+        self.update_matches_count(round(self.__totalFiveDayPerformance / (row_count + 1), 2))
