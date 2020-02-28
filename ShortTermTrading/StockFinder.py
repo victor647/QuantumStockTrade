@@ -1,11 +1,11 @@
-from PyQt5.QtCore import pyqtSignal, Qt, QDate, QThread
+from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageBox
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from ShortTermTrading.SearchResult import SearchResult
 from ShortTermTrading.BatchSearcher import BatchSearcher
 from ShortTermTrading.FiveDayFinder import FiveDayFinder
-from Tools.ProgressBar import ProgressBar
+from ShortTermTrading.StockSearchThread import StandardStockSearcher
 from datetime import datetime
 import ShortTermTrading.SearchCriteria as SearchCriteria
 import tushare, pandas
@@ -301,21 +301,19 @@ class StockFinder(QMainWindow, Ui_StockFinder):
 
     # 开始搜索全部股票
     def search_all_stocks(self):
-        stock_list = FileManager.read_stock_list_file()
         # 确保选股日期不是周末
         search_date = Tools.get_nearest_trade_date(self.dteSearchDate.date()).toString('yyyy-MM-dd')
         # 弹出搜索结果界面
         self.__searchResult = SearchResult(search_date)
         self.__searchResult.show()
         # 开始选股线程
-        search_process = StockSearcher(stock_list, search_date, False)
+        search_process = StandardStockSearcher(search_date, False)
         search_process.addItemCallback.connect(self.__searchResult.add_stock_item)
         search_process.start()
 
     # 批量选股器自动选股接口
     @staticmethod
     def auto_search(searcher: BatchSearcher, start_date: QDate, end_date: QDate):
-        stock_list = FileManager.read_stock_list_file()
         current_searching_date = start_date
         # 初始化选股结果列表
         while current_searching_date < end_date:
@@ -323,7 +321,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             current_searching_date = Tools.get_nearest_trade_date(current_searching_date)
             date_string = current_searching_date.toString('yyyy-MM-dd')
             # 开始选股进程
-            search_process = StockSearcher(stock_list, date_string, True, searcher.iptCriteriaName.text())
+            search_process = StandardStockSearcher(date_string, True, searcher.iptCriteriaName.text())
             search_process.start()
             current_searching_date = searcher.move_to_next_date(current_searching_date)
 
@@ -472,73 +470,3 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if self.cbxShanghaiScience.isChecked() and 688000 <= code < 689000:
             return True
         return False
-
-
-# 多线程股票搜索算法
-class StockSearcher(QThread):
-    addItemCallback = pyqtSignal(list)
-    progressBarCallback = pyqtSignal(int, str, str)
-    finishedCallback = pyqtSignal()
-
-    def __init__(self, stock_list, search_date: str, export_to_file: bool, folder_name=''):
-        super().__init__()
-        self.stockList = stock_list
-        self.selectedStocks = []
-        self.searchDate = search_date
-        # 弹出选股进度条
-        progress_bar = ProgressBar(stock_list.shape[0], search_date + '选股', self)
-        progress_bar.show()
-        self.progressBarCallback.connect(progress_bar.update_search_progress)
-        self.finishedCallback.connect(progress_bar.destroy)
-        if export_to_file:
-            self.finishedCallback.connect(lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate))
-
-    def __del__(self):
-        self.work = False
-        self.terminate()
-
-    def run(self):
-        for index, row in self.stockList.iterrows():
-            code_num = row['code']
-            # 将股票代码固定为6位数
-            code = str(code_num).zfill(6)
-            # 获得股票中文名称
-            name = row['name']
-            # 更新窗口进度条
-            self.progressBarCallback.emit(index, code, name)
-            # 判断股票是否在选中的交易所中
-            if not Instance.code_in_search_range(code_num):
-                continue
-            # 基本面指标考察
-            if Instance.cbxBasicCriteriasEnabled.isChecked() and not Instance.match_basic_criterias(row, self.searchDate):
-                continue
-
-            # 获得股票历史数据
-            data = FileManager.read_stock_history_data(code, True)
-            # 剪去选股日期之后的数据
-            data = data.loc[:self.searchDate]
-            # 技术面指标考察
-            if Instance.cbxTechnicalCriteriasEnabled.isChecked() and not Instance.match_technical_criterias(data):
-                continue
-            # 自定义指标考察
-            if not Instance.match_custom_criterias(data):
-                continue
-            # 获得股票行业信息
-            industry = row['industry']
-            # 获得股票上市地区
-            area = row['area']
-            # 获得股票市盈率
-            pe = row['pe']
-            # 获得股票市净率
-            pb = row['pb']
-            # 获得股票总市值
-            assets = row['totalAssets']
-            # 净资产收益率
-            roe = str(round(row['esp'] / row['bvps'] * 100, 2)) + '%'
-            # 将符合要求的股票信息打包
-            items = [code, name, industry, area, pe, pb, assets, roe]
-            # 添加股票信息至列表
-            self.addItemCallback.emit(items)
-            self.selectedStocks.append(code)
-        # 搜索结束回调
-        self.finishedCallback.emit()
