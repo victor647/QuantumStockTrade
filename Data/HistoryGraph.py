@@ -32,7 +32,7 @@ def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, d
     # 选股日期后的数据
     data_after = stock_data.loc[search_date:].head(days_after)
     # 选股日期前的数据
-    data_before = stock_data.loc[:search_date].iloc[-days_total + data_after.shape[0]:-2]
+    data_before = stock_data.loc[:search_date].iloc[-days_total + data_after.shape[0]:-1]
     graph = HistoryGraph(stock_code, pandas.concat([data_before, data_after]))
     graph.plot_all_ma_lines()
     graph.plot_price()
