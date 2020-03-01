@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>728</width>
-    <height>548</height>
+    <width>718</width>
+    <height>545</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -348,19 +348,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblAnalyzeMonths">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>分析时长</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QSpinBox" name="spbAnalyzeMonths">
        <property name="suffix">
         <string>个月</string>
@@ -376,6 +363,19 @@
        </property>
        <property name="value">
         <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnGetData">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>获取数据</string>
        </property>
       </widget>
      </item>
@@ -1484,59 +1484,6 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>420</y>
-      <width>171</width>
-      <height>89</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_8">
-     <item>
-      <widget class="QPushButton" name="btnGetData">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取股票历史数据</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAutoFindStrategy">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>自动分析获取策略</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnStartTrade">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>开始模拟交易回测</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QCheckBox" name="cbxTrendEnabled">
     <property name="geometry">
      <rect>
@@ -1553,13 +1500,88 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnStartTrade">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>490</y>
+      <width>161</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>开始模拟交易回测</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>421</y>
+      <width>171</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="btnPlotOpenCloseDistribution">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>开盘收盘分布图</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnPlotHighLowDistribution">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>最高最低分布图</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAutoFindStrategy">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>自动分析获取策略</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>728</width>
+     <width>718</width>
      <height>22</height>
     </rect>
    </property>
@@ -1574,8 +1596,8 @@
    <slot>get_history_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>450</x>
-     <y>466</y>
+     <x>709</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>361</x>
@@ -1590,8 +1612,8 @@
    <slot>auto_get_strategy()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>476</x>
-     <y>496</y>
+     <x>477</x>
+     <y>526</y>
     </hint>
     <hint type="destinationlabel">
      <x>591</x>
@@ -1638,8 +1660,8 @@
    <slot>start_trade()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>371</x>
-     <y>517</y>
+     <x>551</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>388</x>
@@ -1727,10 +1749,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnPlotHighLowDistribution</sender>
+   <signal>clicked()</signal>
+   <receiver>StockAnalyzer</receiver>
+   <slot>plot_high_low_distribution()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>482</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>486</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnPlotOpenCloseDistribution</sender>
+   <signal>clicked()</signal>
+   <receiver>StockAnalyzer</receiver>
+   <slot>plot_open_close_distribution()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>529</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>544</x>
+     <y>459</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>get_history_data()</slot>
   <slot>start_trade()</slot>
   <slot>auto_get_strategy()</slot>
+  <slot>plot_high_low_distribution()</slot>
+  <slot>plot_open_close_distribution()</slot>
  </slots>
 </ui>

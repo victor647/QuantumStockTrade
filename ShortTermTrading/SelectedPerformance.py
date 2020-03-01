@@ -5,7 +5,7 @@ import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.InvestmentStatus import StockInvestment
 import pandas
 from Tools import Tools, FileManager
-from Data.HistoryGraph import HistoryGraph
+from Data.HistoryGraph import CandleStickChart
 
 
 # 选股器回测工具
@@ -68,7 +68,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             data = FileManager.read_stock_history_data(code, True)
             # 截取回测日期内的数据
             data = pandas.concat([data.loc[:start_date].iloc[-20:-2], data.loc[start_date:].head(20)])
-            graph = HistoryGraph(code, data)
+            graph = CandleStickChart(code, data)
             graph.plot_all_ma_lines()
             graph.plot_price()
             graph.plot_volume()

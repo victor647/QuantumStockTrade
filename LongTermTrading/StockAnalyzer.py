@@ -5,6 +5,7 @@ from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 import LongTermTrading.TradeSimulator as TradeSimulator
 from LongTermTrading.TradeStrategy import TradeStrategy
 import Data.TechnicalAnalysis as TechnicalAnalysis
+from Data.HistoryGraph import PriceDistributionChart
 from Tools import Tools, FileManager
 
 stockDatabase = pandas.DataFrame()
@@ -127,6 +128,20 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.lblAverageHighWhenDown.setText("阴线平均最高：" + str(self.__analysisData.averageHighWhenDown) + "%")
         self.lblAverageLowWhenDown.setText("阴线平均最低：" + str(self.__analysisData.averageLowWhenDown) + "%")
         self.lblAverageBounceAmp.setText("阴线平均反弹：" + str(self.__analysisData.averageBounce) + "%")
+
+    # 显示开盘收盘涨幅分布图
+    def plot_open_close_distribution(self):
+        stock_code = Tools.get_stock_code(self.iptStockNumber)
+        chart = PriceDistributionChart(stock_code, stockDatabase)
+        chart.plot_open_close_data()
+        chart.exec_()
+
+    # 显示高低涨幅分布图
+    def plot_high_low_distribution(self):
+        stock_code = Tools.get_stock_code(self.iptStockNumber)
+        chart = PriceDistributionChart(stock_code, stockDatabase)
+        chart.plot_high_low_data()
+        chart.exec_()
 
     # 根据平均涨跌幅自动获取交易策略
     def auto_get_strategy(self):

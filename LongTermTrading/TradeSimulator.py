@@ -3,7 +3,7 @@ from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 import LongTermTrading.StockAnalyzer as StockAnalyzer
 import LongTermTrading.TradeStrategy as TradeStrategy
 import Data.TechnicalAnalysis as TechnicalAnalysis
-from Data.HistoryGraph import HistoryGraph
+from Data.HistoryGraph import CandleStickChart
 from Data.InvestmentStatus import StockInvestment
 import baostock, pandas
 from Tools import Tools
@@ -354,7 +354,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 复制一份以日期作为key的数据
         stock_data = pandas.DataFrame.copy(StockAnalyzer.stockDatabase)
         stock_data.set_index('date', inplace=True)
-        graph = HistoryGraph(self.__stockCode, stock_data)
+        graph = CandleStickChart(self.__stockCode, stock_data)
         # 画成交量
         graph.plot_volume()
         # 画布林轨道

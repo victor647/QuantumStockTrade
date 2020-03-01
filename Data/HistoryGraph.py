@@ -33,7 +33,7 @@ def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, d
     data_after = stock_data.loc[search_date:].head(days_after)
     # 选股日期前的数据
     data_before = stock_data.loc[:search_date].iloc[-days_total + data_after.shape[0]:-1]
-    graph = HistoryGraph(stock_code, pandas.concat([data_before, data_after]))
+    graph = CandleStickChart(stock_code, pandas.concat([data_before, data_after]))
     graph.plot_all_ma_lines()
     graph.plot_price()
     graph.plot_volume()
@@ -41,49 +41,49 @@ def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, d
     graph.exec_()
 
 
-# 显示K线图
-class HistoryGraph(QDialog, Ui_HistoryGraph):
-    volumeSeries = None
+# K线图
+class CandleStickChart(QDialog, Ui_HistoryGraph):
+    __volumeSeries = None
 
     def __init__(self, stock_code: str, stock_data: pandas.DataFrame, show_year=False):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(stock_code + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
-        self.stockData = stock_data
+        self.__stockData = stock_data
         # 创建图表
-        self.chart = QChart()
-        self.chart.setBackgroundBrush(Qt.black)
+        self.__chart = QChart()
+        self.__chart.setBackgroundBrush(Qt.black)
         # 隐藏图例
-        self.chart.legend().hide()
+        self.__chart.legend().hide()
         # 初始化日期显示
         self.__dates = []
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             self.__dates.append(index)
         # 创建日期x轴
-        self.x_axis = QBarCategoryAxis()
-        self.x_axis.setCategories(self.__dates)
-        self.chart.addAxis(self.x_axis, Qt.AlignBottom)
+        self.__axis_x = QBarCategoryAxis()
+        self.__axis_x.setCategories(self.__dates)
+        self.__chart.addAxis(self.__axis_x, Qt.AlignBottom)
         # 创建专门的日期显示X轴
         self.resize(len(self.__dates) * 15 + 100, 550)
         self.setMinimumSize(len(self.__dates) * 10 + 200, 400)
-        self.x_axis.hide()
+        self.__axis_x.hide()
         date_axis = QDateTimeAxis()
         date_axis.setTickCount(len(self.__dates) / 5 + 1)
         date_axis.setFormat('yy/MM/dd' if show_year else 'MM/dd')
         date_axis.setGridLineColor(Qt.black)
         date_axis.setLabelsColor(Qt.lightGray)
-        date_axis.setMin(QDateTime.fromString(self.stockData.index[0], 'yyyy-MM-dd'))
-        date_axis.setMax(QDateTime.fromString(self.stockData.index[-1], 'yyyy-MM-dd'))
-        self.chart.addAxis(date_axis, Qt.AlignBottom)
+        date_axis.setMin(QDateTime.fromString(self.__stockData.index[0], 'yyyy-MM-dd'))
+        date_axis.setMax(QDateTime.fromString(self.__stockData.index[-1], 'yyyy-MM-dd'))
+        self.__chart.addAxis(date_axis, Qt.AlignBottom)
 
         # 添加股价Y轴
-        self.price_axis = QValueAxis()
-        self.price_axis.setTickCount(9)
-        self.price_axis.setGridLineColor(Qt.darkGray)
-        self.price_axis.setLabelsColor(Qt.lightGray)
-        self.chart.addAxis(self.price_axis, Qt.AlignLeft)
+        self.__axis_price = QValueAxis()
+        self.__axis_price.setTickCount(9)
+        self.__axis_price.setGridLineColor(Qt.darkGray)
+        self.__axis_price.setLabelsColor(Qt.lightGray)
+        self.__chart.addAxis(self.__axis_price, Qt.AlignLeft)
         # 显示图表
-        self.crtGraph.setChart(self.chart)
+        self.crtGraph.setChart(self.__chart)
         self.show()
 
     # 画股价蜡烛图
@@ -93,7 +93,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         price_series.setDecreasingColor(Qt.cyan)
         price_series.setIncreasingColor(Qt.transparent)
         # 添加数据
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             candlestick_set = QCandlestickSet(day_data['open'], day_data['high'], day_data['low'], day_data['close'])
             # 给线条上色，默认为白色
             candlestick_set.setPen(Qt.white)
@@ -108,10 +108,10 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
                     candlestick_set.setPen(Qt.cyan)
             price_series.append(candlestick_set)
         # 创建图表
-        self.chart.addSeries(price_series)
+        self.__chart.addSeries(price_series)
         # 计算价格轴范围
-        max_price = self.stockData['high'].max()
-        min_price = self.stockData['low'].min()
+        max_price = self.__stockData['high'].max()
+        min_price = self.__stockData['low'].min()
         # 若振幅过小，压缩绘图区域
         stretch_ratio = 1.5 / (max_price / min_price)
         if stretch_ratio > 1:
@@ -119,22 +119,22 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             min_price /= (stretch_ratio - 1) * 0.75 + 1
         # 避开成交量图形区域
         min_price -= (max_price - min_price) / 3
-        self.price_axis.setRange(min_price, max_price)
-        price_series.attachAxis(self.x_axis)
-        price_series.attachAxis(self.price_axis)
+        self.__axis_price.setRange(min_price, max_price)
+        price_series.attachAxis(self.__axis_x)
+        price_series.attachAxis(self.__axis_price)
 
     # 画成交量柱状图
     def plot_volume(self):
-        self.volumeSeries = QStackedBarSeries()
-        self.volumeSeries.setBarWidth(0.7)
+        self.__volumeSeries = QStackedBarSeries()
+        self.__volumeSeries.setBarWidth(0.7)
         volume_bar_up = QBarSet('up')
         volume_bar_down = QBarSet('down')
         decorate_bar_series(volume_bar_up, Qt.red, True)
         decorate_bar_series(volume_bar_down, Qt.cyan)
-        self.volumeSeries.append(volume_bar_up)
-        self.volumeSeries.append(volume_bar_down)
+        self.__volumeSeries.append(volume_bar_up)
+        self.__volumeSeries.append(volume_bar_down)
         # 添加数据
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             # 给成交量柱子上色
             if 'preclose' in day_data:
                 if day_data['close'] >= day_data['preclose']:
@@ -151,17 +151,17 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
                 else:
                     volume_bar_down.append(day_data['turn'])
                     volume_bar_up.append(0)
-        self.chart.addSeries(self.volumeSeries)
+        self.__chart.addSeries(self.__volumeSeries)
         # 创建成交量Y轴在右侧
         volume_axis = QValueAxis()
         volume_axis.setGridLineColor(Qt.darkGray)
         volume_axis.setLabelsColor(Qt.lightGray)
         volume_axis.setTickCount(9)
         # 将成交量图形置于最下方
-        volume_axis.setMax(self.stockData['turn'].max() * 4)
-        self.chart.addAxis(volume_axis, Qt.AlignRight)
-        self.volumeSeries.attachAxis(volume_axis)
-        self.volumeSeries.attachAxis(self.x_axis)
+        volume_axis.setMax(self.__stockData['turn'].max() * 4)
+        self.__chart.addAxis(volume_axis, Qt.AlignRight)
+        self.__volumeSeries.attachAxis(volume_axis)
+        self.__volumeSeries.attachAxis(self.__axis_x)
 
     # 画布林线轨道
     def plot_boll(self):
@@ -175,21 +175,21 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
 
         # 添加数据
         i = 0
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             boll_upper.append(i, day_data['boll_upper'])
             boll_middle.append(i, day_data['boll_middle'])
             boll_lower.append(i, day_data['boll_lower'])
             i += 1
         # 创建图表
-        self.chart.addSeries(boll_upper)
-        self.chart.addSeries(boll_middle)
-        self.chart.addSeries(boll_lower)
-        boll_upper.attachAxis(self.x_axis)
-        boll_upper.attachAxis(self.price_axis)
-        boll_middle.attachAxis(self.x_axis)
-        boll_middle.attachAxis(self.price_axis)
-        boll_lower.attachAxis(self.x_axis)
-        boll_lower.attachAxis(self.price_axis)
+        self.__chart.addSeries(boll_upper)
+        self.__chart.addSeries(boll_middle)
+        self.__chart.addSeries(boll_lower)
+        boll_upper.attachAxis(self.__axis_x)
+        boll_upper.attachAxis(self.__axis_price)
+        boll_middle.attachAxis(self.__axis_x)
+        boll_middle.attachAxis(self.__axis_price)
+        boll_lower.attachAxis(self.__axis_x)
+        boll_lower.attachAxis(self.__axis_price)
 
     # 画MACD曲线
     def plot_macd(self):
@@ -199,7 +199,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         macd_column = QStackedBarSeries()
         macd_column.setBarWidth(0.1)
         # 增粗成交量柱形图
-        self.volumeSeries.setBarWidth(1.4)
+        self.__volumeSeries.setBarWidth(1.4)
         macd_column_positive = QBarSet('red')
         macd_column_negative = QBarSet('green')
         macd_column.append(macd_column_positive)
@@ -212,7 +212,7 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
 
         # 添加数据
         i = 0
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             macd_white.append(i, day_data['macd_white'])
             macd_yellow.append(i, day_data['macd_yellow'])
             macd_column_positive.append(max(day_data['macd_column'], 0))
@@ -222,15 +222,15 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         macd_axis = QValueAxis()
         macd_axis.setTickCount(3)
         # 寻找折线最大值确定显示范围
-        max_abs = max(self.stockData['macd_white'].abs().max(), self.stockData['macd_yellow'].abs().max(), self.stockData['macd_column'].abs().max())
+        max_abs = max(self.__stockData['macd_white'].abs().max(), self.__stockData['macd_yellow'].abs().max(), self.__stockData['macd_column'].abs().max())
         macd_axis.setMax(max_abs * 2)
         macd_axis.setMin(max_abs * -2)
         macd_axis.hide()
-        self.chart.addAxis(macd_axis, Qt.AlignRight)
+        self.__chart.addAxis(macd_axis, Qt.AlignRight)
         # 创建图表
-        self.chart.addSeries(macd_column)
-        self.chart.addSeries(macd_yellow)
-        self.chart.addSeries(macd_white)
+        self.__chart.addSeries(macd_column)
+        self.__chart.addSeries(macd_yellow)
+        self.__chart.addSeries(macd_white)
         macd_white.attachAxis(macd_axis)
         macd_yellow.attachAxis(macd_axis)
         macd_column.attachAxis(macd_axis)
@@ -244,41 +244,41 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         ma_long.setColor(Qt.yellow)
         # 添加数据
         i = 0
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             ma_short.append(i, day_data[label_short])
             ma_long.append(i, day_data[label_long])
             i += 1
         # 创建图表
-        self.chart.addSeries(ma_long)
-        self.chart.addSeries(ma_short)
+        self.__chart.addSeries(ma_long)
+        self.__chart.addSeries(ma_short)
         # 是否拥有不同尺度的Y轴
         if use_different_axis:
             # 创建右侧Y轴显示数据
             y_axis = QValueAxis()
             y_axis.setTickCount(3)
-            max_abs = max(self.stockData[label_short].abs().max(), self.stockData[label_long].abs().max())
+            max_abs = max(self.__stockData[label_short].abs().max(), self.__stockData[label_long].abs().max())
             y_axis.setMax(max_abs * 1.5)
             y_axis.setMin(max_abs * -1.5)
             # 隐藏Y轴
             y_axis.hide()
-            self.chart.addAxis(y_axis, Qt.AlignRight)
+            self.__chart.addAxis(y_axis, Qt.AlignRight)
             ma_short.attachAxis(y_axis)
             ma_long.attachAxis(y_axis)
         else:
-            ma_short.attachAxis(self.price_axis)
-            ma_long.attachAxis(self.price_axis)
+            ma_short.attachAxis(self.__axis_price)
+            ma_long.attachAxis(self.__axis_price)
 
     # 画单条均线
     def plot_ma(self, period: int, color):
         label = 'ma_' + str(period)
         # 若均线指标不在数据中（上市日期不够）
-        if label not in self.stockData:
+        if label not in self.__stockData:
             return
         ma_line = QLineSeries()
         ma_line.setColor(color)
         i = 0
         is_valid = False
-        for index, day_data in self.stockData.iterrows():
+        for index, day_data in self.__stockData.iterrows():
             # 避免部分数值因数据不够不存在
             if not math.isnan(day_data[label]):
                 is_valid = True
@@ -287,8 +287,8 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
                 ma_line.append(i, day_data['close'])
             i += 1
         if is_valid:
-            self.chart.addSeries(ma_line)
-            ma_line.attachAxis(self.price_axis)
+            self.__chart.addSeries(ma_line)
+            ma_line.attachAxis(self.__axis_price)
 
     # 画所有均线
     def plot_all_ma_lines(self):
@@ -342,17 +342,17 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             share_axis.setVisible(False)
             # 将持仓量折线置于最下方
             share_axis.setRange(0, max_share * 4)
-            self.chart.addAxis(share_axis, Qt.AlignRight)
-            self.chart.addSeries(share_series)
+            self.__chart.addAxis(share_axis, Qt.AlignRight)
+            self.__chart.addSeries(share_series)
             share_series.attachAxis(share_axis)
-            share_series.attachAxis(self.x_axis)
+            share_series.attachAxis(self.__axis_x)
 
-        self.chart.addSeries(buy_history)
-        self.chart.addSeries(sell_history)
-        buy_history.attachAxis(self.price_axis)
-        buy_history.attachAxis(self.x_axis)
-        sell_history.attachAxis(self.price_axis)
-        sell_history.attachAxis(self.x_axis)
+        self.__chart.addSeries(buy_history)
+        self.__chart.addSeries(sell_history)
+        buy_history.attachAxis(self.__axis_price)
+        buy_history.attachAxis(self.__axis_x)
+        sell_history.attachAxis(self.__axis_price)
+        sell_history.attachAxis(self.__axis_x)
 
     # 绘制选股日期标记
     def plot_search_date(self, date: str):
@@ -361,12 +361,12 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
         # 找不到日期，跳过
         if date_number == -1:
             return
-        search_mark.append(date_number, self.stockData['close'][date])
+        search_mark.append(date_number, self.__stockData['close'][date])
         # 设置格式
         decorate_scatter_series(search_mark, 'F', QColor(255, 255, 0), 20)
-        self.chart.addSeries(search_mark)
-        search_mark.attachAxis(self.price_axis)
-        search_mark.attachAxis(self.x_axis)
+        self.__chart.addSeries(search_mark)
+        search_mark.attachAxis(self.__axis_price)
+        search_mark.attachAxis(self.__axis_x)
 
     # 通过日期获取第几个交易日
     def get_date_number(self, date: str):
@@ -374,3 +374,91 @@ class HistoryGraph(QDialog, Ui_HistoryGraph):
             if date == self.__dates[i]:
                 return i
         return -1
+
+
+# 每日最高最低价的分布图
+class PriceDistributionChart(QDialog, Ui_HistoryGraph):
+    __axis_x = None
+    __axis_y = None
+
+    def __init__(self, stock_code: str, stock_data: pandas.DataFrame):
+        super().__init__()
+        self.setupUi(self)
+        self.__stockCode = stock_code
+        # 最大涨跌幅，若科创板则为20
+        self.__value_range = 20 if 688000 <= int(stock_code) < 689000 else 10
+        # 设定图表大小
+        self.resize(500, 500)
+        self.stockData = stock_data
+        # 创建图表
+        self.__chart = QChart()
+        self.__chart.setBackgroundBrush(Qt.black)
+        self.__chart.legend().hide()
+        # 显示图表
+        self.crtGraph.setChart(self.__chart)
+        self.show()
+
+    # 创建一个坐标轴
+    def setup_axis(self, alignment, title: str):
+        axis = QValueAxis()
+        axis.setTickCount(3)
+        axis.setGridLineColor(Qt.darkGray)
+        axis.setLabelsColor(Qt.lightGray)
+        axis.setTitleBrush(Qt.lightGray)
+        axis.setTitleText(title)
+        axis.setRange(-self.__value_range, self.__value_range)
+        self.__chart.addAxis(axis, alignment)
+        return axis
+
+    # 创建序列
+    def create_series(self, color):
+        series = QScatterSeries()
+        series.setMarkerSize(4)
+        series.setColor(color)
+        series.setBorderColor(color)
+        self.__chart.addSeries(series)
+        series.attachAxis(self.__axis_x)
+        series.attachAxis(self.__axis_y)
+        return series
+
+    # 画最高最低分布图
+    def plot_high_low_data(self):
+        self.setWindowTitle(self.__stockCode + ' 最高最低涨跌幅分布')
+        self.__axis_x = self.setup_axis(Qt.AlignBottom, '最低跌幅')
+        self.__axis_y = self.setup_axis(Qt.AlignLeft, '最高涨幅')
+        up_days = self.create_series(Qt.red)
+        down_days = self.create_series(Qt.cyan)
+        mid_days = self.create_series(Qt.white)
+        for index, day_data in self.stockData.iterrows():
+            day_low = day_data['low_pct']
+            day_high = day_data['high_pct']
+            # 收盘高于昨日收盘，红点
+            if day_data['close_pct'] > 0:
+                up_days.append(day_low, day_high)
+            # 收盘低于昨日收盘，绿点
+            elif day_data['close_pct'] < 0:
+                down_days.append(day_low, day_high)
+            # 收盘同于昨日收盘，白点
+            else:
+                mid_days.append(day_low, day_high)
+
+    # 画开盘收盘分布图
+    def plot_open_close_data(self):
+        self.setWindowTitle(self.__stockCode + ' 开盘收盘涨跌幅分布')
+        self.__axis_x = self.setup_axis(Qt.AlignBottom, '开盘涨跌幅')
+        self.__axis_y = self.setup_axis(Qt.AlignLeft, '收盘涨跌幅')
+        up_days = self.create_series(Qt.red)
+        down_days = self.create_series(Qt.cyan)
+        mid_days = self.create_series(Qt.white)
+        for index, day_data in self.stockData.iterrows():
+            day_open = day_data['open_pct']
+            day_close = day_data['close_pct']
+            # 收盘高于开盘，红点
+            if day_close > day_open:
+                up_days.append(day_open, day_close)
+            # 收盘低于开盘，绿点
+            elif day_close < day_open:
+                down_days.append(day_open, day_close)
+            # 平盘，白点
+            else:
+                mid_days.append(day_open, day_close)

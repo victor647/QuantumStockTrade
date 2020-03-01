@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog, QHeaderV
 from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QKeyEvent
 from Data.InvestmentStatus import StockInvestment
-from Data.HistoryGraph import HistoryGraph
+from Data.HistoryGraph import CandleStickChart
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Tools import Tools, FileManager
 import baostock, pandas, math
@@ -90,7 +90,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             Tools.open_stock_page(code)
         # 直接画K线图
         elif column > 2:
-            graph = HistoryGraph(code, self.__stockData[code], True)
+            graph = CandleStickChart(code, self.__stockData[code], True)
             graph.plot_all_ma_lines()
             graph.plot_price()
             graph.plot_volume()
