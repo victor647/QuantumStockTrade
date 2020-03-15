@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>545</height>
+    <width>733</width>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>12</y>
+      <y>40</y>
       <width>171</width>
-      <height>211</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
@@ -38,7 +38,7 @@
        <x>12</x>
        <y>20</y>
        <width>151</width>
-       <height>180</height>
+       <height>191</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -146,6 +146,19 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLabel" name="lblWinMarket">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>跑赢大盘日数：</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </widget>
@@ -153,9 +166,9 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>12</y>
+      <y>40</y>
       <width>171</width>
-      <height>211</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="font">
@@ -173,7 +186,7 @@
        <x>10</x>
        <y>20</y>
        <width>151</width>
-       <height>181</height>
+       <height>191</height>
       </rect>
      </property>
      <property name="font">
@@ -290,443 +303,13 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>10</y>
-      <width>341</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="lblStockNumber">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>股票代码/名称</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="iptStockNumber">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>贵州茅台</string>
-       </property>
-       <property name="maxLength">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spbAnalyzeMonths">
-       <property name="suffix">
-        <string>个月</string>
-       </property>
-       <property name="prefix">
-        <string>最近</string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>9</number>
-       </property>
-       <property name="value">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnGetData">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>获取数据</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="grpNormalTradeRule">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>42</y>
-      <width>341</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>基础交易策略</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>328</width>
-       <height>101</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Helvetica</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="lblUpTrendBuyPoint">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>基准买点</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbBuyPointBase">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>-10.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>-3.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblBuyPointStep">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>间隔</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbBuyPointStep">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblBuyPointTrendBias">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>趋势偏移</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbBuyPointTrendBias">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="lblUpTrendSellPoint">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>基准卖点</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbSellPointBase">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>-10.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>3.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblSellPointStep">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>间隔</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbSellPointStep">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblSellPointTrendBias">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>趋势偏移</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbSellPointTrendBias">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>5.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <item>
-         <widget class="QCheckBox" name="cbxAllowSameDayTrade">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>允许日内做T     每笔交易预期收益</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spbSameDayProfit">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>%</string>
-          </property>
-          <property name="decimals">
-           <number>1</number>
-          </property>
-          <property name="minimum">
-           <double>-10.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>2.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>222</y>
+      <x>370</x>
+      <y>38</y>
       <width>351</width>
-      <height>291</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="font">
@@ -744,7 +327,7 @@
        <x>10</x>
        <y>18</y>
        <width>161</width>
-       <height>261</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="font">
@@ -892,23 +475,10 @@
        <x>180</x>
        <y>20</y>
        <width>161</width>
-       <height>261</height>
+       <height>211</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_9">
-      <item>
-       <widget class="QLabel" name="lblWinMarket">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>跑赢大盘日数：</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="lblInverseMarketUp">
         <property name="font">
@@ -1042,498 +612,108 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="grpTrendIndicator">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>180</y>
-      <width>171</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-     </font>
-    </property>
-    <property name="title">
-     <string>多空趋势信号</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>21</y>
-       <width>151</width>
-       <height>199</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QRadioButton" name="rbnMacd">
-        <property name="text">
-         <string>MACD交叉</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbnTrix">
-        <property name="text">
-         <string>TRIX交叉</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbnExpma">
-        <property name="text">
-         <string>EXPMA交叉</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QRadioButton" name="rbnMa">
-          <property name="text">
-           <string>短长期均线交叉</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_11">
-        <item>
-         <widget class="QLabel" name="lblMaShort">
-          <property name="text">
-           <string>短期均线</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbMaShort">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_14">
-        <item>
-         <widget class="QLabel" name="lblMaLong">
-          <property name="text">
-           <string>长期均线</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbMaLong">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_16">
-        <item>
-         <widget class="QLabel" name="lblTrendChangeTradeUnit">
-          <property name="text">
-           <string>趋势扭转时交易</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbTrendChangeTradeUnit">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="suffix">
-           <string>笔</string>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="grpShareAllowed">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>330</y>
-      <width>161</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-     </font>
-    </property>
-    <property name="title">
-     <string>仓位控制策略</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>141</width>
-       <height>120</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="lblInitialShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>初始底仓</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbInitialShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>手</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QLabel" name="lblSharePerTrade">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>每笔交易</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbSharePerTrade">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>手</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
-        <item>
-         <widget class="QLabel" name="lblMaxShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>最大持仓</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbMaxShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>手</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>50</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
-         <widget class="QLabel" name="lblMinShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>最小持仓</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbMinShare">
-          <property name="font">
-           <font>
-            <family>Helvetica</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="suffix">
-           <string>手</string>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="grpShortTermSignal">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>180</y>
-      <width>161</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-     </font>
-    </property>
-    <property name="title">
-     <string>超买超卖信号</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>144</width>
-       <height>112</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_7">
-      <item>
-       <widget class="QCheckBox" name="cbxKdjEnabled">
-        <property name="text">
-         <string>KDJ出现极值</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="cbxBollEnabled">
-        <property name="text">
-         <string>BOLL穿过上下轨</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
-        <item>
-         <widget class="QCheckBox" name="cbxBiasEnabled">
-          <property name="text">
-           <string>BIAS达到±</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbBiasThreshold">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>5</number>
-          </property>
-          <property name="maximum">
-           <number>20</number>
-          </property>
-          <property name="value">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
-        <item>
-         <widget class="QLabel" name="lblSignalTradeUnit">
-          <property name="text">
-           <string>出现信号时交易</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spbSignalTradeUnit">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="suffix">
-           <string>笔</string>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QCheckBox" name="cbxTrendEnabled">
-    <property name="geometry">
-     <rect>
-      <x>458</x>
-      <y>180</y>
-      <width>16</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnStartTrade">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>490</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>开始模拟交易回测</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>421</y>
-      <width>171</width>
-      <height>91</height>
+      <x>10</x>
+      <y>10</y>
+      <width>711</width>
+      <height>25</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_8">
-     <property name="spacing">
-      <number>3</number>
-     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblStockNumber">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>股票代码/名称</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="iptStockNumber">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>贵州茅台</string>
+       </property>
+       <property name="maxLength">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblStockNumber_2">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>数据范围</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spbAnalyzeMonths">
+       <property name="suffix">
+        <string>个月</string>
+       </property>
+       <property name="prefix">
+        <string>最近</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>12</number>
+       </property>
+       <property name="value">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnGetData">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>获取历史K线数据</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="btnPlotOpenCloseDistribution">
        <property name="font">
@@ -1560,19 +740,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btnAutoFindStrategy">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>自动分析获取策略</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -1581,7 +748,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>718</width>
+     <width>733</width>
      <height>22</height>
     </rect>
    </property>
@@ -1602,150 +769,6 @@
     <hint type="destinationlabel">
      <x>361</x>
      <y>64</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnAutoFindStrategy</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>auto_get_strategy()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>477</x>
-     <y>526</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>591</x>
-     <y>331</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAllowSameDayTrade</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbSameDayProfit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>408</x>
-     <y>178</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>705</x>
-     <y>178</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxBiasEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbBiasThreshold</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>589</x>
-     <y>288</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>662</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnStartTrade</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>start_trade()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>551</x>
-     <y>534</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>388</x>
-     <y>471</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxTrendEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>grpTrendIndicator</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>459</x>
-     <y>210</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>418</x>
-     <y>207</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxTrendEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbBuyPointTrendBias</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>458</x>
-     <y>219</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>675</x>
-     <y>99</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxTrendEnabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>spbSellPointTrendBias</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>465</x>
-     <y>207</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>676</x>
-     <y>135</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rbnMa</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>cbbMaShort</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>419</x>
-     <y>307</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>473</x>
-     <y>337</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>rbnMa</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>cbbMaLong</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>442</x>
-     <y>305</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>481</x>
-     <y>379</y>
     </hint>
    </hints>
   </connection>

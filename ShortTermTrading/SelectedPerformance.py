@@ -122,10 +122,8 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             column = Tools.add_price_item(self.tblStockList, row, 3, initial_price, data['preclose'].iloc[0])
             # 次日开盘买入价
             buy_price = round(data['open'].iloc[1], 2)
-            # 计算买入股数，至少买入100股
-            share_per_trade = max(round(self.spbMoneyPerTrade.value() / (buy_price * 100)), 1) * 100
             # 次日开盘买入股票
-            investment.buy_stock(buy_price, share_per_trade, data.index[1])
+            investment.buy_stock_by_money(buy_price, self.spbMoneyPerTrade.value(), data.index[1])
             investment.initial_invest()
             # 次日开盘买入价
             column = Tools.add_price_item(self.tblStockList, row, column, buy_price, initial_price)
@@ -161,14 +159,14 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                     if self.cbxAddWhenDown.isChecked() and low_percentage < self.spbAddThresholdDown.value():
                         # 若开盘价低于补仓点，则以开盘价补仓
                         add_price = min(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdDown.value()), open_price)
-                        investment.buy_stock(add_price, share_per_trade, data.index[day])
+                        investment.buy_stock_by_money(add_price, self.spbMoneyPerTrade.value(), data.index[day])
                         add_day = day
                         actual_behaviour = '第' + str(day) + '日下跌补仓，'
                     # 达到加仓点，强势追涨
                     elif self.cbxAddWhenUp.isChecked() and high_percentage > self.spbAddThresholdUp.value():
                         # 若开盘价高于加仓点，则以开盘价加仓
                         add_price = max(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdUp.value()), open_price)
-                        investment.buy_stock(add_price, share_per_trade, data.index[day])
+                        investment.buy_stock_by_money(add_price, self.spbMoneyPerTrade.value(), data.index[day])
                         add_day = day
                         actual_behaviour = '第' + str(day) + '日上涨加仓，'
 

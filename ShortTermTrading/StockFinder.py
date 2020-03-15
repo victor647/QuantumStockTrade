@@ -32,9 +32,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿', '红柱缩短', '绿柱缩短'])
         self.cbbBollBehaviour.addItems(['上穿', '下穿'])
         self.cbbBollTrack.addItems(['上轨', '中轨', '下轨'])
-        self.cbbExpmaBehaviour.addItems(['多头下穿白线', '多头下穿黄线', '空头上穿白线', '空头上穿黄线', '金叉转为多头', '死叉转为空头'])
         self.cbbMaBehaviour.addItems(['金叉', '死叉'])
-        self.cbbTrixBehaviour.addItems(['金叉', '死叉'])
 
     # 快捷键设置
     def keyPressEvent(self, key: QKeyEvent):
@@ -201,14 +199,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             'bollOn': self.cbxBollEnabled.isChecked(),
             'bollBehaviour': self.cbbBollBehaviour.currentText(),
             'bollTrack': self.cbbBollTrack.currentText(),
-            'expmaOn': self.cbxExpmaEnabled.isChecked(),
-            'expmaBehaviour': self.cbbExpmaBehaviour.currentText(),
             'maOn': self.cbxMaEnabled.isChecked(),
             'maShort': self.spbMaShort.value(),
             'maBehaviour': self.cbbMaBehaviour.currentText(),
             'maLong': self.spbMaLong.value(),
-            'trixOn': self.cbxTrixEnabled.isChecked(),
-            'trixBehaviour': self.cbbTrixBehaviour.currentText()
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -227,14 +221,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbxBollEnabled.setChecked(data['bollOn'])
             self.cbbBollBehaviour.setCurrentText(data['bollBehaviour'])
             self.cbbBollTrack.setCurrentText(data['bollTrack'])
-            self.cbxExpmaEnabled.setChecked(data['expmaOn'])
-            self.cbbExpmaBehaviour.setCurrentText(data['expmaBehaviour'])
             self.cbxMaEnabled.setChecked(data['maOn'])
             self.spbMaShort.setValue(data['maShort'])
             self.cbbMaBehaviour.setCurrentText(data['maBehaviour'])
             self.spbMaLong.setValue(data['maLong'])
-            self.cbxTrixEnabled.setChecked(data['trixOn'])
-            self.cbbTrixBehaviour.setCurrentText(data['trixBehaviour'])
 
     # 保存自定义指标搜索条件
     def export_custom_config(self):
@@ -441,14 +431,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 检测BOLL区间
         if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
             return False
-        # 检测EXPMA图形
-        if self.cbxExpmaEnabled.isChecked() and not DataAnalyzer.match_expma(data, period, self.cbbExpmaBehaviour.currentText()):
-            return False
         # 检测均线交叉
         if self.cbxMaEnabled.isChecked() and not DataAnalyzer.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
-            return False
-        # 检测TRIX图形
-        if self.cbxTrixEnabled.isChecked() and not DataAnalyzer.match_trix(data, period, self.cbbTrixBehaviour.currentText()):
             return False
         return True
 

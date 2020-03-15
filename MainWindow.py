@@ -4,10 +4,10 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from LongTermTrading import StockAnalyzer, ScheduledInvestment
-from Tools import TradeSettings
+from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
 from ShortTermTrading import StockFinder, SelectedPerformance
 from RealTimeMonitor import LiveTracker
+from Tools import TradeSettings
 
 
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
@@ -19,6 +19,7 @@ if hasattr(Qt, 'AA_UseHighDpiPixmaps'):
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     __stockAnalyzer = None
+    __tradeSimulator = None
     __stockFinder = None
     __stockTracker = None
     __selectedPerformance = None
@@ -33,17 +34,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def reconnect_server():
         baostock.login()
 
+    # 个股股性分析
     def show_stock_analyzer(self):
         self.__stockAnalyzer = StockAnalyzer.StockAnalyzer()
         self.__stockAnalyzer.show()
 
+    # 趋势模拟交易
+    def show_trade_simulator(self):
+        self.__tradeSimulator = TradeSimulator.TradeSimulator()
+        self.__tradeSimulator.show()
+
+    # 量化指标选股
     def show_stock_finder(self):
         self.__stockFinder = StockFinder.StockFinder()
         self.__stockFinder.show()
-
-    def show_live_tracker(self):
-        self.__stockTracker = LiveTracker.LiveTracker()
-        self.__stockTracker.show()
 
     # 选股表现回测
     def show_selected_performance(self):
@@ -54,6 +58,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def show_scheduled_investment(self):
         self.__scheduledInvestment = ScheduledInvestment.ScheduledInvestment()
         self.__scheduledInvestment.show()
+
+    # 实时盯盘助手
+    def show_live_tracker(self):
+        self.__stockTracker = LiveTracker.LiveTracker()
+        self.__stockTracker.show()
 
     # 交易费用设置
     @staticmethod

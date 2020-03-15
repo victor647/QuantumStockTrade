@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>553</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -235,7 +235,7 @@
       <x>10</x>
       <y>180</y>
       <width>351</width>
-      <height>341</height>
+      <height>321</height>
      </rect>
     </property>
     <property name="font">
@@ -253,7 +253,7 @@
        <x>10</x>
        <y>23</y>
        <width>331</width>
-       <height>306</height>
+       <height>291</height>
       </rect>
      </property>
      <property name="font">
@@ -1005,7 +1005,7 @@
       <x>370</x>
       <y>180</y>
       <width>261</width>
-      <height>251</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="font">
@@ -1023,7 +1023,7 @@
        <x>11</x>
        <y>20</y>
        <width>241</width>
-       <height>221</height>
+       <height>171</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1124,33 +1124,6 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
-        <item>
-         <widget class="QCheckBox" name="cbxExpmaEnabled">
-          <property name="text">
-           <string>EXPMA</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbExpmaBehaviour">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_14">
         <item>
          <widget class="QCheckBox" name="cbxMaEnabled">
@@ -1210,27 +1183,6 @@
           </property>
           <property name="maximum">
            <number>60</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_15">
-        <item>
-         <widget class="QCheckBox" name="cbxTrixEnabled">
-          <property name="text">
-           <string>TRIX</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbbTrixBehaviour">
-          <property name="enabled">
-           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1316,8 +1268,8 @@
    <widget class="QLabel" name="lblGetStockReminder">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>431</y>
+      <x>370</x>
+      <y>390</y>
       <width>243</width>
       <height>25</height>
      </rect>
@@ -1336,7 +1288,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>458</y>
+      <y>420</y>
       <width>261</width>
       <height>62</height>
      </rect>
@@ -1929,38 +1881,6 @@
     <hint type="destinationlabel">
      <x>619</x>
      <y>309</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxExpmaEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>cbbExpmaBehaviour</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>433</x>
-     <y>341</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>615</x>
-     <y>341</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxTrixEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>cbbTrixBehaviour</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>427</x>
-     <y>403</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>618</x>
-     <y>404</y>
     </hint>
    </hints>
   </connection>

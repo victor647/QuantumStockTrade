@@ -82,6 +82,7 @@ class StockInvestment:
         # 计算买入股数，至少买入100股
         share = max(round(money / (price * 100)), 1) * 100
         self.buy_stock(price, share, date)
+        return share
 
     # 模拟卖出股票
     def sell_stock(self, price: float, share: int, date: str):
@@ -109,6 +110,13 @@ class StockInvestment:
         self.currentShare -= share
         self.shareAtDate[date] = self.currentShare
         return True
+
+    # 模拟卖出股票，按照金额
+    def sell_stock_by_money(self, price: float, money: int, date: str):
+        # 计算卖出股数，至少买入100股
+        share = max(round(money / (price * 100)), 1) * 100
+        self.sell_stock(price, share, date)
+        return share
 
     # 清仓卖出可卖出部分
     def sell_all(self, price: float, date: str):

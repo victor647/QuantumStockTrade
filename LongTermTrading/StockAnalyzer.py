@@ -24,7 +24,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         global instance
         instance = self
         # 均线取值初始化
-        self.cbbMaShort.addItems(['5', '10', '20', '30'])
+        self.cbbMaShort.addItems(['1', '5', '10', '20'])
         self.cbbMaLong.addItems(['10', '20', '30', '60'])
 
     # 获取股票历史数据

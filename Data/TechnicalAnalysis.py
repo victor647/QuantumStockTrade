@@ -62,24 +62,10 @@ def get_technical_index(stock_data: pandas.DataFrame):
     stock_data['macd_yellow'] = yellow
     stock_data['macd_column'] = column
 
-    # 计算TRIX曲线，至少上市43天
-    if stock_closes.shape[0] < 43:
-        return
-    white = talib.TRIX(stock_closes, 12)
-    yellow = talib.SMA(white, 9)
-    stock_data['trix_white'] = white
-    stock_data['trix_yellow'] = yellow
-
     # 计算60日均线，至少上市60天
     if stock_closes.shape[0] < 60:
         return
     calculate_ma_curve(stock_data, 60)
-
-    # 计算EXPMA曲线，至少上市99天
-    if stock_closes.shape[0] < 99:
-        return
-    stock_data['expma_white'] = talib.EMA(stock_closes, 12)
-    stock_data['expma_yellow'] = talib.EMA(stock_closes, 50)
 
 
 # 分析价格获得涨跌幅百分比数据
@@ -422,38 +408,6 @@ def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behavi
     return False
 
 
-# 计算是否符合EXPMA图形
-def match_expma(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
-    if 'expma_white' not in stock_data.columns:
-        return False
-    # 获得长短两条EMA均线
-    white = stock_data['expma_white']
-    yellow = stock_data['expma_yellow']
-    stock_closes = stock_data['close']
-
-    # 白线在上为多头排列，否则为空头排列
-    if '多头' in behaviour and white.iloc[-1] < yellow.iloc[-1]:
-        return False
-    elif '空头' in behaviour and white.iloc[-1] > yellow.iloc[-1]:
-        return False
-
-    # 获取被比较的两个价格
-    first = stock_closes if '穿' in behaviour else white
-    second = white if '白线' in behaviour else yellow
-
-    # 获取最近和几日前的价格
-    ahead_first = first.iloc[-days_ahead]
-    ahead_second = second.iloc[-days_ahead]
-    newest_first = first.iloc[-1]
-    newest_second = second.iloc[-1]
-
-    if '下' or '金叉' in behaviour:
-        return ahead_first > ahead_second and newest_first < newest_second
-    if '上' or '死叉' in behaviour:
-        return ahead_first < ahead_second and newest_first > newest_second
-    return False
-
-
 # 计算是否符合KDJ图形
 def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold: int):
     if 'kdj_k' not in stock_data.columns:
@@ -476,22 +430,3 @@ def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold
         return value.iloc[-1] > threshold
     else:
         return value.iloc[-1] < threshold
-
-
-# 计算是否符合TRIX图形
-def match_trix(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
-    if 'trix_white' not in stock_data.columns:
-        return False
-    # 获取白线和黄线
-    white = stock_data['trix_white']
-    yellow = stock_data['trix_yellow']
-    # 获取最近和几日前的价格
-    ahead_white = white.iloc[-days_ahead]
-    ahead_yellow = yellow.iloc[-days_ahead]
-    newest_white = white.iloc[-1]
-    newest_yellow = yellow.iloc[-1]
-
-    if behaviour == '金叉':
-        return ahead_white < ahead_yellow and newest_white > newest_yellow
-    else:
-        return ahead_white > ahead_yellow and newest_white < newest_yellow
