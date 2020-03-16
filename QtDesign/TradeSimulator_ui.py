@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'TradeSimulator.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -207,7 +207,7 @@ class Ui_TradeSimulator(object):
         self.grpDailyBuyLogic.setFont(font)
         self.grpDailyBuyLogic.setObjectName("grpDailyBuyLogic")
         self.layoutWidget_3 = QtWidgets.QWidget(self.grpDailyBuyLogic)
-        self.layoutWidget_3.setGeometry(QtCore.QRect(10, 20, 204, 81))
+        self.layoutWidget_3.setGeometry(QtCore.QRect(10, 20, 211, 81))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -382,7 +382,7 @@ class Ui_TradeSimulator(object):
         self.grpDailySellLogic.setFont(font)
         self.grpDailySellLogic.setObjectName("grpDailySellLogic")
         self.layoutWidget_6 = QtWidgets.QWidget(self.grpDailySellLogic)
-        self.layoutWidget_6.setGeometry(QtCore.QRect(10, 20, 204, 81))
+        self.layoutWidget_6.setGeometry(QtCore.QRect(10, 20, 211, 81))
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(9)
@@ -656,6 +656,7 @@ class Ui_TradeSimulator(object):
         self.rbnEndByMacd.toggled['bool'].connect(self.spbMaSellPeriodLong.setDisabled)
         self.rbnStartByMaBreak.toggled['bool'].connect(self.spbMaStartStayDays.setEnabled)
         self.rbnEndByMaBreak.toggled['bool'].connect(self.spbMaEndStayDays.setEnabled)
+        self.btnShowDiagram.clicked.connect(TradeSimulator.show_history_diagram)
         QtCore.QMetaObject.connectSlotsByName(TradeSimulator)
 
     def retranslateUi(self, TradeSimulator):
@@ -740,8 +741,8 @@ class Ui_TradeSimulator(object):
         item.setText(_translate("TradeSimulator", "累计收益"))
         item = self.tblTradeHistory.horizontalHeaderItem(12)
         item.setText(_translate("TradeSimulator", "盈亏比例"))
-        self.lblBuyCount.setText(_translate("TradeSimulator", "买入次数："))
-        self.lblSellCount.setText(_translate("TradeSimulator", "卖出次数："))
+        self.lblBuyCount.setText(_translate("TradeSimulator", "共买入0次，成功0次"))
+        self.lblSellCount.setText(_translate("TradeSimulator", "共卖出0次，成功0次"))
         self.lblSameDayPerformance.setText(_translate("TradeSimulator", "做T次数："))
         self.lblOriginalInvestment.setText(_translate("TradeSimulator", "初始成本："))
         self.lblFinalAsset.setText(_translate("TradeSimulator", "最终资产："))

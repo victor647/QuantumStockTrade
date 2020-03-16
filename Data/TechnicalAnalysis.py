@@ -1,29 +1,6 @@
 import pandas, talib, math
 
 
-class AnalysisData:
-    # 平均换手率
-    averageTurn = 0
-    # 平均收盘涨幅
-    averageCloseUp = 1
-    # 平均收盘跌幅
-    averageCloseDown = -1
-    # 上涨时平均最高涨幅
-    averageHighWhenUp = 3
-    # 下跌时平均最高涨幅
-    averageHighWhenDown = 1
-    # 下跌时平均最低跌幅
-    averageLowWhenDown = -3
-    # 上涨时平均最低跌幅
-    averageLowWhenUp = -1
-    # 平均振幅
-    averageFullAmp = 4
-    # 平均最高涨幅回撤
-    averageFallback = 1
-    # 平均最低跌幅反弹
-    averageBounce = 1
-
-
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     stock_closes = stock_data['close']

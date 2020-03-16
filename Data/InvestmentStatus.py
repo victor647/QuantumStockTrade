@@ -126,13 +126,13 @@ class StockInvestment:
     def stock_value(self, current_price: float):
         return round(self.currentShare * current_price, 2)
 
-    # 累计利润：股票价值+现金价值
-    def net_profit(self, current_price: float):
-        return round(self.cashValue + self.stock_value(current_price) - self.totalInvestment, 2)
-
-    # 总资产：累计利润+初始投入
+    # 净资产：股票价值+现金价值
     def net_worth(self, current_price: float):
         return round(self.stock_value(current_price) + self.cashValue, 2)
+
+    # 累计利润：净资产-初始投入
+    def net_profit(self, current_price: float):
+        return round(self.net_worth(current_price) - self.totalInvestment, 2)
 
     # 持仓平均成本
     def average_cost(self, current_price: float):

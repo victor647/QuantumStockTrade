@@ -65,7 +65,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.__chart.addAxis(self.__axis_x, Qt.AlignBottom)
         # 创建专门的日期显示X轴
         self.resize(len(self.__dates) * 15 + 100, 550)
-        self.setMinimumSize(len(self.__dates) * 10 + 200, 400)
+        self.setMinimumSize(len(self.__dates) * 7 + 200, 400)
         self.__axis_x.hide()
         date_axis = QDateTimeAxis()
         date_axis.setTickCount(len(self.__dates) / 5 + 1)
