@@ -53,6 +53,7 @@ class Ui_FiveDayMatches(object):
         _translate = QtCore.QCoreApplication.translate
         FiveDayMatches.setWindowTitle(_translate("FiveDayMatches", "五日图形选股结果"))
         self.lblMatchesSummary.setText(_translate("FiveDayMatches", "共出现0次图形匹配，出现后平均5日涨幅0%"))
+        self.tblMatches.setSortingEnabled(True)
         item = self.tblMatches.horizontalHeaderItem(0)
         item.setText(_translate("FiveDayMatches", "股票代码"))
         item = self.tblMatches.horizontalHeaderItem(1)

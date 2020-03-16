@@ -138,7 +138,7 @@ class StockInvestment:
     def average_cost(self, current_price: float):
         if self.currentShare == 0:
             return 0.00
-        return round(self.stock_value(current_price) - self.net_profit(current_price) / self.currentShare, 2)
+        return round((self.stock_value(current_price) - self.net_profit(current_price)) / self.currentShare, 2)
 
     # 盈亏一定数额时的价格
     def threshold_price(self, profit: float):

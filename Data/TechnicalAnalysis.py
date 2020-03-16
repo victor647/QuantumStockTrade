@@ -407,3 +407,48 @@ def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold
         return value.iloc[-1] > threshold
     else:
         return value.iloc[-1] < threshold
+
+
+# 获得K线图形分类
+def candlestick_shape(daily_data: pandas.DataFrame):
+    needle_up = daily_data['high'] - max(daily_data['open'], daily_data['close'])
+    needle_down = min(daily_data['open'], daily_data['close']) - daily_data['low']
+    body_length = abs(daily_data['open'] - daily_data['close'])
+
+    if body_length > 6:
+        size = '大'
+    elif 3 < body_length <= 6:
+        size = '中'
+    elif 0.5 < body_length <= 3:
+        size = '小'
+    else:
+        size = '十字'
+
+    if needle_up < 0.5 and needle_down < 0.5:
+        shape = '实体'
+    elif needle_up < 0.5 <= needle_down:
+        shape = '光头'
+    elif needle_up >= 0.5 > needle_down:
+        shape = '赤脚'
+    elif needle_up - needle_down >= 1:
+        shape = '上影长'
+    elif needle_down - needle_up >= 1:
+        shape = '下影长'
+    else:
+        shape = '影等长'
+
+    if daily_data['open_pct'] < -2:
+        position = '低开'
+    elif daily_data['open_pct'] > 2:
+        position = '高开'
+    else:
+        position = '平开'
+
+    if daily_data['open'] > daily_data['close']:
+        color = '阳线'
+    elif daily_data['open'] < daily_data['close']:
+        color = '阴线'
+    else:
+        color = '白线'
+
+    return position, shape, size, color

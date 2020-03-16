@@ -68,7 +68,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.setMinimumSize(len(self.__dates) * 7 + 200, 400)
         self.__axis_x.hide()
         date_axis = QDateTimeAxis()
-        date_axis.setTickCount(len(self.__dates) / 5 + 1)
+        date_axis.setTickCount(max(31, round(len(self.__dates) / 5) + 1))
         date_axis.setFormat('yy/MM/dd' if show_year else 'MM/dd')
         date_axis.setGridLineColor(Qt.black)
         date_axis.setLabelsColor(Qt.lightGray)

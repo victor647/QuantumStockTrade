@@ -31,7 +31,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def start_trading(self):
         self.reset_data()
         self.get_stock_data()
-        TechnicalAnalysis.get_technical_index(self.__stockData)
+        TechnicalAnalysis.get_percentage_data(self.__stockData)
         self.analyze_by_day()
 
     def reset_data(self):
@@ -53,18 +53,25 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         bs_result = baostock.query_history_k_data(code=market + "." + self.__stockCode, fields="date,open,high,low,close,preclose,pctChg,turn",
                                                   start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
         self.__stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
+        # 计算均线
+        TechnicalAnalysis.calculate_ma_curve(self.__stockData, 5)
+        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaBuyPeriodShort.value())
+        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaBuyPeriodLong.value())
+        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaSellPeriodShort.value())
+        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaSellPeriodLong.value())
 
     # 分析每日情况
     def analyze_by_day(self):
         start_date = self.dteStart.date().toString('yyyy-MM-dd')
-        for day_index in range(self.__stockData.shape[0]):
+        total_days = self.__stockData.shape[0]
+        for day_index in range(total_days):
             # 前期计算均线数据，不进行交易
             if self.__stockData.iloc[day_index]['date'] < start_date:
                 continue
             # 当前有持仓
             if self.__isHolding:
                 self.daily_trade(day_index)
-                if self.end_signal_appears(day_index):
+                if self.end_signal_appears(day_index) or day_index == total_days - 1:
                     self.end_trade(day_index)
             elif self.start_signal_appears(day_index):
                 self.start_trade(day_index)
@@ -81,13 +88,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 if macd_data.iloc[day_index - i - 1] > macd_data.iloc[day_index - i] or macd_data.iloc[day_index - i - 1] > 0:
                     return False
         else:
-            close_data = self.__stockData['close']
+            ma_long_column = 'ma_' + str(self.spbMaBuyPeriodLong.value())
             # 均线交叉信号
             if self.rbnStartByMaCross.isChecked():
-                ma_long_yesterday = close_data.iloc[day_index - 1 - self.spbMaBuyPeriodLong.value():day_index - 1].mean()
-                ma_long_today = close_data.iloc[day_index - self.spbMaBuyPeriodLong.value():day_index].mean()
-                ma_short_yesterday = close_data.iloc[day_index - 1 - self.spbMaBuyPeriodShort.value():day_index - 1].mean()
-                ma_short_today = close_data.iloc[day_index - 1 - self.spbMaBuyPeriodShort.value():day_index - 1].mean()
+                ma_long_yesterday = self.__stockData[ma_long_column].iloc[day_index - 1]
+                ma_long_today = self.__stockData[ma_long_column].iloc[day_index]
+                ma_short_column = 'ma_' + str(self.spbMaBuyPeriodShort.value())
+                ma_short_yesterday = self.__stockData[ma_short_column].iloc[day_index - 1]
+                ma_short_today = self.__stockData[ma_short_column].iloc[day_index]
                 # 未出现金叉，趋势不成立
                 if ma_short_today < ma_long_today or ma_short_yesterday > ma_long_yesterday:
                     return False
@@ -95,14 +103,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             else:
                 # N天前必须在均线下方
                 day_index_before = day_index - self.spbMaStartStayDays.value()
-                ma_day_before = close_data.iloc[day_index_before - self.spbMaBuyPeriodLong.value():day_index_before].mean()
-                if close_data[day_index_before] >= ma_day_before:
+                ma_day_before = self.__stockData[ma_long_column].iloc[day_index_before]
+                if self.__stockData['close'].iloc[day_index_before] >= ma_day_before:
                     return False
                 # 检测是否连续N天站稳均线
                 for i in range(self.spbMaStartStayDays.value()):
-                    ma_long = close_data.iloc[day_index - i - self.spbMaBuyPeriodLong.value():day_index - i].mean()
+                    ma_long = self.__stockData[ma_long_column].iloc[day_index - i]
                     # 任何一日收盘低于均线，则趋势不成立
-                    if close_data[day_index - i] < ma_long:
+                    if self.__stockData['close'].iloc[day_index - i] < ma_long:
                         return False
         return True
 
@@ -116,13 +124,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 if macd_data.iloc[day_index - i - 1] < macd_data.iloc[day_index - i] or macd_data.iloc[day_index - i - 1] < 0:
                     return False
         else:
-            close_data = self.__stockData['close']
+            ma_long_column = 'ma_' + str(self.spbMaSellPeriodLong.value())
             # 均线交叉信号
             if self.rbnEndByMaCross.isChecked():
-                ma_long_yesterday = close_data.iloc[day_index - 1 - self.spbMaSellPeriodLong.value():day_index - 1].mean()
-                ma_long_today = close_data.iloc[day_index - self.spbMaSellPeriodLong.value():day_index].mean()
-                ma_short_yesterday = close_data.iloc[day_index - 1 - self.spbMaSellPeriodShort.value():day_index - 1].mean()
-                ma_short_today = close_data.iloc[day_index - 1 - self.spbMaSellPeriodShort.value():day_index - 1].mean()
+                ma_long_yesterday = self.__stockData[ma_long_column].iloc[day_index - 1]
+                ma_long_today = self.__stockData[ma_long_column].iloc[day_index]
+                ma_short_column = 'ma_' + str(self.spbMaSellPeriodShort.value())
+                ma_short_yesterday = self.__stockData[ma_short_column].iloc[day_index - 1]
+                ma_short_today = self.__stockData[ma_short_column].iloc[day_index]
                 # 未出现死叉，趋势不成立
                 if ma_short_today > ma_long_today or ma_short_yesterday < ma_long_yesterday:
                     return False
@@ -130,14 +139,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             else:
                 # N天前必须在均线上方
                 day_index_before = day_index - self.spbMaEndStayDays.value()
-                ma_day_before = close_data.iloc[day_index_before - self.spbMaSellPeriodLong.value():day_index_before].mean()
-                if close_data[day_index_before] <= ma_day_before:
+                ma_day_before = self.__stockData[ma_long_column].iloc[day_index_before]
+                if self.__stockData['close'].iloc[day_index_before] <= ma_day_before:
                     return False
                 # 检测是否连续N天站稳均线
                 for i in range(self.spbMaEndStayDays.value()):
-                    ma_long = close_data.iloc[day_index - i - self.spbMaSellPeriodLong.value():day_index - i].mean()
+                    ma_long = self.__stockData[ma_long_column].iloc[day_index - i]
                     # 任何一日收盘高于均线，则趋势不成立
-                    if close_data[day_index - i] > ma_long:
+                    if self.__stockData['close'].iloc[day_index - i] > ma_long:
                         return False
         return True
 
@@ -151,9 +160,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         price = round(daily_data['close'], 2)
         trade_time = daily_data['date'] + " 15:00"
         self.buy_stock(daily_data, "建仓买入", trade_time, price, self.spbInitialInvestment.value())
-        # 得到初始成本
-        self.__stockInvestment.initial_invest()
-        self.lblOriginalInvestment.setText("初始成本：" + str(self.__stockInvestment.initialAsset))
 
     # 出现清仓信号，卖出
     def end_trade(self, day_index: int):
@@ -185,7 +191,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         buy_price = TechnicalAnalysis.get_price_from_percentage(pre_close, self.spbBuyPoint.value())
         sell_price = TechnicalAnalysis.get_price_from_percentage(pre_close, self.spbSellPoint.value())
         # 五日均线买卖点模式，计算前四日收盘均价
-        last_four_day_total = self.__stockData.iloc[day_index - 5 : day_index - 1]['close'].sum()
+        last_four_day_total = self.__stockData.iloc[day_index - 5:day_index - 1]['close'].sum()
 
         # 遍历当日5分钟K线数据
         for index, minute_data in minute_database.iterrows():
@@ -227,14 +233,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             # 允许做T情况下，判断当前价位可否做T
             if self.cbxAllowSameDayTradeBuy:
                 # 遍历当日买入记录
-                for history in daily_buy_history:
+                for history_buy_price in daily_buy_history:
                     # 计算卖出价的涨跌幅
-                    t_sell_price = history + self.spbSameDayProfitBuy.value() * pre_close
+                    t_sell_price = history_buy_price + self.spbSameDayProfitBuy.value() / 100 * pre_close
                     # 价格高于做T卖出盈利点，执行卖出操作
                     if minute_data['high'] >= t_sell_price:
                         if self.sell_stock(daily_data, "做T卖出", minute_data['time'], t_sell_price, self.spbMoneyPerTrade.value()):
                             # 抵消当日买入记录
-                            daily_buy_history.remove(history)
+                            daily_buy_history.remove(history_buy_price)
                             # 回溯再次买入点价格，跌到该买点会再次买入
                             buy_price -= pre_close * self.spbBuyPoint.value()
                             # 累计做T次数
@@ -245,14 +251,14 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             # 允许做T情况下，判断当前价位可否做T
             if self.cbxAllowSameDayTradeSell:
                 # 遍历当日卖出记录
-                for history in daily_sell_history:
+                for history_sell_price in daily_sell_history:
                     # 计算买回价的涨跌幅
-                    t_buy_price = history - self.spbSameDayProfitBuy.value() * pre_close
+                    t_buy_price = history_sell_price - self.spbSameDayProfitBuy.value() / 100 * pre_close
                     # 价格低于做T买回盈利点，执行买入操作
                     if minute_data['low'] < t_buy_price:
                         if self.buy_stock(daily_data, "做T买回", minute_data['time'], t_buy_price, self.spbMoneyPerTrade.value()):
                             # 抵消当日卖出记录
-                            daily_sell_history.remove(history)
+                            daily_sell_history.remove(history_sell_price)
                             # 回溯再次卖出点价格，涨到该卖点会再次卖出
                             sell_price -= pre_close * self.spbSellPoint.value()
                             # 累计做T次数
@@ -261,18 +267,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                             if daily_data['close'] > t_buy_price:
                                 self.successfulSameDayTradeCount += 1
 
-    # 更新交易记录并计算资产变化
-    def update_trade_count(self, data: pandas.DataFrame):
-        self.lblBuyCount.setText("共买入" + str(len(self.__stockInvestment.buyTransactions)) + "次，成功" + str(self.__successfulBuyCount) + "次")
-        self.lblSellCount.setText("共卖出" + str(len(self.__stockInvestment.sellTransactions)) + "次，成功" + str(self.__successfulSellCount) + "次")
-        self.lblSameDayPerformance.setText("共做T " + str(self.totalSameDayTradeCount) + "次，成功" + str(self.successfulSameDayTradeCount) + "次")
-        self.lblTotalFee.setText("总手续费：" + str(self.__stockInvestment.totalFee))
-        self.lblFinalAsset.setText("最终资产：" + str(self.__stockInvestment.net_worth(data['close'])))
-        self.lblTotalProfit.setText("累计收益：" + str(self.__stockInvestment.net_profit(data['close'])))
-        self.lblTotalReturn.setText("盈亏比例：" + str(self.__stockInvestment.profit_percentage_from_init(data['close'])) + "%")
-
     # 模拟买入股票操作
     def buy_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
+        price = round(price, 2)
         available_money = self.spbMaxHolding.value() - self.__stockInvestment.stock_value(price)
         # 最大买入额度已满，放弃买入
         if available_money < 5000:
@@ -290,12 +287,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价高于买入价，买入成功
         if data['close'] > price:
             self.__successfulBuyCount += 1
-        # 更新交易记录显示
-        self.update_trade_count(data)
         return True
 
     # 模拟卖出股票操作
     def sell_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
+        price = round(price, 2)
         available_money = self.__stockInvestment.stock_value(price) - self.spbMinHolding.value()
         # 最小持仓额度已到，放弃卖出
         if available_money < 5000:
@@ -313,8 +309,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价低于卖出价，卖出成功
         if data['close'] < price:
             self.__successfulSellCount += 1
-        # 更新交易记录显示
-        self.update_trade_count(data)
         return True
 
     # 在表格中添加交易记录
@@ -357,7 +351,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 累计收益
         column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.net_profit(data['close']))
         # 盈亏比例
-        column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), "%")
+        Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), "%")
 
     # 显示交易记录K线图
     def show_history_diagram(self):
@@ -366,12 +360,6 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 复制一份以日期作为key的数据
         stock_data = pandas.DataFrame.copy(self.__stockData)
         stock_data.set_index('date', inplace=True)
-        # 计算均线
-        TechnicalAnalysis.calculate_ma_curve(stock_data, 5)
-        TechnicalAnalysis.calculate_ma_curve(stock_data, self.spbMaBuyPeriodShort.value())
-        TechnicalAnalysis.calculate_ma_curve(stock_data, self.spbMaBuyPeriodLong.value())
-        TechnicalAnalysis.calculate_ma_curve(stock_data, self.spbMaSellPeriodShort.value())
-        TechnicalAnalysis.calculate_ma_curve(stock_data, self.spbMaSellPeriodLong.value())
         # 截取开始交易的日期
         start_date = self.dteStart.date().toString('yyyy-MM-dd')
         stock_data = stock_data.loc[start_date:]

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1040</width>
-    <height>791</height>
+    <width>1062</width>
+    <height>742</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QGroupBox" name="grpStartLogic">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>10</x>
      <y>10</y>
-     <width>221</width>
+     <width>211</width>
      <height>161</height>
     </rect>
    </property>
@@ -36,7 +36,7 @@
      <rect>
       <x>11</x>
       <y>21</y>
-      <width>201</width>
+      <width>191</width>
       <height>131</height>
      </rect>
     </property>
@@ -84,13 +84,6 @@
       </layout>
      </item>
      <item>
-      <widget class="QRadioButton" name="rbnStartByMaCross">
-       <property name="text">
-        <string>短期均线突破长期均线</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QRadioButton" name="rbnStartByMaBreak">
@@ -123,11 +116,18 @@
           <number>1</number>
          </property>
          <property name="value">
-          <number>3</number>
+          <number>2</number>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnStartByMaCross">
+       <property name="text">
+        <string>短期均线突破长期均线</string>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -210,7 +210,7 @@
   <widget class="QGroupBox" name="grpShareAllowed">
    <property name="geometry">
     <rect>
-     <x>640</x>
+     <x>450</x>
      <y>10</y>
      <width>161</width>
      <height>161</height>
@@ -409,9 +409,9 @@
   <widget class="QGroupBox" name="grpDailyBuyLogic">
    <property name="geometry">
     <rect>
-     <x>810</x>
+     <x>620</x>
      <y>10</y>
-     <width>221</width>
+     <width>211</width>
      <height>111</height>
     </rect>
    </property>
@@ -429,7 +429,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>211</width>
+      <width>201</width>
       <height>81</height>
      </rect>
     </property>
@@ -506,7 +506,7 @@
        <item>
         <widget class="QRadioButton" name="rbnBuyByMa5">
          <property name="text">
-          <string>调整到距离五日均线</string>
+          <string>调整到五日均线上方</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -554,7 +554,7 @@
           </font>
          </property>
          <property name="text">
-          <string>做T卖出    预期收益</string>
+          <string>做T卖出 预期收益</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -585,7 +585,7 @@
           <double>0.100000000000000</double>
          </property>
          <property name="value">
-          <double>2.000000000000000</double>
+          <double>3.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -597,9 +597,9 @@
   <widget class="QGroupBox" name="grpEndLogic">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>230</x>
      <y>10</y>
-     <width>221</width>
+     <width>211</width>
      <height>161</height>
     </rect>
    </property>
@@ -617,7 +617,7 @@
      <rect>
       <x>11</x>
       <y>21</y>
-      <width>201</width>
+      <width>191</width>
       <height>131</height>
      </rect>
     </property>
@@ -665,13 +665,6 @@
       </layout>
      </item>
      <item>
-      <widget class="QRadioButton" name="rbnEndByMaCross">
-       <property name="text">
-        <string>短期均线跌破长期均线</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_19">
        <item>
         <widget class="QRadioButton" name="rbnEndByMaBreak">
@@ -704,11 +697,18 @@
           <number>1</number>
          </property>
          <property name="value">
-          <number>3</number>
+          <number>2</number>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnEndByMaCross">
+       <property name="text">
+        <string>短期均线跌破长期均线</string>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_20">
@@ -791,9 +791,9 @@
   <widget class="QGroupBox" name="grpDailySellLogic">
    <property name="geometry">
     <rect>
-     <x>810</x>
-     <y>120</y>
-     <width>221</width>
+     <x>840</x>
+     <y>10</y>
+     <width>211</width>
      <height>111</height>
     </rect>
    </property>
@@ -811,7 +811,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>211</width>
+      <width>201</width>
       <height>81</height>
      </rect>
     </property>
@@ -936,7 +936,7 @@
           </font>
          </property>
          <property name="text">
-          <string>做T买回    预期收益</string>
+          <string>做T买回 预期收益</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -967,7 +967,7 @@
           <double>0.100000000000000</double>
          </property>
          <property name="value">
-          <double>2.000000000000000</double>
+          <double>3.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -976,162 +976,12 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>161</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="lblStockNumber">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>股票代码/名称</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="iptStockNumber">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>贵州茅台</string>
-        </property>
-        <property name="maxLength">
-         <number>6</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_24">
-      <item>
-       <widget class="QLabel" name="lblStartDate">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>开始日期</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateEdit" name="dteStart">
-        <property name="specialValueText">
-         <string/>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_25">
-      <item>
-       <widget class="QLabel" name="lblEndDate">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>结束日期</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateEdit" name="dteEnd">
-        <property name="specialValueText">
-         <string/>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btnStartTrading">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>开始模拟交易回测</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btnShowDiagram">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>显示K线图</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QTableWidget" name="tblTradeHistory">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>240</y>
-     <width>1021</width>
+     <y>190</y>
+     <width>1041</width>
      <height>541</height>
     </rect>
    </property>
@@ -1219,20 +1069,26 @@
     </property>
    </column>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>180</y>
-     <width>791</width>
-     <height>42</height>
+     <x>620</x>
+     <y>130</y>
+     <width>431</width>
+     <height>54</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_12">
       <item>
-       <widget class="QLabel" name="lblBuyCount">
+       <widget class="QLabel" name="lblStockNumber">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -1240,12 +1096,18 @@
          </font>
         </property>
         <property name="text">
-         <string>共买入0次，成功0次</string>
+         <string>股票代码/名称</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblSellCount">
+       <widget class="QLineEdit" name="iptStockNumber">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -1253,29 +1115,52 @@
          </font>
         </property>
         <property name="text">
-         <string>共卖出0次，成功0次</string>
+         <string>贵州茅台</string>
+        </property>
+        <property name="maxLength">
+         <number>6</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblSameDayPerformance">
+       <widget class="QPushButton" name="btnStartTrading">
         <property name="font">
          <font>
           <family>Helvetica</family>
           <pointsize>9</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
-         <string>做T次数：</string>
+         <string>开始模拟交易回测</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnShowDiagram">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>显示K线图</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_15">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="lblOriginalInvestment">
+       <widget class="QLabel" name="lblStartDate">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -1283,25 +1168,28 @@
          </font>
         </property>
         <property name="text">
-         <string>初始成本：</string>
+         <string>开始日期</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblFinalAsset">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
+       <widget class="QDateEdit" name="dteStart">
+        <property name="specialValueText">
+         <string/>
         </property>
-        <property name="text">
-         <string>最终资产：</string>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblTotalProfit">
+       <widget class="QLabel" name="lblEndDate">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -1309,33 +1197,17 @@
          </font>
         </property>
         <property name="text">
-         <string>累计收益：</string>
+         <string>结束日期</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblTotalFee">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
+       <widget class="QDateEdit" name="dteEnd">
+        <property name="specialValueText">
+         <string/>
         </property>
-        <property name="text">
-         <string>总手续费：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblTotalReturn">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>盈亏比例：</string>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
         </property>
        </widget>
       </item>
