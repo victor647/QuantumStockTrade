@@ -59,7 +59,7 @@ class CriteriaItem:
         # 获取时间段数据
         if self.queryPeriodBegin == self.queryPeriodEnd:
             if self.queryPeriodBegin == 1:
-                text = '最新'
+                text = '当日'
             else:
                 text = str(self.queryPeriodBegin) + '日前'
         elif self.queryPeriodEnd == 1:
@@ -73,7 +73,7 @@ class CriteriaItem:
         else:
             if self.comparedPeriodBegin == self.comparedPeriodEnd:
                 if self.comparedPeriodBegin == 1:
-                    text += '最新'
+                    text += '当日'
                 else:
                     text += str(self.comparedPeriodBegin) + '日前'
             elif self.comparedPeriodEnd == 1:

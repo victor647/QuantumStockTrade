@@ -1,6 +1,6 @@
 {
     "peOn": true,
-    "peMin": 10,
+    "peMin": 5,
     "peMax": 100,
     "pbOn": true,
     "pbMin": 0.5,
@@ -19,11 +19,13 @@
     "incomeIncrease": 10,
     "profitIncreaseOn": false,
     "profitIncrease": 10,
-    "netAssetProfitOn": false,
+    "netAssetProfitOn": true,
     "netAssetProfit": 5,
     "totalHoldersOn": false,
     "totalHoldersMin": 1.0,
     "totalHoldersMax": 10.0,
     "includeSt": false,
-    "includeNew": true
+    "timeToMarketOn": false,
+    "timeToMarketMin": 0,
+    "timeToMarketMax": 120
 }

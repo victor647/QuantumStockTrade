@@ -30,14 +30,14 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, days_total=100):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 选股日期后的数据
-    data_after = stock_data.loc[search_date:].head(days_after)
+    data_after = stock_data.loc[search_date:].iloc[1:days_after]
     # 选股日期前的数据
-    data_before = stock_data.loc[:search_date].iloc[-days_total + data_after.shape[0]:-1]
+    data_before = stock_data.loc[:search_date].tail(days_total - days_after)
     graph = CandleStickChart(stock_code, pandas.concat([data_before, data_after]))
     graph.plot_all_ma_lines()
     graph.plot_price()
     graph.plot_volume()
-    graph.plot_search_date(data_after.index[0])
+    graph.plot_search_date(data_before.index[-1])
     graph.exec_()
 
 
