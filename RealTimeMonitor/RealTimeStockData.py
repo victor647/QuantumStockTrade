@@ -14,7 +14,7 @@ class RecentTradeHistory:
     # 成交额
     amount = 0
     # 买卖方向
-    direction = "买入"
+    direction = '买入'
 
 
 # 挂单信息
@@ -40,7 +40,7 @@ class BidInfo:
 
 class StockMonitorData:
     # 股票代码
-    code = ""
+    code = ''
     # 当前价格
     currentPrice = 0.0
     # 昨日收盘价
@@ -63,7 +63,7 @@ class StockMonitorData:
     # 新增盯盘条件组
     def add_monitor_condition_group(self):
         count = len(self.monitorConditionGroups)
-        condition_group = MonitorCondition.ConditionItemGroup("指标组" + str(count + 1), 10, [])
+        condition_group = MonitorCondition.ConditionItemGroup('指标组' + str(count + 1), 10, [])
         self.create_item_group_node(condition_group)
         # 生成一个默认指标
         condition_group.add_default_condition()
@@ -73,7 +73,7 @@ class StockMonitorData:
     def create_item_group_node(self, item_group):
         item_group_node = QTreeWidgetItem()
         item_group_node.setText(0, item_group.name)
-        item_group_node.setText(3, str(item_group.coolDownTime) + "分钟")
+        item_group_node.setText(3, str(item_group.coolDownTime) + '分钟')
         self.codeNode.addChild(item_group_node)
         item_group.conditionGroupNode = item_group_node
 
@@ -99,7 +99,7 @@ class StockMonitorData:
     # 读取股票最近几条交易记录数据
     def parse_recent_transactions(self, data: str):
         # 跳过没有成交数据的
-        if data == "":
+        if data == '':
             return
         logs = data.split('|')
         for log in logs:
@@ -112,7 +112,7 @@ class StockMonitorData:
             history.time = trade_time
             history.price = float(log_split[1])
             history.volume = int(log_split[2])
-            history.direction = "买入" if log_split[3] == "B" else "卖出"
+            history.direction = '买入' if log_split[3] == 'B' else '卖出'
             history.amount = int(log_split[4])
             self.recentTransactions[trade_time] = history
         self.delete_obsolete_transactions()
@@ -151,7 +151,7 @@ class StockMonitorData:
     def fetch_recent_transactions_by_minute(self, minute: int):
         history = sorted(self.recentTransactions, reverse=True)
         selected = []
-        now = int(time.strftime("%H%M%S"))
+        now = int(time.strftime('%H%M%S'))
         for trade_time in history:
             if now - trade_time < minute * 60:
                 selected.append(self.recentTransactions[trade_time])
@@ -169,7 +169,7 @@ def get_active_buy_ratio(transactions: list):
     total_sell = 0
     for transaction in transactions:
         # 主动买单则加入外盘
-        if transaction.direction == "买入":
+        if transaction.direction == '买入':
             total_buy += transaction.volume
         # 主动卖单则加入内盘
         else:

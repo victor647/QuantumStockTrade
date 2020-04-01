@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidget, QTableWidget
 
 
 def base_message():
-    return "最近" + str(LiveTracker.liveTrackerInstance.spbRecentMeasureCount.value()) + LiveTracker.liveTrackerInstance.cbbRecentMeasurement.currentText()
+    return '最近' + str(LiveTracker.liveTrackerInstance.spbRecentMeasureCount.value()) + LiveTracker.liveTrackerInstance.cbbRecentMeasurement.currentText()
 
 
 # 单条监测指标
@@ -27,35 +27,35 @@ class ConditionItem:
 
     def match_condition(self, live_data: RealTimeStockData.StockMonitorData, recent_transactions: list):
         # 根据指标内容判断
-        if self.field == "短时成交额":
+        if self.field == '短时成交额':
             value = RealTimeStockData.get_total_amount(recent_transactions)
             if value > self.thresholdValue:
-                return base_message() + "成交额达到" + str(value) + "万元"
-        elif self.field == "短时涨跌幅":
+                return base_message() + '成交额达到' + str(value) + '万元'
+        elif self.field == '短时涨跌幅':
             value = RealTimeStockData.get_recent_change(recent_transactions)
             if value > self.thresholdValue:
-                return base_message() + "涨幅达到" + str(value) + "%"
+                return base_message() + '涨幅达到' + str(value) + '%'
             elif value < self.thresholdValue * -1:
-                return base_message() + "跌幅达到" + str(value) + "%"
-        elif self.field == "日内涨跌幅":
+                return base_message() + '跌幅达到' + str(value) + '%'
+        elif self.field == '日内涨跌幅':
             value = live_data.percentChange
             if value > self.thresholdValue:
-                return "日内涨幅达到" + str(value) + "%"
+                return '日内涨幅达到' + str(value) + '%'
             elif value < self.thresholdValue * -1:
-                return "日内跌幅达到" + str(value) + "%"
-        elif self.field == "短时内外盘占比":
+                return '日内跌幅达到' + str(value) + '%'
+        elif self.field == '短时内外盘占比':
             value = RealTimeStockData.get_active_buy_ratio(recent_transactions)
             if value > self.thresholdValue:
-                return base_message() + "外盘占比达到" + str(value) + "%"
+                return base_message() + '外盘占比达到' + str(value) + '%'
             elif value < 100 - self.thresholdValue:
-                return base_message() + "内盘占比达到" + str(value) + "%"
-        elif self.field == "当前委比":
+                return base_message() + '内盘占比达到' + str(value) + '%'
+        elif self.field == '当前委比':
             value = live_data.bidInfo.get_bid_ratio()
             if value > self.thresholdValue:
-                return "当前委比超过" + str(value) + "%"
+                return '当前委比超过' + str(value) + '%'
             elif value < self.thresholdValue * -1:
-                return "当前委比低于" + str(value) + "%"
-        return ""
+                return '当前委比低于' + str(value) + '%'
+        return ''
 
 
 # 单个监测条件的所有监测指标
@@ -79,14 +79,14 @@ class ConditionItemGroup:
 
     # 生成一个默认指标
     def add_default_condition(self):
-        condition_item = ConditionItem("日内涨跌幅", "3")
+        condition_item = ConditionItem('日内涨跌幅', '3')
         self.create_individual_item_node(condition_item, 0)
         self.conditionItems.append(condition_item)
 
     # 创建新的子节点
     def create_individual_item_node(self, item: ConditionItem, index: int):
         item_node = QTreeWidgetItem()
-        item_node.setText(0, "指标" + str(index + 1))
+        item_node.setText(0, '指标' + str(index + 1))
         item_node.setText(1, item.field)
         item_node.setText(2, str(item.thresholdValue))
         self.conditionGroupNode.addChild(item_node)
@@ -100,22 +100,22 @@ class ConditionItemGroup:
 
     def check_condition_match(self, live_data: RealTimeStockData.StockMonitorData, recent_transactions: list):
         # 获得当前时间
-        now = int(time.strftime("%H%M%S"))
+        now = int(time.strftime('%H%M%S'))
         # 还在冷却时间中，返回
         if now - self.__lastTriggered < self.coolDownTime * 100:
             return
-        output_message = ""
+        output_message = ''
         for condition in self.conditionItems:
             message = condition.match_condition(live_data, recent_transactions)
             # 任何一个条件不满足则返回
-            if message == "":
+            if message == '':
                 return
             # 返回消息不为空，添加至输出消息
             output_message += message
         # 更新提示消息时间至当前
         self.__lastTriggered = now
         # 发送弹出消息
-        LiveTracker.liveTrackerInstance.add_message_log(live_data.code, output_message + "!")
+        LiveTracker.liveTrackerInstance.add_message_log(live_data.code, output_message + '!')
 
     # 更新修改过的指标内容
     def update_condition_items(self, table: QTableWidget):
@@ -151,7 +151,7 @@ class MonitorConditionEditor(QDialog, Ui_MonitorCondition):
         for condition_item in condition_group.conditionItems:
             self.tblMonitorItems.insertRow(row)
             box = QComboBox()
-            box.addItems(["日内涨跌幅", "短时涨跌幅", "短时成交额", "短时内外盘占比", "当前委比"])
+            box.addItems(['日内涨跌幅', '短时涨跌幅', '短时成交额', '短时内外盘占比', '当前委比'])
             box.setCurrentText(condition_item.field)
             self.tblMonitorItems.setCellWidget(row, 0, box)
             self.tblMonitorItems.setItem(row, 1, QTableWidgetItem(str(condition_item.thresholdValue)))
@@ -166,11 +166,11 @@ class MonitorConditionEditor(QDialog, Ui_MonitorCondition):
     # 添加盯盘指标
     def add_condition_item(self):
         box = QComboBox()
-        box.addItems(["日内涨跌幅", "短时涨跌幅", "短时成交额", "短时内外盘占比", "当前委比"])
+        box.addItems(['日内涨跌幅', '短时涨跌幅', '短时成交额', '短时内外盘占比', '当前委比'])
         row_count = self.tblMonitorItems.rowCount()
         self.tblMonitorItems.insertRow(row_count)
         self.tblMonitorItems.setCellWidget(row_count, 0, box)
-        self.tblMonitorItems.setItem(row_count, 1, QTableWidgetItem("0"))
+        self.tblMonitorItems.setItem(row_count, 1, QTableWidgetItem('0'))
 
     # 删除盯盘指标
     def delete_condition_item(self):

@@ -24,12 +24,12 @@ class BatchSearcher(QDialog, Ui_BatchSearcher):
 
     # 进入下一个选股日期
     def move_to_next_date(self, current_searching_date: QDate):
-        if self.cbbIntervalType.currentText() == "日":
+        if self.cbbIntervalType.currentText() == '日':
             current_searching_date = current_searching_date.addDays(self.spbInterval.value())
             # 若不是交易日则继续往下加日期
             while current_searching_date.dayOfWeek() > 5:
                 current_searching_date = current_searching_date.addDays(1)
-        elif self.cbbIntervalType.currentText() == "周":
+        elif self.cbbIntervalType.currentText() == '周':
             current_searching_date = current_searching_date.addDays(self.spbInterval.value() * 7)
         else:
             current_searching_date = current_searching_date.addMonths(self.spbInterval.value())

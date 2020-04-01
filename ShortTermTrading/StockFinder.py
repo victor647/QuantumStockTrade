@@ -407,7 +407,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if len(self.__criteriaItems) == 0:
             return True
         # 跳过还未上市新股
-        if data.shape[0] == 0:
+        if data.empty:
             return False
         # 跳过当日停牌股票
         if data.iloc[-1]['tradestatus'] == 0:

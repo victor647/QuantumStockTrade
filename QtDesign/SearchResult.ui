@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>830</width>
     <height>311</height>
    </rect>
   </property>
@@ -102,12 +102,47 @@
      </column>
      <column>
       <property name="text">
-       <string>所属行业</string>
+       <string>收盘价</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>所在地区</string>
+       <string>次日开盘</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>五日收盘</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>默认收益</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>次日最低</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>五日最高</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>最大收益</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>主营行业</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>地区</string>
       </property>
      </column>
      <column>
@@ -127,7 +162,7 @@
      </column>
      <column>
       <property name="text">
-       <string>净资产收益率</string>
+       <string>ROE</string>
       </property>
      </column>
     </widget>

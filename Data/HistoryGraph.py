@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
+from Data import TechnicalAnalysis
 from Tools import FileManager
 import pandas, math
 
@@ -12,7 +13,7 @@ import pandas, math
 def decorate_scatter_series(series: QScatterSeries, text: str, color: QColor, label_size=12):
     series.setPointLabelsVisible(True)
     series.setPointLabelsFormat(text)
-    series.setPointLabelsFont(QFont("Helvetica", label_size, QFont.Bold))
+    series.setPointLabelsFont(QFont('Helvetica', label_size, QFont.Bold))
     series.setPointLabelsColor(color)
     series.setMarkerSize(5)
     series.setColor(color)
@@ -30,9 +31,9 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, days_total=100):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 选股日期后的数据
-    data_after = stock_data.loc[search_date:].iloc[1:days_after]
+    data_after = TechnicalAnalysis.get_stock_data_after_date(stock_data, search_date, days_after)
     # 选股日期前的数据
-    data_before = stock_data.loc[:search_date].tail(days_total - days_after)
+    data_before = TechnicalAnalysis.get_stock_data_before_date(stock_data, search_date, days_total - days_after)
     graph = CandleStickChart(stock_code, pandas.concat([data_before, data_after]))
     graph.plot_all_ma_lines()
     graph.plot_price()
@@ -81,7 +82,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.__axis_price.setTickCount(9)
         self.__axis_price.setGridLineColor(Qt.darkGray)
         self.__axis_price.setLabelsColor(Qt.lightGray)
-        self.__chart.addAxis(self.__axis_price, Qt.AlignLeft)
+        self.__chart.addAxis(self.__axis_price, Qt.AlignRight)
         # 显示图表
         self.crtGraph.setChart(self.__chart)
         self.show()
@@ -159,7 +160,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         volume_axis.setTickCount(9)
         # 将成交量图形置于最下方
         volume_axis.setMax(self.__stockData['turn'].max() * 4)
-        self.__chart.addAxis(volume_axis, Qt.AlignRight)
+        self.__chart.addAxis(volume_axis, Qt.AlignLeft)
         self.__volumeSeries.attachAxis(volume_axis)
         self.__volumeSeries.attachAxis(self.__axis_x)
 

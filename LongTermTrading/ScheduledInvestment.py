@@ -205,7 +205,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
                 # 获得该交易日信息
                 data = stock_data.loc[current_date.toString('yyyy-MM-dd'):].head(1)
                 # 跳过停牌股票
-                if data.shape[0] > 0 and data.iloc[0]['high'] != data.iloc[0]['low']:
+                if not data.empty and data.iloc[0]['high'] != data.iloc[0]['low']:
                     buy_price = data.iloc[0]['open' if self.cbbInvestTime.currentText() == '期始' else 'close']
                     money = share_ratio * self.spbEachInvestment.value() * 10000
                     # 若开启智能定投，则下跌时多买

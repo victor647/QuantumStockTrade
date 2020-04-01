@@ -3,7 +3,7 @@ from Tools import FileManager, Tools
 from Tools.ProgressBar import ProgressBar
 import ShortTermTrading.StockFinder as StockFinder
 import ShortTermTrading.FiveDayFinder as FiveDayFinder
-import Data.TechnicalAnalysis as TechnicalAnalysis
+import Data.TechnicalAnalysis as TA
 
 
 # 选股算法基类
@@ -48,17 +48,33 @@ class StandardStockSearcher(StockSearcher):
             # 基本面指标考察
             if StockFinder.Instance.cbxBasicCriteriasEnabled.isChecked() and not StockFinder.Instance.match_basic_criterias(row, self.searchDate):
                 continue
-
             # 获得股票历史数据
             stock_data = FileManager.read_stock_history_data(code, True)
-            # 剪去选股日期之后的数据
-            stock_data = stock_data.loc[:self.searchDate]
+            # 选股日期之前和之后的数据
+            data_before = TA.get_stock_data_before_date(stock_data, self.searchDate)
+            data_after = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 技术面指标考察
-            if StockFinder.Instance.cbxTechnicalCriteriasEnabled.isChecked() and not StockFinder.Instance.match_technical_criterias(stock_data):
+            if StockFinder.Instance.cbxTechnicalCriteriasEnabled.isChecked() and not StockFinder.Instance.match_technical_criterias(data_before):
                 continue
             # 自定义指标考察
-            if not StockFinder.Instance.match_custom_criterias(stock_data):
+            if not StockFinder.Instance.match_custom_criterias(data_before):
                 continue
+            # 选股日收盘价
+            pre_close = round(data_before.iloc[-1]['close'], 2)
+            # 次日开盘
+            next_day_open = TA.get_stock_performance_after_days(data_after, pre_close, 1, 'open')
+            # 五日收盘
+            five_day_close = TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
+            # 默认收益
+            default_profit = TA.get_percentage_from_price(TA.get_price_from_percentage(pre_close, five_day_close),
+                                                          TA.get_price_from_percentage(pre_close, next_day_open))
+            # 次日最低
+            next_day_low = TA.get_stock_extremes_in_day_range(data_after, pre_close, 1, 1, 'low')
+            # 五日最高
+            five_day_high = TA.get_stock_extremes_in_day_range(data_after, pre_close, 2, 5, 'high')
+            # 最高收益
+            max_profit = TA.get_percentage_from_price(TA.get_price_from_percentage(pre_close, five_day_high),
+                                                      TA.get_price_from_percentage(pre_close, next_day_low))
             # 获得股票行业信息
             industry = row['industry']
             # 获得股票上市地区
@@ -70,9 +86,9 @@ class StandardStockSearcher(StockSearcher):
             # 获得股票总市值
             assets = row['totalAssets']
             # 净资产收益率
-            roe = str(round(row['esp'] / row['bvps'] * 100, 2)) + '%'
+            roe = round(row['esp'] / row['bvps'] * 100, 2)
             # 将符合要求的股票信息打包
-            items = [code, name, industry, area, pe, pb, assets, roe]
+            items = [code, name, pre_close, next_day_open, five_day_close, default_profit, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(code)
@@ -95,7 +111,7 @@ class FiveDaySearcher(StockSearcher):
         # 获得图形出现时价格和x日后价格
         shape_end_price = self._stockData.iloc[shape_end_day_index]['close']
         period_end_price = self._stockData.iloc[period_end_day_index]['close']
-        return TechnicalAnalysis.get_percentage_from_price(period_end_price, shape_end_price)
+        return TA.get_percentage_from_price(period_end_price, shape_end_price)
 
 
 # 单只股票多日分析

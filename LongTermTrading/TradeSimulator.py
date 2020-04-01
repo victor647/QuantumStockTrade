@@ -50,8 +50,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         start_date = self.dteStart.date().addYears(-1).toString('yyyy-MM-dd')
         end_date = self.dteEnd.date().toString('yyyy-MM-dd')
         # 获取股票历史数据
-        bs_result = baostock.query_history_k_data(code=market + "." + self.__stockCode, fields="date,open,high,low,close,preclose,pctChg,turn",
-                                                  start_date=start_date, end_date=end_date, frequency="d", adjustflag="2")
+        bs_result = baostock.query_history_k_data(code=market + '.' + self.__stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',
+                                                  start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
         self.__stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
         # 计算均线
         TechnicalAnalysis.calculate_ma_curve(self.__stockData, 5)
@@ -158,8 +158,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.__isHolding = True
         # 出现信号当日收盘价买入
         price = round(daily_data['close'], 2)
-        trade_time = daily_data['date'] + " 15:00"
-        self.buy_stock(daily_data, "建仓买入", trade_time, price, self.spbInitialInvestment.value())
+        trade_time = daily_data['date'] + ' 15:00'
+        self.buy_stock(daily_data, '建仓买入', trade_time, price, self.spbInitialInvestment.value())
 
     # 出现清仓信号，卖出
     def end_trade(self, day_index: int):
@@ -167,7 +167,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.__isHolding = False
         # 收盘价卖出
         price = round(daily_data['close'], 2)
-        time = Tools.reformat_time(daily_data['date'] + " 15:00")
+        time = Tools.reformat_time(daily_data['date'] + ' 15:00')
         current_share = self.__stockInvestment.currentShare
         self.__stockInvestment.sell_all(price, time[:10])
         self.add_trade_log(daily_data, time, '清仓卖出', price, current_share)
@@ -183,8 +183,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         date = daily_data['date']
         # 获取当日5分钟K线数据
         market = Tools.get_trade_center(self.__stockCode)
-        result = baostock.query_history_k_data(code=market + "." + self.__stockCode, fields="time,high,low",
-                                               start_date=date, end_date=date, frequency="5", adjustflag="2")
+        result = baostock.query_history_k_data(code=market + '.' + self.__stockCode, fields='time,high,low',
+                                               start_date=date, end_date=date, frequency='5', adjustflag='2')
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
         # 百分比买卖点模式，获取基础买卖价格
@@ -206,7 +206,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if minute_data['low'] <= buy_price:
                 # 确保买入价格高于5分钟最低价
                 buy_price = min(minute_data['high'], buy_price)
-                if self.buy_stock(daily_data, "回调买入", minute_data['time'], buy_price, self.spbMoneyPerTrade.value()):
+                if self.buy_stock(daily_data, '回调买入', minute_data['time'], buy_price, self.spbMoneyPerTrade.value()):
                     # 记录本次买入，为做T卖出参考
                     if self.cbxAllowSameDayTradeBuy.isChecked():
                         daily_buy_history.append(buy_price)
@@ -220,7 +220,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if minute_data['high'] >= sell_price:
                 # 确保卖出价格高于5分钟最高价
                 sell_price = max(minute_data['low'], sell_price)
-                if self.sell_stock(daily_data, "冲高卖出", minute_data['time'], sell_price, self.spbMoneyPerTrade.value()):
+                if self.sell_stock(daily_data, '冲高卖出', minute_data['time'], sell_price, self.spbMoneyPerTrade.value()):
                     # 记录本次卖出，为做T买回参考
                     if self.cbxAllowSameDayTradeSell.isChecked():
                         daily_sell_history.append(sell_price)
@@ -238,7 +238,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                     t_sell_price = history_buy_price + self.spbSameDayProfitBuy.value() / 100 * pre_close
                     # 价格高于做T卖出盈利点，执行卖出操作
                     if minute_data['high'] >= t_sell_price:
-                        if self.sell_stock(daily_data, "做T卖出", minute_data['time'], t_sell_price, self.spbMoneyPerTrade.value()):
+                        if self.sell_stock(daily_data, '做T卖出', minute_data['time'], t_sell_price, self.spbMoneyPerTrade.value()):
                             # 抵消当日买入记录
                             daily_buy_history.remove(history_buy_price)
                             # 回溯再次买入点价格，跌到该买点会再次买入
@@ -256,7 +256,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                     t_buy_price = history_sell_price - self.spbSameDayProfitBuy.value() / 100 * pre_close
                     # 价格低于做T买回盈利点，执行买入操作
                     if minute_data['low'] < t_buy_price:
-                        if self.buy_stock(daily_data, "做T买回", minute_data['time'], t_buy_price, self.spbMoneyPerTrade.value()):
+                        if self.buy_stock(daily_data, '做T买回', minute_data['time'], t_buy_price, self.spbMoneyPerTrade.value()):
                             # 抵消当日卖出记录
                             daily_sell_history.remove(history_sell_price)
                             # 回溯再次卖出点价格，涨到该卖点会再次卖出
@@ -343,7 +343,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘
         column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['close'], 2), pre_close)
         # 换手率
-        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(round(data['turn'], 2)) + "%"))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(round(data['turn'], 2)) + '%'))
         column += 1
         # 持仓成本
         self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.__stockInvestment.average_cost(data['close']))))
@@ -351,7 +351,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 累计收益
         column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.net_profit(data['close']))
         # 盈亏比例
-        Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), "%")
+        Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), '%')
 
     # 显示交易记录K线图
     def show_history_diagram(self):

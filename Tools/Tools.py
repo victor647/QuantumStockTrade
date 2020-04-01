@@ -56,7 +56,7 @@ def get_stock_code_from_name(stock_name: str):
     table = FileManager.read_stock_list_file()
     row = table[table['name'] == stock_name]
     # 如果搜不到股票名称
-    if row.shape[0] == 0:
+    if row.empty:
         return ''
     code = row.iloc[0]['code']
     # 将深圳代码添加0
@@ -123,9 +123,9 @@ def add_colored_item(table: QTableWidget, row: int, column: int, value: float, s
 
 # 添加可排序的数据
 def add_sortable_item(table: QTableWidget, row: int, column: int, value: float, text=''):
-    strategy_item = CustomSortingTableData(text if text != '' else str(value))
-    strategy_item.set_sorting_data(value)
-    table.setItem(row, column, strategy_item)
+    item = CustomSortingTableData(text if text != '' else str(value))
+    item.set_sorting_data(value)
+    table.setItem(row, column, item)
     return column + 1
 
 

@@ -409,6 +409,59 @@ def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold
         return value.iloc[-1] < threshold
 
 
+# 剪去股票在某个日期之前的K线数据
+def get_stock_data_before_date(data: pandas.DataFrame, date: str, days=0):
+    trimmed_data = data[:date]
+    # 保留选定日数
+    if days == 0:
+        return trimmed_data
+    else:
+        return trimmed_data.tail(days)
+
+
+# 剪去股票在某个日期之后的K线数据
+def get_stock_data_after_date(data: pandas.DataFrame, date: str, days=0):
+    # 选股日期发生了交易
+    if date in data.index:
+        trimmed_data = data[date:].iloc[1:]
+    else:
+        trimmed_data = data[date:]
+    # 保留选定日数
+    if days == 0:
+        return trimmed_data
+    else:
+        return trimmed_data.head(days)
+
+
+# 获取股票X日后的收盘涨跌幅
+def get_stock_performance_after_days(data: pandas.DataFrame, pre_close: float, days: int, key: str):
+    # 选股日期为今天，无效
+    if data.empty:
+        return 0
+    if data.shape[0] >= days:
+        end_price = data.iloc[days - 1][key]
+    else:
+        end_price = data.iloc[-1][key]
+    return get_percentage_from_price(end_price, pre_close)
+
+
+# 计算某个日期后一段时间内的股价极值
+def get_stock_extremes_in_day_range(data: pandas.DataFrame, pre_close: float, start_days: int, end_days: int, key: str):
+    # 选股日期为今天，无效
+    if data.empty:
+        return 0
+    if data.shape[0] >= end_days:
+        end_price_set = data.iloc[start_days - 1:end_days][key]
+    else:
+        end_price_set = data.iloc[start_days - 1:][key]
+    # 判定寻找最高价还是最低价
+    if key == 'high':
+        end_price = end_price_set.max()
+    else:
+        end_price = end_price_set.min()
+    return get_percentage_from_price(end_price, pre_close)
+
+
 # 获得K线图形分类
 def candlestick_shape(daily_data: pandas.DataFrame):
     needle_up = daily_data['high'] - max(daily_data['open'], daily_data['close'])

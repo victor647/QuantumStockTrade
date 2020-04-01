@@ -34,17 +34,39 @@ class SearchResult(QDialog, Ui_SearchResult):
     def add_stock_item(self, items: list):
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
-        for i in range(len(items)):
-            item = QTableWidgetItem()
-            item.setData(Qt.DisplayRole, items[i])
-            self.tblStockList.setItem(row_count, i, item)
+        column = 0
+        # 股票代码
+        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        column += 1
+        # 股票名称
+        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        column += 1
+        # 选股日收盘价
+        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
+        # 次日开盘、五日收盘、默认收益、次日最低、五日最高、最大收益
+        for i in range(6):
+            column = Tools.add_colored_item(self.tblStockList, row_count, column, items[column], '%')
+        # 股票行业
+        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        column += 1
+        # 股票地区
+        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        column += 1
+        # 市盈率
+        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
+        # 市净率
+        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
+        # 总市值
+        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '亿')
+        # 净资产收益率
+        Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '%')
         self.update_found_stock_count()
 
     # 显示股票详细数据
     def stock_detailed_info(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
-        if column > 1:
+        if column > 3:
             Tools.open_stock_page(code)
         # 直接画K线图
         else:

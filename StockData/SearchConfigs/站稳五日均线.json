@@ -10,7 +10,7 @@
         "comparedPeriodEnd": 1,
         "comparedObject": "\u6bd4\u503c",
         "operator": "\u5927\u4e8e",
-        "value": 1.0
+        "value": 1.01
     },
     {
         "queryLogic": "\u5e73\u5747",
@@ -28,14 +28,14 @@
     {
         "queryLogic": "\u5e73\u5747",
         "comparedLogic": "\u5e73\u5747",
-        "queryField": "\u6536\u76d8\u4ef7",
+        "queryField": "\u5f00\u76d8\u4ef7",
         "comparedField": "\u6536\u76d8\u4ef7",
         "queryPeriodBegin": 3,
         "queryPeriodEnd": 3,
         "comparedPeriodBegin": 7,
         "comparedPeriodEnd": 3,
         "comparedObject": "\u6bd4\u503c",
-        "operator": "\u5927\u4e8e",
+        "operator": "\u5c0f\u4e8e",
         "value": 1.0
     },
     {
@@ -62,7 +62,7 @@
         "comparedPeriodEnd": 1,
         "comparedObject": "\u6bd4\u503c",
         "operator": "\u5927\u4e8e",
-        "value": 0.98
+        "value": 0.99
     },
     {
         "queryLogic": "\u7d2f\u8ba1",
@@ -79,12 +79,12 @@
     },
     {
         "queryLogic": "\u5e73\u5747",
-        "comparedLogic": "\u5e73\u5747",
+        "comparedLogic": "\u6700\u9ad8",
         "queryField": "\u6700\u9ad8\u4ef7",
         "comparedField": "\u6700\u9ad8\u4ef7",
         "queryPeriodBegin": 1,
         "queryPeriodEnd": 1,
-        "comparedPeriodBegin": 2,
+        "comparedPeriodBegin": 3,
         "comparedPeriodEnd": 2,
         "comparedObject": "\u6bd4\u503c",
         "operator": "\u5927\u4e8e",
@@ -99,8 +99,99 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 60,
         "comparedPeriodEnd": 1,
-        "operator": "\u5c0f\u4e8e",
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5c0f\u4e8e",
         "value": 1.2
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u632f\u5e45",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 1,
+        "comparedObject": "\u7edd\u5bf9\u503c",
+        "operator": "\u5927\u4e8e",
+        "value": 3.0
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6362\u624b\u7387",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 1,
+        "comparedObject": "\u7edd\u5bf9\u503c",
+        "operator": "\u5927\u4e8e",
+        "value": 1.0
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u4ef7",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 1,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 20,
+        "comparedPeriodEnd": 1,
+        "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5c0f\u4e8e",
+        "value": 1.1
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u6700\u9ad8",
+        "queryField": "\u6700\u4f4e\u4ef7",
+        "comparedField": "\u6700\u4f4e\u4ef7",
+        "queryPeriodBegin": 1,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 3,
+        "comparedPeriodEnd": 2,
+        "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
+        "value": 1.0
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6362\u624b\u7387",
+        "comparedField": "\u6362\u624b\u7387",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 1,
+        "comparedPeriodBegin": 10,
+        "comparedPeriodEnd": 4,
+        "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
+        "value": 1.2
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6536\u76d8\u4ef7",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 3,
+        "queryPeriodEnd": 3,
+        "comparedPeriodBegin": 7,
+        "comparedPeriodEnd": 3,
+        "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
+        "value": 1.0
+    },
+    {
+        "queryLogic": "\u5e73\u5747",
+        "comparedLogic": "\u5e73\u5747",
+        "queryField": "\u6700\u4f4e\u4ef7",
+        "comparedField": "\u6536\u76d8\u4ef7",
+        "queryPeriodBegin": 2,
+        "queryPeriodEnd": 2,
+        "comparedPeriodBegin": 6,
+        "comparedPeriodEnd": 2,
+        "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5c0f\u4e8e",
+        "value": 1.0
     }
 ]
