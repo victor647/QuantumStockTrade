@@ -4,9 +4,10 @@ from PyQt5.QtWidgets import QMainWindow
 from QtDesign.StockAnalyzer_ui import Ui_StockAnalyzer
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.HistoryGraph import PriceDistributionChart
-from Tools import Tools, FileManager
+from Tools import Tools
     
 
+# 分析个股和大盘在一段时期内的股性
 class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
     __stockDatabase = None
     __marketDatabase = None
@@ -14,6 +15,10 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        # 默认从6个月前到今天
+        today = QDate.currentDate()
+        self.dteEndDate.setDate(today)
+        self.dteStartDate.setDate(today.addMonths(-6))
 
     # 获取股票历史数据
     def get_history_data(self):
@@ -24,36 +29,31 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
             Tools.show_error_dialog('股票代码或名称无效！')
             return
 
-        # 获取交易所信息
-        market = Tools.get_trade_center(stock_code)
-        now = QDate.currentDate()
-        start_date = now.addYears(-1).toString('yyyy-MM-dd')
-        end_date = now.toString('yyyy-MM-dd')
+        # 获取交易所信息和大盘指数代码
+        market, index_code = Tools.get_trade_center_and_index(stock_code)
+        # 获取分析日期范围
+        start_date = self.dteStartDate.date().toString('yyyy-MM-dd')
+        end_date = self.dteEndDate.date().toString('yyyy-MM-dd')
 
         # 获取股票历史数据
         result = baostock.query_history_k_data(code=market + '.' + stock_code, fields='date,open,high,low,close,preclose,pctChg,turn,tradestatus,isST',
                                                start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
-        FileManager.save_stock_history_data(result, stock_code)
-        self.__stockDatabase = FileManager.read_stock_history_data(stock_code, False)
+        self.__stockDatabase = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
         # 确保股票代码有效
         if self.__stockDatabase is None:
             Tools.show_error_dialog('股票代码无效或网络无响应！')
             return
 
         # 获取股票对应的大盘历史数据
-        market_code = '000001' if market == 'sh' else '399001'
-        start_date = now.addMonths(self.spbAnalyzeMonths.value() * -1).toString('yyyy-MM-dd')
-        result_market = baostock.query_history_k_data(code=market + '.' + market_code, fields='date,open,high,low,close,preclose,turn',
+        result_market = baostock.query_history_k_data(code=market + '.' + index_code, fields='date,open,high,low,close,preclose,turn',
                                                       start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
         self.__marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
         # 分析大盘表现
         TechnicalAnalysis.get_percentage_data(self.__marketDatabase)
         # 裁剪股票数据
-        self.__stockDatabase = self.__stockDatabase.tail(self.__marketDatabase.shape[0]).reset_index(drop=True)
+        # self.__stockDatabase = self.__stockDatabase.tail(self.__marketDatabase.shape[0]).reset_index(drop=True)
         # 分析股票股性
         TechnicalAnalysis.get_percentage_data(self.__stockDatabase)
-        TechnicalAnalysis.get_kdj_index(self.__stockDatabase)
-        TechnicalAnalysis.get_bias_index(self.__stockDatabase)
         self.analyze_data()
         self.repaint()
 

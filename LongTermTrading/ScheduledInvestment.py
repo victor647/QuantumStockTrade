@@ -148,7 +148,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         total_share_ratio = total_spent = total_profit = 0
         for row in range(self.tblStockList.rowCount()):
             stock_code = self.tblStockList.item(row, 0).text()
-            market = Tools.get_trade_center(stock_code)
+            market = Tools.get_trade_center_and_index(stock_code)
             bs_result = baostock.query_history_k_data(code=market + '.' + stock_code, fields='date,open,high,low,close,turn',
                                                       start_date=start_date.toString('yyyy-MM-dd'), end_date=end_date.toString('yyyy-MM-dd'), frequency=frequency, adjustflag='2')
             if not bs_result.data:
@@ -159,8 +159,6 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             self.__stockData[stock_code] = stock_data
             investment = StockInvestment()
             self.__stockInvestments[stock_code] = investment
-            # 获取均线数据
-            TechnicalAnalysis.calculate_all_ma_curves(stock_data)
             # 开始价格
             start_price = stock_data.iloc[0]['open']
             # 当前价格

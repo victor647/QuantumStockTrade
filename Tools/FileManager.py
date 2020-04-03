@@ -1,8 +1,6 @@
-import os, json, pandas, tushare, baostock
-from Tools import Tools
-from PyQt5.QtCore import QDate, QThread, pyqtSignal
+import os, json, pandas, tushare
+from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
-from Tools.ProgressBar import ProgressBar
 import Data.TechnicalAnalysis as TechnicalAnalysis
 
 
@@ -234,47 +232,9 @@ def save_stock_history_data(bs_result, stock_code: str):
     data.to_csv(stock_history_path(stock_code))
 
 
-# 获取最新全部股票数据
-def export_all_stock_data():
-    stock_list = read_stock_list_file()
-    exporter = StockDataExporter()
-    progress = ProgressBar(stock_list.shape[0], '正在爬取股票历史数据', exporter)
-    progress.show()
-    exporter.progressBarCallback.connect(progress.update_search_progress)
-    exporter.finishedCallback.connect(progress.finish_progress)
-    exporter.start()
-    progress.exec()
-
-
 # 导入选股器找到的股票列表
 def import_selected_stock_list():
     return QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
 
 
-class StockDataExporter(QThread):
-    progressBarCallback = pyqtSignal(int, str, str)
-    finishedCallback = pyqtSignal()
 
-    def __init__(self):
-        super().__init__()
-        now = QDate.currentDate()
-        start_date = now.addYears(-1)
-        self.today = now.toString('yyyy-MM-dd')
-        self.startDate = start_date.toString('yyyy-MM-dd')
-        self.stockList = read_stock_list_file()
-
-    def run(self):
-        for index, row in self.stockList.iterrows():
-            code_num = row['code']
-            # 将股票代码固定为6位数
-            code = str(code_num).zfill(6)
-            # 获得股票中文名称
-            name = row['name']
-            # 获取股票交易所
-            market = Tools.get_trade_center(code)
-            # 获取股票历史数据
-            result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,preclose,turn,tradestatus,isST',
-                                                        start_date=self.startDate, end_date=self.today, frequency='d', adjustflag='2')
-            save_stock_history_data(result, code)
-            self.progressBarCallback.emit(index + 1, code, name)
-        self.finishedCallback.emit()

@@ -10,7 +10,8 @@ from datetime import datetime
 import ShortTermTrading.SearchCriteria as SearchCriteria
 import tushare, pandas
 from Tools import Tools, FileManager
-import Data.TechnicalAnalysis as DataAnalyzer
+import Data.TechnicalAnalysis as TA
+from Data.QueryStockData import query_all_stock_data
 
 
 Instance = None
@@ -107,7 +108,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
     # 获取并导出全部股票K线
     @staticmethod
     def export_all_stock_data():
-        FileManager.export_all_stock_data()
+        query_all_stock_data()
 
     # 获取两市全部股票列表
     def export_all_stock_list(self):
@@ -426,13 +427,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return False
         period = self.spbTechnicalTimePeriod.value() + 1
         # 检测MACD图形
-        if self.cbxMacdEnabled.isChecked() and not DataAnalyzer.match_macd(data, period, self.cbbMacdBehaviour.currentText()):
+        if self.cbxMacdEnabled.isChecked() and not TA.match_macd(data, period, self.cbbMacdBehaviour.currentText()):
             return False
         # 检测BOLL区间
-        if self.cbxBollEnabled.isChecked() and not DataAnalyzer.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
+        if self.cbxBollEnabled.isChecked() and not TA.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
             return False
         # 检测均线交叉
-        if self.cbxMaEnabled.isChecked() and not DataAnalyzer.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
+        if self.cbxMaEnabled.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
             return False
         return True
 

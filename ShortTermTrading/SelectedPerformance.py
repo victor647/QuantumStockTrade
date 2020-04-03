@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
-import Data.TechnicalAnalysis as TechnicalAnalysis
+import Data.TechnicalAnalysis as TA
 from Data.InvestmentStatus import StockInvestment
 import pandas
 from Tools import Tools, FileManager
@@ -112,31 +112,23 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             start_date = self.tblStockList.item(row, 2).text()
             # 获取股票历史K线数据
             data = FileManager.read_stock_history_data(stock_code, True)
-            # 截取回测日期内的数据
-            data = data.loc[start_date:].head(self.spbMaxHoldTime.value() + 1)
-            # 最大持仓时间超过回测时间
-            if data.shape[0] <= self.spbMaxHoldTime.value():
-                continue
+            # 计算均线
+            if self.rbnAddByMa.isChecked():
+                TA.calculate_ma_curve(data, self.spbAddMaPeriod.value())
+            if self.cbxClearByMa.isChecked():
+                TA.calculate_ma_curve(data, self.spbClearMaPeriod.value())
+            # 截取回测日期后的数据
+            data = TA.get_stock_data_after_date(data, start_date)
             # 选股日收盘价
-            initial_price = round(data['close'].iloc[0], 2)
-            column = Tools.add_price_item(self.tblStockList, row, 3, initial_price, data['preclose'].iloc[0])
-            # 次日开盘买入价
-            buy_price = round(data['open'].iloc[1], 2)
+            pre_close = round(data.iloc[0]['preclose'], 2)
+            column = Tools.add_sortable_item(self.tblStockList, row, 3, pre_close)
+            # 次日开盘买入底仓价格
+            base_buy_price = round(data['open'].iloc[0], 2)
             # 次日开盘买入股票
-            investment.buy_stock_by_money(buy_price, self.spbMoneyPerTrade.value(), data.index[1])
+            investment.buy_stock_by_money(base_buy_price, self.spbMoneyPerTrade.value(), data.index[0])
             investment.initial_invest()
             # 次日开盘买入价
-            column = Tools.add_price_item(self.tblStockList, row, column, buy_price, initial_price)
-            # 次日收盘表现
-            column = self.get_day_performance(1, column, row, data, buy_price)
-            # 加仓期满表现
-            column = self.get_day_performance(self.spbAddDeadline.value(), column, row, data, buy_price)
-            # 清仓期满表现
-            column = self.get_day_performance(-1, column, row, data, buy_price)
-            # 期间最高涨幅
-            column = Tools.add_price_item(self.tblStockList, row, column, round(data['high'].iloc[1:].max(), 2), buy_price)
-            # 期间最大回撤
-            column = Tools.add_price_item(self.tblStockList, row, column, round(data['low'].iloc[1:].min(), 2), buy_price)
+            column = Tools.add_price_item(self.tblStockList, row, column, base_buy_price, pre_close)
 
             # 初始化策略文本
             best_strategy = '选股失败，无法盈利'
@@ -144,65 +136,88 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             # 初始化日均盈利
             best_earning_per_day = 0
             # 初始化加仓和卖出日期
-            add_day = 0
+            add_day = hold_days = 0
             # 遍历选股后每个交易日执行操作
-            for day in range(1, self.spbMaxHoldTime.value() + 1):
+            while True:
+                # 至今未达到清仓条件，卖出
+                if data.shape[0] <= hold_days:
+                    sell_price = data['close'].iloc[-1]
+                    investment.sell_all(sell_price, data.index[-1])
+                    actual_behaviour += '持股至今被动清仓'
+                    break
                 # 获取当日最高最低涨跌幅
-                high_price = round(data['high'].iloc[day], 2)
-                high_percentage = TechnicalAnalysis.get_percentage_from_price(high_price, buy_price)
-                low_price = round(data['low'].iloc[day], 2)
-                low_percentage = TechnicalAnalysis.get_percentage_from_price(low_price, buy_price)
-                open_price = round(data['open'].iloc[day], 2)
-                # 在加仓期限之前可以进行加仓
-                if day <= self.spbAddDeadline.value() and add_day == 0:
-                    # 达到补仓点，降低成本
-                    if self.cbxAddWhenDown.isChecked() and low_percentage < self.spbAddThresholdDown.value():
-                        # 若开盘价低于补仓点，则以开盘价补仓
-                        add_price = min(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdDown.value()), open_price)
-                        investment.buy_stock_by_money(add_price, self.spbMoneyPerTrade.value(), data.index[day])
-                        add_day = day
-                        actual_behaviour = '第' + str(day) + '日下跌补仓，'
-                    # 达到加仓点，强势追涨
-                    elif self.cbxAddWhenUp.isChecked() and high_percentage > self.spbAddThresholdUp.value():
-                        # 若开盘价高于加仓点，则以开盘价加仓
-                        add_price = max(TechnicalAnalysis.get_price_from_percentage(buy_price, self.spbAddThresholdUp.value()), open_price)
-                        investment.buy_stock_by_money(add_price, self.spbMoneyPerTrade.value(), data.index[day])
-                        add_day = day
-                        actual_behaviour = '第' + str(day) + '日上涨加仓，'
+                high_price = round(data['high'].iloc[hold_days], 2)
+                high_percentage = TA.get_percentage_from_price(high_price, base_buy_price)
+                low_price = round(data['low'].iloc[hold_days], 2)
+                low_percentage = TA.get_percentage_from_price(low_price, base_buy_price)
+                open_price = round(data['open'].iloc[hold_days], 2)
+                close_price = round(data['close'].iloc[hold_days], 2)
+                # 允许加仓
+                if not self.rbnNeverAdd.isChecked() and add_day == 0:
+                    add_price = 0
+                    # 根据涨跌幅补仓
+                    if self.rbnAddByPercent.isChecked():
+                        # 下跌补仓
+                        if low_percentage < self.spbAddPercent.value() < 0:
+                            # 若开盘价低于补仓点，则以开盘价补仓
+                            add_price = min(TA.get_price_from_percentage(base_buy_price, self.spbAddPercent.value()), open_price)
+                            actual_behaviour = '第' + str(hold_days) + '日下跌补仓，'
+                        # 上涨追仓
+                        if high_percentage > self.spbAddPercent.value() > 0:
+                            add_price = max(TA.get_price_from_percentage(base_buy_price, self.spbAddPercent.value()), open_price)
+                            actual_behaviour = '第' + str(hold_days) + '日上涨加仓，'
+                    # 回踩均线补仓
+                    if self.rbnAddByMa.isChecked():
+                        ma_price = data.iloc[hold_days - self.spbAddMaPeriod.value():hold_days]['close'].mean()
+                        if low_price <= ma_price:
+                            add_price = min(low_price, open_price)
+                            actual_behaviour = '第' + str(hold_days) + '日回踩均线补仓，'
+                    # 发生过补仓行为，进行买入
+                    if add_price > 0:
+                        add_day = hold_days
+                        investment.buy_stock_by_money(add_price, self.spbMoneyPerTrade.value(), data.index[hold_days])
 
-                # 买入首日无法卖出
-                if day > 1:
+                # 第二个交易日开始可以卖出股票
+                if hold_days > 0:
                     # 计算日化单利
-                    earning_per_day = high_percentage / day
+                    earning_per_day = high_percentage / hold_days
                     # 发现更优持仓时间
                     if earning_per_day > best_earning_per_day:
                         best_earning_per_day = earning_per_day
-                        best_strategy = '持股' + str(day) + '日, 获利' + str(round(high_percentage, 2)) + '%'
+                        best_strategy = '持股' + str(hold_days) + '日, 获利' + str(round(high_percentage, 2)) + '%'
 
                     if self.__stockInvestments[stock_code].currentShare > 0:
                         # 达到止盈点，获利了结
-                        if self.cbxWinThreshold.isChecked() and investment.net_profit(high_price) > self.spbWinThreshold.value():
-                            sell_price = max(open_price, investment.threshold_price(self.spbWinThreshold.value()))
-                            investment.sell_all(sell_price, data.index[day])
+                        if self.cbxClearByEarning.isChecked() and investment.net_profit(high_price) > self.spbClearEarning.value():
+                            sell_price = max(open_price, investment.threshold_price(self.spbClearEarning.value()))
+                            investment.sell_all(sell_price, data.index[hold_days])
                             # 当日加仓过，只卖出底仓
-                            if add_day == day:
-                                actual_behaviour += '第' + str(day) + '日止盈卖出一半，'
+                            if add_day == hold_days:
+                                actual_behaviour += '第' + str(hold_days) + '日止盈卖出底仓，'
                             else:
-                                actual_behaviour += '第' + str(day) + '日止盈，'
+                                actual_behaviour += '第' + str(hold_days) + '日止盈清仓，'
+                                break
                         # 达到止损点，割肉离场
-                        elif self.cbxLoseThreshold.isChecked() and investment.net_profit(low_price) < self.spbLoseThreshold.value():
-                            sell_price = min(open_price, investment.threshold_price(self.spbLoseThreshold.value()))
-                            investment.sell_all(sell_price, data.index[day])
-                            if add_day == day:
-                                actual_behaviour += '第' + str(day) + '日止损卖出一半，'
+                        elif self.cbxClearByLosing.isChecked() and investment.net_profit(low_price) < self.spbClearLosing.value():
+                            sell_price = min(open_price, investment.threshold_price(self.spbClearLosing.value()))
+                            investment.sell_all(sell_price, data.index[hold_days])
+                            if add_day == hold_days:
+                                actual_behaviour += '第' + str(hold_days) + '日止损卖出底仓，'
                             else:
-                                actual_behaviour += '第' + str(day) + '日止损，'
-
-                    # 若持股到最后一天，则收盘卖出清算
-                    if day == self.spbMaxHoldTime.value() and investment.currentShare > 0:
-                        sell_price = round(data['close'].iloc[day], 2)
-                        investment.sell_all(sell_price, data.index[day])
-                        actual_behaviour += '末日卖出，'
+                                actual_behaviour += '第' + str(hold_days) + '日止损清仓，'
+                                break
+                        # 收盘跌破均线，清仓
+                        elif self.cbxClearByMa.isChecked():
+                            ma_price = data.iloc[hold_days - self.spbClearMaPeriod.value():hold_days]['close'].mean()
+                            if close_price < ma_price:
+                                investment.sell_all(close_price, data.index[hold_days])
+                                if add_day == hold_days:
+                                    actual_behaviour += '第' + str(hold_days) + '日破位卖出底仓，'
+                                else:
+                                    actual_behaviour += '第' + str(hold_days) + '日跌破均线清仓，'
+                                    break
+                # 从买入开始的天数
+                hold_days += 1
 
             # 计算这只股票的最终盈利
             if investment.final_profit() > 0:
@@ -210,6 +225,15 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                 actual_behaviour += '获利' + str(investment.final_profit()) + '元'
             else:
                 actual_behaviour += '亏损' + str(investment.final_profit()) + '元'
+
+            # 清仓日期
+            column = Tools.add_sortable_item(self.tblStockList, row, column, hold_days)
+            # 清仓时涨幅
+            column = Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit_percentage(), '%')
+            # 期间最高涨幅
+            column = Tools.add_price_item(self.tblStockList, row, column, round(data['high'].iloc[1:].max(), 2), base_buy_price)
+            # 期间最大回撤
+            column = Tools.add_price_item(self.tblStockList, row, column, round(data['low'].iloc[1:].min(), 2), base_buy_price)
 
             # 按照日化单利排序最佳策略
             column = Tools.add_sortable_item(self.tblStockList, row, column, best_earning_per_day, best_strategy)
@@ -224,23 +248,24 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             if investment.totalInvestment > 0:
                 profit_text = ('获利' if total_profit >= 0 else '亏损') + str(round(total_profit, 2))
                 self.lblTradeSummary.setText('共买入{}只股票，盈利{}只，成本{}元，{}元，收益率{}%'
-                                             .format(row + 1, win_stocks, round(total_spent, 2), profit_text, TechnicalAnalysis.get_profit_percentage(total_profit, total_spent)))
+                                             .format(row + 1, win_stocks, round(total_spent, 2), profit_text, TA.get_profit_percentage(total_profit, total_spent)))
 
     # 导出股票交易策略
     def export_trade_strategy(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.trade_strategy_path(), filter='JSON(*.json)')
         data = {
             'moneyPerTrade': self.spbMoneyPerTrade.value(),
-            'winThresholdOn': self.cbxWinThreshold.isChecked(),
-            'winThreshold': self.spbWinThreshold.value(),
-            'loseThresholdOn': self.cbxLoseThreshold.isChecked(),
-            'loseThreshold': self.spbLoseThreshold.value(),
-            'addWhenDown': self.cbxAddWhenDown.isChecked(),
-            'addThresholdDown': self.spbAddThresholdDown.value(),
-            'addWhenUp': self.cbxAddWhenUp.isChecked(),
-            'addThresholdUp': self.spbAddThresholdUp.value(),
-            'addDeadline': self.spbAddDeadline.value(),
-            'maxHoldTime': self.spbMaxHoldTime.value()
+            'neverAdd': self.rbnNeverAdd.isChecked(),
+            'addByPercent': self.rbnAddByPercent.isChecked(),
+            'addPercent': self.spbAddPercent.value(),
+            'addByMa': self.rbnAddByMa.isChecked(),
+            'addMaPeriod': self.spbAddMaPeriod.value(),
+            'clearByEarning': self.cbxClearByEarning.isChecked(),
+            'clearEarning': self.spbClearEarning.value(),
+            'clearByLosing': self.cbxClearByLosing.isChecked(),
+            'clearLosing': self.spbClearLosing.value(),
+            'clearByMa': self.cbxClearByMa.isChecked(),
+            'clearMaPeriod': self.spbClearMaPeriod.value()
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -254,13 +279,14 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                 Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
             self.spbMoneyPerTrade.setValue(data['moneyPerTrade'])
-            self.cbxWinThreshold.setChecked(data['winThresholdOn'])
-            self.spbWinThreshold.setValue(data['winThreshold'])
-            self.cbxLoseThreshold.setChecked(data['loseThresholdOn'])
-            self.spbLoseThreshold.setValue(data['loseThreshold'])
-            self.cbxAddWhenDown.setChecked(data['addWhenDown'])
-            self.spbAddThresholdDown.setValue(data['addThresholdDown'])
-            self.cbxAddWhenUp.setChecked(data['addWhenUp'])
-            self.spbAddThresholdUp.setValue(data['addThresholdUp'])
-            self.spbAddDeadline.setValue(data['addDeadline'])
-            self.spbMaxHoldTime.setValue(data['maxHoldTime'])
+            self.rbnNeverAdd.setChecked(data['neverAdd'])
+            self.rbnAddByPercent.setChecked(data['addByPercent'])
+            self.spbAddPercent.setValue(data['addPercent'])
+            self.rbnAddByMa.setChecked(data['addByMa'])
+            self.spbAddMaPeriod.setValue(data['addMaPeriod'])
+            self.cbxClearByEarning.setChecked(data['clearByEarning'])
+            self.spbClearEarning.setValue(data['clearEarning'])
+            self.cbxClearByLosing.setChecked(data['clearByLosing'])
+            self.spbClearLosing.setValue(data['clearLosing'])
+            self.cbxClearByMa.setChecked(data['clearByMa'])
+            self.spbClearMaPeriod.setValue(data['clearMaPeriod'])

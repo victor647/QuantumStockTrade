@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
+    <width>729</width>
     <height>312</height>
    </rect>
   </property>
@@ -612,7 +612,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -645,7 +645,7 @@
       <widget class="QLineEdit" name="iptStockNumber">
        <property name="maximumSize">
         <size>
-         <width>100</width>
+         <width>80</width>
          <height>16777215</height>
         </size>
        </property>
@@ -664,7 +664,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblStockNumber_2">
+      <widget class="QLabel" name="lblStartDate">
        <property name="maximumSize">
         <size>
          <width>100</width>
@@ -678,26 +678,52 @@
         </font>
        </property>
        <property name="text">
-        <string>数据范围</string>
+        <string>开始日期</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spbAnalyzeMonths">
-       <property name="suffix">
-        <string>个月</string>
+      <widget class="QDateEdit" name="dteStartDate">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
        </property>
-       <property name="prefix">
-        <string>最近</string>
+       <property name="displayFormat">
+        <string>yyyy-MM-dd</string>
        </property>
-       <property name="minimum">
-        <number>1</number>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblEndDate">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
        </property>
-       <property name="maximum">
-        <number>12</number>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
        </property>
-       <property name="value">
-        <number>6</number>
+       <property name="text">
+        <string>结束日期</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateEdit" name="dteEndDate">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="displayFormat">
+        <string>yyyy-MM-dd</string>
        </property>
       </widget>
      </item>
@@ -710,7 +736,7 @@
         </font>
        </property>
        <property name="text">
-        <string>获取历史K线数据</string>
+        <string>获取数据</string>
        </property>
       </widget>
      </item>
@@ -723,7 +749,7 @@
         </font>
        </property>
        <property name="text">
-        <string>开盘收盘分布图</string>
+        <string>开盘收盘分布</string>
        </property>
       </widget>
      </item>
@@ -736,7 +762,7 @@
         </font>
        </property>
        <property name="text">
-        <string>最高最低分布图</string>
+        <string>最高最低分布</string>
        </property>
       </widget>
      </item>
@@ -748,7 +774,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>733</width>
+     <width>729</width>
      <height>22</height>
     </rect>
    </property>

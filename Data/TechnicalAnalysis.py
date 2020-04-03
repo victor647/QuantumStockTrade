@@ -1,19 +1,21 @@
 import pandas, talib, math
 
 
+# 获取同样时间段的大盘历史数据
+def get_market_data():
+
+    market_code = '000001' if market == 'sh' else '399001'
+    start_date = now.addMonths(self.spbAnalyzeMonths.value() * -1).toString('yyyy-MM-dd')
+    result_market = baostock.query_history_k_data(code=market + '.' + market_code, fields='date,open,high,low,close,preclose,turn',
+                                                  start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
+    self.__marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
+
+
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     stock_closes = stock_data['close']
     # 将价格数据转换为涨跌幅数据
     get_percentage_data(stock_data)
-    # 计算5日均线，至少上市5天
-    if stock_closes.shape[0] < 5:
-        return
-    calculate_ma_curve(stock_data, 5)
-    # 计算10日均线，至少上市10天
-    if stock_closes.shape[0] < 10:
-        return
-    calculate_ma_curve(stock_data, 10)
 
     # 计算BOLL轨道，至少上市20天
     if stock_closes.shape[0] < 20:
@@ -22,13 +24,6 @@ def get_technical_index(stock_data: pandas.DataFrame):
     stock_data['boll_upper'] = upper
     stock_data['boll_middle'] = middle
     stock_data['boll_lower'] = lower
-    # 计算20日均线
-    calculate_ma_curve(stock_data, 20)
-
-    # 计算30日均线，至少上市30天
-    if stock_closes.shape[0] < 30:
-        return
-    calculate_ma_curve(stock_data, 30)
 
     # 计算MACD图形，至少上市34天
     if stock_closes.shape[0] < 34:
@@ -38,11 +33,6 @@ def get_technical_index(stock_data: pandas.DataFrame):
     stock_data['macd_white'] = white
     stock_data['macd_yellow'] = yellow
     stock_data['macd_column'] = column
-
-    # 计算60日均线，至少上市60天
-    if stock_closes.shape[0] < 60:
-        return
-    calculate_ma_curve(stock_data, 60)
 
 
 # 分析价格获得涨跌幅百分比数据

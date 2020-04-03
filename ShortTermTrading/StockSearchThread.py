@@ -33,7 +33,19 @@ class StandardStockSearcher(StockSearcher):
         if export_to_file:
             self.finishedCallback.connect(lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate))
 
+    # 获取同期大盘五日表现
+    def market_five_day_performance(self, code: str):
+        market_data = FileManager.read_stock_history_data(code, True)
+        data_before = TA.get_stock_data_before_date(market_data, self.searchDate)
+        data_after = TA.get_stock_data_after_date(market_data, self.searchDate)
+        pre_close = round(data_before.iloc[-1]['close'], 2)
+        return TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
+
     def run(self):
+        # 获取大盘数据
+        index_shanghai_performance = self.market_five_day_performance('sh000001')
+        index_shenzhen_performance = self.market_five_day_performance('sz399001')
+        index_startup_performance = self.market_five_day_performance('sz399006')
         for index, row in self.stockList.iterrows():
             code_num = row['code']
             # 将股票代码固定为6位数
@@ -52,6 +64,9 @@ class StandardStockSearcher(StockSearcher):
             stock_data = FileManager.read_stock_history_data(code, True)
             # 选股日期之前和之后的数据
             data_before = TA.get_stock_data_before_date(stock_data, self.searchDate)
+            # 新股还没上市
+            if data_before.empty:
+                continue
             data_after = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 技术面指标考察
             if StockFinder.Instance.cbxTechnicalCriteriasEnabled.isChecked() and not StockFinder.Instance.match_technical_criterias(data_before):
@@ -59,15 +74,22 @@ class StandardStockSearcher(StockSearcher):
             # 自定义指标考察
             if not StockFinder.Instance.match_custom_criterias(data_before):
                 continue
+
             # 选股日收盘价
             pre_close = round(data_before.iloc[-1]['close'], 2)
             # 次日开盘
             next_day_open = TA.get_stock_performance_after_days(data_after, pre_close, 1, 'open')
             # 五日收盘
             five_day_close = TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
-            # 默认收益
-            default_profit = TA.get_percentage_from_price(TA.get_price_from_percentage(pre_close, five_day_close),
-                                                          TA.get_price_from_percentage(pre_close, next_day_open))
+            # 跑赢大盘
+            market, index_code = Tools.get_trade_center_and_index(code)
+            if index_code == '000001':
+                index_performance = index_shanghai_performance
+            elif index_code == '399001':
+                index_performance = index_shenzhen_performance
+            else:
+                index_performance = index_startup_performance
+            market_difference = round(five_day_close - index_performance, 2)
             # 次日最低
             next_day_low = TA.get_stock_extremes_in_day_range(data_after, pre_close, 1, 1, 'low')
             # 五日最高
@@ -88,7 +110,7 @@ class StandardStockSearcher(StockSearcher):
             # 净资产收益率
             roe = round(row['esp'] / row['bvps'] * 100, 2)
             # 将符合要求的股票信息打包
-            items = [code, name, pre_close, next_day_open, five_day_close, default_profit, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
+            items = [code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(code)

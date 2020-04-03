@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
-from Data import TechnicalAnalysis
+import Data.TechnicalAnalysis as TA
 from Tools import FileManager
 import pandas, math
 
@@ -31,9 +31,9 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, days_total=100):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 选股日期后的数据
-    data_after = TechnicalAnalysis.get_stock_data_after_date(stock_data, search_date, days_after)
+    data_after = TA.get_stock_data_after_date(stock_data, search_date, days_after)
     # 选股日期前的数据
-    data_before = TechnicalAnalysis.get_stock_data_before_date(stock_data, search_date, days_total - days_after)
+    data_before = TA.get_stock_data_before_date(stock_data, search_date, days_total - days_after)
     graph = CandleStickChart(stock_code, pandas.concat([data_before, data_after]))
     graph.plot_all_ma_lines()
     graph.plot_price()
@@ -271,10 +271,9 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
     # 画单条均线
     def plot_ma(self, period: int, color):
+        # 计算均线
+        TA.calculate_ma_curve(self.__stockData, period)
         label = 'ma_' + str(period)
-        # 若均线指标不在数据中（上市日期不够）
-        if label not in self.__stockData:
-            return
         ma_line = QLineSeries()
         ma_line.setColor(color)
         i = 0

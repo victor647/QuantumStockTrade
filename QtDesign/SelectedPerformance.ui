@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
-    <height>437</height>
+    <width>1171</width>
+    <height>429</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
          </font>
         </property>
         <property name="text">
-         <string>选股日期（次日开盘买入）：</string>
+         <string>选股日期：</string>
         </property>
        </widget>
       </item>
@@ -203,7 +203,7 @@
          </font>
         </property>
         <property name="text">
-         <string>操作策略：每支股票买入</string>
+         <string>每支股票买入底仓</string>
         </property>
        </widget>
       </item>
@@ -228,20 +228,31 @@
          <number>1000</number>
         </property>
         <property name="value">
-         <number>20000</number>
+         <number>30000</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbxLoseThreshold">
+       <widget class="QRadioButton" name="rbnNeverAdd">
         <property name="font">
          <font>
-          <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>割肉止损</string>
+         <string>从不补仓</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbnAddByMa">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>回踩</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -249,7 +260,52 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbLoseThreshold">
+       <widget class="QSpinBox" name="spbAddMaPeriod">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>日</string>
+        </property>
+        <property name="minimum">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <number>20</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblAddByMa">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>均线补仓</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rbnAddByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>涨跌幅达到</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbAddPercent">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -257,21 +313,33 @@
          </font>
         </property>
         <property name="suffix">
-         <string>元</string>
+         <string>%</string>
         </property>
         <property name="minimum">
-         <number>-1000000</number>
+         <number>-50</number>
         </property>
         <property name="maximum">
-         <number>-100</number>
+         <number>50</number>
         </property>
         <property name="value">
-         <number>-1000</number>
+         <number>-3</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbxWinThreshold">
+       <widget class="QLabel" name="lblAddByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>补仓</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxClearByEarning">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -287,7 +355,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbWinThreshold">
+       <widget class="QSpinBox" name="spbClearEarning">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -307,12 +375,12 @@
          <number>1</number>
         </property>
         <property name="value">
-         <number>2000</number>
+         <number>4000</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbxAddWhenDown">
+       <widget class="QCheckBox" name="cbxClearByLosing">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -320,7 +388,7 @@
          </font>
         </property>
         <property name="text">
-         <string>下跌补仓</string>
+         <string>割肉止损</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -328,7 +396,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbAddThresholdDown">
+       <widget class="QSpinBox" name="spbClearLosing">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -336,21 +404,21 @@
          </font>
         </property>
         <property name="suffix">
-         <string>%</string>
+         <string>元</string>
         </property>
         <property name="minimum">
-         <number>-50</number>
+         <number>-1000000</number>
         </property>
         <property name="maximum">
-         <number>0</number>
+         <number>-100</number>
         </property>
         <property name="value">
-         <number>-2</number>
+         <number>-2000</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbxAddWhenUp">
+       <widget class="QCheckBox" name="cbxClearByMa">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -358,7 +426,7 @@
          </font>
         </property>
         <property name="text">
-         <string>上涨追进</string>
+         <string>收盘跌破</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -366,100 +434,32 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbAddThresholdUp">
+       <widget class="QSpinBox" name="spbClearMaPeriod">
         <property name="font">
          <font>
-          <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
         <property name="suffix">
-         <string>%</string>
+         <string>日</string>
         </property>
         <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>50</number>
-        </property>
-        <property name="value">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAddDeadline">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>加仓期限</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbAddDeadline">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>天内</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>20</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>3</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMaxHoldTime">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>最长持仓时间</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbMaxHoldTime">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>天</string>
-        </property>
-        <property name="minimum">
-         <number>2</number>
-        </property>
-        <property name="maximum">
-         <number>20</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="value">
          <number>5</number>
+        </property>
+        <property name="maximum">
+         <number>60</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblClearByMa">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>均线清仓</string>
         </property>
        </widget>
       </item>
@@ -509,17 +509,12 @@
       </column>
       <column>
        <property name="text">
-        <string>次日收盘</string>
+        <string>清仓日期</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>加仓期限表现</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>清仓期限表现</string>
+        <string>清仓时涨幅</string>
        </property>
       </column>
       <column>
@@ -564,7 +559,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1191</width>
+     <width>1171</width>
      <height>22</height>
     </rect>
    </property>
@@ -679,38 +674,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxAddWhenUp</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbAddThresholdUp</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>743</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>881</x>
-     <y>87</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxAddWhenDown</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbAddThresholdDown</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>597</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>668</x>
-     <y>86</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>dteSearchDate</sender>
    <signal>editingFinished()</signal>
    <receiver>SelectedPerformance</receiver>
@@ -743,9 +706,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxLoseThreshold</sender>
+   <sender>cbxClearByLosing</sender>
    <signal>toggled(bool)</signal>
-   <receiver>spbLoseThreshold</receiver>
+   <receiver>spbClearLosing</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -759,9 +722,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxWinThreshold</sender>
+   <sender>cbxClearByEarning</sender>
    <signal>toggled(bool)</signal>
-   <receiver>spbWinThreshold</receiver>
+   <receiver>spbClearEarning</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

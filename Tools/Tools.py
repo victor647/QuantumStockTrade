@@ -21,26 +21,33 @@ def get_nearest_trade_date(qdate: QDate):
     return qdate
 
 
-# 根据股票代码获取股票交易所信息
-def get_trade_center(stock_code: str):
+# 根据股票代码获取股票交易所信息和指数代码
+def get_trade_center_and_index(stock_code: str):
     code = int(stock_code)
-    market = ''
     # 深圳主板
     if 0 < code < 100000:
         market = 'sz'
+        index = '399001'
     # 创业板
     elif 300000 < code < 400000:
         market = 'sz'
-    # 上海主板
+        index = '399006'
+    # 上海主板以及科创板
     elif 600000 <= code < 700000:
         market = 'sh'
+        index = '000001'
     # 深圳可转债
     elif 128000 <= code <= 129000:
         market = 'sz'
+        index = '000000'
     # 上海可转债
     elif 113500 <= code <= 113600:
         market = 'sh'
-    return market
+        index = '000000'
+    # 无效股票代码
+    else:
+        return '', ''
+    return market, index
 
 
 # 通过股票代码获取股票名称
@@ -144,7 +151,7 @@ def add_price_item(table: QTableWidget, row: int, column: int, price: float, pre
 
 # 在东方财富网站打开股票主页
 def open_stock_page(code: str):
-    market = get_trade_center(code)
+    market = get_trade_center_and_index(code)
     webbrowser.open('http://quote.eastmoney.com/' + market + code + '.html')
 
 

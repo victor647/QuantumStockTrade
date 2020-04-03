@@ -66,9 +66,13 @@ class SearchResult(QDialog, Ui_SearchResult):
     def stock_detailed_info(self, row: int, column: int):
         code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
-        if column > 3:
+        if column > 8:
             Tools.open_stock_page(code)
-        # 直接画K线图
+        # 大盘K线图
+        elif column == 5:
+            market, index = Tools.get_trade_center_and_index(code)
+            HistoryGraph.plot_stock_search_status(market + index, self.__searchDate)
+        # 股票K线图
         else:
             HistoryGraph.plot_stock_search_status(code, self.__searchDate)
 
