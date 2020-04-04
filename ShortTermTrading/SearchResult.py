@@ -70,8 +70,8 @@ class SearchResult(QDialog, Ui_SearchResult):
             Tools.open_stock_page(stock_code)
         # 大盘K线图
         elif column == 5:
-            market, index = Tools.get_trade_center_and_index(stock_code)
-            HistoryGraph.plot_stock_search_and_trade(market + index, self.__searchDate)
+            market, index_code = Tools.get_trade_center_and_index(stock_code)
+            HistoryGraph.plot_stock_search_and_trade(market + index_code, self.__searchDate)
         # 股票K线图
         else:
             HistoryGraph.plot_stock_search_and_trade(stock_code, self.__searchDate)

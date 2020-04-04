@@ -12,6 +12,7 @@ from Tools import Tools
 class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 当前是否持有股票
     __isHolding = False
+    __market = ''
     __stockCode = ''
     __stockData = None
     __stockInvestment = None
@@ -46,11 +47,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def get_stock_data(self):
         self.__stockCode = Tools.get_stock_code(self.iptStockNumber)
         # 获取交易所信息
-        market = Tools.get_trade_center_and_index(self.__stockCode)
+        self.__market, index_code = Tools.get_trade_center_and_index(self.__stockCode)
         start_date = self.dteStart.date().addYears(-1).toString('yyyy-MM-dd')
         end_date = self.dteEnd.date().toString('yyyy-MM-dd')
         # 获取股票历史数据
-        bs_result = baostock.query_history_k_data(code=market + '.' + self.__stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',
+        bs_result = baostock.query_history_k_data(code=self.__market + '.' + self.__stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',
                                                   start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
         self.__stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
         # 计算均线
@@ -182,8 +183,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         pre_close = daily_data['preclose']
         date = daily_data['date']
         # 获取当日5分钟K线数据
-        market = Tools.get_trade_center_and_index(self.__stockCode)
-        result = baostock.query_history_k_data(code=market + '.' + self.__stockCode, fields='time,high,low',
+        result = baostock.query_history_k_data(code=self.__market + '.' + self.__stockCode, fields='time,high,low',
                                                start_date=date, end_date=date, frequency='5', adjustflag='2')
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 

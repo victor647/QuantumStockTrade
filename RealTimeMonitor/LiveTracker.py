@@ -329,7 +329,7 @@ class StockMonitor(QThread):
     def update_stock_watch_list(self, stock_list):
         line = ''
         for code in stock_list:
-            market = Tools.get_trade_center_and_index(code)
+            market, index_code = Tools.get_trade_center_and_index(code)
             line += market + code + ','
         self.url = 'http://qt.gtimg.cn/q=' + line[:-1]
 

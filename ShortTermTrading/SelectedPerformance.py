@@ -69,8 +69,8 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         search_date = self.tblStockList.item(row, 2).text()
         # 大盘K线图
         if column == 10:
-            market, index = Tools.get_trade_center_and_index(stock_code)
-            HistoryGraph.plot_stock_search_and_trade(market + index, search_date)
+            market, index_code = Tools.get_trade_center_and_index(stock_code)
+            HistoryGraph.plot_stock_search_and_trade(market + index_code, search_date)
         # 股票K线图
         else:
             HistoryGraph.plot_stock_search_and_trade(stock_code, search_date, 50, 50, self.__stockInvestments[stock_code])
