@@ -122,6 +122,10 @@ class StockInvestment:
     def sell_all(self, price: float, date: str):
         self.sell_stock(price, self.currentShare, date)
 
+    # 总交易次数
+    def transaction_count(self):
+        return len(self.buyTransactions) + len(self.sellTransactions)
+
     # 股票价值，持有股数*当前股价
     def stock_value(self, current_price: float):
         return round(self.currentShare * current_price, 2)
@@ -148,13 +152,13 @@ class StockInvestment:
     def final_profit(self):
         return round(self.cashValue - self.totalInvestment, 2)
 
-    # 获利百分比（按照当前价格计算）
+    # 获利百分比（按照总计投入计算）
     def profit_percentage(self, current_price: float):
         if self.stock_value(current_price) == 0:
-            return 0.00
+            return round(self.net_profit(current_price) / self.totalInvestment * 100, 2)
         return round(self.net_profit(current_price) / self.stock_value(current_price) * 100, 2)
 
-    # 获利百分比（按照初始投入计算）
+    # 获利百分比（按照底仓投入计算）
     def profit_percentage_from_init(self, current_price: float):
         if self.initialAsset == 0:
             return 0.00

@@ -28,17 +28,22 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 
 
 # 画选股日期附近的K线
-def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, days_total=100):
+def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after=20, days_before=80, trade_history=None):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
+    # 计算均线数据
+    TA.calculate_all_ma_curves(stock_data)
     # 选股日期后的数据
     data_after = TA.get_stock_data_after_date(stock_data, search_date, days_after)
     # 选股日期前的数据
-    data_before = TA.get_stock_data_before_date(stock_data, search_date, days_total - days_after)
-    graph = CandleStickChart(stock_code, pandas.concat([data_before, data_after]))
+    data_before = TA.get_stock_data_before_date(stock_data, search_date, days_before)
+    graph = CandleStickChart(pandas.concat([data_before, data_after]), stock_code)
     graph.plot_all_ma_lines()
     graph.plot_price()
     graph.plot_volume()
     graph.plot_search_date(data_before.index[-1])
+    # 画交易记录
+    if trade_history is not None:
+        graph.plot_trade_history(trade_history, False)
     graph.exec_()
 
 
@@ -46,10 +51,10 @@ def plot_stock_search_status(stock_code: str, search_date: str, days_after=20, d
 class CandleStickChart(QDialog, Ui_HistoryGraph):
     __volumeSeries = None
 
-    def __init__(self, stock_code: str, stock_data: pandas.DataFrame, show_year=False):
+    def __init__(self, stock_data: pandas.DataFrame, title='', show_year=False):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(stock_code + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
+        self.setWindowTitle(title + '走势：' + stock_data.index[0] + ' ~ ' + stock_data.index[-1])
         self.__stockData = stock_data
         # 创建图表
         self.__chart = QChart()
@@ -271,8 +276,6 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
     # 画单条均线
     def plot_ma(self, period: int, color):
-        # 计算均线
-        TA.calculate_ma_curve(self.__stockData, period)
         label = 'ma_' + str(period)
         ma_line = QLineSeries()
         ma_line.setColor(color)
@@ -284,7 +287,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
                 is_valid = True
                 ma_line.append(i, day_data[label])
             elif i == 0:
-                ma_line.append(i, day_data['close'])
+                ma_line.append(i, 9999999)
             i += 1
         if is_valid:
             self.__chart.addSeries(ma_line)

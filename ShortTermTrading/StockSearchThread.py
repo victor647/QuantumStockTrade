@@ -33,27 +33,19 @@ class StandardStockSearcher(StockSearcher):
         if export_to_file:
             self.finishedCallback.connect(lambda: FileManager.export_auto_search_stock_list(self.selectedStocks, folder_name, self.searchDate))
 
-    # 获取同期大盘五日表现
-    def market_five_day_performance(self, code: str):
-        market_data = FileManager.read_stock_history_data(code, True)
-        data_before = TA.get_stock_data_before_date(market_data, self.searchDate)
-        data_after = TA.get_stock_data_after_date(market_data, self.searchDate)
-        pre_close = round(data_before.iloc[-1]['close'], 2)
-        return TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
-
     def run(self):
         # 获取大盘数据
-        index_shanghai_performance = self.market_five_day_performance('sh000001')
-        index_shenzhen_performance = self.market_five_day_performance('sz399001')
-        index_startup_performance = self.market_five_day_performance('sz399006')
+        index_shanghai_performance = TA.market_performance_by_days('sh000001', self.searchDate, 5)
+        index_shenzhen_performance = TA.market_performance_by_days('sz399001', self.searchDate, 5)
+        index_startup_performance = TA.market_performance_by_days('sz399006', self.searchDate, 5)
         for index, row in self.stockList.iterrows():
             code_num = row['code']
             # 将股票代码固定为6位数
-            code = str(code_num).zfill(6)
+            stock_code = str(code_num).zfill(6)
             # 获得股票中文名称
             name = row['name']
             # 更新窗口进度条
-            self.progressBarCallback.emit(index, code, name)
+            self.progressBarCallback.emit(index, stock_code, name)
             # 判断股票是否在选中的交易所中
             if not StockFinder.Instance.code_in_search_range(code_num):
                 continue
@@ -61,7 +53,7 @@ class StandardStockSearcher(StockSearcher):
             if StockFinder.Instance.cbxBasicCriteriasEnabled.isChecked() and not StockFinder.Instance.match_basic_criterias(row, self.searchDate):
                 continue
             # 获得股票历史数据
-            stock_data = FileManager.read_stock_history_data(code, True)
+            stock_data = FileManager.read_stock_history_data(stock_code, True)
             # 选股日期之前和之后的数据
             data_before = TA.get_stock_data_before_date(stock_data, self.searchDate)
             # 新股还没上市
@@ -82,7 +74,7 @@ class StandardStockSearcher(StockSearcher):
             # 五日收盘
             five_day_close = TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
             # 跑赢大盘
-            market, index_code = Tools.get_trade_center_and_index(code)
+            market, index_code = Tools.get_trade_center_and_index(stock_code)
             if index_code == '000001':
                 index_performance = index_shanghai_performance
             elif index_code == '399001':
@@ -110,10 +102,10 @@ class StandardStockSearcher(StockSearcher):
             # 净资产收益率
             roe = round(row['esp'] / row['bvps'] * 100, 2)
             # 将符合要求的股票信息打包
-            items = [code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
+            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
-            self.selectedStocks.append(code)
+            self.selectedStocks.append(stock_code)
         # 搜索结束回调
         self.finishedCallback.emit()
 

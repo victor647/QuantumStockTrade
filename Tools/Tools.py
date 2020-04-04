@@ -151,7 +151,7 @@ def add_price_item(table: QTableWidget, row: int, column: int, price: float, pre
 
 # 在东方财富网站打开股票主页
 def open_stock_page(code: str):
-    market = get_trade_center_and_index(code)
+    market, index = get_trade_center_and_index(code)
     webbrowser.open('http://quote.eastmoney.com/' + market + code + '.html')
 
 

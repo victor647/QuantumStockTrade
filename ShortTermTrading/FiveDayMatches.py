@@ -17,13 +17,13 @@ class FiveDayMatches(QDialog, Ui_FiveDayMatches):
 
     # 显示股票详细数据
     def stock_detailed_info(self, row: int, column: int):
-        code = self.tblMatches.item(row, 0).text()
+        stock_code = self.tblMatches.item(row, 0).text()
         # 通过网页打开
         if column < 2:
-            Tools.open_stock_page(code)
+            Tools.open_stock_page(stock_code)
         # 直接画K线图
         else:
-            HistoryGraph.plot_stock_search_status(code, self.tblMatches.item(row, 2).text())
+            HistoryGraph.plot_stock_search_and_trade(stock_code, self.tblMatches.item(row, 2).text())
 
     # 更新已找到的股票数量
     def update_matches_count(self, average_performance: float):

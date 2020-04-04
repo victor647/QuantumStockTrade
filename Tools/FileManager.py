@@ -1,5 +1,5 @@
 import os, json, pandas, tushare
-from PyQt5.QtCore import QDate
+from pathlib import Path
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
 import Data.TechnicalAnalysis as TechnicalAnalysis
 
@@ -121,31 +121,15 @@ def import_stock_list(import_func):
 
 
 # 从txt文件导入股票列表并读取日期信息
-def import_stock_list_with_date(import_func):
-    file_path = QFileDialog.getOpenFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
-    date = QDate.currentDate().toString('yyyy-MM-dd')
-    if file_path[0] == '':
-        return '', date
-    file = open(file_path[0], 'r')
-    lines = file.readlines()
-    date = lines[0].rstrip('\n')
-    for line in lines[1:]:
-        code = line.rstrip('\n')
-        import_func(code)
-    file.close()
-    return file_path[0], date
-
-
-# 从txt文件导入股票列表并读取日期信息
 def import_multiple_stock_lists():
     files = QFileDialog.getOpenFileNames(directory=selected_stock_list_path(), filter='TXT(*.txt)')
     full_data = {}
     for file_path in files[0]:
         file = open(file_path, 'r')
         lines = file.readlines()
-        date = lines[0].rstrip('\n')
+        date = Path(file_path).stem
         codes = []
-        for line in lines[1:]:
+        for line in lines:
             codes.append(line.rstrip('\n'))
         full_data[date] = codes
         file.close()

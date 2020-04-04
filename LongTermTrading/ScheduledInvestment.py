@@ -84,17 +84,17 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
 
     # 股票详细信息
     def show_stock_graph(self, row: int, column: int):
-        code = self.tblStockList.item(row, 0).text()
+        stock_code = self.tblStockList.item(row, 0).text()
         # 通过网页打开
         if column < 2:
-            Tools.open_stock_page(code)
+            Tools.open_stock_page(stock_code)
         # 直接画K线图
         elif column > 2:
-            graph = CandleStickChart(code, self.__stockData[code], True)
+            graph = CandleStickChart(self.__stockData[stock_code], stock_code, True)
             graph.plot_all_ma_lines()
             graph.plot_price()
             graph.plot_volume()
-            graph.plot_trade_history(self.__stockInvestments[code])
+            graph.plot_trade_history(self.__stockInvestments[stock_code])
             graph.exec_()
 
     # 导出股票交易策略

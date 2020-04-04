@@ -363,7 +363,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 截取开始交易的日期
         start_date = self.dteStart.date().toString('yyyy-MM-dd')
         stock_data = stock_data.loc[start_date:]
-        graph = CandleStickChart(self.__stockCode, stock_data)
+        graph = CandleStickChart(stock_data, self.__stockCode)
         # 画成交量
         graph.plot_volume()      
 

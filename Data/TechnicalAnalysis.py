@@ -1,14 +1,5 @@
 import pandas, talib, math
-
-
-# 获取同样时间段的大盘历史数据
-def get_market_data():
-
-    market_code = '000001' if market == 'sh' else '399001'
-    start_date = now.addMonths(self.spbAnalyzeMonths.value() * -1).toString('yyyy-MM-dd')
-    result_market = baostock.query_history_k_data(code=market + '.' + market_code, fields='date,open,high,low,close,preclose,turn',
-                                                  start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
-    self.__marketDatabase = pandas.DataFrame(result_market.data, columns=result_market.fields, dtype=float)
+import Tools.FileManager as FileManager
 
 
 # 计算技术指标
@@ -71,18 +62,23 @@ def get_kdj_index(stock_data: pandas.DataFrame):
 
 # 计算所有MA均线
 def calculate_all_ma_curves(stock_data: pandas.DataFrame):
-    stock_closes = stock_data['close']
-    stock_data['ma_5'] = talib.SMA(stock_closes, 5)
-    stock_data['ma_10'] = talib.SMA(stock_closes, 10)
-    stock_data['ma_20'] = talib.SMA(stock_closes, 20)
-    stock_data['ma_30'] = talib.SMA(stock_closes, 30)
-    stock_data['ma_60'] = talib.SMA(stock_closes, 60)
+    calculate_ma_curve(stock_data, 5)
+    calculate_ma_curve(stock_data, 10)
+    calculate_ma_curve(stock_data, 20)
+    calculate_ma_curve(stock_data, 30)
+    calculate_ma_curve(stock_data, 60)
 
 
 # 计算MA均线
 def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
     key = 'ma_' + str(period)
+    if key in stock_data:
+        return
     stock_data[key] = talib.SMA(stock_data['close'], period)
+    # 解决最前端数据不够的问题
+    for i in range(period):
+        if math.isnan(stock_data[key].iloc[i]):
+            stock_data[key].iloc[i] = stock_data['close'].iloc[:i + 1].mean()
     return key
 
 
@@ -450,6 +446,15 @@ def get_stock_extremes_in_day_range(data: pandas.DataFrame, pre_close: float, st
     else:
         end_price = end_price_set.min()
     return get_percentage_from_price(end_price, pre_close)
+
+
+# 获取同期大盘表现
+def market_performance_by_days(market_code: str, start_date: str, days: int):
+    market_data = FileManager.read_stock_history_data(market_code, True)
+    data_before = get_stock_data_before_date(market_data, start_date)
+    data_after = get_stock_data_after_date(market_data, start_date)
+    pre_close = round(data_before.iloc[-1]['close'], 2)
+    return get_stock_performance_after_days(data_after, pre_close, days, 'close')
 
 
 # 获得K线图形分类

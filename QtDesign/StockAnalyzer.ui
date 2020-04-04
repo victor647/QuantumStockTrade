@@ -20,7 +20,7 @@
       <x>10</x>
       <y>40</y>
       <width>171</width>
-      <height>221</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="font">
@@ -38,7 +38,7 @@
        <x>12</x>
        <y>20</y>
        <width>151</width>
-       <height>191</height>
+       <height>214</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -159,6 +159,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="btnStockGraph">
+        <property name="text">
+         <string>个股K线图</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </widget>
@@ -168,7 +175,7 @@
       <x>190</x>
       <y>40</y>
       <width>171</width>
-      <height>221</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="font">
@@ -186,7 +193,7 @@
        <x>10</x>
        <y>20</y>
        <width>151</width>
-       <height>191</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="font">
@@ -297,6 +304,13 @@
         </property>
         <property name="text">
          <string>每日上涨概率： </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnMarketGraph">
+        <property name="text">
+         <string>大盘K线图</string>
         </property>
        </widget>
       </item>
@@ -789,8 +803,8 @@
    <slot>get_history_data()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>709</x>
-     <y>56</y>
+     <x>547</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>361</x>
@@ -805,8 +819,8 @@
    <slot>plot_high_low_distribution()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>512</x>
-     <y>482</y>
+     <x>719</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>545</x>
@@ -821,12 +835,44 @@
    <slot>plot_open_close_distribution()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>529</x>
-     <y>459</y>
+     <x>633</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
      <x>544</x>
      <y>459</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnStockGraph</sender>
+   <signal>clicked()</signal>
+   <receiver>StockAnalyzer</receiver>
+   <slot>show_stock_graph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnMarketGraph</sender>
+   <signal>clicked()</signal>
+   <receiver>StockAnalyzer</receiver>
+   <slot>show_market_graph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>307</y>
     </hint>
    </hints>
   </connection>
@@ -837,5 +883,7 @@
   <slot>auto_get_strategy()</slot>
   <slot>plot_high_low_distribution()</slot>
   <slot>plot_open_close_distribution()</slot>
+  <slot>show_stock_graph()</slot>
+  <slot>show_market_graph()</slot>
  </slots>
 </ui>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>选股器回测</string>
+   <string>选股结果回测</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -71,7 +71,7 @@
          </font>
         </property>
         <property name="text">
-         <string>贵州茅台</string>
+         <string>中国平安</string>
         </property>
         <property name="maxLength">
          <number>6</number>
@@ -203,7 +203,7 @@
          </font>
         </property>
         <property name="text">
-         <string>每支股票买入底仓</string>
+         <string>每支股票选股次日开盘买入</string>
         </property>
        </widget>
       </item>
@@ -233,19 +233,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rbnNeverAdd">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
+       <widget class="QCheckBox" name="cbxAddByMa">
+        <property name="maximumSize">
+         <size>
+          <width>45</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="text">
-         <string>从不补仓</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="rbnAddByMa">
         <property name="font">
          <font>
           <pointsize>9</pointsize>
@@ -261,6 +255,12 @@
       </item>
       <item>
        <widget class="QSpinBox" name="spbAddMaPeriod">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>9</pointsize>
@@ -293,7 +293,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rbnAddByPercent">
+       <widget class="QCheckBox" name="cbxAddByPercent">
         <property name="font">
          <font>
           <pointsize>9</pointsize>
@@ -302,10 +302,19 @@
         <property name="text">
          <string>涨跌幅达到</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QSpinBox" name="spbAddPercent">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -375,7 +384,7 @@
          <number>1</number>
         </property>
         <property name="value">
-         <number>4000</number>
+         <number>5000</number>
         </property>
        </widget>
       </item>
@@ -413,7 +422,7 @@
          <number>-100</number>
         </property>
         <property name="value">
-         <number>-2000</number>
+         <number>-3000</number>
         </property>
        </widget>
       </item>
@@ -435,6 +444,12 @@
       </item>
       <item>
        <widget class="QSpinBox" name="spbClearMaPeriod">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>9</pointsize>
@@ -509,12 +524,17 @@
       </column>
       <column>
        <property name="text">
-        <string>清仓日期</string>
+        <string>持股</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>清仓时涨幅</string>
+        <string>持仓收益</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>收益率</string>
        </property>
       </column>
       <column>
@@ -525,6 +545,11 @@
       <column>
        <property name="text">
         <string>期间最大回撤</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>跑赢大盘</string>
        </property>
       </column>
       <column>
@@ -548,7 +573,7 @@
        </font>
       </property>
       <property name="text">
-       <string>共买入0只股票，盈利0只，成本0元，获利0元，收益率0%</string>
+       <string/>
       </property>
      </widget>
     </item>
