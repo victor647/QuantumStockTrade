@@ -140,7 +140,7 @@ def add_sortable_item(table: QTableWidget, row: int, column: int, value: float, 
 def add_price_item(table: QTableWidget, row: int, column: int, price: float, pre_close: float):
     item = CustomSortingTableData()
     item.setForeground(get_price_color(price, pre_close))
-    percentage = TechnicalAnalysis.get_percentage_from_price(price, pre_close)
+    percentage = TechnicalAnalysis.get_percent_change_from_price(price, pre_close)
     # 显示全部数据
     item.setText(str(price) + ' ' + str(percentage) + '%')
     # 以百分比数据作为隐藏排序值

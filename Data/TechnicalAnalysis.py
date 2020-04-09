@@ -28,11 +28,11 @@ def get_technical_index(stock_data: pandas.DataFrame):
 
 # 分析价格获得涨跌幅百分比数据
 def get_percentage_data(database: pandas.DataFrame):
-    database['open_pct'] = get_percentage_from_price(database['open'], database['preclose'])
-    database['high_pct'] = get_percentage_from_price(database['high'], database['preclose'])
-    database['low_pct'] = get_percentage_from_price(database['low'], database['preclose'])
-    database['close_pct'] = get_percentage_from_price(database['close'], database['preclose'])
-    database['daily_pct'] = get_percentage_from_price(database['close'], database['open'])
+    database['open_pct'] = get_percent_change_from_price(database['open'], database['preclose'])
+    database['high_pct'] = get_percent_change_from_price(database['high'], database['preclose'])
+    database['low_pct'] = get_percent_change_from_price(database['low'], database['preclose'])
+    database['close_pct'] = get_percent_change_from_price(database['close'], database['preclose'])
+    database['daily_pct'] = get_percent_change_from_price(database['close'], database['open'])
     database['amplitude'] = database['high_pct'] - database['low_pct']
 
 
@@ -245,7 +245,7 @@ def interval_average_price(database: pandas.DataFrame):
 
 # 区间总涨幅
 def interval_total_performance(database: pandas.DataFrame):
-    return get_percentage_from_price(interval_close_price(database), interval_open_price(database))
+    return get_percent_change_from_price(interval_close_price(database), interval_open_price(database))
 
 
 # 区间每日平均涨幅
@@ -281,12 +281,12 @@ def inverse_market_down(stock_database: pandas.DataFrame, market_database: panda
 
 
 # 通过价格计算涨跌幅
-def get_percentage_from_price(price: float, base_price: float):
+def get_percent_change_from_price(price: float, base_price: float):
     return round((price / base_price - 1) * 100, 2)
 
 
 # 通过涨跌幅计算价格
-def get_price_from_percentage(base_price: float, percentage: float):
+def get_price_from_percent_change(base_price: float, percentage: float):
     return round(base_price * (1 + percentage / 100), 2)
 
 
@@ -428,7 +428,7 @@ def get_stock_performance_after_days(data: pandas.DataFrame, pre_close: float, d
         end_price = data.iloc[days - 1][key]
     else:
         end_price = data.iloc[-1][key]
-    return get_percentage_from_price(end_price, pre_close)
+    return get_percent_change_from_price(end_price, pre_close)
 
 
 # 计算某个日期后一段时间内的股价极值
@@ -445,7 +445,7 @@ def get_stock_extremes_in_day_range(data: pandas.DataFrame, pre_close: float, st
         end_price = end_price_set.max()
     else:
         end_price = end_price_set.min()
-    return get_percentage_from_price(end_price, pre_close)
+    return get_percent_change_from_price(end_price, pre_close)
 
 
 # 获取同期大盘表现

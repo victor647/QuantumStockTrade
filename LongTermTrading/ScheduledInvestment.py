@@ -4,7 +4,7 @@ from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtGui import QKeyEvent
 from Data.InvestmentStatus import StockInvestment
 from Data.HistoryGraph import CandleStickChart
-import Data.TechnicalAnalysis as TechnicalAnalysis
+import Data.TechnicalAnalysis as TA
 from Tools import Tools, FileManager
 import baostock, pandas, math
 
@@ -15,11 +15,6 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.cbbIntervalType.addItems(['周', '月'])
-        # 期始则开盘买入，期尾则收盘买入
-        self.cbbInvestTime.addItems(['期始', '期尾'])
-        # 默认以月定投
-        self.cbbIntervalType.setCurrentText('月')
         # 默认开始日期为10年前
         self.dteStartDate.setDate(QDate.currentDate().addYears(-10))
         self.__stockInvestments = {}
@@ -91,7 +86,7 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         # 直接画K线图
         elif column > 2:
             graph = CandleStickChart(self.__stockData[stock_code], stock_code, True)
-            graph.plot_all_ma_lines()
+            graph.plot_ma(self.spbSmartBuyMaPeriod.value(), Qt.yellow)
             graph.plot_price()
             graph.plot_volume()
             graph.plot_trade_history(self.__stockInvestments[stock_code])
@@ -103,12 +98,17 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
         data = {
             'startDate': self.dteStartDate.date().toString('yyyy-MM-dd'),
             'initialInvestment': self.spbInitialInvestment.value(),
-            'interval': self.spbInterval.value(),
-            'intervalType': self.cbbIntervalType.currentText(),
+            'investInterval': self.spbInvestInterval.value(),
             'eachInvestment': self.spbEachInvestment.value(),
-            'investTime': self.cbbInvestTime.currentText(),
-            'smartInvestOn': self.cbxSmartInvesting.isChecked(),
-            'smartInvestFactor': self.spbSmartInvestFactor.value()
+            'smartBuy': self.cbxSmartBuy.isChecked(),
+            'smartBuyMaPeriod': self.spbSmartBuyMaPeriod.value(),
+            'smartBuyMaBias': self.spbSmartBuyMaBias.value(),
+            'smartBuyFactor': self.spbSmartBuyFactor.value(),
+            'smartSell': self.cbxSmartSell.isChecked(),
+            'smartSellThreshold': self.spbSmartSellThreshold.value(),
+            'smartSellFactor': self.spbSmartSellFactor.value(),
+            'sellByPercent': self.cbxSellByPercent.isChecked(),
+            'buyBackAfterSell': self.cbxBuyBackAfterSell.isChecked(),
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -123,12 +123,17 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
                 return
             self.dteStartDate.setDate(QDate.fromString(data['startDate'], 'yyyy-MM-dd'))
             self.spbInitialInvestment.setValue(data['initialInvestment'])
-            self.spbInterval.setValue(data['interval'])
-            self.cbbIntervalType.setCurrentText(data['intervalType'])
+            self.spbInvestInterval.setValue(data['investInterval'])
             self.spbEachInvestment.setValue(data['eachInvestment'])
-            self.cbbInvestTime.setCurrentText(data['investTime'])
-            self.cbxSmartInvesting.setChecked(data['smartInvestOn'])
-            self.spbSmartInvestFactor.setValue(data['smartInvestFactor'])
+            self.cbxSmartBuy.setChecked(data['smartBuy'])
+            self.spbSmartBuyMaPeriod.setValue(data['smartBuyMaPeriod'])
+            self.spbSmartBuyMaBias.setValue(data['smartBuyMaBias'])
+            self.spbSmartBuyFactor.setValue(data['smartBuyFactor'])
+            self.cbxSmartSell.setChecked(data['smartSell'])
+            self.spbSmartSellThreshold.setValue(data['smartSellThreshold'])
+            self.spbSmartSellFactor.setValue(data['smartSellFactor'])
+            self.cbxSellByPercent.setChecked(data['sellByPercent'])
+            self.cbxBuyBackAfterSell.setChecked(data['buyBackAfterSell'])
 
     # 平均分配持股仓位
     def auto_split_ratio(self):
@@ -143,19 +148,19 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
     def start_investing(self):
         start_date = self.dteStartDate.date()
         end_date = QDate.currentDate()
-        frequency = 'w' if self.cbbIntervalType.currentText() == '周' else 'm'
         # 所有股票总计
         total_share_ratio = total_spent = total_profit = 0
         for row in range(self.tblStockList.rowCount()):
             stock_code = self.tblStockList.item(row, 0).text()
             market, index_code = Tools.get_trade_center_and_index(stock_code)
             bs_result = baostock.query_history_k_data(code=market + '.' + stock_code, fields='date,open,high,low,close,turn',
-                                                      start_date=start_date.toString('yyyy-MM-dd'), end_date=end_date.toString('yyyy-MM-dd'), frequency=frequency, adjustflag='2')
+                                                      start_date=start_date.toString('yyyy-MM-dd'), end_date=end_date.toString('yyyy-MM-dd'), frequency='m', adjustflag='2')
             if not bs_result.data:
                 Tools.show_error_dialog('数据有误！')
                 continue
             stock_data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
             stock_data.set_index('date', inplace=True)
+            TA.calculate_ma_curve(stock_data, self.spbSmartBuyMaPeriod.value())
             self.__stockData[stock_code] = stock_data
             investment = StockInvestment()
             self.__stockInvestments[stock_code] = investment
@@ -165,7 +170,6 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             end_price = stock_data.iloc[-1]['close']
             # 获取实际k线开始和截止日期
             actual_start_date = QDate.fromString(stock_data.index[0], 'yyyy-MM-dd')
-            actual_end_date = QDate.fromString(stock_data.index[-1], 'yyyy-MM-dd')
             years = int(stock_data.index[-1][:4]) - int(stock_data.index[0][:4]) + 1
             # 年化复利
             annual_profit = round((math.pow(end_price / start_price, 1 / years) - 1) * 100, 2)
@@ -184,48 +188,88 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
             time_to_market = QDate.fromString(self.tblStockList.item(row, 3).text(), 'yyyy-MM-dd')
             if time_to_market < start_date:
                 investment.buy_stock_by_money(start_price, share_ratio * self.spbInitialInvestment.value() * 10000, actual_start_date.toString('yyyy-MM-dd'))
-            # 当前交易日期
-            current_date = QDate(actual_start_date)
-            # 记录上次定投的价格，以
+            # 记录上次买卖的价格
             last_price = start_price
+            # 记录上次操作的净买入金额
+            last_trade_money = 1
+            # 初始化最高亏损额
+            max_losing = 0
+            # 每期基础买入额
+            base_money = share_ratio * self.spbEachInvestment.value() * 10000
+            month_index = 0
             # 进行每次定投
-            while current_date < actual_end_date:
-                if self.cbbIntervalType.currentText() == '周':
-                    current_date = current_date.addDays(7 * self.spbInterval.value())
-                    # 确保每周一买入
-                    while current_date.dayOfWeek() > 1:
-                        current_date = current_date.addDays(-1)
-                else:
-                    current_date = current_date.addMonths(self.spbInterval.value())
-                    # 确保每月第一天买入
-                    if current_date.day() > 1:
-                        current_date = current_date.addDays(-current_date.day() + 1)
-                # 获得该交易日信息
-                data = stock_data.loc[current_date.toString('yyyy-MM-dd'):].head(1)
-                # 跳过停牌股票
-                if not data.empty and data.iloc[0]['high'] != data.iloc[0]['low']:
-                    buy_price = data.iloc[0]['open' if self.cbbInvestTime.currentText() == '期始' else 'close']
-                    money = share_ratio * self.spbEachInvestment.value() * 10000
-                    # 若开启智能定投，则下跌时多买
-                    if self.cbxSmartInvesting.isChecked():
-                        percent_change = TechnicalAnalysis.get_percentage_from_price(buy_price, last_price)
-                        # 计算实际投入金钱
-                        money *= max(0, (100 - self.spbSmartInvestFactor.value() * percent_change) / 100)
-                    last_price = buy_price
-                    investment.buy_stock_by_money(buy_price, money, data.index[0])
+            for date, month_data in stock_data.iterrows():
+                month_index += 1
+                # 跳过第一个月和停牌时期
+                if month_index == 1 or month_data['turn'] == 0:
+                    continue
+                open_price = month_data['open']
+                # 计算当期最高亏损额
+                max_losing = min(max_losing, investment.net_profit(month_data['close']))
+                money = base_money
+                # 若单月涨幅过高则卖出
+                if self.cbxSellByPercent.isChecked():
+                    sell_price = TA.get_price_from_percent_change(open_price, self.spbSellByPercent.value())
+                    sell_count = 1
+                    # 每上涨X%卖出一次
+                    while sell_price <= month_data['high']:
+                        investment.sell_stock_by_money(sell_price, money, date)
+                        sell_count += 1
+                        sell_price = TA.get_price_from_percent_change(open_price, self.spbSellByPercent.value() * sell_count)
 
+                # 若单月跌幅过高则买入
+                if self.cbxBuyByPercent.isChecked():
+                    buy_price = TA.get_price_from_percent_change(open_price, -self.spbBuyByPercent.value())
+                    buy_count = 1
+                    # 每下跌X%买入一次
+                    while buy_price >= month_data['low']:
+                        investment.buy_stock_by_money(buy_price, money, date)
+                        buy_count += 1
+                        buy_price = TA.get_price_from_percent_change(open_price, -self.spbBuyByPercent.value() * buy_count)
+
+                # 跳过定投间隔月
+                if month_index % self.spbInvestInterval.value() != 1:
+                    continue
+
+                # 允许根据上期买入价格进行卖出
+                if self.cbxSmartSell.isChecked():
+                    percent_change = TA.get_percent_change_from_price(open_price, last_price) - self.spbSmartSellThreshold.value()
+                    if percent_change >= 0:
+                        money *= max(0, 1 + self.spbSmartSellFactor.value() * percent_change / 100)
+                        last_trade_money = -money
+                        investment.sell_stock_by_money(open_price, TA.get_price_from_percent_change(money, percent_change), date)
+                        last_price = open_price
+                        continue
+
+                # 允许自动根据涨幅调节买入额
+                if self.cbxSmartBuy.isChecked():
+                    # 计算距离均线的偏离值
+                    ma_price = month_data['ma_' + str(self.spbSmartBuyMaPeriod.value())]
+                    percent_change = TA.get_percent_change_from_price(open_price, ma_price) - self.spbSmartBuyMaBias.value()
+                    # 计算实际投入金钱
+                    money *= max(0, 1 - self.spbSmartBuyFactor.value() * percent_change / 100)
+                    # 上次卖出了，这次下跌了买回来
+                    if self.cbxBuyBackAfterSell.isChecked() and last_trade_money < 0 and open_price < last_price:
+                        money -= last_trade_money
+                if money > 0:
+                    last_trade_money = money
+                    investment.buy_stock_by_money(open_price, money, date)
+                last_price = open_price
+
+            # 累计投入
             column = Tools.add_sortable_item(self.tblStockList, row, column, round(investment.totalInvestment, 2))
-            # 最终价格
+            # 最终获利
             final_price = round(stock_data.iloc[-1]['close'], 2)
-            # 卖出全部以计算利润
-            investment.sell_all(final_price, end_date)
+            investment.sell_all(final_price, stock_data.index[-1])
             column = Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit())
+            # 最高亏损额
+            column = Tools.add_colored_item(self.tblStockList, row, column, max_losing)
             # 计算收益率
             Tools.add_colored_item(self.tblStockList, row, column, investment.final_profit_percentage(), '%')
             # 累计所有股票成本与利润
             total_spent += investment.totalInvestment
             total_profit += investment.final_profit()
-        self.lblTradeSummary.setText('共计成本{}元，至今获利{}元，收益率{}%'.format(round(total_spent, 2), round(total_profit, 2), TechnicalAnalysis.get_profit_percentage(total_profit, total_spent)))
+        self.lblTradeSummary.setText('共计成本{}元，至今获利{}元，收益率{}%'.format(round(total_spent, 2), round(total_profit, 2), TA.get_profit_percentage(total_profit, total_spent)))
 
 
 

@@ -188,8 +188,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
         # 百分比买卖点模式，获取基础买卖价格
-        buy_price = TechnicalAnalysis.get_price_from_percentage(pre_close, self.spbBuyPoint.value())
-        sell_price = TechnicalAnalysis.get_price_from_percentage(pre_close, self.spbSellPoint.value())
+        buy_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbBuyPoint.value())
+        sell_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbSellPoint.value())
         # 五日均线买卖点模式，计算前四日收盘均价
         last_four_day_total = self.__stockData.iloc[day_index - 5:day_index - 1]['close'].sum()
 
@@ -198,9 +198,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             # 五日均线买点模式计算挂单价,确保今日没交易过
             five_day_mean = (last_four_day_total + minute_data['low']) / 5
             if self.rbnBuyByMa5.isChecked() and buy_price != 0:
-                buy_price = TechnicalAnalysis.get_price_from_percentage(five_day_mean, self.spbMa5BuyThreshold.value())
+                buy_price = TechnicalAnalysis.get_price_from_percent_change(five_day_mean, self.spbMa5BuyThreshold.value())
             if self.rbnSellByMa5.isChecked() and sell_price != 9999:
-                sell_price = TechnicalAnalysis.get_price_from_percentage(five_day_mean, self.spbMa5SellThreshold.value())
+                sell_price = TechnicalAnalysis.get_price_from_percent_change(five_day_mean, self.spbMa5SellThreshold.value())
 
             # 价格达到买点，执行买入操作
             if minute_data['low'] <= buy_price:

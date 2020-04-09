@@ -113,7 +113,7 @@ class StockInvestment:
 
     # 模拟卖出股票，按照金额
     def sell_stock_by_money(self, price: float, money: int, date: str):
-        # 计算卖出股数，至少买入100股
+        # 计算卖出股数，至少卖出100股
         share = max(round(money / (price * 100)), 1) * 100
         self.sell_stock(price, share, date)
         return share

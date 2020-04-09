@@ -1,7 +1,7 @@
 {
-    "startDate": "2010-02-02",
-    "initialInvestment": 20,
-    "interval": 3,
+    "startDate": "2010-01-01",
+    "initialInvestment": 10,
+    "interval": 6,
     "intervalType": "\u6708",
     "eachInvestment": 10,
     "investTime": "\u671f\u59cb",

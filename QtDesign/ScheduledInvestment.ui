@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>708</width>
-    <height>391</height>
+    <width>710</width>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,148 +17,6 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="spacing">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="lblInitialInvestment">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>初始总金额</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbInitialInvestment">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>万元</string>
-        </property>
-        <property name="prefix">
-         <string/>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>20</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblInterval">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>定投间隔</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbInterval">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-         </font>
-        </property>
-        <property name="prefix">
-         <string/>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>50</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbbIntervalType">
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-         </font>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbbInvestTime">
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-         </font>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblEachInvestment">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>每期总金额</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spbEachInvestment">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-         </font>
-        </property>
-        <property name="suffix">
-         <string>万元</string>
-        </property>
-        <property name="prefix">
-         <string/>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <property name="spacing">
        <number>5</number>
       </property>
@@ -189,9 +47,141 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbxSmartInvesting">
+       <widget class="QLabel" name="lblInitialInvestment">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>智能定投：每涨跌1%减少增加投资额</string>
+         <string>初始总金额</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbInitialInvestment">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>万元</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblEachInvestment">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>每期总金额</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbEachInvestment">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>万元</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblInvestInterval">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>定投间隔</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbInvestInterval">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>月</string>
+        </property>
+        <property name="prefix">
+         <string>每</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>3</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="cbxSmartBuy">
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>以</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -199,10 +189,77 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spbSmartInvestFactor">
+       <widget class="QSpinBox" name="spbSmartBuyMaPeriod">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>月</string>
+        </property>
+        <property name="minimum">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <number>60</number>
+        </property>
+        <property name="value">
+         <number>6</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSmartBuyMa">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>均线之上</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbSmartBuyMaBias">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>-20</number>
+        </property>
+        <property name="maximum">
+         <number>20</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSmartBuyExplanation">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>的价格为基准，每上涨或下跌1%，相应减少或增加买入投资额 × </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbSmartBuyFactor">
         <property name="font">
          <font>
           <family>Helvetica</family>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="suffix">
@@ -222,29 +279,191 @@
         </property>
        </widget>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QPushButton" name="btnAutoSplitRatio">
+       <widget class="QCheckBox" name="cbxSmartSell">
         <property name="font">
          <font>
-          <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>平分仓位</string>
+         <string>比上期上涨达到</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnExportPlan">
+       <widget class="QSpinBox" name="spbSmartSellThreshold">
         <property name="font">
          <font>
-          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>10</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSmartSellExplanation">
+        <property name="font">
+         <font>
           <pointsize>9</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>导出策略</string>
+         <string>则不买入并卖出一笔，每额外上涨1%多卖出投资额 ×</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbSmartSellFactor">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>20</number>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxBuyBackAfterSell">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>卖出后若下期下跌则买回</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QCheckBox" name="cbxBuyByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>单月跌幅每达到</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbBuyByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblBuyByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>立刻买入一笔</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbxSellByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>单月涨幅每达到</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbSellByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>15</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSellByPercent">
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>立刻卖出一笔</string>
         </property>
        </widget>
       </item>
@@ -258,6 +477,19 @@
         </property>
         <property name="text">
          <string>导入策略</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnExportPlan">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>导出策略</string>
         </property>
        </widget>
       </item>
@@ -369,17 +601,15 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnStartInvesting">
+       <widget class="QPushButton" name="btnAutoSplitRatio">
         <property name="font">
          <font>
           <family>Helvetica</family>
           <pointsize>9</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
          </font>
         </property>
         <property name="text">
-         <string>开始定投</string>
+         <string>平分仓位</string>
         </property>
        </widget>
       </item>
@@ -387,9 +617,17 @@
     </item>
     <item>
      <widget class="QTableWidget" name="tblStockList">
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>80</number>
+      </attribute>
       <column>
        <property name="text">
         <string>股票代码</string>
@@ -422,7 +660,12 @@
       </column>
       <column>
        <property name="text">
-        <string>盈亏金额</string>
+        <string>最终获利</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>最高亏损</string>
        </property>
       </column>
       <column>
@@ -433,17 +676,42 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="lblTradeSummary">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>共计成本0元，至今获利0元，收益率0%</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QPushButton" name="btnStartInvesting">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>开始定投</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTradeSummary">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>共计成本0元，至今获利0元，收益率0%</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -452,7 +720,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>708</width>
+     <width>710</width>
      <height>22</height>
     </rect>
    </property>
@@ -467,8 +735,8 @@
    <slot>export_investment_plan()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>549</x>
-     <y>75</y>
+     <x>699</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>240</x>
@@ -483,8 +751,8 @@
    <slot>import_investment_plan()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>675</x>
-     <y>77</y>
+     <x>618</x>
+     <y>135</y>
     </hint>
     <hint type="destinationlabel">
      <x>354</x>
@@ -499,8 +767,8 @@
    <slot>export_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>583</x>
-     <y>109</y>
+     <x>602</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>454</x>
@@ -515,8 +783,8 @@
    <slot>import_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>505</x>
-     <y>115</y>
+     <x>514</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>562</x>
@@ -531,8 +799,8 @@
    <slot>add_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>109</y>
+     <x>248</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>197</x>
@@ -547,8 +815,8 @@
    <slot>remove_stock_code()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>286</x>
-     <y>115</y>
+     <x>336</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>287</x>
@@ -563,8 +831,8 @@
    <slot>clear_stock_list()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>405</x>
-     <y>107</y>
+     <x>425</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>410</x>
@@ -579,8 +847,8 @@
    <slot>start_investing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>698</x>
-     <y>126</y>
+     <x>84</x>
+     <y>384</y>
     </hint>
     <hint type="destinationlabel">
      <x>562</x>
@@ -605,18 +873,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxSmartInvesting</sender>
+   <sender>cbxSmartBuy</sender>
    <signal>toggled(bool)</signal>
-   <receiver>spbSmartInvestFactor</receiver>
+   <receiver>spbSmartBuyFactor</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>364</x>
-     <y>80</y>
+     <x>17</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>456</x>
-     <y>80</y>
+     <x>646</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -627,12 +895,124 @@
    <slot>auto_split_ratio()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>523</x>
-     <y>83</y>
+     <x>690</x>
+     <y>166</y>
     </hint>
     <hint type="destinationlabel">
      <x>523</x>
      <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartBuy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSmartBuyMaPeriod</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>22</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>86</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartBuy</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSmartBuyMaBias</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartSell</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSmartSellThreshold</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartSell</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSmartSellFactor</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>519</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSmartSell</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cbxBuyBackAfterSell</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>124</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>604</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxBuyByPercent</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbBuyByPercent</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxSellByPercent</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbSellByPercent</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>365</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>424</x>
+     <y>120</y>
     </hint>
    </hints>
   </connection>

@@ -160,7 +160,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                     add_price = 0
                     # 根据涨跌幅补仓
                     if self.cbxAddByPercent.isChecked():
-                        trigger_price = TA.get_price_from_percentage(base_buy_price, self.spbAddPercent.value())
+                        trigger_price = TA.get_price_from_percent_change(base_buy_price, self.spbAddPercent.value())
                         # 下跌补仓
                         if self.spbAddPercent.value() < 0 and low_price <= trigger_price:
                             # 若开盘价低于补仓点，则以开盘价补仓
@@ -187,7 +187,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                 # 第二个交易日开始可以卖出股票
                 if hold_days > 0:
                     # 当日最高价折算收益
-                    high_percentage = TA.get_percentage_from_price(high_price, base_buy_price)
+                    high_percentage = TA.get_percent_change_from_price(high_price, base_buy_price)
                     # 计算日化单利
                     earning_per_day = high_percentage / hold_days
                     # 发现更优持仓时间
@@ -253,7 +253,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                 index_performance = TA.market_performance_by_days('sz399001', start_date, hold_days)
             else:
                 index_performance = TA.market_performance_by_days('sz399006', start_date, hold_days)
-            stock_total_performance = TA.get_percentage_from_price(data['close'].iloc[hold_days - 1], data['preclose'].iloc[0])
+            stock_total_performance = TA.get_percent_change_from_price(data['close'].iloc[hold_days - 1], data['preclose'].iloc[0])
             market_difference = round(stock_total_performance - index_performance, 2)
             column = Tools.add_colored_item(self.tblStockList, row, column, market_difference, '%')
             # 按照日化单利排序最佳策略

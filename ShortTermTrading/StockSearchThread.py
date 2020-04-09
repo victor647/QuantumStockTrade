@@ -87,8 +87,8 @@ class StandardStockSearcher(StockSearcher):
             # 五日最高
             five_day_high = TA.get_stock_extremes_in_day_range(data_after, pre_close, 2, 5, 'high')
             # 最高收益
-            max_profit = TA.get_percentage_from_price(TA.get_price_from_percentage(pre_close, five_day_high),
-                                                      TA.get_price_from_percentage(pre_close, next_day_low))
+            max_profit = TA.get_percent_change_from_price(TA.get_price_from_percent_change(pre_close, five_day_high),
+                                                          TA.get_price_from_percent_change(pre_close, next_day_low))
             # 获得股票行业信息
             industry = row['industry']
             # 获得股票上市地区
@@ -125,7 +125,7 @@ class FiveDaySearcher(StockSearcher):
         # 获得图形出现时价格和x日后价格
         shape_end_price = self._stockData.iloc[shape_end_day_index]['close']
         period_end_price = self._stockData.iloc[period_end_day_index]['close']
-        return TA.get_percentage_from_price(period_end_price, shape_end_price)
+        return TA.get_percent_change_from_price(period_end_price, shape_end_price)
 
 
 # 单只股票多日分析
