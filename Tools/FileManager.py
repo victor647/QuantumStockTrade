@@ -65,12 +65,10 @@ def monitor_config_path():
 
 # 导出找到的股票列表到txt文件
 def export_stock_list(stock_table: QTableWidget, date=''):
-    file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path(), filter='TXT(*.txt)')
+    file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path() + '/' + date, filter='TXT(*.txt)')
     if file_path[0] == '':
         return
-    file = open(file_path[0], 'w')
-    if date != '':
-        file.write(date + '\n')
+    file = open(file_path[0], 'w')            
     for i in range(stock_table.rowCount()):
         text = stock_table.item(i, 0).text()
         file.write(text + '\n')
