@@ -28,7 +28,7 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 
 
 # 画选股日期附近的K线
-def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after=20, days_before=80, trade_history=None):
+def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after=20, days_before=100, trade_history=None):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 计算均线数据
     TA.calculate_all_ma_curves(stock_data)

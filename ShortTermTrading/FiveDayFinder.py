@@ -5,6 +5,7 @@ from ShortTermTrading.FiveDayMatches import FiveDayMatches
 from ShortTermTrading.StockSearchThread import FiveDaySearcherSingle, FiveDaySearcherMultiple
 import ShortTermTrading.StockFinder as StockFinder
 import ShortTermTrading.SearchCriteria as SearchCriteria
+import Data.TechnicalAnalysis as TA
 import pandas
 
 
@@ -14,17 +15,20 @@ Instance = None
 # 根据五日图形选股
 class FiveDayFinder(QDialog, Ui_FiveDayShapeFinder):
 
-    criteriaItems = []
     __currentEditingItem = None
     __matches = None
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.cbbQueryField.addItems(['开盘涨跌幅', '收盘涨跌幅', '日内涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率'])
+        self.cbbOpenPosition.addItems(['低开', '高开', '平开'])
+        self.cbbNeedleShape.addItems(['实体', '光头', '赤脚', '上影长', '下影长', '影等长'])
+        self.cbbBodyHeight.addItems(['大', '中', '小', '十字'])
+        self.cbbCandleColor.addItems(['阳线', '阴线', '白线'])
         # 初始化单例
         global Instance
         Instance = self
+        self.criteriaItems = []
 
     # 删除一个条件
     def remove_criteria(self):
@@ -53,12 +57,10 @@ class FiveDayFinder(QDialog, Ui_FiveDayShapeFinder):
     def edit_criteria(self):
         self.select_criteria()
         self.spbDayIndex.setValue(self.__currentEditingItem.dayIndex)
-        self.cbbQueryField.setCurrentText(self.__currentEditingItem.field)
-        if self.__currentEditingItem.operator == '大于':
-            self.rbnGreaterThan.setChecked(True)
-        else:
-            self.rbnLessThan.setChecked(True)
-        self.spbCriteriaValue.setValue(self.__currentEditingItem.value)
+        self.cbbOpenPosition.setCurrentText(self.__currentEditingItem.openPosition)
+        self.cbbNeedleShape.setCurrentText(self.__currentEditingItem.needleShape)
+        self.cbbBodyHeight.setCurrentText(self.__currentEditingItem.bodyHeight)
+        self.cbbCandleColor.setCurrentText(self.__currentEditingItem.candleColor)
 
     # 保存编辑好的条件
     def save_criteria(self):
@@ -78,9 +80,10 @@ class FiveDayFinder(QDialog, Ui_FiveDayShapeFinder):
     # 更新所选条件内容
     def update_criteria_item(self, item: SearchCriteria.FiveDayCriteriaItem):
         item.dayIndex = self.spbDayIndex.value()
-        item.field = self.cbbQueryField.currentText()
-        item.operator = '大于' if self.rbnGreaterThan.isChecked() else '小于'
-        item.value = self.spbCriteriaValue.value()
+        item.openPosition = self.cbbOpenPosition.currentText()
+        item.needleShape = self.cbbNeedleShape.currentText()
+        item.bodyHeight = self.cbbBodyHeight.currentText()
+        item.candleColor = self.cbbCandleColor.currentText()
 
     # 导出条件组
     def export_config(self):
@@ -104,6 +107,9 @@ class FiveDayFinder(QDialog, Ui_FiveDayShapeFinder):
 
     # 开始寻找图形
     def start_searching(self):
+        if len(self.criteriaItems) == 0:
+            Tools.show_error_dialog('选股条件为空！')
+            return
         # 弹出匹配结果界面
         self.__matches = FiveDayMatches()
         self.__matches.show()
@@ -131,10 +137,9 @@ class FiveDayFinder(QDialog, Ui_FiveDayShapeFinder):
     def match_criteria(self, day_index: int, stock_data: pandas.DataFrame):
         for criteria in self.criteriaItems:
             day_data = stock_data.iloc[day_index + criteria.dayIndex - 1]
-            label = SearchCriteria.get_column_label(criteria.field)
-            if criteria.operator == '大于' and day_data[label] < criteria.value:
-                return False
-            if criteria.operator == '小于' and day_data[label] > criteria.value:
+            # 获取当日K线图形描述
+            description = TA.candlestick_shape(day_data)
+            if not criteria.match_criteria(description):
                 return False
         return True
 

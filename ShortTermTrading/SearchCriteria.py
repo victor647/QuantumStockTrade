@@ -7,9 +7,10 @@ import pandas
 # 五日选股指标内容
 class FiveDayCriteriaItem:
     dayIndex = 1
-    field = '收盘价'
-    operator = '大于'
-    value = -2
+    bodyHeight = '大'
+    needleShape = '实体'
+    openPosition = '低开'
+    candleColor = '阳线'
 
     # 自定义排序算法
     def __lt__(self, other):
@@ -17,17 +18,22 @@ class FiveDayCriteriaItem:
 
     # 转换为界面上显示的文字
     def to_display_text(self):
-        return '第{}天{}{}{}%'.format(self.dayIndex, self.field, self.operator, self.value)
+        return '第{}天为{}{}{}{}'.format(self.dayIndex, self.openPosition, self.needleShape, self.bodyHeight, self.candleColor)
 
     # 通过json导入搜索条件
     @staticmethod
     def import_criteria_item(json_data: dict):
         item = FiveDayCriteriaItem()
         item.dayIndex = json_data['dayIndex']
-        item.field = json_data['field']
-        item.operator = json_data['operator']
-        item.value = json_data['value']
+        item.bodyHeight = json_data['bodyHeight']
+        item.needleShape = json_data['needleShape']
+        item.openPosition = json_data['openPosition']
+        item.candleColor = json_data['candleColor']
         return item
+
+    # 是否符合图形描述
+    def match_criteria(self, data_description: str):
+        return self.openPosition + self.needleShape + self.bodyHeight + self.candleColor == data_description
 
 
 # 自定义技术指标内容
