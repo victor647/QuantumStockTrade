@@ -71,6 +71,9 @@ def calculate_all_ma_curves(stock_data: pandas.DataFrame):
 
 # 计算MA均线
 def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
+    # 数据数量不够，跳过
+    if stock_data.shape[0] <= period:
+        return
     key = 'ma_' + str(period)
     if key in stock_data:
         return

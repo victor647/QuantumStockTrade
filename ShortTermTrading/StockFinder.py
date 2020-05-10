@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
 from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from ShortTermTrading.SearchResult import SearchResult
@@ -11,7 +11,6 @@ import ShortTermTrading.SearchCriteria as SearchCriteria
 import tushare, pandas
 from Tools import Tools, FileManager
 import Data.TechnicalAnalysis as TA
-from Data.QueryStockData import query_all_stock_data
 
 
 Instance = None
@@ -104,16 +103,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             for code in search_result:
                 file.write(code + '\n')
             file.close()
-
-    # 获取并导出全部股票K线
-    @staticmethod
-    def export_all_stock_data():
-        query_all_stock_data()
-
-    # 获取两市全部股票列表
-    def export_all_stock_list(self):
-        FileManager.save_stock_list_file()
-        QMessageBox.information(self, '成功', '导出全部股票列表成功！')
 
     # 保存基本面指标搜索条件
     def export_basic_config(self):

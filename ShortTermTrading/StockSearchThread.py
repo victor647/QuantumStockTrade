@@ -50,7 +50,7 @@ class StandardStockSearcher(StockSearcher):
             if not StockFinder.Instance.code_in_search_range(code_num):
                 continue
             # 基本面指标考察
-            if StockFinder.Instance.cbxBasicCriteriasEnabled.isChecked() and not StockFinder.Instance.match_basic_criterias(row, self.searchDate):
+            if not StockFinder.Instance.match_basic_criterias(row, self.searchDate):
                 continue
             # 获得股票历史数据
             stock_data = FileManager.read_stock_history_data(stock_code, True)
@@ -61,7 +61,7 @@ class StandardStockSearcher(StockSearcher):
                 continue
             data_after = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 技术面指标考察
-            if StockFinder.Instance.cbxTechnicalCriteriasEnabled.isChecked() and not StockFinder.Instance.match_technical_criterias(data_before):
+            if not StockFinder.Instance.match_technical_criterias(data_before):
                 continue
             # 自定义指标考察
             if not StockFinder.Instance.match_custom_criterias(data_before):

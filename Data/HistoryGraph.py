@@ -276,6 +276,9 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
     # 画单条均线
     def plot_ma(self, period: int, color):
+        # 数据数量不够，跳过
+        if self.__stockData.shape[0] <= period:
+            return
         label = 'ma_' + str(period)
         ma_line = QLineSeries()
         ma_line.setColor(color)

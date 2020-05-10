@@ -19,7 +19,7 @@
     "incomeIncrease": 10,
     "profitIncreaseOn": false,
     "profitIncrease": 10,
-    "netAssetProfitOn": true,
+    "netAssetProfitOn": false,
     "netAssetProfit": 5,
     "totalHoldersOn": false,
     "totalHoldersMin": 1.0,

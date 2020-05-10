@@ -159,7 +159,15 @@
     <addaction name="actReconnect"/>
     <addaction name="actTradeSettings"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>数据</string>
+    </property>
+    <addaction name="actGetStockList"/>
+    <addaction name="actGetStockData"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <action name="actReconnect">
    <property name="text">
@@ -169,6 +177,16 @@
   <action name="actTradeSettings">
    <property name="text">
     <string>交易设置</string>
+   </property>
+  </action>
+  <action name="actGetStockList">
+   <property name="text">
+    <string>获取全部股票列表</string>
+   </property>
+  </action>
+  <action name="actGetStockData">
+   <property name="text">
+    <string>获取股票历史K线</string>
    </property>
   </action>
  </widget>
@@ -302,6 +320,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actGetStockList</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>get_all_stocks_list()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>101</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actGetStockData</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>get_stocks_history_data()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>101</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_stock_analyzer()</slot>
@@ -312,5 +362,7 @@
   <slot>show_trade_settings()</slot>
   <slot>show_scheduled_investment()</slot>
   <slot>show_trade_simulator()</slot>
+  <slot>get_all_stocks_list()</slot>
+  <slot>get_stocks_history_data()</slot>
  </slots>
 </ui>

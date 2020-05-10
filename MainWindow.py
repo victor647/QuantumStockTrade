@@ -2,12 +2,13 @@ import sys
 import traceback
 import baostock
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
 from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
 from ShortTermTrading import StockFinder, SelectedPerformance
 from RealTimeMonitor import LiveTracker
-from Tools import TradeSettings
+from Data.QueryStockData import query_all_stock_data
+from Tools import TradeSettings, FileManager
 
 
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
@@ -70,6 +71,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         settings = TradeSettings.TradeSettings()
         settings.show()
         settings.exec_()
+
+    # 获取两市全部股票列表
+    def get_all_stocks_list(self):
+        FileManager.save_stock_list_file()
+        QMessageBox.information(self, '成功', '获取全部股票K线成功！')
+
+    # 获取最新股票K线图
+    @staticmethod
+    def get_stocks_history_data():
+        query_all_stock_data()
+
 
 
 sys.excepthook = traceback.print_exception

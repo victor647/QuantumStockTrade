@@ -68,7 +68,7 @@ def export_stock_list(stock_table: QTableWidget, date=''):
     file_path = QFileDialog.getSaveFileName(directory=selected_stock_list_path() + '/' + date, filter='TXT(*.txt)')
     if file_path[0] == '':
         return
-    file = open(file_path[0], 'w')            
+    file = open(file_path[0], 'w')
     for i in range(stock_table.rowCount()):
         text = stock_table.item(i, 0).text()
         file.write(text + '\n')
