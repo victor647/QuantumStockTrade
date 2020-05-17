@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1171</width>
+    <width>1295</width>
     <height>429</height>
    </rect>
   </property>
@@ -203,7 +203,7 @@
          </font>
         </property>
         <property name="text">
-         <string>每支股票选股次日开盘买入</string>
+         <string>每只股票底仓</string>
         </property>
        </widget>
       </item>
@@ -343,7 +343,31 @@
          </font>
         </property>
         <property name="text">
-         <string>补仓</string>
+         <string>补仓    补仓价格不超过买入价格</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbAddPriceLimit">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="maximum">
+         <number>20</number>
+        </property>
+        <property name="value">
+         <number>3</number>
         </property>
        </widget>
       </item>
@@ -524,7 +548,7 @@
       </column>
       <column>
        <property name="text">
-        <string>持股</string>
+        <string>持股天数</string>
        </property>
       </column>
       <column>
@@ -534,7 +558,7 @@
       </column>
       <column>
        <property name="text">
-        <string>收益率</string>
+        <string>本金收益率</string>
        </property>
       </column>
       <column>
@@ -544,12 +568,22 @@
       </column>
       <column>
        <property name="text">
-        <string>期间最大回撤</string>
+        <string>期间最大跌幅</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>跑赢大盘</string>
+        <string>收盘涨跌幅</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>同期指数表现</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>跑赢指数</string>
        </property>
       </column>
       <column>
@@ -584,7 +618,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1171</width>
+     <width>1295</width>
      <height>22</height>
     </rect>
    </property>

@@ -176,7 +176,9 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
                         ma_price = data['ma_' + str(ma_add_period)].iloc[hold_days]
                         # 根据日内涨跌幅调整买入时的均线值
                         ma_price += (ma_price - close_price) / ma_add_period
-                        if low_price <= ma_price:
+                        ma_price_from_base = TA.get_percent_change_from_price(ma_price, base_buy_price)
+                        # 回踩补仓价格需低于补仓价格上限
+                        if low_price <= ma_price and ma_price_from_base < self.spbAddPriceLimit.value():
                             add_price = min(ma_price, open_price)
                             actual_behaviour = 'D' + str(hold_days + 1) + '回踩补仓，'
                     # 发生过补仓行为，进行买入
@@ -245,7 +247,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             column = Tools.add_price_item(self.tblStockList, row, column, round(data['high'].iloc[1:hold_days].max(), 2), base_buy_price)
             # 期间最大回撤
             column = Tools.add_price_item(self.tblStockList, row, column, round(data['low'].iloc[1:hold_days].min(), 2), base_buy_price)
-            # 期间跑赢大盘
+            # 获取指数表现
             market, index_code = Tools.get_trade_center_and_index(stock_code)
             if index_code == '000001':
                 index_performance = TA.market_performance_by_days('sh000001', start_date, hold_days)
@@ -254,6 +256,11 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
             else:
                 index_performance = TA.market_performance_by_days('sz399006', start_date, hold_days)
             stock_total_performance = TA.get_percent_change_from_price(data['close'].iloc[hold_days - 1], data['preclose'].iloc[0])
+            # 收盘涨跌幅
+            column = Tools.add_colored_item(self.tblStockList, row, column, stock_total_performance, '%')
+            # 同期指数表现
+            column = Tools.add_colored_item(self.tblStockList, row, column, index_performance, '%')
+            # 期间跑赢指数
             market_difference = round(stock_total_performance - index_performance, 2)
             column = Tools.add_colored_item(self.tblStockList, row, column, market_difference, '%')
             # 按照日化单利排序最佳策略
