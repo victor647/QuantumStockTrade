@@ -128,3 +128,6 @@ StockData/StockHistory
 .idea/
 .idea/workspace.xml
 StockData/full_stock_info.csv
+
+# Build
+QuantumStockTrade.exe
