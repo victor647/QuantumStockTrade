@@ -32,7 +32,7 @@
     <property name="title">
      <string>搜索范围</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -200,7 +200,7 @@
     <property name="title">
      <string>自定义指标</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -301,7 +301,7 @@
        <x>10</x>
        <y>23</y>
        <width>511</width>
-       <height>162</height>
+       <height>167</height>
       </rect>
      </property>
      <property name="font">
@@ -325,12 +325,15 @@
            <string>市盈率</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbPriceEarningMin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -359,6 +362,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spbPriceEarningMax">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -394,12 +400,15 @@
            <string>市净率</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QDoubleSpinBox" name="spbPriceBookMin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -430,6 +439,9 @@
         </item>
         <item>
          <widget class="QDoubleSpinBox" name="spbPriceBookMax">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -471,12 +483,15 @@
            <string>ROE</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbNetAssetProfit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -512,12 +527,15 @@
            <string>毛利率</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbGrossProfit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -553,12 +571,15 @@
            <string>净利率</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbNetProfit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -598,12 +619,15 @@
            <string>收入增长</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbIncomeIncrease">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -639,12 +663,15 @@
            <string>利润增长</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbProfitIncrease">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -915,12 +942,15 @@
            <string>总市值</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QSpinBox" name="spbTotalAssetsMin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -946,6 +976,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spbTotalAssetsMax">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="font">
            <font>
             <family>Helvetica</family>
@@ -1028,7 +1061,7 @@
        <x>11</x>
        <y>20</y>
        <width>511</width>
-       <height>82</height>
+       <height>83</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1088,12 +1121,16 @@
            <string>MACD</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="cbbMacdBehaviour"/>
+         <widget class="QComboBox" name="cbbMacdBehaviour">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="cbxBollEnabled">
@@ -1218,7 +1255,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -1236,7 +1273,7 @@
      <x>0</x>
      <y>0</y>
      <width>553</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="mnuOtherCriterias">
@@ -1281,7 +1318,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>528</x>
-     <y>575</y>
+     <y>106</y>
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
@@ -1296,12 +1333,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>76</x>
-     <y>245</y>
+     <x>78</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
      <x>186</x>
-     <y>245</y>
+     <y>177</y>
     </hint>
    </hints>
   </connection>
@@ -1312,12 +1349,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>77</x>
-     <y>245</y>
+     <x>79</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
      <x>272</x>
-     <y>245</y>
+     <y>177</y>
     </hint>
    </hints>
   </connection>
@@ -1328,12 +1365,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>66</x>
-     <y>353</y>
+     <x>68</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
-     <x>186</x>
-     <y>353</y>
+     <x>184</x>
+     <y>289</y>
     </hint>
    </hints>
   </connection>
@@ -1344,12 +1381,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>353</y>
+     <x>76</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
      <x>272</x>
-     <y>353</y>
+     <y>289</y>
     </hint>
    </hints>
   </connection>
@@ -1360,12 +1397,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>352</x>
-     <y>353</y>
+     <x>356</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
-     <x>443</x>
-     <y>353</y>
+     <x>440</x>
+     <y>289</y>
     </hint>
    </hints>
   </connection>
@@ -1376,12 +1413,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
-     <y>353</y>
+     <x>356</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
-     <y>353</y>
+     <y>289</y>
     </hint>
    </hints>
   </connection>
@@ -1392,8 +1429,8 @@
    <slot>add_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>89</x>
-     <y>163</y>
+     <x>91</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>65</x>
@@ -1408,8 +1445,8 @@
    <slot>modify_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>163</y>
+     <x>272</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>182</x>
@@ -1424,8 +1461,8 @@
    <slot>remove_criteria_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>163</x>
-     <y>163</y>
+     <x>187</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -1440,8 +1477,8 @@
    <slot>reset_criteria_items()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>311</x>
-     <y>163</y>
+     <x>357</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>367</x>
@@ -1456,8 +1493,8 @@
    <slot>export_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>417</x>
-     <y>180</y>
+     <x>443</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
@@ -1472,8 +1509,8 @@
    <slot>import_custom_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>497</x>
-     <y>180</y>
+     <x>528</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -1488,12 +1525,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>272</y>
+     <x>272</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>357</x>
-     <y>272</y>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -1505,11 +1542,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>443</x>
-     <y>272</y>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
-     <y>272</y>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -1520,12 +1557,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>66</x>
-     <y>299</y>
+     <x>68</x>
+     <y>232</y>
     </hint>
     <hint type="destinationlabel">
      <x>220</x>
-     <y>299</y>
+     <y>233</y>
     </hint>
    </hints>
   </connection>
@@ -1537,11 +1574,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>323</x>
-     <y>299</y>
+     <y>232</y>
     </hint>
     <hint type="destinationlabel">
      <x>425</x>
-     <y>299</y>
+     <y>233</y>
     </hint>
    </hints>
   </connection>
@@ -1552,12 +1589,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>272</y>
+     <x>101</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>186</x>
-     <y>272</y>
+     <y>205</y>
     </hint>
    </hints>
   </connection>
@@ -1568,12 +1605,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>326</y>
+     <x>93</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>186</x>
-     <y>326</y>
+     <x>187</x>
+     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -1584,12 +1621,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>77</x>
-     <y>326</y>
+     <x>79</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>280</x>
-     <y>326</y>
+     <x>284</x>
+     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -1600,8 +1637,8 @@
    <slot>edit_selected_item()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>208</x>
-     <y>86</y>
+     <x>209</x>
+     <y>474</y>
     </hint>
     <hint type="destinationlabel">
      <x>299</x>
@@ -1616,8 +1653,8 @@
    <slot>export_basic_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>24</x>
-     <y>383</y>
+     <x>26</x>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>529</x>
@@ -1633,7 +1670,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>528</x>
-     <y>383</y>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>471</x>
@@ -1664,12 +1701,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>477</y>
+     <x>76</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>135</x>
-     <y>478</y>
+     <x>221</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
@@ -1680,12 +1717,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>477</y>
+     <x>324</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>251</x>
-     <y>478</y>
+     <x>426</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
@@ -1696,12 +1733,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>477</y>
+     <x>324</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
-     <x>310</x>
-     <y>478</y>
+     <x>529</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
@@ -1712,8 +1749,8 @@
    <slot>export_technical_config()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>341</x>
-     <y>447</y>
+     <x>431</x>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
      <x>430</x>
@@ -1729,7 +1766,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>529</x>
-     <y>447</y>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
      <x>550</x>
@@ -1760,12 +1797,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>346</x>
-     <y>477</y>
+     <x>72</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
-     <x>413</x>
-     <y>477</y>
+     <x>170</x>
+     <y>431</y>
     </hint>
    </hints>
   </connection>
@@ -1776,12 +1813,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>332</x>
-     <y>477</y>
+     <x>72</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
-     <x>472</x>
-     <y>478</y>
+     <x>236</x>
+     <y>431</y>
     </hint>
    </hints>
   </connection>
@@ -1792,12 +1829,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>347</x>
-     <y>477</y>
+     <x>72</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
-     <x>529</x>
-     <y>477</y>
+     <x>334</x>
+     <y>431</y>
     </hint>
    </hints>
   </connection>
@@ -1808,12 +1845,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>338</x>
-     <y>326</y>
+     <x>365</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>445</x>
-     <y>326</y>
+     <x>447</x>
+     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -1824,12 +1861,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>347</x>
-     <y>326</y>
+     <x>365</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
-     <y>326</y>
+     <y>261</y>
     </hint>
    </hints>
   </connection>

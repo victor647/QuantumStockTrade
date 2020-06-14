@@ -190,9 +190,9 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 30,
         "comparedPeriodEnd": 1,
-        "operator": "\u5927\u4e8e",
         "comparedObject": "\u6bd4\u503c",
-        "value": 0.95
+        "operator": "\u5927\u4e8e",
+        "value": 0.97
     },
     {
         "queryLogic": "\u5e73\u5747",
@@ -203,8 +203,8 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 20,
         "comparedPeriodEnd": 1,
-        "operator": "\u5c0f\u4e8e",
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5c0f\u4e8e",
         "value": 1.05
     },
     {
@@ -216,8 +216,8 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 30,
         "comparedPeriodEnd": 1,
-        "operator": "\u5c0f\u4e8e",
         "comparedObject": "\u6bd4\u503c",
-        "value": 1.05
+        "operator": "\u5c0f\u4e8e",
+        "value": 1.03
     }
 ]
