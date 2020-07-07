@@ -99,7 +99,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         self.lblAverageLowWhenUp.setText('阳线平均最低：' + str(TA.average_low_when_up(self.__stockDatabase)) + '%')
         self.lblAverageFallbackAmp.setText('阳线平均回撤：' + str(TA.average_fallback(self.__stockDatabase)) + '%')
         self.lblAverageCloseDown.setText('阴线平均跌幅：' + str(TA.average_close_when_down(self.__stockDatabase)) + '%')
-        self.lblAverageHighWhenDown.setText('阴线平均最高：' + str(TA.average_low_when_down(self.__stockDatabase)) + '%')
+        self.lblAverageHighWhenDown.setText('阴线平均最高：' + str(TA.average_high_when_down(self.__stockDatabase)) + '%')
         self.lblAverageLowWhenDown.setText('阴线平均最低：' + str(TA.average_low_when_down(self.__stockDatabase)) + '%')
         self.lblAverageBounceAmp.setText('阴线平均反弹：' + str(TA.average_bounce(self.__stockDatabase)) + '%')
 
