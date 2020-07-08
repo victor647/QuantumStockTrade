@@ -6,44 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>729</width>
-    <height>312</height>
+    <width>722</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>个股股性分析</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="grpStockPerformance">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>171</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>区间个股表现</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>12</x>
-       <y>20</y>
-       <width>151</width>
-       <height>214</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="lblStockIntervalOpen">
+       <widget class="QLabel" name="lblStockNumber">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -51,12 +32,18 @@
          </font>
         </property>
         <property name="text">
-         <string>区间开盘价格： </string>
+         <string>股票代码/名称</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalClose">
+       <widget class="QLineEdit" name="iptStockNumber">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -64,12 +51,21 @@
          </font>
         </property>
         <property name="text">
-         <string>区间收盘价格： </string>
+         <string>贵州茅台</string>
+        </property>
+        <property name="maxLength">
+         <number>6</number>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalHigh">
+       <widget class="QLabel" name="lblStartDate">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -77,12 +73,31 @@
          </font>
         </property>
         <property name="text">
-         <string>区间最高价格： </string>
+         <string>开始日期</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalLow">
+       <widget class="QDateEdit" name="dteStartDate">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblEndDate">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -90,12 +105,25 @@
          </font>
         </property>
         <property name="text">
-         <string>区间最低价格： </string>
+         <string>结束日期</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalAverage">
+       <widget class="QDateEdit" name="dteEndDate">
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnGetData">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -103,12 +131,12 @@
          </font>
         </property>
         <property name="text">
-         <string>区间平均价格： </string>
+         <string>获取数据</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalTotal">
+       <widget class="QPushButton" name="btnPlotOpenCloseDistribution">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -116,12 +144,12 @@
          </font>
         </property>
         <property name="text">
-         <string>区间累计涨幅： </string>
+         <string>开盘收盘分布</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblStockIntervalAveragePoint">
+       <widget class="QPushButton" name="btnPlotHighLowDistribution">
         <property name="font">
          <font>
           <family>Helvetica</family>
@@ -129,754 +157,808 @@
          </font>
         </property>
         <property name="text">
-         <string>平均每日涨幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblStockUpProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>每日上涨概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblWinMarket">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>跑赢大盘日数：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnStockGraph">
-        <property name="text">
-         <string>个股K线图</string>
+         <string>最高最低分布</string>
         </property>
        </widget>
       </item>
      </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="grpMarketPerformance">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>40</y>
-      <width>171</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>同期大盘表现</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>151</width>
-       <height>211</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Helvetica</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLabel" name="lblMarketIntervalOpen">
+       <widget class="QGroupBox" name="grpStockPerformance">
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
-        <property name="text">
-         <string>区间开盘点位： </string>
+        <property name="title">
+         <string>区间个股表现</string>
         </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>20</y>
+           <width>151</width>
+           <height>214</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="lblStockIntervalOpen">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间开盘价格： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间收盘价格： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalHigh">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间最高价格： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalLow">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间最低价格： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalAverage">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间平均价格： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalTotal">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间累计涨幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockIntervalAveragePoint">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>平均每日涨幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStockUpProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>每日上涨概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblWinMarket">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>跑赢大盘日数：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnStockGraph">
+            <property name="text">
+             <string>个股K线图</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblMarketIntervalClose">
+       <widget class="QGroupBox" name="grpMarketPerformance">
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
-        <property name="text">
-         <string>区间收盘点位： </string>
+        <property name="title">
+         <string>同期大盘表现</string>
         </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>151</width>
+           <height>211</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalOpen">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间开盘点位： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间收盘点位： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalHigh">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间最高点位： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalLow">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间最低点位： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalAverage">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间平均点位： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalTotal">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>区间累计涨幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketIntervalAveragePoint">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>平均每日涨幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblMarketUpProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>每日上涨概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnMarketGraph">
+            <property name="text">
+             <string>大盘K线图</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblMarketIntervalHigh">
+       <widget class="QGroupBox" name="groupBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>240</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <family>Helvetica</family>
           <pointsize>9</pointsize>
          </font>
         </property>
-        <property name="text">
-         <string>区间最高点位： </string>
+        <property name="title">
+         <string>股性评估</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMarketIntervalLow">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>区间最低点位： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMarketIntervalAverage">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>区间平均点位： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMarketIntervalTotal">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>区间累计涨幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMarketIntervalAveragePoint">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>平均每日涨幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMarketUpProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>每日上涨概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnMarketGraph">
-        <property name="text">
-         <string>大盘K线图</string>
-        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>18</y>
+           <width>161</width>
+           <height>211</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="lblAverageTurn">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>平均换手率：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageAmplitude">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>每日平均振幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageCloseUp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阳线平均涨幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageHighWhenUp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阳线平均最高： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageLowWhenUp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阳线平均最低： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageFallbackAmp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阳线平均回撤：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageCloseDown">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阴线平均跌幅： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageHighWhenDown">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阴线平均最高： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageLowWhenDown">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阴线平均最低： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAverageBounceAmp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>阴线平均反弹：</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>20</y>
+           <width>161</width>
+           <height>211</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QLabel" name="lblInverseMarketUp">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>逆市上涨日数：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblInverseMarketDown">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>逆市下跌日数：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblHighOpenHighClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>高开高走概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblHighOpenLowClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>高开低走概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblLowOpenLowClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>低开低走概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblLowOpenHighClose">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>低开高走概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblReachMaxProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>涨停触板概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStayMaxProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>涨停收盘概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblReachMinProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>跌停触板概率： </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblStayMinProbability">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>跌停收盘概率： </string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>38</y>
-      <width>351</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>股性评估</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>18</y>
-       <width>161</width>
-       <height>211</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Helvetica</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_6">
-      <item>
-       <widget class="QLabel" name="lblAverageTurn">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>平均换手率：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageAmplitude">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>每日平均振幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageCloseUp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阳线平均涨幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageHighWhenUp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阳线平均最高： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageLowWhenUp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阳线平均最低： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageFallbackAmp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阳线平均回撤：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageCloseDown">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阴线平均跌幅： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageHighWhenDown">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阴线平均最高： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageLowWhenDown">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阴线平均最低： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblAverageBounceAmp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>阴线平均反弹：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>20</y>
-       <width>161</width>
-       <height>211</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_9">
-      <item>
-       <widget class="QLabel" name="lblInverseMarketUp">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>逆市上涨日数：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblInverseMarketDown">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>逆市下跌日数：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblHighOpenHighClose">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>高开高走概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblHighOpenLowClose">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>高开低走概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblLowOpenLowClose">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>低开低走概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblLowOpenHighClose">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>低开高走概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblReachMaxProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>涨停触板概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblStayMaxProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>涨停收盘概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblReachMinProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>跌停触板概率： </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblStayMinProbability">
-        <property name="font">
-         <font>
-          <family>Helvetica</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>跌停收盘概率： </string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>711</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="lblStockNumber">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblUpTrendInfo">
+      <property name="font">
+       <font>
+        <family>Helvetica</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>上涨波段： 占比%</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblUpTrendHistory">
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>85</number>
+      </attribute>
+      <column>
        <property name="text">
-        <string>股票代码/名称</string>
+        <string>起止日期</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="iptStockNumber">
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>贵州茅台</string>
+        <string>涨跌天数</string>
        </property>
-       <property name="maxLength">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblStartDate">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>开始日期</string>
+        <string>开始价格</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDateEdit" name="dteStartDate">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="displayFormat">
-        <string>yyyy-MM-dd</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblEndDate">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>结束日期</string>
+        <string>结束价格</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDateEdit" name="dteEndDate">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="displayFormat">
-        <string>yyyy-MM-dd</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnGetData">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>获取数据</string>
+        <string>波段涨幅</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnPlotOpenCloseDistribution">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>开盘收盘分布</string>
+        <string>回踩MA5次数</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnPlotHighLowDistribution">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
+      </column>
+      <column>
        <property name="text">
-        <string>最高最低分布</string>
+        <string>最大偏离MA5</string>
        </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblDownTrendInfo">
+      <property name="font">
+       <font>
+        <family>Helvetica</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>下跌波段： 占比%</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblDownTrendHistory">
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>85</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>起止日期</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>涨跌天数</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>开始价格</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>结束价格</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>波段跌幅</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>上探MA5次数</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>最大偏离MA5</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblFlatTrendInfo">
+      <property name="font">
+       <font>
+        <family>Helvetica</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>横盘波段： 占比%</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tblFlatTrendHistory">
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>85</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>起止日期</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>涨跌天数</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>开始价格</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>结束价格</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>波段涨跌幅</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>穿过MA20次数</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>最大偏离MA20</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>729</width>
-     <height>22</height>
+     <width>722</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>btnGetData</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>get_history_data()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>547</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>361</x>
-     <y>64</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnPlotHighLowDistribution</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>plot_high_low_distribution()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>719</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>545</x>
-     <y>486</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnPlotOpenCloseDistribution</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>plot_open_close_distribution()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>633</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>544</x>
-     <y>459</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnStockGraph</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>show_stock_graph()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>278</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>111</x>
-     <y>304</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btnMarketGraph</sender>
-   <signal>clicked()</signal>
-   <receiver>StockAnalyzer</receiver>
-   <slot>show_market_graph()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>287</x>
-     <y>282</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>295</x>
-     <y>307</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>get_history_data()</slot>
   <slot>start_trade()</slot>
