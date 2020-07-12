@@ -304,7 +304,26 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.plot_ma(10, Qt.yellow)
         self.plot_ma(5, Qt.white)
 
-        # 画出买卖记录
+    # 画趋势节点
+    def plot_high_low_points(self, points: list):
+        high_points = QScatterSeries()
+        low_points = QScatterSeries()
+        decorate_scatter_series(high_points, 'H', QColor(255, 127, 0), 15)
+        decorate_scatter_series(low_points, 'L', QColor(0, 255, 127), 15)
+
+        for point in points:
+            date = self.get_date_number(point.date)
+            if date == -1:
+                continue
+            if point.type == '高点':
+                high_points.append(date, point.price)
+            else:
+                low_points.append(date, point.price)
+
+        self.attach_scatter_series(high_points)
+        self.attach_scatter_series(low_points)
+
+    # 画出买卖记录
     def plot_trade_history(self, trade_history: StockInvestment, show_share_change=True):
         buy_history = QScatterSeries()
         sell_history = QScatterSeries()
@@ -353,12 +372,8 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
             share_series.attachAxis(share_axis)
             share_series.attachAxis(self.__axis_x)
 
-        self.__chart.addSeries(buy_history)
-        self.__chart.addSeries(sell_history)
-        buy_history.attachAxis(self.__axis_price)
-        buy_history.attachAxis(self.__axis_x)
-        sell_history.attachAxis(self.__axis_price)
-        sell_history.attachAxis(self.__axis_x)
+        self.attach_scatter_series(buy_history)
+        self.attach_scatter_series(sell_history)
 
     # 绘制选股日期标记
     def plot_search_date(self, date: str):
@@ -370,9 +385,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         search_mark.append(date_number, self.__stockData['close'][date])
         # 设置格式
         decorate_scatter_series(search_mark, 'F', QColor(255, 255, 0), 20)
-        self.__chart.addSeries(search_mark)
-        search_mark.attachAxis(self.__axis_price)
-        search_mark.attachAxis(self.__axis_x)
+        self.attach_scatter_series(search_mark)
 
     # 通过日期获取第几个交易日
     def get_date_number(self, date: str):
@@ -380,6 +393,12 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
             if date == self.__dates[i]:
                 return i
         return -1
+
+    # 将散点图映射到价格轴上
+    def attach_scatter_series(self, series: QScatterSeries):
+        self.__chart.addSeries(series)
+        series.attachAxis(self.__axis_price)
+        series.attachAxis(self.__axis_x)
 
 
 # 每日最高最低价的分布图

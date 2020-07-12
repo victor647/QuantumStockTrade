@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>722</width>
-    <height>720</height>
+    <height>552</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -780,168 +780,62 @@
      </layout>
     </item>
     <item>
-     <widget class="QLabel" name="lblUpTrendInfo">
+     <widget class="QGroupBox" name="grpHighLowPoints">
       <property name="font">
        <font>
-        <family>Helvetica</family>
         <pointsize>9</pointsize>
        </font>
       </property>
-      <property name="text">
-       <string>上涨波段： 占比%</string>
+      <property name="title">
+       <string>趋势高低点</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTableWidget" name="tblUpTrendHistory">
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>85</number>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>起止日期</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>涨跌天数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>开始价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>结束价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>波段涨幅</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>回踩MA5次数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>最大偏离MA5</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblDownTrendInfo">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>下跌波段： 占比%</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTableWidget" name="tblDownTrendHistory">
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>85</number>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>起止日期</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>涨跌天数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>开始价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>结束价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>波段跌幅</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>上探MA5次数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>最大偏离MA5</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblFlatTrendInfo">
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>横盘波段： 占比%</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTableWidget" name="tblFlatTrendHistory">
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>85</number>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>起止日期</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>涨跌天数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>开始价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>结束价格</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>波段涨跌幅</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>穿过MA20次数</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>最大偏离MA20</string>
-       </property>
-      </column>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QTableWidget" name="tblHighLowPoints">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>95</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>日期</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>类型</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>价格</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>偏离MA5</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>波段时长</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>涨跌天数</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>累计涨跌幅</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
