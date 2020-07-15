@@ -11,171 +11,223 @@ from Tools import Tools
 # 长线模拟交易回测
 class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 当前是否持有股票
-    __isHolding = False
-    __market = ''
-    __stockCode = ''
-    __stockData = None
-    __stockInvestment = None
-    __successfulBuyCount = __successfulSellCount = 0
+    isHolding = False
+    market = ''
+    stockCode = ''
+    stockData = None
+    stockInvestment = None
+    successfulBuyCount = __successfulSellCount = 0
     totalSameDayTradeCount = successfulSameDayTradeCount = 0
+    # 当前趋势
+    currentTrend = '震荡'
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setup_triggers()
         # 为表格自动设置列宽
         self.tblTradeHistory.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         today = QDate.currentDate()
         self.dteEnd.setDate(today)
         self.dteStart.setDate(today.addYears(-1))
 
+    def setup_triggers(self):
+        self.btnStartTrading.clicked.connect(self.start_trading)
+        self.btnShowDiagram.clicked.connect(self.show_history_diagram)
+
     # 开始模拟交易
     def start_trading(self):
         self.reset_data()
         self.get_stock_data()
-        TechnicalAnalysis.get_percentage_data(self.__stockData)
+        TechnicalAnalysis.get_percentage_data(self.stockData)
         self.analyze_by_day()
 
     def reset_data(self):
-        self.__stockInvestment = StockInvestment()
-        self.__isHolding = False
-        self.__stockData = None
-        self.__successfulBuyCount = self.__successfulSellCount = 0
+        self.stockInvestment = StockInvestment()
+        self.isHolding = False
+        self.stockData = None
+        self.successfulBuyCount = self.__successfulSellCount = 0
         self.totalSameDayTradeCount = self.successfulSameDayTradeCount = 0
         self.tblTradeHistory.setRowCount(0)
 
     # 获取股票历史K线
     def get_stock_data(self):
-        self.__stockCode = Tools.get_stock_code(self.iptStockNumber)
+        self.stockCode = Tools.get_stock_code(self.iptStockNumber)
         # 获取交易所信息
-        self.__market, index_code = Tools.get_trade_center_and_index(self.__stockCode)
+        self.market, index_code = Tools.get_trade_center_and_index(self.stockCode)
         start_date = self.dteStart.date().addYears(-1).toString('yyyy-MM-dd')
         end_date = self.dteEnd.date().toString('yyyy-MM-dd')
         # 获取股票历史数据
-        bs_result = baostock.query_history_k_data(code=self.__market + '.' + self.__stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',
+        bs_result = baostock.query_history_k_data(code=self.market + '.' + self.stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',
                                                   start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
-        self.__stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
+        self.stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
         # 计算均线
-        TechnicalAnalysis.calculate_ma_curve(self.__stockData, 5)
-        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaBuyPeriodShort.value())
-        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaBuyPeriodLong.value())
-        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaSellPeriodShort.value())
-        TechnicalAnalysis.calculate_ma_curve(self.__stockData, self.spbMaSellPeriodLong.value())
+        TechnicalAnalysis.calculate_ma_curve(self.stockData, self.spbMAPeriodShort.value())
+        TechnicalAnalysis.calculate_ma_curve(self.stockData, self.spbMAPeriodLong.value())
 
     # 分析每日情况
     def analyze_by_day(self):
         start_date = self.dteStart.date().toString('yyyy-MM-dd')
-        total_days = self.__stockData.shape[0]
+        total_days = self.stockData.shape[0]
         for day_index in range(total_days):
             # 前期计算均线数据，不进行交易
-            if self.__stockData.iloc[day_index]['date'] < start_date:
+            if self.stockData.iloc[day_index]['date'] < start_date:
                 continue
-            # 当前有持仓
-            if self.__isHolding:
-                self.daily_trade(day_index)
-                if self.end_signal_appears(day_index) or day_index == total_days - 1:
-                    self.end_trade(day_index)
-            elif self.start_signal_appears(day_index):
+
+            # 买入底仓
+            if not self.isHolding:
                 self.start_trade(day_index)
+            else:
+                if self.currentTrend == '上升':
+                    self.check_if_up_trend_end(day_index)
+                elif self.currentTrend == '下降':
+                    self.check_if_down_trend_end(day_index)
+                else:
+                    self.check_if_up_trend_start(day_index)
+                    self.check_if_down_trend_start(day_index)
+                # 进行每日交易
+                self.daily_trade(day_index)
+                if day_index == total_days - 1:
+                    self.end_trade(day_index)
+
             # 更新表格显示
             self.tblTradeHistory.repaint()
 
-    # 出现建仓信号
-    def start_signal_appears(self, day_index: int):
-        # MACD信号
-        if self.rbnStartByMacd.isChecked():
-            macd_data = self.__stockData['macd_column']
-            for i in range(self.spbMacdStartDays.value()):
-                # 任何一日为红色或继续下降，则趋势不成立
-                if macd_data.iloc[day_index - i - 1] > macd_data.iloc[day_index - i] or macd_data.iloc[day_index - i - 1] > 0:
-                    return False
+    # 进入上升趋势
+    def check_if_up_trend_start(self, day_index: int):
+        # MACD金叉
+        if self.rbnUpTrendStartByMACD.isChecked():
+            macd_white = self.stockData['macd_white']
+            macd_yellow = self.stockData['macd_yellow']
+            if macd_white.iloc[day_index - 1] > macd_yellow.iloc[day_index - 1] or macd_white.iloc[day_index] < macd_yellow.iloc[day_index]:
+                return
+        # 连续X日突破长期均线
+        elif self.rbnUpTrendStartByMAStay.isChecked():
+            ma_long_column = 'ma_' + str(self.spbMAPeriodLong.value())
+            # 检测是否连续N天站稳均线
+            for i in range(self.spbUpTrendStartMAStayDays.value()):
+                ma_long = self.stockData[ma_long_column].iloc[day_index - i]
+                # 任何一日收盘低于均线，则趋势不成立
+                if self.stockData['close'].iloc[day_index - i] < ma_long:
+                    return
+        # 均线金叉
         else:
-            ma_long_column = 'ma_' + str(self.spbMaBuyPeriodLong.value())
-            # 均线交叉信号
-            if self.rbnStartByMaCross.isChecked():
-                ma_long_yesterday = self.__stockData[ma_long_column].iloc[day_index - 1]
-                ma_long_today = self.__stockData[ma_long_column].iloc[day_index]
-                ma_short_column = 'ma_' + str(self.spbMaBuyPeriodShort.value())
-                ma_short_yesterday = self.__stockData[ma_short_column].iloc[day_index - 1]
-                ma_short_today = self.__stockData[ma_short_column].iloc[day_index]
-                # 未出现金叉，趋势不成立
-                if ma_short_today < ma_long_today or ma_short_yesterday > ma_long_yesterday:
-                    return False
-            # 均线突破信号
-            else:
-                # N天前必须在均线下方
-                day_index_before = day_index - self.spbMaStartStayDays.value()
-                ma_day_before = self.__stockData[ma_long_column].iloc[day_index_before]
-                if self.__stockData['close'].iloc[day_index_before] >= ma_day_before:
-                    return False
-                # 检测是否连续N天站稳均线
-                for i in range(self.spbMaStartStayDays.value()):
-                    ma_long = self.__stockData[ma_long_column].iloc[day_index - i]
-                    # 任何一日收盘低于均线，则趋势不成立
-                    if self.__stockData['close'].iloc[day_index - i] < ma_long:
-                        return False
-        return True
+            ma_long_column = 'ma_' + str(self.spbMAPeriodLong.value())
+            ma_long_yesterday = self.stockData[ma_long_column].iloc[day_index - 1]
+            ma_long_today = self.stockData[ma_long_column].iloc[day_index]
+            ma_short_column = 'ma_' + str(self.spbMAPeriodShort.value())
+            ma_short_yesterday = self.stockData[ma_short_column].iloc[day_index - 1]
+            ma_short_today = self.stockData[ma_short_column].iloc[day_index]
+            # 未出现金叉，趋势不成立
+            if ma_short_today < ma_long_today or ma_short_yesterday > ma_long_yesterday:
+                return                                       
+        self.currentTrend = '上升'
 
-    # 出现清仓信号
-    def end_signal_appears(self, day_index: int):
-        # MACD信号
-        if self.rbnEndByMacd.isChecked():
-            macd_data = self.__stockData['macd_column']
-            for i in range(self.spbMacdEndDays.value()):
-                # 任何一日为绿色或继续下降，则趋势不成立
-                if macd_data.iloc[day_index - i - 1] < macd_data.iloc[day_index - i] or macd_data.iloc[day_index - i - 1] < 0:
-                    return False
+    # 结束上升趋势
+    def check_if_up_trend_end(self, day_index: int):
+        # 连续X日MACD缩短
+        if self.rbnUpTrendEndByMacd.isChecked():
+            macd_data = self.stockData['macd_column']
+            for i in range(self.spbUpTrendEndMACDFallDays.value()):
+                # 任何一日红色柱体回升则不符合
+                if macd_data.iloc[day_index - i - 1] > macd_data.iloc[day_index - i]:
+                    return
+        # 连续X日失守短期均线
+        elif self.rbnUpTrendEndByMaBreak.isChecked():
+            ma_short_column = 'ma_' + str(self.spbMAPeriodShort.value())            
+            for i in range(self.spbUpTrendEndMABreakDays.value()):
+                ma_short = self.stockData[ma_short_column].iloc[day_index - i]
+                # 任何一日收盘高于均线，则趋势不成立
+                if self.stockData['close'].iloc[day_index - i] > ma_short:
+                    return
+        # 连续X日不再创新高
         else:
-            ma_long_column = 'ma_' + str(self.spbMaSellPeriodLong.value())
-            # 均线交叉信号
-            if self.rbnEndByMaCross.isChecked():
-                ma_long_yesterday = self.__stockData[ma_long_column].iloc[day_index - 1]
-                ma_long_today = self.__stockData[ma_long_column].iloc[day_index]
-                ma_short_column = 'ma_' + str(self.spbMaSellPeriodShort.value())
-                ma_short_yesterday = self.__stockData[ma_short_column].iloc[day_index - 1]
-                ma_short_today = self.__stockData[ma_short_column].iloc[day_index]
-                # 未出现死叉，趋势不成立
-                if ma_short_today > ma_long_today or ma_short_yesterday < ma_long_yesterday:
-                    return False
-            # 均线突破信号
-            else:
-                # N天前必须在均线上方
-                day_index_before = day_index - self.spbMaEndStayDays.value()
-                ma_day_before = self.__stockData[ma_long_column].iloc[day_index_before]
-                if self.__stockData['close'].iloc[day_index_before] <= ma_day_before:
-                    return False
-                # 检测是否连续N天站稳均线
-                for i in range(self.spbMaEndStayDays.value()):
-                    ma_long = self.__stockData[ma_long_column].iloc[day_index - i]
-                    # 任何一日收盘高于均线，则趋势不成立
-                    if self.__stockData['close'].iloc[day_index - i] > ma_long:
-                        return False
-        return True
+            x_days_ago_high = self.stockData['high'].iloc[day_index - self.spbUpTrendEndNoHighDays.value()]
+            after_x_days_ago_high = self.stockData['high'].iloc[day_index - self.spbUpTrendEndNoHighDays.value() + 1:day_index].max()
+            if after_x_days_ago_high < x_days_ago_high:
+                return
+        self.currentTrend = '震荡'
 
-    # 出现建仓信号，买入
+    # 进入下降趋势
+    def check_if_down_trend_start(self, day_index: int):
+        # MACD死叉
+        if self.rbnDownTrendStartByMACD.isChecked():
+            macd_white = self.stockData['macd_white']
+            macd_yellow = self.stockData['macd_yellow']
+            if macd_white.iloc[day_index - 1] < macd_yellow.iloc[day_index - 1] or macd_white.iloc[day_index] > macd_yellow.iloc[day_index]:
+                return
+        # 连续X日失守长期均线
+        elif self.rbnDownTrendStartByMaBreak.isChecked():
+            ma_long_column = 'ma_' + str(self.spbMAPeriodLong.value())
+            # 检测是否连续N天失守均线
+            for i in range(self.spbDownTrendStartMABreakDays.value()):
+                ma_long = self.stockData[ma_long_column].iloc[day_index - i]
+                # 任何一日收盘高于均线，则趋势不成立
+                if self.stockData['close'].iloc[day_index - i] > ma_long:
+                    return
+        # 均线死叉
+        else:
+            ma_long_column = 'ma_' + str(self.spbMAPeriodLong.value())
+            ma_long_yesterday = self.stockData[ma_long_column].iloc[day_index - 1]
+            ma_long_today = self.stockData[ma_long_column].iloc[day_index]
+            ma_short_column = 'ma_' + str(self.spbMAPeriodShort.value())
+            ma_short_yesterday = self.stockData[ma_short_column].iloc[day_index - 1]
+            ma_short_today = self.stockData[ma_short_column].iloc[day_index]
+            # 未出现死叉，趋势不成立
+            if ma_short_today > ma_long_today or ma_short_yesterday < ma_long_yesterday:
+                return
+        self.currentTrend = '下降'
+
+    # 结束下降趋势
+    def check_if_down_trend_end(self, day_index: int):
+        # 连续X日MACD缩短
+        if self.rbnDownTrendEndByMacd.isChecked():
+            macd_data = self.stockData['macd_column']
+            for i in range(self.spbDownTrendEndMAStayDays.value()):
+                # 任何一日绿色柱体变长则不符合
+                if macd_data.iloc[day_index - i - 1] < macd_data.iloc[day_index - i]:
+                    return
+        # 连续X日突破短期均线
+        elif self.rbnDownTrendEndByMAStay.isChecked():
+            ma_short_column = 'ma_' + str(self.spbMAPeriodShort.value())            
+            for i in range(self.spbDownTrendEndMAStayDays.value()):
+                ma_short = self.stockData[ma_short_column].iloc[day_index - i]
+                # 任何一日收盘低于均线，则趋势不成立
+                if self.stockData['close'].iloc[day_index - i] < ma_short:
+                    return
+        # 连续X日不再创新低
+        else:
+            x_days_ago_low = self.stockData['low'].iloc[day_index - self.spbDownTrendEndNoLowDays.value()]
+            after_x_days_ago_low = self.stockData['low'].iloc[day_index - self.spbDownTrendEndNoLowDays.value() + 1:day_index].min()
+            if after_x_days_ago_low < x_days_ago_low:
+                return
+        self.currentTrend = '震荡'
+
+    # 买入底仓
     def start_trade(self, day_index: int):
         # 获取当日数据
-        daily_data = self.__stockData.iloc[day_index]
+        daily_data = self.stockData.iloc[day_index]
         # 开始持股
-        self.__isHolding = True
+        self.isHolding = True
         # 出现信号当日收盘价买入
-        price = round(daily_data['close'], 2)
-        trade_time = daily_data['date'] + ' 15:00'
+        price = round(daily_data['open'], 2)
+        trade_time = daily_data['date'] + ' 09:30'
         self.buy_stock(daily_data, '建仓买入', trade_time, price, self.spbInitialInvestment.value())
 
-    # 出现清仓信号，卖出
+    # 卖出所有仓位
     def end_trade(self, day_index: int):
-        daily_data = self.__stockData.iloc[day_index]
-        self.__isHolding = False
+        daily_data = self.stockData.iloc[day_index]
+        self.isHolding = False
         # 收盘价卖出
         price = round(daily_data['close'], 2)
         time = Tools.reformat_time(daily_data['date'] + ' 15:00')
-        current_share = self.__stockInvestment.currentShare
-        self.__stockInvestment.sell_all(price, time[:10])
+        current_share = self.stockInvestment.currentShare
+        self.stockInvestment.sell_all(price, time[:10])
         self.add_trade_log(daily_data, time, '清仓卖出', price, current_share)
 
     # 普通交易策略
     def daily_trade(self, day_index: int):
-        daily_data = self.__stockData.iloc[day_index]
+        daily_data = self.stockData.iloc[day_index]
         # 初始化当日交易记录
         daily_buy_history = []
         daily_sell_history = []
@@ -183,7 +235,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         pre_close = daily_data['preclose']
         date = daily_data['date']
         # 获取当日5分钟K线数据
-        result = baostock.query_history_k_data(code=self.__market + '.' + self.__stockCode, fields='time,high,low',
+        result = baostock.query_history_k_data(code=self.market + '.' + self.stockCode, fields='time,high,low',
                                                start_date=date, end_date=date, frequency='5', adjustflag='2')
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
 
@@ -191,7 +243,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         buy_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbBuyPoint.value())
         sell_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbSellPoint.value())
         # 五日均线买卖点模式，计算前四日收盘均价
-        last_four_day_total = self.__stockData.iloc[day_index - 5:day_index - 1]['close'].sum()
+        last_four_day_total = self.stockData.iloc[day_index - 5:day_index - 1]['close'].sum()
 
         # 遍历当日5分钟K线数据
         for index, minute_data in minute_database.iterrows():
@@ -270,7 +322,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 模拟买入股票操作
     def buy_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
         price = round(price, 2)
-        available_money = self.spbMaxHolding.value() - self.__stockInvestment.stock_value(price)
+        available_money = self.spbMaxHolding.value() - self.stockInvestment.stock_value(price)
         # 最大买入额度已满，放弃买入
         if available_money < 5000:
             return False
@@ -281,18 +333,18 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 修复日期格式
         time = Tools.reformat_time(time)
         # 进行实际买入操作
-        share = self.__stockInvestment.buy_stock_by_money(price, money, time[:10])
+        share = self.stockInvestment.buy_stock_by_money(price, money, time[:10])
         # 添加交易记录
         self.add_trade_log(data, time, action, price, share)
         # 收盘价高于买入价，买入成功
         if data['close'] > price:
-            self.__successfulBuyCount += 1
+            self.successfulBuyCount += 1
         return True
 
     # 模拟卖出股票操作
     def sell_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
         price = round(price, 2)
-        available_money = self.__stockInvestment.stock_value(price) - self.spbMinHolding.value()
+        available_money = self.stockInvestment.stock_value(price) - self.spbMinHolding.value()
         # 最小持仓额度已到，放弃卖出
         if available_money < 5000:
             return False
@@ -303,7 +355,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 修复日期格式
         time = Tools.reformat_time(time)
         # 进行实际卖出操作
-        share = self.__stockInvestment.sell_stock_by_money(price, money, time[:10])
+        share = self.stockInvestment.sell_stock_by_money(price, money, time[:10])
         # 添加交易记录
         self.add_trade_log(data, time, action, price, share)
         # 收盘价低于卖出价，卖出成功
@@ -332,7 +384,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(trade_share)))
         column += 1
         # 持仓股数
-        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.__stockInvestment.currentShare)))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.stockInvestment.currentShare)))
         column += 1
         # 开盘
         column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['open'], 2), pre_close)
@@ -346,50 +398,31 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(round(data['turn'], 2)) + '%'))
         column += 1
         # 持仓成本
-        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.__stockInvestment.average_cost(data['close']))))
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.stockInvestment.average_cost(data['close']))))
         column += 1
         # 累计收益
-        column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.net_profit(data['close']))
+        column = Tools.add_colored_item(self.tblTradeHistory, row, column, self.stockInvestment.net_profit(data['close']))
         # 盈亏比例
-        Tools.add_colored_item(self.tblTradeHistory, row, column, self.__stockInvestment.profit_percentage(data['close']), '%')
+        Tools.add_colored_item(self.tblTradeHistory, row, column, self.stockInvestment.profit_percentage(data['close']), '%')
 
     # 显示交易记录K线图
     def show_history_diagram(self):
-        if self.__stockData is None:
+        if self.stockData is None:
             self.get_stock_data()
         # 复制一份以日期作为key的数据
-        stock_data = pandas.DataFrame.copy(self.__stockData)
+        stock_data = pandas.DataFrame.copy(self.stockData)
         stock_data.set_index('date', inplace=True)
         # 截取开始交易的日期
         start_date = self.dteStart.date().toString('yyyy-MM-dd')
         stock_data = stock_data.loc[start_date:]
-        graph = CandleStickChart(stock_data, self.__stockCode)
+        graph = CandleStickChart(stock_data, self.stockCode)
         # 画成交量
-        graph.plot_volume()      
-
-        # 画趋势线
-        if self.rbnStartByMacd.isChecked() or self.rbnEndByMacd.isChecked():
-            graph.plot_macd()
-
-        ma5_plotted = False
-        if self.rbnBuyByMa5.isChecked() or self.rbnSellByMa5.isChecked():
-            TechnicalAnalysis.calculate_ma_curve(stock_data, 5)
-            graph.plot_ma(5, Qt.white)
-            ma5_plotted = True
-
-        if not self.rbnStartByMacd.isChecked():
-            graph.plot_ma(self.spbMaBuyPeriodLong.value(), Qt.magenta)
-            if self.rbnStartByMaCross.isChecked():
-                if not ma5_plotted or self.spbMaBuyPeriodShort.value() != 5:
-                    graph.plot_ma(self.spbMaBuyPeriodShort.value(), Qt.yellow)
-
-        if not self.rbnEndByMacd.isChecked():
-            graph.plot_ma(self.spbMaSellPeriodLong.value(), Qt.green)
-            if self.rbnEndByMaCross.isChecked():
-                if not ma5_plotted or self.spbMaSellPeriodShort.value() != 5:
-                    graph.plot_ma(self.spbMaSellPeriodShort.value(), Qt.white)
-
+        graph.plot_volume()
+        # 画MACD和均线
+        graph.plot_macd()
+        graph.plot_ma(self.spbMAPeriodLong.value(), Qt.yellow)
+        graph.plot_ma(self.spbMAPeriodShort.value(), Qt.white)
         graph.plot_price()
-        graph.plot_trade_history(self.__stockInvestment)
+        graph.plot_trade_history(self.stockInvestment)
         graph.exec_()
 
