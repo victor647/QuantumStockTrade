@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
 from PyQt5.QtCore import Qt, QDate
-import Data.TechnicalAnalysis as TechnicalAnalysis
+import Data.TechnicalAnalysis as TA
 from Data.HistoryGraph import CandleStickChart
 from Data.InvestmentStatus import StockInvestment
 import baostock, pandas
@@ -39,7 +39,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     def start_trading(self):
         self.reset_data()
         self.get_stock_data()
-        TechnicalAnalysis.get_percentage_data(self.stockData)
+        TA.get_percentage_data(self.stockData)
         self.analyze_by_day()
 
     def reset_data(self):
@@ -62,8 +62,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                                                   start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
         self.stockData = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
         # 计算均线
-        TechnicalAnalysis.calculate_ma_curve(self.stockData, self.spbMAPeriodShort.value())
-        TechnicalAnalysis.calculate_ma_curve(self.stockData, self.spbMAPeriodLong.value())
+        TA.calculate_ma_curve(self.stockData, self.spbMAPeriodShort.value())
+        TA.calculate_ma_curve(self.stockData, self.spbMAPeriodLong.value())
 
     # 分析每日情况
     def analyze_by_day(self):
@@ -234,56 +234,85 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 缓存昨日收盘价和日期
         pre_close = daily_data['preclose']
         date = daily_data['date']
+        # 缓存每次交易的金额
+        money = self.spbMoneyPerTrade.value()
         # 获取当日5分钟K线数据
         result = baostock.query_history_k_data(code=self.market + '.' + self.stockCode, fields='time,high,low',
                                                start_date=date, end_date=date, frequency='5', adjustflag='2')
         minute_database = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
-
+        # 计算各个趋势下的买卖点
+        if self.currentTrend == '上升':
+            buy_point = self.spbUpTrendBuyPoint.value()
+            sell_point = self.spbUpTrendSellPoint.value()
+            buy_by_percent = self.cbxUpTrendBuyByPercent.isChecked()
+            sell_by_percent = self.cbxUpTrendSellByPercent.isChecked()
+            same_day_trade = self.cbxUpTrendSameDayTrade.isChecked()
+        elif self.currentTrend == '下降':
+            buy_point = self.spbDownTrendBuyPoint.value()
+            sell_point = self.spbDownTrendSellPoint.value()
+            buy_by_percent = self.cbxDownTrendBuyByPercent.isChecked()
+            sell_by_percent = self.cbxDownTrendSellByPercent.isChecked()
+            same_day_trade = self.cbxDownTrendSameDayTrade.isChecked()
+        else:
+            buy_point = self.spbFlatTrendBuyPoint.value()
+            sell_point = self.spbFlatTrendSellPoint.value()
+            buy_by_percent = self.cbxFlatTrendBuyByPercent.isChecked()
+            sell_by_percent = self.cbxFlatTrendSellByPercent.isChecked()
+            same_day_trade = self.cbxFlatTrendSameDayTrade.isChecked()
         # 百分比买卖点模式，获取基础买卖价格
-        buy_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbBuyPoint.value())
-        sell_price = TechnicalAnalysis.get_price_from_percent_change(pre_close, self.spbSellPoint.value())
+        percent_buy_price = TA.get_price_from_percent_change(pre_close, buy_point)
+        percent_sell_price = TA.get_price_from_percent_change(pre_close, sell_point)
+
         # 五日均线买卖点模式，计算前四日收盘均价
         last_four_day_total = self.stockData.iloc[day_index - 5:day_index - 1]['close'].sum()
 
         # 遍历当日5分钟K线数据
         for index, minute_data in minute_database.iterrows():
-            # 五日均线买点模式计算挂单价,确保今日没交易过
-            five_day_mean = (last_four_day_total + minute_data['low']) / 5
-            if self.rbnBuyByMa5.isChecked() and buy_price != 0:
-                buy_price = TechnicalAnalysis.get_price_from_percent_change(five_day_mean, self.spbMa5BuyThreshold.value())
-            if self.rbnSellByMa5.isChecked() and sell_price != 9999:
-                sell_price = TechnicalAnalysis.get_price_from_percent_change(five_day_mean, self.spbMa5SellThreshold.value())
+            time = minute_data['time']
+            minute_low = minute_data['low']
+            minute_high = minute_data['high']
+            # 当日还未买过
+            if len(daily_buy_history) == 0:
+                five_day_mean = round((last_four_day_total + minute_low) / 5, 2)
+                # 回调五日均线买入
+                if self.currentTrend == '上升' and self.cbxUpTrendBuyByMA5.isChecked():
+                    if minute_low < five_day_mean:
+                        if self.buy_stock(daily_data, '回调买入', time, five_day_mean, money):
+                            daily_buy_history.append(five_day_mean)
+                # 超跌偏离五日均线买入
+                if self.currentTrend == '下降' and self.cbxDownTrendBuyByMA5.isChecked():
+                    buy_price = TA.get_price_from_percent_change(five_day_mean, self.spbUpTrendMA5SellThreshold.value())
+                    if minute_low < buy_price:
+                        if self.buy_stock(daily_data, '超跌买入', time, buy_price, money):
+                            daily_buy_history.append(buy_price)
+            # 达到跌幅买入
+            if len(daily_buy_history) == 0 and buy_by_percent:
+                if minute_low < percent_buy_price:
+                    if self.buy_stock(daily_data, '回调买入', time, percent_buy_price, money):
+                        daily_buy_history.append(percent_buy_price)
 
-            # 价格达到买点，执行买入操作
-            if minute_data['low'] <= buy_price:
-                # 确保买入价格高于5分钟最低价
-                buy_price = min(minute_data['high'], buy_price)
-                if self.buy_stock(daily_data, '回调买入', minute_data['time'], buy_price, self.spbMoneyPerTrade.value()):
-                    # 记录本次买入，为做T卖出参考
-                    if self.cbxAllowSameDayTradeBuy.isChecked():
-                        daily_buy_history.append(buy_price)
-                    # 计算下一次买点价格
-                    if self.rbnBuyByPercentChange.isChecked() and self.cbxSameDayBuyAgain:
-                        buy_price += pre_close * self.spbBuyPoint.value()
-                    else:
-                        buy_price = 0
-
-            # 价格高于卖点，执行卖出操作
-            if minute_data['high'] >= sell_price:
-                # 确保卖出价格高于5分钟最高价
-                sell_price = max(minute_data['low'], sell_price)
-                if self.sell_stock(daily_data, '冲高卖出', minute_data['time'], sell_price, self.spbMoneyPerTrade.value()):
-                    # 记录本次卖出，为做T买回参考
-                    if self.cbxAllowSameDayTradeSell.isChecked():
-                        daily_sell_history.append(sell_price)
-                    # 计算下一次卖点
-                    if self.rbnSellByPercentChange.isChecked() and self.cbxSameDayBuyAgain:
-                        sell_price += pre_close * self.spbSellPoint.value()
-                    else:
-                        sell_price = 9999
+            # 当日还未卖过
+            if len(daily_sell_history) == 0:
+                five_day_mean = round((last_four_day_total + minute_high) / 5, 2)
+                # 冲高五日均线卖出
+                if self.currentTrend == '下降' and self.cbxDownTrendSellByMA5.isChecked():
+                    if minute_high > five_day_mean:
+                        if self.sell_stock(daily_data, '冲高卖出', time, five_day_mean, money):
+                            daily_sell_history.append(five_day_mean)
+                # 超买偏离五日均线卖出
+                if self.currentTrend == '上升' and self.cbxUpTrendSellByMA5.isChecked():
+                    sell_price = TA.get_price_from_percent_change(five_day_mean, self.spbUpTrendMA5SellThreshold.value())
+                    if minute_high > sell_price:
+                        if self.sell_stock(daily_data, '超买卖出', time, sell_price, money):
+                            daily_sell_history.append(sell_price)
+            # 达到涨幅卖出
+            if len(daily_sell_history) == 0 and sell_by_percent:
+                if minute_high > percent_sell_price:
+                    if self.sell_stock(daily_data, '冲高卖出', time, percent_sell_price, money):
+                        daily_sell_history.append(percent_sell_price)
 
             # 允许做T情况下，判断当前价位可否做T
-            if self.cbxAllowSameDayTradeBuy:
+            if same_day_trade:
                 # 遍历当日买入记录
                 for history_buy_price in daily_buy_history:
                     # 计算卖出价的涨跌幅
