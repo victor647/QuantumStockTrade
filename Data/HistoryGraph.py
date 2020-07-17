@@ -323,6 +323,28 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.attach_scatter_series(high_points)
         self.attach_scatter_series(low_points)
 
+    # 画出趋势记录
+    def plot_trends(self, trends: list):
+        up_trends = QScatterSeries()
+        down_trends = QScatterSeries()
+        flat_trends = QScatterSeries()
+        # 设置格式
+        decorate_scatter_series(up_trends, 'U', QColor(255, 127, 0), 20)
+        decorate_scatter_series(down_trends, 'D', QColor(0, 255, 127), 20)
+        decorate_scatter_series(flat_trends, 'F', QColor(255, 255, 0), 20)
+
+        for trend_type, day_index, price in trends:
+            if trend_type == '上升':
+                up_trends.append(day_index, price)
+            elif trend_type == '下降':
+                down_trends.append(day_index, price)
+            else:
+                flat_trends.append(day_index, price)
+
+        self.attach_scatter_series(up_trends)
+        self.attach_scatter_series(down_trends)
+        self.attach_scatter_series(flat_trends)
+
     # 画出买卖记录
     def plot_trade_history(self, trade_history: StockInvestment, show_share_change=True):
         buy_history = QScatterSeries()

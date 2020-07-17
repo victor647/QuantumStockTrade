@@ -11,7 +11,7 @@ from Tools import Tools
 # 长线模拟交易回测
 class TradeSimulator(QDialog, Ui_TradeSimulator):
     # 当前是否持有股票
-    isHolding = False
+    tradeStartDayIndex = 0
     market = ''
     stockCode = ''
     stockData = None
@@ -20,6 +20,9 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
     totalSameDayTradeCount = successfulSameDayTradeCount = 0
     # 当前趋势
     currentTrend = '震荡'
+    trends = []
+    # 持仓份数
+    currentShare = 0
 
     def __init__(self):
         super().__init__()
@@ -44,8 +47,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     def reset_data(self):
         self.stockInvestment = StockInvestment()
-        self.isHolding = False
+        self.tradeStartDayIndex = 0
         self.stockData = None
+        self.currentTrend = '震荡'
+        self.trends = []
+        self.currentShare = 0
         self.successfulBuyCount = self.__successfulSellCount = 0
         self.totalSameDayTradeCount = self.successfulSameDayTradeCount = 0
         self.tblTradeHistory.setRowCount(0)
@@ -64,6 +70,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 计算均线
         TA.calculate_ma_curve(self.stockData, self.spbMAPeriodShort.value())
         TA.calculate_ma_curve(self.stockData, self.spbMAPeriodLong.value())
+        TA.get_technical_index(self.stockData)
 
     # 分析每日情况
     def analyze_by_day(self):
@@ -75,7 +82,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 continue
 
             # 买入底仓
-            if not self.isHolding:
+            if self.tradeStartDayIndex == 0:
                 self.start_trade(day_index)
             else:
                 if self.currentTrend == '上升':
@@ -122,6 +129,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if ma_short_today < ma_long_today or ma_short_yesterday > ma_long_yesterday:
                 return                                       
         self.currentTrend = '上升'
+        self.trends.append(('上升', day_index - self.tradeStartDayIndex, self.stockData['close'].iloc[day_index]))
 
     # 结束上升趋势
     def check_if_up_trend_end(self, day_index: int):
@@ -147,6 +155,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if after_x_days_ago_high < x_days_ago_high:
                 return
         self.currentTrend = '震荡'
+        self.trends.append(('震荡', day_index - self.tradeStartDayIndex, self.stockData['close'].iloc[day_index]))
 
     # 进入下降趋势
     def check_if_down_trend_start(self, day_index: int):
@@ -177,6 +186,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if ma_short_today > ma_long_today or ma_short_yesterday < ma_long_yesterday:
                 return
         self.currentTrend = '下降'
+        self.trends.append(('下降', day_index - self.tradeStartDayIndex, self.stockData['close'].iloc[day_index]))
 
     # 结束下降趋势
     def check_if_down_trend_end(self, day_index: int):
@@ -202,22 +212,23 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             if after_x_days_ago_low < x_days_ago_low:
                 return
         self.currentTrend = '震荡'
+        self.trends.append(('震荡', day_index - self.tradeStartDayIndex, self.stockData['close'].iloc[day_index]))
 
     # 买入底仓
     def start_trade(self, day_index: int):
         # 获取当日数据
         daily_data = self.stockData.iloc[day_index]
         # 开始持股
-        self.isHolding = True
+        self.tradeStartDayIndex = day_index
         # 出现信号当日收盘价买入
         price = round(daily_data['open'], 2)
         trade_time = daily_data['date'] + ' 09:30'
-        self.buy_stock(daily_data, '建仓买入', trade_time, price, self.spbInitialInvestment.value())
+        self.buy_stock(daily_data, '建仓买入', trade_time, price, self.spbMoneyPerTrade.value())
 
     # 卖出所有仓位
     def end_trade(self, day_index: int):
         daily_data = self.stockData.iloc[day_index]
-        self.isHolding = False
+        self.tradeStartDayIndex = False
         # 收盘价卖出
         price = round(daily_data['close'], 2)
         time = Tools.reformat_time(daily_data['date'] + ' 15:00')
@@ -227,13 +238,13 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
 
     # 普通交易策略
     def daily_trade(self, day_index: int):
-        daily_data = self.stockData.iloc[day_index]
+        day_data = self.stockData.iloc[day_index]
         # 初始化当日交易记录
         daily_buy_history = []
         daily_sell_history = []
         # 缓存昨日收盘价和日期
-        pre_close = daily_data['preclose']
-        date = daily_data['date']
+        pre_close = day_data['preclose']
+        date = day_data['date']
         # 缓存每次交易的金额
         money = self.spbMoneyPerTrade.value()
         # 获取当日5分钟K线数据
@@ -247,18 +258,21 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
             buy_by_percent = self.cbxUpTrendBuyByPercent.isChecked()
             sell_by_percent = self.cbxUpTrendSellByPercent.isChecked()
             same_day_trade = self.cbxUpTrendSameDayTrade.isChecked()
+            same_day_profit = self.spbUpTrendSameDayProfit.value()
         elif self.currentTrend == '下降':
             buy_point = self.spbDownTrendBuyPoint.value()
             sell_point = self.spbDownTrendSellPoint.value()
             buy_by_percent = self.cbxDownTrendBuyByPercent.isChecked()
             sell_by_percent = self.cbxDownTrendSellByPercent.isChecked()
             same_day_trade = self.cbxDownTrendSameDayTrade.isChecked()
+            same_day_profit = self.spbDownTrendSameDayProfit.value()
         else:
             buy_point = self.spbFlatTrendBuyPoint.value()
             sell_point = self.spbFlatTrendSellPoint.value()
             buy_by_percent = self.cbxFlatTrendBuyByPercent.isChecked()
             sell_by_percent = self.cbxFlatTrendSellByPercent.isChecked()
             same_day_trade = self.cbxFlatTrendSameDayTrade.isChecked()
+            same_day_profit = self.spbFlatTrendSameDayProfit.value()
         # 百分比买卖点模式，获取基础买卖价格
         percent_buy_price = TA.get_price_from_percent_change(pre_close, buy_point)
         percent_sell_price = TA.get_price_from_percent_change(pre_close, sell_point)
@@ -277,18 +291,25 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 # 回调五日均线买入
                 if self.currentTrend == '上升' and self.cbxUpTrendBuyByMA5.isChecked():
                     if minute_low < five_day_mean:
-                        if self.buy_stock(daily_data, '回调买入', time, five_day_mean, money):
+                        if self.buy_stock(day_data, '回调买入', time, five_day_mean, money):
                             daily_buy_history.append(five_day_mean)
                 # 超跌偏离五日均线买入
                 if self.currentTrend == '下降' and self.cbxDownTrendBuyByMA5.isChecked():
-                    buy_price = TA.get_price_from_percent_change(five_day_mean, self.spbUpTrendMA5SellThreshold.value())
+                    buy_price = TA.get_price_from_percent_change(five_day_mean, self.spbDownTrendMA5BuyThreshold.value())
                     if minute_low < buy_price:
-                        if self.buy_stock(daily_data, '超跌买入', time, buy_price, money):
+                        if self.buy_stock(day_data, '超跌买入', time, buy_price, money):
                             daily_buy_history.append(buy_price)
+                # 穿过布林线下轨买入
+                if self.currentTrend == '震荡' and self.cbxFlatTrendBuyByBOLL.isChecked():
+                    buy_price = round(day_data['boll_lower'], 2)
+                    if minute_low < buy_price:
+                        if self.buy_stock(day_data, '探底买入', time, buy_price, money):
+                            daily_buy_history.append(buy_price)
+
             # 达到跌幅买入
             if len(daily_buy_history) == 0 and buy_by_percent:
                 if minute_low < percent_buy_price:
-                    if self.buy_stock(daily_data, '回调买入', time, percent_buy_price, money):
+                    if self.buy_stock(day_data, '回调买入', time, percent_buy_price, money):
                         daily_buy_history.append(percent_buy_price)
 
             # 当日还未卖过
@@ -297,63 +318,70 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
                 # 冲高五日均线卖出
                 if self.currentTrend == '下降' and self.cbxDownTrendSellByMA5.isChecked():
                     if minute_high > five_day_mean:
-                        if self.sell_stock(daily_data, '冲高卖出', time, five_day_mean, money):
+                        if self.sell_stock(day_data, '冲高卖出', time, five_day_mean, money):
                             daily_sell_history.append(five_day_mean)
                 # 超买偏离五日均线卖出
                 if self.currentTrend == '上升' and self.cbxUpTrendSellByMA5.isChecked():
                     sell_price = TA.get_price_from_percent_change(five_day_mean, self.spbUpTrendMA5SellThreshold.value())
                     if minute_high > sell_price:
-                        if self.sell_stock(daily_data, '超买卖出', time, sell_price, money):
+                        if self.sell_stock(day_data, '超买卖出', time, sell_price, money):
                             daily_sell_history.append(sell_price)
+                # 穿过布林线上轨卖出
+                if self.currentTrend == '震荡' and self.cbxFlatTrendBuyByBOLL.isChecked():
+                    sell_price = round(day_data['boll_upper'], 2)
+                    if minute_high > sell_price:
+                        if self.sell_stock(day_data, '触顶卖出', time, sell_price, money):
+                            daily_sell_history.append(sell_price)
+
             # 达到涨幅卖出
             if len(daily_sell_history) == 0 and sell_by_percent:
                 if minute_high > percent_sell_price:
-                    if self.sell_stock(daily_data, '冲高卖出', time, percent_sell_price, money):
+                    if self.sell_stock(day_data, '冲高卖出', time, percent_sell_price, money):
                         daily_sell_history.append(percent_sell_price)
 
             # 允许做T情况下，判断当前价位可否做T
             if same_day_trade:
-                # 遍历当日买入记录
-                for history_buy_price in daily_buy_history:
-                    # 计算卖出价的涨跌幅
-                    t_sell_price = history_buy_price + self.spbSameDayProfitBuy.value() / 100 * pre_close
-                    # 价格高于做T卖出盈利点，执行卖出操作
-                    if minute_data['high'] >= t_sell_price:
-                        if self.sell_stock(daily_data, '做T卖出', minute_data['time'], t_sell_price, self.spbMoneyPerTrade.value()):
-                            # 抵消当日买入记录
-                            daily_buy_history.remove(history_buy_price)
-                            # 回溯再次买入点价格，跌到该买点会再次买入
-                            buy_price -= pre_close * self.spbBuyPoint.value()
-                            # 累计做T次数
-                            self.totalSameDayTradeCount += 1
-                            # 收盘价低于做T卖出价，做T成功
-                            if daily_data['close'] < t_sell_price:
-                                self.successfulSameDayTradeCount += 1
-            # 允许做T情况下，判断当前价位可否做T
-            if self.cbxAllowSameDayTradeSell:
-                # 遍历当日卖出记录
-                for history_sell_price in daily_sell_history:
-                    # 计算买回价的涨跌幅
-                    t_buy_price = history_sell_price - self.spbSameDayProfitBuy.value() / 100 * pre_close
-                    # 价格低于做T买回盈利点，执行买入操作
-                    if minute_data['low'] < t_buy_price:
-                        if self.buy_stock(daily_data, '做T买回', minute_data['time'], t_buy_price, self.spbMoneyPerTrade.value()):
-                            # 抵消当日卖出记录
-                            daily_sell_history.remove(history_sell_price)
-                            # 回溯再次卖出点价格，涨到该卖点会再次卖出
-                            sell_price -= pre_close * self.spbSellPoint.value()
-                            # 累计做T次数
-                            self.totalSameDayTradeCount += 1
-                            # 收盘价高于做T买回价，做T成功
-                            if daily_data['close'] > t_buy_price:
-                                self.successfulSameDayTradeCount += 1
+                # 持仓大于底仓才可做T卖出
+                if self.currentShare >= self.spbBaseHolding.value():
+                    # 遍历当日买入记录
+                    for buy_price in daily_buy_history:
+                        # 计算卖出价的涨跌幅
+                        sell_price = round(buy_price + same_day_profit / 100 * pre_close, 2)
+                        # 价格高于做T卖出盈利点，执行卖出操作
+                        if minute_high >= sell_price:
+                            if self.sell_stock(day_data, '做T卖出', time, sell_price, money):
+                                # 抵消当日买入记录
+                                daily_buy_history.remove(buy_price)
+                                daily_sell_history.append(sell_price)
+                                # 累计做T次数
+                                self.totalSameDayTradeCount += 1
+                                # 收盘价低于做T卖出价，做T成功
+                                if day_data['close'] < sell_price:
+                                    self.successfulSameDayTradeCount += 1
+                # 持仓小于底仓才可做T买回
+                if self.currentShare <= self.spbBaseHolding.value():
+                    # 遍历当日卖出记录
+                    for sell_price in daily_sell_history:
+                        # 计算买回价的涨跌幅
+                        buy_price = round(sell_price - same_day_profit / 100 * pre_close, 2)
+                        # 价格低于做T买回盈利点，执行买入操作
+                        if minute_low < buy_price:
+                            if self.buy_stock(day_data, '做T买回', time, buy_price, money):
+                                # 抵消当日卖出记录
+                                daily_sell_history.remove(sell_price)
+                                daily_buy_history.append(buy_price)
+                                # 累计做T次数
+                                self.totalSameDayTradeCount += 1
+                                # 收盘价高于做T买回价，做T成功
+                                if day_data['close'] > buy_price:
+                                    self.successfulSameDayTradeCount += 1
 
     # 模拟买入股票操作
     def buy_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
         price = round(price, 2)
-        available_money = self.spbMaxHolding.value() - self.stockInvestment.stock_value(price)
+        available_money = self.spbMaxHolding.value() * self.spbMoneyPerTrade.value() - self.stockInvestment.stock_value(price)
         # 最大买入额度已满，放弃买入
-        if available_money < 5000:
+        if available_money < 10000:
             return False
         # 可买入额度小于单次交易额度
         if available_money < self.spbMoneyPerTrade.value():
@@ -368,14 +396,15 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价高于买入价，买入成功
         if data['close'] > price:
             self.successfulBuyCount += 1
+        self.currentShare += 1
         return True
 
     # 模拟卖出股票操作
     def sell_stock(self, data: pandas.DataFrame, action: str, time: str, price: float, money: int):
         price = round(price, 2)
-        available_money = self.stockInvestment.stock_value(price) - self.spbMinHolding.value()
+        available_money = self.stockInvestment.stock_value(price) - self.spbMinHolding.value() * self.spbMoneyPerTrade.value()
         # 最小持仓额度已到，放弃卖出
-        if available_money < 5000:
+        if available_money < 10000:
             return False
         # 可卖出额度小于单次交易额度
         if available_money < self.spbMoneyPerTrade.value():
@@ -390,6 +419,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 收盘价低于卖出价，卖出成功
         if data['close'] < price:
             self.__successfulSellCount += 1
+        self.currentShare -= 1
         return True
 
     # 在表格中添加交易记录
@@ -423,8 +453,8 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['low'], 2), pre_close)
         # 收盘
         column = Tools.add_price_item(self.tblTradeHistory, row, column, round(data['close'], 2), pre_close)
-        # 换手率
-        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(round(data['turn'], 2)) + '%'))
+        # 股价趋势
+        self.tblTradeHistory.setItem(row, column, QTableWidgetItem(self.currentTrend))
         column += 1
         # 持仓成本
         self.tblTradeHistory.setItem(row, column, QTableWidgetItem(str(self.stockInvestment.average_cost(data['close']))))
@@ -448,10 +478,11 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         # 画成交量
         graph.plot_volume()
         # 画MACD和均线
-        graph.plot_macd()
+        # graph.plot_macd()
         graph.plot_ma(self.spbMAPeriodLong.value(), Qt.yellow)
         graph.plot_ma(self.spbMAPeriodShort.value(), Qt.white)
         graph.plot_price()
+        graph.plot_trends(self.trends)
         graph.plot_trade_history(self.stockInvestment)
         graph.exec_()
 

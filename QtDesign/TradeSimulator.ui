@@ -1125,7 +1125,7 @@
            <string>布林线下轨买入</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1135,7 +1135,7 @@
            <string>布林线上轨卖出</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1247,7 +1247,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QLabel" name="lblInitialShare">
+           <widget class="QLabel" name="lblBaseHolding">
             <property name="font">
              <font>
               <family>Helvetica</family>
@@ -1255,12 +1255,12 @@
              </font>
             </property>
             <property name="text">
-             <string>初始底仓</string>
+             <string>基础仓位</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spbInitialInvestment">
+           <widget class="QSpinBox" name="spbBaseHolding">
             <property name="font">
              <font>
               <family>Helvetica</family>
@@ -1280,7 +1280,7 @@
              <number>1</number>
             </property>
             <property name="value">
-             <number>1</number>
+             <number>2</number>
             </property>
            </widget>
           </item>
@@ -1411,7 +1411,7 @@
             </font>
            </property>
            <property name="text">
-            <string>贵州茅台</string>
+            <string>恒瑞医药</string>
            </property>
            <property name="maxLength">
             <number>6</number>
@@ -1526,6 +1526,9 @@
        <pointsize>9</pointsize>
       </font>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
      <property name="rowCount">
       <number>0</number>
      </property>
@@ -1585,7 +1588,7 @@
      </column>
      <column>
       <property name="text">
-       <string>当日换手</string>
+       <string>股价趋势</string>
       </property>
      </column>
      <column>
