@@ -70,8 +70,8 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.__axis_x.setCategories(self.__dates)
         self.__chart.addAxis(self.__axis_x, Qt.AlignBottom)
         # 创建专门的日期显示X轴
-        self.resize(len(self.__dates) * 15 + 100, 550)
-        self.setMinimumSize(len(self.__dates) * 7 + 200, 400)
+        self.resize(len(self.__dates) * 15 + 100, 700)
+        self.setMinimumSize(len(self.__dates) * 7 + 200, 500)
         self.__axis_x.hide()
         date_axis = QDateTimeAxis()
         date_axis.setTickCount(max(31, round(len(self.__dates) / 5) + 1))
@@ -84,7 +84,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
         # 添加股价Y轴
         self.__axis_price = QValueAxis()
-        self.__axis_price.setTickCount(9)
+        self.__axis_price.setTickCount(11)
         self.__axis_price.setGridLineColor(Qt.darkGray)
         self.__axis_price.setLabelsColor(Qt.lightGray)
         self.__chart.addAxis(self.__axis_price, Qt.AlignRight)
@@ -123,8 +123,8 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         if stretch_ratio > 1:
             max_price *= (stretch_ratio - 1) * 0.25 + 1
             min_price /= (stretch_ratio - 1) * 0.75 + 1
-        # 避开成交量图形区域
-        min_price -= (max_price - min_price) / 3
+        # 避开成交量图形和MACD区域
+        min_price -= (max_price - min_price) / 1.5
         self.__axis_price.setRange(min_price, max_price)
         price_series.attachAxis(self.__axis_x)
         price_series.attachAxis(self.__axis_price)
@@ -162,9 +162,9 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         volume_axis = QValueAxis()
         volume_axis.setGridLineColor(Qt.darkGray)
         volume_axis.setLabelsColor(Qt.lightGray)
-        volume_axis.setTickCount(9)
+        volume_axis.setTickCount(11)
         # 将成交量图形置于最下方
-        volume_axis.setMax(self.__stockData['turn'].max() * 4)
+        volume_axis.setMax(self.__stockData['turn'].max() * 5)
         self.__chart.addAxis(volume_axis, Qt.AlignLeft)
         self.__volumeSeries.attachAxis(volume_axis)
         self.__volumeSeries.attachAxis(self.__axis_x)
@@ -229,8 +229,8 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         macd_axis.setTickCount(3)
         # 寻找折线最大值确定显示范围
         max_abs = max(self.__stockData['macd_white'].abs().max(), self.__stockData['macd_yellow'].abs().max(), self.__stockData['macd_column'].abs().max())
-        macd_axis.setMax(max_abs * 2)
-        macd_axis.setMin(max_abs * -2)
+        macd_axis.setMax(max_abs * 7)
+        macd_axis.setMin(max_abs * -3)
         macd_axis.hide()
         self.__chart.addAxis(macd_axis, Qt.AlignRight)
         # 创建图表
@@ -347,6 +347,8 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
     # 画出买卖记录
     def plot_trade_history(self, trade_history: StockInvestment, show_share_change=True):
+        if trade_history is None:
+            return
         buy_history = QScatterSeries()
         sell_history = QScatterSeries()
         # 设置格式
@@ -388,7 +390,7 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
             share_axis = QValueAxis()
             share_axis.setVisible(False)
             # 将持仓量折线置于最下方
-            share_axis.setRange(0, max_share * 4)
+            share_axis.setRange(0, max_share * 5)
             self.__chart.addAxis(share_axis, Qt.AlignRight)
             self.__chart.addSeries(share_series)
             share_series.attachAxis(share_axis)

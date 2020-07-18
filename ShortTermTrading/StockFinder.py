@@ -379,7 +379,10 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if self.cbxNetAssetProfit.isChecked():
             profit = row['esp']
             asset = row['bvps']
-            if profit / asset * 100 < self.spbNetAssetProfit.value():
+            if asset == 0:
+                return False
+            roe = profit / asset * 100
+            if roe < self.spbNetAssetProfit.value():
                 return False
 
         # 检测股票股东人数是否符合范围

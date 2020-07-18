@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1017</width>
+    <width>1094</width>
     <height>850</height>
    </rect>
   </property>
@@ -25,18 +25,114 @@
         </font>
        </property>
        <property name="title">
-        <string>上升趋势开始信号</string>
+        <string>上升趋势开始信号（同时满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <widget class="QCheckBox" name="cbxUpTrendStartByMACD">
+          <property name="text">
+           <string>MACD柱体红色</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbxUpTrendStartByMACross">
+          <property name="text">
+           <string>MAS高于MAL</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_20">
           <item>
-           <widget class="QRadioButton" name="rbnUpTrendStartByMACD">
+           <widget class="QCheckBox" name="cbxUpTrendStartByMAShortDiff">
             <property name="text">
-             <string>MACD金叉</string>
+             <string>MAS斜率高于</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbUpTrendMAShortDiffRate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>10.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_37">
+          <item>
+           <widget class="QCheckBox" name="cbxUpTrendStartByMALongDiff">
+            <property name="text">
+             <string>MAL斜率高于</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbUpTrendMALongDiffRate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>-5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -45,9 +141,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QRadioButton" name="rbnUpTrendStartByMAStay">
+           <widget class="QCheckBox" name="cbxUpTrendStartByMAStay">
             <property name="text">
-             <string>站稳长期均线</string>
+             <string>收盘连续高于MAL</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -84,16 +180,6 @@
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="QRadioButton" name="rbnUpTrendStartByMACross">
-          <property name="text">
-           <string>长短期均线金叉</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </item>
@@ -106,13 +192,13 @@
         </font>
        </property>
        <property name="title">
-        <string>上升趋势结束信号</string>
+        <string>上升趋势结束信号（任一满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_29">
           <item>
-           <widget class="QRadioButton" name="rbnUpTrendEndByMacd">
+           <widget class="QCheckBox" name="cbxUpTrendEndByMacd">
             <property name="text">
              <string>MACD红柱连续缩短</string>
             </property>
@@ -154,19 +240,19 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_30">
           <item>
-           <widget class="QRadioButton" name="rbnUpTrendEndByMaBreak">
+           <widget class="QCheckBox" name="cbxUpTrendEndByMaBreak">
             <property name="text">
-             <string>失守短期均线</string>
+             <string>收盘连续低于MAS</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSpinBox" name="spbUpTrendEndMABreakDays">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="font">
              <font>
@@ -194,9 +280,19 @@
          </layout>
         </item>
         <item>
+         <widget class="QCheckBox" name="cbxUpTrendEndByMAShortDiff">
+          <property name="text">
+           <string>MAS开始下滑</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_33">
           <item>
-           <widget class="QRadioButton" name="rbnUpTrendEndByNoHighAgain">
+           <widget class="QCheckBox" name="cbxUpTrendEndByNoHighAgain">
             <property name="text">
              <string>连续</string>
             </property>
@@ -233,7 +329,53 @@
           <item>
            <widget class="QLabel" name="lblUpTrendEndByNoHighAgain">
             <property name="text">
-             <string>不再创新高</string>
+             <string>未创新高</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_35">
+          <item>
+           <widget class="QCheckBox" name="cbxUpTrendEndByConsecutiveDown">
+            <property name="text">
+             <string>连续</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spbUpTrendEndConsecutiveDownDays">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>日</string>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblUpTrendEndByConsecutiveDown">
+            <property name="text">
+             <string>收盘下跌</string>
             </property>
            </widget>
           </item>
@@ -251,18 +393,114 @@
         </font>
        </property>
        <property name="title">
-        <string>下降趋势开始信号</string>
+        <string>下降趋势开始信号（同时满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_18">
+         <widget class="QCheckBox" name="cbxDownTrendStartByMACD">
+          <property name="text">
+           <string>MACD柱体绿色</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbxDownTrendStartByMACross">
+          <property name="text">
+           <string>MAS低于MAL</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_21">
           <item>
-           <widget class="QRadioButton" name="rbnDownTrendStartByMACD">
+           <widget class="QCheckBox" name="cbxDownTrendStartByMAShortDiff">
             <property name="text">
-             <string>MACD死叉</string>
+             <string>MAS斜率低于</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbDownTrendMAShortDiffRate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>-10.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>-1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_38">
+          <item>
+           <widget class="QCheckBox" name="cbxDownTrendStartByMALongDiff">
+            <property name="text">
+             <string>MAL斜率低于</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbDownTrendMALongDiffRate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>-5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -271,9 +509,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_19">
           <item>
-           <widget class="QRadioButton" name="rbnDownTrendStartByMaBreak">
+           <widget class="QCheckBox" name="cbxDownTrendStartByMABreak">
             <property name="text">
-             <string>失守长期均线</string>
+             <string>收盘连续低于MAL</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -310,16 +548,6 @@
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="QRadioButton" name="rbnDownTrendStartByMACross">
-          <property name="text">
-           <string>长短期均线死叉</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </item>
@@ -332,13 +560,13 @@
         </font>
        </property>
        <property name="title">
-        <string>下降趋势结束信号</string>
+        <string>下降趋势结束信号（任一满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_31">
           <item>
-           <widget class="QRadioButton" name="rbnDownTrendEndByMacd">
+           <widget class="QCheckBox" name="cbxDownTrendEndByMacd">
             <property name="text">
              <string>MACD绿柱连续缩短</string>
             </property>
@@ -380,19 +608,19 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_32">
           <item>
-           <widget class="QRadioButton" name="rbnDownTrendEndByMAStay">
+           <widget class="QCheckBox" name="cbxDownTrendEndByMAStay">
             <property name="text">
-             <string>站稳短期均线</string>
+             <string>收盘连续高于MAS</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSpinBox" name="spbDownTrendEndMAStayDays">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="font">
              <font>
@@ -420,9 +648,19 @@
          </layout>
         </item>
         <item>
+         <widget class="QCheckBox" name="cbxDownTrendEndByMAShortDiff">
+          <property name="text">
+           <string>MAS开始上升</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_34">
           <item>
-           <widget class="QRadioButton" name="rbnDownTrendEndByNoLowAgain">
+           <widget class="QCheckBox" name="cbxDownTrendEndByNoLowAgain">
             <property name="text">
              <string>连续</string>
             </property>
@@ -459,7 +697,53 @@
           <item>
            <widget class="QLabel" name="lblDownTrendEndByNoLowAgain">
             <property name="text">
-             <string>不再创新低</string>
+             <string>未创新低</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_36">
+          <item>
+           <widget class="QCheckBox" name="cbxDownTrendEndByConsecutiveUp">
+            <property name="text">
+             <string>连续</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spbDownTrendEndConsecutiveUpDays">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>日</string>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblDownTrendEndByConsecutiveUp">
+            <property name="text">
+             <string>收盘上涨</string>
             </property>
            </widget>
           </item>
@@ -474,8 +758,13 @@
         <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
           <widget class="QLabel" name="lblMAPeriodShort">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="text">
-            <string>短期均线时长</string>
+            <string>短期均线(MAS)时长</string>
            </property>
           </widget>
          </item>
@@ -513,8 +802,13 @@
         <layout class="QHBoxLayout" name="horizontalLayout_14">
          <item>
           <widget class="QLabel" name="lblMAPeriodLong">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="text">
-            <string>长期均线时长</string>
+            <string>长期均线(MAL)时长</string>
            </property>
           </widget>
          </item>
@@ -544,6 +838,19 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnShowDiagram">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>显示K线图</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -668,6 +975,54 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QCheckBox" name="cbxUpTrendSameDayTrade">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>日内做T 预期收益</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbUpTrendSameDayProfit">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>20.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>2.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QCheckBox" name="cbxUpTrendBuyByMA5">
           <property name="text">
            <string>回调至五日均线买入</string>
@@ -713,7 +1068,7 @@
              <double>0.100000000000000</double>
             </property>
             <property name="value">
-             <double>10.000000000000000</double>
+             <double>8.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -721,54 +1076,6 @@
            <widget class="QLabel" name="lblUpTrendSellByMA5">
             <property name="text">
              <string>减仓</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
-          <item>
-           <widget class="QCheckBox" name="cbxUpTrendSameDayTrade">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>日内做T 预期收益</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbUpTrendSameDayProfit">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>20.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>2.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -894,6 +1201,54 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_22">
+          <item>
+           <widget class="QCheckBox" name="cbxDownTrendSameDayTrade">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>日内做T 预期收益</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spbDownTrendSameDayProfit">
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>20.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>2.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QCheckBox" name="cbxDownTrendSellByMA5">
           <property name="text">
            <string>反弹至五日均线卖出</string>
@@ -939,7 +1294,7 @@
              <double>0.100000000000000</double>
             </property>
             <property name="value">
-             <double>-8.000000000000000</double>
+             <double>-6.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -947,54 +1302,6 @@
            <widget class="QLabel" name="lblUpTrendBuyByMA5">
             <property name="text">
              <string>补仓</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_22">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendSameDayTrade">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>日内做T 预期收益</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbDownTrendSameDayProfit">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>20.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>2.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -1106,7 +1413,7 @@
              <double>0.100000000000000</double>
             </property>
             <property name="value">
-             <double>4.000000000000000</double>
+             <double>3.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -1118,26 +1425,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxFlatTrendBuyByBOLL">
-          <property name="text">
-           <string>布林线下轨买入</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxFlatTrendSellByBOLL">
-          <property name="text">
-           <string>布林线上轨卖出</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_26">
@@ -1181,11 +1468,31 @@
              <double>0.100000000000000</double>
             </property>
             <property name="value">
-             <double>3.000000000000000</double>
+             <double>2.000000000000000</double>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbxFlatTrendBuyByBOLL">
+          <property name="text">
+           <string>布林线下轨买入</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbxFlatTrendSellByBOLL">
+          <property name="text">
+           <string>布林线上轨卖出</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1501,19 +1808,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="btnShowDiagram">
-         <property name="font">
-          <font>
-           <family>Helvetica</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>显示K线图</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
@@ -1533,7 +1827,7 @@
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>13</number>
+      <number>14</number>
      </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>70</number>
@@ -1598,6 +1892,11 @@
      </column>
      <column>
       <property name="text">
+       <string>持仓市值</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>累计收益</string>
       </property>
      </column>
@@ -1619,44 +1918,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>448</y>
+     <x>139</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>215</x>
-     <y>449</y>
+     <x>214</x>
+     <y>310</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>rbnUpTrendStartByMAStay</sender>
+   <sender>cbxUpTrendStartByMAStay</sender>
    <signal>toggled(bool)</signal>
    <receiver>spbUpTrendStartMAStayDays</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>112</y>
+     <x>115</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
-     <x>209</x>
-     <y>113</y>
+     <x>184</x>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>rbnDownTrendStartByMaBreak</sender>
+   <sender>cbxDownTrendStartByMABreak</sender>
    <signal>toggled(bool)</signal>
    <receiver>spbDownTrendStartMABreakDays</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>585</x>
-     <y>112</y>
+     <x>520</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
-     <x>643</x>
-     <y>113</y>
+     <x>590</x>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
@@ -1667,12 +1966,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>409</y>
+     <x>95</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>414</y>
+     <x>184</x>
+     <y>282</y>
     </hint>
    </hints>
   </connection>
@@ -1683,12 +1982,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>75</x>
-     <y>362</y>
+     <x>91</x>
+     <y>229</y>
     </hint>
     <hint type="destinationlabel">
-     <x>146</x>
-     <y>365</y>
+     <x>160</x>
+     <y>230</y>
     </hint>
    </hints>
   </connection>
@@ -1699,12 +1998,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>334</y>
+     <x>88</x>
+     <y>201</y>
     </hint>
     <hint type="destinationlabel">
-     <x>143</x>
-     <y>338</y>
+     <x>164</x>
+     <y>202</y>
     </hint>
    </hints>
   </connection>
@@ -1715,12 +2014,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>287</x>
-     <y>334</y>
+     <x>313</x>
+     <y>201</y>
     </hint>
     <hint type="destinationlabel">
-     <x>354</x>
-     <y>340</y>
+     <x>386</x>
+     <y>202</y>
     </hint>
    </hints>
   </connection>
@@ -1731,12 +2030,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>296</x>
-     <y>359</y>
+     <x>313</x>
+     <y>229</y>
     </hint>
     <hint type="destinationlabel">
-     <x>337</x>
-     <y>360</y>
+     <x>382</x>
+     <y>230</y>
     </hint>
    </hints>
   </connection>
@@ -1747,12 +2046,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
-     <y>412</y>
+     <x>337</x>
+     <y>281</y>
     </hint>
     <hint type="destinationlabel">
-     <x>373</x>
-     <y>417</y>
+     <x>410</x>
+     <y>282</y>
     </hint>
    </hints>
   </connection>
@@ -1763,12 +2062,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>332</x>
-     <y>449</y>
+     <x>361</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>396</x>
-     <y>448</y>
+     <x>440</x>
+     <y>310</y>
     </hint>
    </hints>
   </connection>
@@ -1779,12 +2078,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>517</x>
-     <y>333</y>
+     <x>539</x>
+     <y>201</y>
     </hint>
     <hint type="destinationlabel">
-     <x>576</x>
-     <y>333</y>
+     <x>612</x>
+     <y>202</y>
     </hint>
    </hints>
   </connection>
@@ -1795,12 +2094,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>522</x>
-     <y>369</y>
+     <x>539</x>
+     <y>231</y>
     </hint>
     <hint type="destinationlabel">
-     <x>600</x>
-     <y>368</y>
+     <x>608</x>
+     <y>232</y>
     </hint>
    </hints>
   </connection>
@@ -1811,33 +2110,33 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>558</x>
-     <y>443</y>
+     <x>587</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>615</x>
-     <y>443</y>
+     <x>656</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>rbnUpTrendEndByMaBreak</sender>
+   <sender>cbxUpTrendEndByMaBreak</sender>
    <signal>toggled(bool)</signal>
    <receiver>spbUpTrendEndMABreakDays</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>333</x>
-     <y>91</y>
+     <x>307</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
-     <x>396</x>
-     <y>91</y>
+     <x>397</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>rbnUpTrendEndByMacd</sender>
+   <sender>cbxUpTrendEndByMacd</sender>
    <signal>toggled(bool)</signal>
    <receiver>spbUpTrendEndMACDFallDays</receiver>
    <slot>setEnabled(bool)</slot>
@@ -1847,8 +2146,104 @@
      <y>53</y>
     </hint>
     <hint type="destinationlabel">
-     <x>417</x>
-     <y>53</y>
+     <x>397</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxUpTrendEndByNoHighAgain</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbUpTrendEndNoHighDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxUpTrendEndByConsecutiveDown</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbUpTrendEndConsecutiveDownDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>258</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>306</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxDownTrendEndByMacd</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbDownTrendEndMACDRiseDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>702</x>
+     <y>42</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>771</x>
+     <y>42</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxDownTrendEndByMAStay</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbDownTrendEndMAStayDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>683</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>759</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxDownTrendEndByNoLowAgain</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbDownTrendEndNoLowDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>660</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>689</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbxDownTrendEndByConsecutiveUp</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spbDownTrendEndConsecutiveUpDays</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>650</x>
+     <y>129</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>692</x>
+     <y>131</y>
     </hint>
    </hints>
   </connection>
