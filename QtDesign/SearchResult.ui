@@ -163,7 +163,7 @@
      </column>
      <column>
       <property name="text">
-       <string>总市值</string>
+       <string>流通市值</string>
       </property>
      </column>
      <column>
