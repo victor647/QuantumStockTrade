@@ -1,11 +1,11 @@
 import sys
 import traceback
-import baostock
+import baostock, tushare
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
 from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
-from ShortTermTrading import StockFinder, SelectedPerformance
+from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor
 from RealTimeMonitor import LiveTracker
 from Data.QueryStockData import query_all_stock_data
 from Tools import TradeSettings, FileManager
@@ -25,15 +25,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     __stockTracker = None
     __selectedPerformance = None
     __scheduledInvestment = None
+    __poolMonitor = None
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setup_triggers()
         self.reconnect_server()
+
+    def setup_triggers(self):
+        self.btnStockAnalyzer.clicked.connect(self.show_stock_analyzer)
+        self.btnTradeSimulator.clicked.connect(self.show_trade_simulator)
+        self.btnStockFinder.clicked.connect(self.show_stock_finder)
+        self.btnSelectedPerformance.clicked.connect(self.show_selected_performance)
+        self.btnLiveTracker.clicked.connect(self.show_live_tracker)
+        self.btnScheduledInvestment.clicked.connect(self.show_scheduled_investment)
+        self.btnPoolMonitor.clicked.connect(self.show_pool_monitor)
 
     @staticmethod
     def reconnect_server():
         baostock.login()
+        tushare.set_token('eee03f328c31ce7b74e1f0417863e4019723e9bdda3fb0d243cf9a1c')
 
     # 个股股性分析
     def show_stock_analyzer(self):
@@ -55,15 +67,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.__selectedPerformance = SelectedPerformance.SelectedPerformance()
         self.__selectedPerformance.show()
 
+    # 实时盯盘助手
+    def show_live_tracker(self):
+        self.__stockTracker = LiveTracker.LiveTracker()
+        self.__stockTracker.show()
+
     # 定投组合表现
     def show_scheduled_investment(self):
         self.__scheduledInvestment = ScheduledInvestment.ScheduledInvestment()
         self.__scheduledInvestment.show()
 
-    # 实时盯盘助手
-    def show_live_tracker(self):
-        self.__stockTracker = LiveTracker.LiveTracker()
-        self.__stockTracker.show()
+    # 股池每日监测
+    def show_pool_monitor(self):
+        self.__poolMonitor = PoolMonitor.PoolMonitor()
+        self.__poolMonitor.show()
 
     # 交易费用设置
     @staticmethod

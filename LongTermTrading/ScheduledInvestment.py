@@ -53,10 +53,11 @@ class ScheduledInvestment(QMainWindow, Ui_ScheduledInvestment):
 
     # 根据导入的选股列表文件填表
     def fill_stock_list(self, code: str, share: str):
+        name = Tools.get_stock_name_from_code(code)
+        if name == '':
+            return
         row = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row)
-        # 获取股票名称
-        name = Tools.get_stock_name_from_code(code)
         self.tblStockList.setItem(row, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row, 1, QTableWidgetItem(name))
         Tools.add_sortable_item(self.tblStockList, row, 2, float(share.strip('%')), share)

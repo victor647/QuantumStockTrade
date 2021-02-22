@@ -35,7 +35,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         today = QDate.currentDate()
         self.dteEndDate.setDate(today)
         self.dteStartDate.setDate(today.addMonths(-6))
-        # self.tblHighLowPoints.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tblHighLowPoints.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def setup_triggers(self):
         self.btnGetData.clicked.connect(self.get_history_data)

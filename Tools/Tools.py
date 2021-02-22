@@ -52,9 +52,11 @@ def get_trade_center_and_index(stock_code: str):
 
 # 通过股票代码获取股票名称
 def get_stock_name_from_code(stock_code: str):
+    if stock_code == '':
+        return ''
     table = FileManager.read_stock_list_file()
     row = table[table['code'] == int(stock_code)]
-    name = row.iloc[0]['name']
+    name = row.iloc[0]['name'] 
     return name
 
 

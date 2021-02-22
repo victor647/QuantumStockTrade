@@ -77,10 +77,11 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
 
     # 根据导入的选股列表文件填表
     def fill_stock_list(self, code: str):
+        name = Tools.get_stock_name_from_code(code)
+        if name == '':
+            return
         row_count = self.tblStockList.rowCount()
         self.tblStockList.insertRow(row_count)
-        # 获取股票名称
-        name = Tools.get_stock_name_from_code(code)
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
         self.tblStockList.setItem(row_count, 2, QTableWidgetItem(self.__startDate))

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1094</width>
+    <width>847</width>
     <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>模拟交易回测</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_11">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_28">
      <item>
@@ -25,23 +25,13 @@
         </font>
        </property>
        <property name="title">
-        <string>上升趋势开始信号（同时满足）</string>
+        <string>上升下降趋势开始信号（同时满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QCheckBox" name="cbxUpTrendStartByMACD">
-          <property name="text">
-           <string>MACD柱体红色</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="cbxUpTrendStartByMACross">
           <property name="text">
-           <string>MAS高于MAL</string>
+           <string>MAS金叉MAL</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -51,43 +41,12 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_20">
           <item>
-           <widget class="QCheckBox" name="cbxUpTrendStartByMAShortDiff">
+           <widget class="QCheckBox" name="cbxUpTrendStartByMASGoUp">
             <property name="text">
-             <string>MAS斜率高于</string>
+             <string>MAS向上</string>
             </property>
             <property name="checked">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbUpTrendMAShortDiffRate">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>10.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -96,43 +55,12 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_37">
           <item>
-           <widget class="QCheckBox" name="cbxUpTrendStartByMALongDiff">
+           <widget class="QCheckBox" name="cbxUpTrendStartByMALGoUp">
             <property name="text">
-             <string>MAL斜率高于</string>
+             <string>MAL向上</string>
             </property>
             <property name="checked">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbUpTrendMALongDiffRate">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>-5.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>5.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -141,9 +69,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QCheckBox" name="cbxUpTrendStartByMAStay">
+           <widget class="QCheckBox" name="cbxUpTrendStartByMALStay">
             <property name="text">
-             <string>收盘连续高于MAL</string>
+             <string>连续</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -151,7 +79,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spbUpTrendStartMAStayDays">
+           <widget class="QSpinBox" name="spbUpTrendStartMALStayDays">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -162,7 +90,7 @@
              </font>
             </property>
             <property name="suffix">
-             <string>日</string>
+             <string/>
             </property>
             <property name="minimum">
              <number>1</number>
@@ -174,7 +102,14 @@
              <number>1</number>
             </property>
             <property name="value">
-             <number>2</number>
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblContinuousHigherThanMAL">
+            <property name="text">
+             <string>根K线高于MAL</string>
             </property>
            </widget>
           </item>
@@ -192,7 +127,7 @@
         </font>
        </property>
        <property name="title">
-        <string>上升趋势结束信号（任一满足）</string>
+        <string>上升下降趋势结束信号（任一满足）</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
@@ -282,7 +217,7 @@
         <item>
          <widget class="QCheckBox" name="cbxUpTrendEndByMAShortDiff">
           <property name="text">
-           <string>MAS开始下滑</string>
+           <string>MAS开始向下</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -385,374 +320,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="grpDownTrendStartSignal">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="title">
-        <string>下降趋势开始信号（同时满足）</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QCheckBox" name="cbxDownTrendStartByMACD">
-          <property name="text">
-           <string>MACD柱体绿色</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxDownTrendStartByMACross">
-          <property name="text">
-           <string>MAS低于MAL</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_21">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendStartByMAShortDiff">
-            <property name="text">
-             <string>MAS斜率低于</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbDownTrendMAShortDiffRate">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>-10.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>0.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>-1.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_38">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendStartByMALongDiff">
-            <property name="text">
-             <string>MAL斜率低于</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spbDownTrendMALongDiffRate">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="minimum">
-             <double>-5.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>5.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_19">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendStartByMABreak">
-            <property name="text">
-             <string>收盘连续低于MAL</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spbDownTrendStartMABreakDays">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>日</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="grpDownTrendEndSignal">
-       <property name="font">
-        <font>
-         <family>Helvetica</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="title">
-        <string>下降趋势结束信号（任一满足）</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_31">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendEndByMacd">
-            <property name="text">
-             <string>MACD绿柱连续缩短</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spbDownTrendEndMACDRiseDays">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>日</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_32">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendEndByMAStay">
-            <property name="text">
-             <string>收盘连续高于MAS</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spbDownTrendEndMAStayDays">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>日</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="cbxDownTrendEndByMAShortDiff">
-          <property name="text">
-           <string>MAS开始上升</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_34">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendEndByNoLowAgain">
-            <property name="text">
-             <string>连续</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spbDownTrendEndNoLowDays">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>日</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblDownTrendEndByNoLowAgain">
-            <property name="text">
-             <string>未创新低</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_36">
-          <item>
-           <widget class="QCheckBox" name="cbxDownTrendEndByConsecutiveUp">
-            <property name="text">
-             <string>连续</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spbDownTrendEndConsecutiveUpDays">
-            <property name="font">
-             <font>
-              <family>Helvetica</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="suffix">
-             <string>日</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="singleStep">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblDownTrendEndByConsecutiveUp">
-            <property name="text">
-             <string>收盘上涨</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -780,19 +347,19 @@
             </font>
            </property>
            <property name="suffix">
-            <string>日</string>
+            <string/>
            </property>
            <property name="minimum">
-            <number>3</number>
+            <number>5</number>
            </property>
            <property name="maximum">
-            <number>20</number>
+            <number>100</number>
            </property>
            <property name="singleStep">
             <number>1</number>
            </property>
            <property name="value">
-            <number>5</number>
+            <number>65</number>
            </property>
           </widget>
          </item>
@@ -821,19 +388,19 @@
             </font>
            </property>
            <property name="suffix">
-            <string>日</string>
+            <string/>
            </property>
            <property name="minimum">
-            <number>10</number>
+            <number>20</number>
            </property>
            <property name="maximum">
-            <number>250</number>
+            <number>5000</number>
            </property>
            <property name="singleStep">
             <number>1</number>
            </property>
            <property name="value">
-            <number>20</number>
+            <number>130</number>
            </property>
           </widget>
          </item>
@@ -849,6 +416,136 @@
          </property>
          <property name="text">
           <string>显示K线图</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLabel" name="lblStockNumber">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Helvetica</family>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>股票代码/名称</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="iptStockNumber">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Helvetica</family>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>恒瑞医药</string>
+           </property>
+           <property name="maxLength">
+            <number>6</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lblStartDate">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Helvetica</family>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>开始日期</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="dteStart">
+           <property name="specialValueText">
+            <string/>
+           </property>
+           <property name="displayFormat">
+            <string>yyyy-MM-dd</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_25">
+         <item>
+          <widget class="QLabel" name="lblEndDate">
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Helvetica</family>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>结束日期</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="dteEnd">
+           <property name="specialValueText">
+            <string/>
+           </property>
+           <property name="displayFormat">
+            <string>yyyy-MM-dd</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnStartTrading">
+         <property name="font">
+          <font>
+           <family>Helvetica</family>
+           <pointsize>9</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>开始模拟交易回测</string>
          </property>
         </widget>
        </item>
@@ -1680,136 +1377,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_12">
-         <item>
-          <widget class="QLabel" name="lblStockNumber">
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Helvetica</family>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>股票代码/名称</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="iptStockNumber">
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Helvetica</family>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>恒瑞医药</string>
-           </property>
-           <property name="maxLength">
-            <number>6</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="lblStartDate">
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Helvetica</family>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>开始日期</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDateEdit" name="dteStart">
-           <property name="specialValueText">
-            <string/>
-           </property>
-           <property name="displayFormat">
-            <string>yyyy-MM-dd</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_25">
-         <item>
-          <widget class="QLabel" name="lblEndDate">
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Helvetica</family>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>结束日期</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDateEdit" name="dteEnd">
-           <property name="specialValueText">
-            <string/>
-           </property>
-           <property name="displayFormat">
-            <string>yyyy-MM-dd</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnStartTrading">
-         <property name="font">
-          <font>
-           <family>Helvetica</family>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>开始模拟交易回测</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
     </layout>
    </item>
    <item>
@@ -1928,9 +1495,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>cbxUpTrendStartByMAStay</sender>
+   <sender>cbxUpTrendStartByMALStay</sender>
    <signal>toggled(bool)</signal>
-   <receiver>spbUpTrendStartMAStayDays</receiver>
+   <receiver>spbUpTrendStartMALStayDays</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1939,22 +1506,6 @@
     </hint>
     <hint type="destinationlabel">
      <x>184</x>
-     <y>106</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDownTrendStartByMABreak</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbDownTrendStartMABreakDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>520</x>
-     <y>105</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>590</x>
      <y>106</y>
     </hint>
    </hints>
@@ -2180,70 +1731,6 @@
     <hint type="destinationlabel">
      <x>306</x>
      <y>123</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDownTrendEndByMacd</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbDownTrendEndMACDRiseDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>702</x>
-     <y>42</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>771</x>
-     <y>42</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDownTrendEndByMAStay</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbDownTrendEndMAStayDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>683</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>759</x>
-     <y>74</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDownTrendEndByNoLowAgain</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbDownTrendEndNoLowDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>660</x>
-     <y>99</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>689</x>
-     <y>99</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cbxDownTrendEndByConsecutiveUp</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>spbDownTrendEndConsecutiveUpDays</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>650</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>692</x>
-     <y>131</y>
     </hint>
    </hints>
   </connection>

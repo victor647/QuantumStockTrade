@@ -157,6 +157,7 @@ def import_scheduled_investment_stock_list():
 
 # 导出全部股票信息列表
 def save_stock_list_file():
+    # stock_list = tushare.pro_api().stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
     stock_list = tushare.get_stock_basics()
     stock_list.to_csv(full_stock_info_path())
     return stock_list
