@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
 from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
-from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor
+from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor, FifteenMinTrader
 from RealTimeMonitor import LiveTracker
 from Data.QueryStockData import query_all_stock_data
 from Tools import TradeSettings, FileManager
@@ -26,6 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     __selectedPerformance = None
     __scheduledInvestment = None
     __poolMonitor = None
+    __15MinTrader = None
 
     def __init__(self):
         super().__init__()
@@ -41,6 +42,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btnLiveTracker.clicked.connect(self.show_live_tracker)
         self.btnScheduledInvestment.clicked.connect(self.show_scheduled_investment)
         self.btnPoolMonitor.clicked.connect(self.show_pool_monitor)
+        self.btn15MinTrader.clicked.connect(self.show_15_min_trader)
 
     @staticmethod
     def reconnect_server():
@@ -81,6 +83,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def show_pool_monitor(self):
         self.__poolMonitor = PoolMonitor.PoolMonitor()
         self.__poolMonitor.show()
+
+    # 15分钟线掘金
+    def show_15_min_trader(self):
+        self.__15MinTrader = FifteenMinTrader.FifteenMinTrader()
+        self.__15MinTrader.show()
 
     # 交易费用设置
     @staticmethod

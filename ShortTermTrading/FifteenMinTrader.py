@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
-from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
+from QtDesign.FifteenMinTrader_ui import Ui_FifteenMinTrader
 import Data.TechnicalAnalysis as TA
 from Data.InvestmentStatus import StockInvestment
 import pandas
@@ -8,25 +8,26 @@ from Tools import Tools, FileManager
 import Data.HistoryGraph as HistoryGraph
 
 
-# 选股器回测工具
-class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
+# 15分钟k线选股交易
+class FifteenMinTrader(QMainWindow, Ui_FifteenMinTrader):
     __startDate = ''
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        # 初始化日期显示
-        self.dteSearchDate.setDate(QDate.currentDate().addMonths(-1))
-        self.update_start_date()
+        self.setup_triggers()
         # 为表格自动设置列宽
         self.tblStockList.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.__stockInvestments = {}
+
+    def setup_triggers(self):
+        self.btnImportStockList.clicked.connect(self.import_stock_list)
+        self.btnStartTrading.clicked.connect(self.start_trade_simulation)
 
     # 读取股票列表（可多选）
     def import_stock_list(self):
         full_data = FileManager.import_multiple_stock_lists()
         for date, codes in full_data.items():
-            self.__startDate = date
             for code in codes:
                 self.fill_stock_list(code)
 
@@ -57,6 +58,9 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
 
     # 股票详细信息
     def show_stock_graph(self, row: int, column: int):
+        # 编辑选股日期
+        if column == 2:
+            return
         stock_code = self.tblStockList.item(row, 0).text()
         # 通过网页打开股票资料
         if column < 2:
@@ -65,7 +69,7 @@ class SelectedPerformance(QMainWindow, Ui_SelectedPerformance):
         # 从表格中读取选股时间
         search_date = self.tblStockList.item(row, 2).text()
         # 大盘K线图
-        if column >= 8:
+        if column == 10:
             market, index_code = Tools.get_trade_center_and_index(stock_code)
             HistoryGraph.plot_stock_search_and_trade(market + index_code, search_date)
         # 股票K线图

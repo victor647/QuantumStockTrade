@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
+    <width>240</width>
     <height>192</height>
    </rect>
   </property>
@@ -74,7 +74,7 @@
          </font>
         </property>
         <property name="text">
-         <string>量化指标选股</string>
+         <string>日线指标选股</string>
         </property>
        </widget>
       </item>
@@ -93,7 +93,7 @@
          </font>
         </property>
         <property name="text">
-         <string>选股表现回测</string>
+         <string>日线选股回测</string>
         </property>
        </widget>
       </item>
@@ -102,7 +102,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QPushButton" name="btnLiveTracker">
+       <widget class="QPushButton" name="btnPoolMonitor">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
           <horstretch>0</horstretch>
@@ -116,7 +116,7 @@
          </font>
         </property>
         <property name="text">
-         <string>实时盯盘助手</string>
+         <string>日线股池监测</string>
         </property>
        </widget>
       </item>
@@ -142,23 +142,46 @@
      </layout>
     </item>
     <item>
-     <widget class="QPushButton" name="btnPoolMonitor">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>股池每日监测</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QPushButton" name="btnFifteenMinFinder">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>15分钟线选股</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnFifteenMinTrade">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Helvetica</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>15分钟线回测</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -167,7 +190,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>203</width>
+     <width>240</width>
      <height>23</height>
     </rect>
    </property>
