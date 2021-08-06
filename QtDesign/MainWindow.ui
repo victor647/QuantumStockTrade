@@ -144,7 +144,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QPushButton" name="btnFifteenMinFinder">
+       <widget class="QPushButton" name="btn15MinFinder">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
           <horstretch>0</horstretch>
@@ -163,7 +163,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnFifteenMinTrade">
+       <widget class="QPushButton" name="btn15MinTrader">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
           <horstretch>0</horstretch>

@@ -1,4 +1,3 @@
-from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.FifteenMinTrader_ui import Ui_FifteenMinTrader
 import Data.TechnicalAnalysis as TA
@@ -8,7 +7,7 @@ from Tools import Tools, FileManager
 import Data.HistoryGraph as HistoryGraph
 
 
-# 15分钟k线选股交易
+# 15分钟k线回测
 class FifteenMinTrader(QMainWindow, Ui_FifteenMinTrader):
     __startDate = ''
 
