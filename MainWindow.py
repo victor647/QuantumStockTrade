@@ -37,6 +37,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.btn15MinFinder.clicked.connect(self.show_15_min_finder)
         self.btn15MinTrader.clicked.connect(self.show_15_min_trader)
 
+        self.actGetStockList.triggered.connect(self.get_all_stocks_list)
+        self.actGetStockData.triggered.connect(self.get_stocks_history_data)
+        self.actReconnect.triggered.connect(self.reconnect_server)
+        self.actTradeSettings.triggered.connect(self.show_trade_settings)
+
     @staticmethod
     def reconnect_server():
         baostock.login()

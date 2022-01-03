@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QErrorMessage, QLineEdit, QTableWidget
 from Tools import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.CustomSortingTableData import CustomSortingTableData
-import webbrowser
+import webbrowser, baostock
 from datetime import date
 
 
@@ -16,9 +16,14 @@ def get_today_date():
 
 # 获取离今天最近的交易日
 def get_nearest_trade_date(qdate: QDate):
-    while qdate.dayOfWeek() > 5:
-        qdate = qdate.addDays(-1)
-    return qdate
+    start_date = qdate.addMonths(-1).toString('yyyy-MM-dd')
+    end_date = qdate.toString('yyyy-MM-dd')
+    data = baostock.query_trade_dates(start_date=start_date, end_date=end_date).data
+    index = -1
+    while data[index][1] == 0:
+        index -= 1
+    trade_date = QDate.fromString(data[index][0], 'yyyy-MM-dd')
+    return trade_date
 
 
 # 根据股票代码获取股票交易所信息和指数代码
@@ -32,6 +37,10 @@ def get_trade_center_and_index(stock_code: str):
     elif 300000 < code < 400000:
         market = 'sz'
         index = '399006'
+    # 北交所
+    elif 400000 < code < 600000:
+        market = 'bj'
+        index = '000000'
     # 上海主板以及科创板
     elif 600000 <= code < 700000:
         market = 'sh'

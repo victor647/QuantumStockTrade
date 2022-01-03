@@ -69,14 +69,23 @@ def calculate_all_ma_curves(stock_data: pandas.DataFrame):
     calculate_ma_curve(stock_data, 60)
 
 
+# 计算股池需要的MA均线
+def calculate_pool_ma_curves(stock_data: pandas.DataFrame):
+    calculate_ma_curve(stock_data, 5)
+    calculate_ma_curve(stock_data, 20)
+    calculate_ma_curve(stock_data, 60)
+    calculate_ma_curve(stock_data, 120)
+    calculate_ma_curve(stock_data, 250)
+
+
 # 计算MA均线
 def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
     # 数据数量不够，跳过
     if stock_data.shape[0] <= period:
-        return
+        return ''
     key = 'ma_' + str(period)
     if key in stock_data:
-        return
+        return ''
     stock_data[key] = talib.SMA(stock_data['close'], period)
     # 解决最前端数据不够的问题
     for i in range(period):
@@ -302,6 +311,9 @@ def get_profit_percentage(profit: float, investment: float):
 def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int, behaviour: str):
     key_short = calculate_ma_curve(stock_data, period_short)
     key_long = calculate_ma_curve(stock_data, period_long)
+    if key_short == '' or key_long == '':
+        return False
+
     # 获取短线和长线
     short = stock_data[key_short]
     long = stock_data[key_long]

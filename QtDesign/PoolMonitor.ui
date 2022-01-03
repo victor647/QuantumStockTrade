@@ -6,37 +6,90 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>872</width>
-    <height>836</height>
+    <width>944</width>
+    <height>772</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>股池每日监测</string>
+   <string>股池监测</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="btnImportStockList">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QLabel" name="lblNewStockCode">
        <property name="font">
         <font>
          <family>Helvetica</family>
-         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>导入股池列表</string>
+        <string>股票代码/名称</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnStartAnalyze">
+      <widget class="QLineEdit" name="iptStockCode">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>贵州茅台</string>
+       </property>
+       <property name="maxLength">
+        <number>6</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAddStock">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>添加股票</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRemoveStock">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>删除股票</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClearStocks">
+       <property name="font">
+        <font>
+         <family>Helvetica</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>清空列表</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnImportPool">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
          <horstretch>0</horstretch>
@@ -50,7 +103,7 @@
         </font>
        </property>
        <property name="text">
-        <string>开始分析计算</string>
+        <string>导入股池</string>
        </property>
       </widget>
      </item>

@@ -233,72 +233,7 @@
   </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>actReconnect</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>reconnect_server()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>112</x>
-     <y>71</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actTradeSettings</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>show_trade_settings()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>104</x>
-     <y>64</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actGetStockList</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>get_all_stocks_list()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>72</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actGetStockData</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>get_stocks_history_data()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>72</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>show_stock_analyzer()</slot>
   <slot>show_stock_finder()</slot>

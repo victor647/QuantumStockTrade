@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtChart import *
-from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtCore import Qt, QDateTime, QDate
 from PyQt5.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
 import Data.TechnicalAnalysis as TA
-from Tools import FileManager
-import pandas, math
+from Tools import FileManager, Tools
+import pandas, math, baostock
 
 
 # 美化散点图
@@ -28,7 +28,7 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 
 
 # 画选股日期附近的K线
-def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after=20, days_before=100, trade_history=None):
+def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after: int = 20, days_before: int = 100, trade_history=None):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 计算均线数据
     TA.calculate_all_ma_curves(stock_data)
@@ -44,6 +44,27 @@ def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after=20
     # 画交易记录
     if trade_history is not None:
         graph.plot_trade_history(trade_history, False)
+    graph.exec_()
+
+
+# 画股池股票走势图
+def plot_pooled_stock_graph(stock_code: str):
+    # 先获取日期，取15个月的K线以获得均线数据
+    today = QDate.currentDate()
+    start_date = today.addMonths(-15).toString('yyyy-MM-dd')
+    end_date = today.toString('yyyy-MM-dd')
+    market, index_code = Tools.get_trade_center_and_index(stock_code)
+    full_code = market + '.' + stock_code
+    result = baostock.query_history_k_data(code=full_code, fields='date,open,close,high,low,turn',
+                                           start_date=start_date, end_date=end_date, frequency='d', adjustflag='2')
+    stock_data = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
+    stock_data.set_index('date', inplace=True)
+    # 计算均线并画图
+    TA.calculate_pool_ma_curves(stock_data)
+    graph = CandleStickChart(stock_data[-100:], stock_code)
+    graph.plot_pool_ma_lines()
+    graph.plot_price()
+    graph.plot_volume()
     graph.exec_()
 
 
@@ -143,7 +164,10 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         for index, day_data in self.__stockData.iterrows():
             # 给成交量柱子上色
             if 'preclose' in day_data:
-                if day_data['close'] >= day_data['preclose']:
+                if day_data['high'] == day_data['low']:
+                    volume_bar_down.append(0)
+                    volume_bar_up.append(0)
+                elif day_data['close'] >= day_data['preclose']:
                     volume_bar_up.append(day_data['turn'])
                     volume_bar_down.append(0)
                 else:
@@ -276,9 +300,6 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
 
     # 画单条均线
     def plot_ma(self, period: int, color):
-        # 数据数量不够，跳过
-        if self.__stockData.shape[0] <= period:
-            return
         label = 'ma_' + str(period)
         ma_line = QLineSeries()
         ma_line.setColor(color)
@@ -302,6 +323,14 @@ class CandleStickChart(QDialog, Ui_HistoryGraph):
         self.plot_ma(30, Qt.green)
         self.plot_ma(20, Qt.magenta)
         self.plot_ma(10, Qt.yellow)
+        self.plot_ma(5, Qt.white)
+
+    # 画股池均线
+    def plot_pool_ma_lines(self):
+        self.plot_ma(250, Qt.red)
+        self.plot_ma(120, QColor(0, 127, 255))
+        self.plot_ma(60, Qt.green)
+        self.plot_ma(20, Qt.magenta)
         self.plot_ma(5, Qt.white)
 
     # 画趋势节点

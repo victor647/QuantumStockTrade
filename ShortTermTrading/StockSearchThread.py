@@ -90,19 +90,19 @@ class StandardStockSearcher(StockSearcher):
             max_profit = TA.get_percent_change_from_price(TA.get_price_from_percent_change(pre_close, five_day_high),
                                                           TA.get_price_from_percent_change(pre_close, next_day_low))
             # 获得股票行业信息
-            industry = row['industry']
+            # industry = row['industry']
             # 获得股票上市地区
-            area = row['area']
+            # area = row['area']
             # 获得股票市盈率
-            pe = row['pe']
+            # pe = row['pe']
             # 获得股票市净率
-            pb = row['pb']
+            # pb = row['pb']
             # 获得股票总市值
-            assets = row['totalAssets']
+            # assets = row['totalAssets']
             # 净资产收益率
-            roe = round(row['esp'] / row['bvps'] * 100, 2)
+            # roe = round(row['esp'] / row['bvps'] * 100, 2)
             # 将符合要求的股票信息打包
-            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, industry, area, pe, pb, assets, roe]
+            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit] #, industry, area, pe, pb, assets, roe]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(stock_code)

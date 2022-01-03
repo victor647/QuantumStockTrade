@@ -1,6 +1,8 @@
-import os, json, pandas, tushare
+import os, json, pandas, baostock
 from pathlib import Path
+from Tools import Tools
 from PyQt5.QtWidgets import QFileDialog, QTableWidget
+from PyQt5.Qt import QDate
 import Data.TechnicalAnalysis as TechnicalAnalysis
 
 
@@ -113,7 +115,9 @@ def import_stock_list(import_func):
         return
     file = open(file_path[0], 'r')
     for line in file:
-        code = line.rstrip('\n')
+        code = line.rstrip('\n').rstrip('\t')
+        if code == '':
+            continue
         import_func(code)
     file.close()
 
@@ -157,10 +161,29 @@ def import_scheduled_investment_stock_list():
 
 # 导出全部股票信息列表
 def save_stock_list_file():
-    # stock_list = tushare.pro_api().stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
-    stock_list = tushare.get_stock_basics()
-    stock_list.to_csv(full_stock_info_path())
-    return stock_list
+    today = Tools.get_nearest_trade_date(QDate.currentDate()).toString('yyyy-MM-dd')
+    stock_list = baostock.query_all_stock(today).data
+    results = []
+    for stock_info in stock_list:
+        name = stock_info[2]
+        if name == '' or len(name) > 4:
+            continue
+
+        market = stock_info[0][:2]
+        code = stock_info[0][3:]
+        if market == 'sh' and code < '100000':
+            continue
+
+        data = {
+            'market': market,
+            'code': code,
+            'name': name
+        }
+
+        results.append(data)
+    data = pandas.DataFrame(results)
+    data.to_csv(full_stock_info_path())
+    return data
 
 
 # 导入全部股票信息列表

@@ -47,19 +47,19 @@ class SearchResult(QDialog, Ui_SearchResult):
         for i in range(6):
             column = Tools.add_colored_item(self.tblStockList, row_count, column, items[column], '%')
         # 股票行业
-        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
-        column += 1
+        # self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        # column += 1
         # 股票地区
-        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
-        column += 1
+        # self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        # column += 1
         # 市盈率
-        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
+        # column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
         # 市净率
-        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
+        # column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
         # 总市值
-        column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '亿')
+        # column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '亿')
         # 净资产收益率
-        Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '%')
+        # Tools.add_sortable_item(self.tblStockList, row_count, column, items[column], str(items[column]) + '%')
         self.update_found_stock_count()
 
     # 显示股票详细数据
