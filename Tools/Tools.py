@@ -20,7 +20,7 @@ def get_nearest_trade_date(qdate: QDate):
     end_date = qdate.toString('yyyy-MM-dd')
     data = baostock.query_trade_dates(start_date=start_date, end_date=end_date).data
     index = -1
-    while data[index][1] == 0:
+    while data[index][1] == '0':
         index -= 1
     trade_date = QDate.fromString(data[index][0], 'yyyy-MM-dd')
     return trade_date
