@@ -1,0 +1,13 @@
+{
+    "timePeriod": 100,
+    "macdOn": false,
+    "macdBehaviour": "\u91d1\u53c9",
+    "bollOn": false,
+    "bollBehaviour": "\u4e0a\u7a7f",
+    "bollTrack": "\u4e0a\u8f68",
+    "maOn": false,
+    "maShort": 5,
+    "maLong": 10,
+    "specialOn": true,
+    "specialShape": "\u5bf9\u6570\u5e95"
+}

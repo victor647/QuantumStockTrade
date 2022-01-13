@@ -5,7 +5,7 @@ from Tools import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.CustomSortingTableData import CustomSortingTableData
 import webbrowser, baostock
-from datetime import date
+from datetime import date, datetime
 
 
 # 获取今天日期，格式‘20190101’
@@ -16,6 +16,9 @@ def get_today_date():
 
 # 获取离今天最近的交易日
 def get_nearest_trade_date(qdate: QDate):
+    # 不到收盘时间取前一天
+    if qdate == QDate.currentDate() and datetime.now().hour < 16:
+        qdate = qdate.addDays(-1)
     start_date = qdate.addMonths(-1).toString('yyyy-MM-dd')
     end_date = qdate.toString('yyyy-MM-dd')
     data = baostock.query_trade_dates(start_date=start_date, end_date=end_date).data

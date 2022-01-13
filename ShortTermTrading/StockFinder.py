@@ -115,6 +115,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             'maOn': self.cbxMA.isChecked(),
             'maShort': self.spbMaShort.value(),
             'maLong': self.spbMaLong.value(),
+            'specialOn': self.cbxSpecialShape.isChecked(),
+            'specialShape': self.cbbSpecialShape.currentText()
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -136,6 +138,8 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbxMA.setChecked(data['maOn'])
             self.spbMaShort.setValue(data['maShort'])
             self.spbMaLong.setValue(data['maLong'])
+            self.cbxSpecialShape.setChecked(data['specialOn'])
+            self.cbbSpecialShape.setCurrentText(data['specialShape'])
 
     # 保存自定义指标搜索条件
     def export_custom_config(self):
@@ -285,7 +289,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if self.cbxBOLL.isChecked() and not TA.match_boll(data, period, self.cbbBOLLTrack.currentText(), self.cbbBOLLBehaviour.currentText()):
             return False
         # 检测均线交叉
-        if self.cbxMA.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
+        if self.cbxMA.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value()):
             return False
         # 检测特殊图形
         if self.cbxSpecialShape.isChecked() and not TA.match_special_shape(data, self.spbTechnicalTimePeriod.value(), self.cbbSpecialShape.currentText()):

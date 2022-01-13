@@ -512,8 +512,29 @@ def candlestick_shape(daily_data: pandas.DataFrame):
 
     return open_position + needle_shape + body_height + candle_color
 
+
 # 特殊K线图形
 def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
     if shape == '对数底':
-        pass
+        trimmed_data = stock_data[-period:]
+        period_min = str(round(trimmed_data['low'].min(), 2)).split('.')
+        left = list(period_min[0])
+        right = list(period_min[1])
+        # *.00
+        if len(right) == 0:
+            return True
+        # *.a0
+        if len(right) == 1:
+            return False
+        # *.aa
+        if right[0] == right[1]:
+            return True
+        if len(left) > 1:
+            # *ab.ab
+            if right[0] == left[-2] and right[1] == left[-1]:
+                return True
+            # *ab.ba
+            if right[0] == left[-1] and right[1] == left[-2]:
+                return True
+    return False
 

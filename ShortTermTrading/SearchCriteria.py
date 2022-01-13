@@ -4,38 +4,6 @@ import ShortTermTrading.StockFinder as StockFinder
 import pandas
 
 
-# 五日选股指标内容
-class FiveDayCriteriaItem:
-    dayIndex = 1
-    bodyHeight = '大'
-    needleShape = '实体'
-    openPosition = '低开'
-    candleColor = '阳线'
-
-    # 自定义排序算法
-    def __lt__(self, other):
-        return self.dayIndex < other.dayIndex
-
-    # 转换为界面上显示的文字
-    def to_display_text(self):
-        return '第{}天为{}{}{}{}'.format(self.dayIndex, self.openPosition, self.needleShape, self.bodyHeight, self.candleColor)
-
-    # 通过json导入搜索条件
-    @staticmethod
-    def import_criteria_item(json_data: dict):
-        item = FiveDayCriteriaItem()
-        item.dayIndex = json_data['dayIndex']
-        item.bodyHeight = json_data['bodyHeight']
-        item.needleShape = json_data['needleShape']
-        item.openPosition = json_data['openPosition']
-        item.candleColor = json_data['candleColor']
-        return item
-
-    # 是否符合图形描述
-    def match_criteria(self, data_description: str):
-        return self.openPosition + self.needleShape + self.bodyHeight + self.candleColor == data_description
-
-
 # 自定义技术指标内容
 class CriteriaItem:
     queryLogic = '平均'
@@ -62,6 +30,7 @@ class CriteriaItem:
             connector = operator
         else:
             connector = '-'
+
         # 获取时间段数据
         if self.queryPeriodBegin == self.queryPeriodEnd:
             if self.queryPeriodBegin == 1:
@@ -69,13 +38,14 @@ class CriteriaItem:
             else:
                 text = str(self.queryPeriodBegin) + '日前'
         elif self.queryPeriodEnd == 1:
-            text = '最近' + str(self.queryPeriodBegin) + '日内' + self.queryLogic
+            text = '最近' + str(self.queryPeriodBegin) + '日内' + (self.queryLogic if self.queryLogic not in self.queryField else '')
         else:
-            text = '最近' + str(self.queryPeriodBegin) + '日到' + str(self.queryPeriodEnd) + '日之间' + self.queryLogic
+            text = '最近' + str(self.queryPeriodBegin) + '日到' + str(self.queryPeriodEnd) + '日之间' + (self.queryLogic if self.queryLogic not in self.queryField else '')
         text += self.queryField + connector
     
         if self.comparedObject == '绝对值':
             text += str(self.value) + ('元' if '价' in self.queryField else '%')
+        # 比值
         else:
             if self.comparedPeriodBegin == self.comparedPeriodEnd:
                 if self.comparedPeriodBegin == 1:
@@ -83,9 +53,9 @@ class CriteriaItem:
                 else:
                     text += str(self.comparedPeriodBegin) + '日前'
             elif self.comparedPeriodEnd == 1:
-                text += '最近' + str(self.comparedPeriodBegin) + '日内' + self.comparedLogic
+                text += '最近' + str(self.comparedPeriodBegin) + '日内' + (self.comparedLogic if self.comparedLogic not in self.comparedField else '')
             else:
-                text += '最近' + str(self.comparedPeriodBegin) + '日到' + str(self.comparedPeriodEnd) + '日之间' + self.comparedLogic
+                text += '最近' + str(self.comparedPeriodBegin) + '日到' + str(self.comparedPeriodEnd) + '日之间' + (self.comparedLogic if self.comparedLogic not in self.comparedField else '')
             text += self.comparedField
     
             if self.comparedObject == '比值' and self.value != 1:
@@ -138,6 +108,8 @@ def get_column_label(field: str):
         return 'low_pct'
     elif field == '振幅':
         return 'amplitude'
+    elif field == '成交额':
+        return 'amount'
     else:
         return 'turn'
 
@@ -211,7 +183,7 @@ class SearchCriteria(QDialog, Ui_SearchCriteria):
         self.cbbQueryLogic.addItems(logic_items)
         self.cbbComparedLogic.addItems(logic_items)
         self.cbbOperator.addItems(['大于', '小于', '等于'])
-        field_items = ['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '日内涨跌幅', '最高涨幅', '最低跌幅', '振幅', '换手率']
+        field_items = ['开盘价', '收盘价', '最高价', '最低价', '开盘涨跌幅', '收盘涨跌幅', '日内涨跌幅', '最高涨幅', '最低跌幅', '振幅', '成交额', '换手率']
         self.cbbQueryField.addItems(field_items)
         self.cbbComparedField.addItems(field_items)
         self.criteriaItem = criteria_item
