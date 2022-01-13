@@ -143,16 +143,6 @@
      </column>
      <column>
       <property name="text">
-       <string>主营行业</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>地区</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>市盈率</string>
       </property>
      </column>
@@ -163,12 +153,7 @@
      </column>
      <column>
       <property name="text">
-       <string>流通市值</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>ROE</string>
+       <string>市销率</string>
       </property>
      </column>
     </widget>

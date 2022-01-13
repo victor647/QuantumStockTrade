@@ -1,0 +1,9 @@
+{
+    "peOn": true,
+    "peMax": 20,
+    "pbOn": true,
+    "pbMax": 2.0,
+    "psOn": true,
+    "psMax": 1.0,
+    "includeSt": false
+}

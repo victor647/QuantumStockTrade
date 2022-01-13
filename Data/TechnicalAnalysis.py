@@ -308,7 +308,7 @@ def get_profit_percentage(profit: float, investment: float):
 
 
 # 计算是否符合均线图形
-def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int, behaviour: str):
+def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, period_long: int):
     key_short = calculate_ma_curve(stock_data, period_short)
     key_long = calculate_ma_curve(stock_data, period_long)
     if key_short == '' or key_long == '':
@@ -322,11 +322,7 @@ def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, p
     ahead_long = long.iloc[-days_ahead]
     newest_short = short.iloc[-1]
     newest_long = long.iloc[-1]
-
-    if behaviour == '金叉':
-        return ahead_short < ahead_long and newest_short > newest_long
-    else:
-        return ahead_short > ahead_long and newest_short < newest_long
+    return ahead_short < ahead_long and newest_short > newest_long
 
 
 # 计算是否符合MACD图形
@@ -515,3 +511,9 @@ def candlestick_shape(daily_data: pandas.DataFrame):
         candle_color = '白线'
 
     return open_position + needle_shape + body_height + candle_color
+
+# 特殊K线图形
+def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
+    if shape == '对数底':
+        pass
+

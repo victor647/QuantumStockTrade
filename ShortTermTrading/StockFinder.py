@@ -8,7 +8,7 @@ from ShortTermTrading.FiveDayFinder import FiveDayFinder
 from ShortTermTrading.StockSearchThread import StandardStockSearcher
 from datetime import datetime
 import ShortTermTrading.SearchCriteria as SearchCriteria
-import tushare, pandas
+import pandas
 from Tools import Tools, FileManager
 import Data.TechnicalAnalysis as TA
 
@@ -26,13 +26,34 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         # 初始化单例
         global Instance
         Instance = self
+        self.setup_triggers()
         # 初始化选股日期
         self.dteSearchDate.setDate(QDate.currentDate())
         # 初始化技术面指标下拉菜单
-        self.cbbMacdBehaviour.addItems(['金叉', '死叉', '翻红', '翻绿', '红柱缩短', '绿柱缩短'])
-        self.cbbBollBehaviour.addItems(['上穿', '下穿'])
-        self.cbbBollTrack.addItems(['上轨', '中轨', '下轨'])
-        self.cbbMaBehaviour.addItems(['金叉', '死叉'])
+        self.cbbMACDBehaviour.addItems(['金叉', '翻红', '绿柱缩短'])
+        self.cbbBOLLBehaviour.addItems(['上穿', '下穿'])
+        self.cbbBOLLTrack.addItems(['上轨', '中轨', '下轨'])
+        self.cbbSpecialShape.addItems(['对数底', '金针探底', '揉搓线', '仙人指路', '早晨之星'])
+
+    def setup_triggers(self):
+        self.btnStartSearch.clicked.connect(self.start_searching)
+        self.btnAutoSearch.clicked.connect(self.run_batch_searcher)
+        self.btnExportBasicConfig.clicked.connect(self.export_basic_config)
+        self.btnImportBasicConfig.clicked.connect(self.import_basic_config)
+        self.btnExportTechnicalConfig.clicked.connect(self.export_technical_config)
+        self.btnImportTechnicalConfig.clicked.connect(self.import_technical_config)
+        self.btnExportCustomConfig.clicked.connect(self.export_custom_config)
+        self.btnImportCustomConfig.clicked.connect(self.import_custom_config)
+        self.btnAddCriteria.clicked.connect(self.add_criteria_item)
+        self.btnEditCriteria.clicked.connect(self.edit_selected_item)
+        self.btnRemoveCriteria.clicked.connect(self.remove_criteria_item)
+        self.btnResetCriteria.clicked.connect(self.reset_criteria_items)
+        self.lstCriteriaItems.itemDoubleClicked.connect(self.edit_selected_item)
+        self.cbxPE.toggled.connect(self.spbPEMax.setEnabled)
+        self.cbxPB.toggled.connect(self.spbPBMax.setEnabled)
+        self.cbxPS.toggled.connect(self.spbPSMax.setEnabled)
+        self.cbxMACD.toggled.connect(self.spbPEMax.setEnabled)
+        self.cbxSpecialShape.toggled.connect(self.cbbSpecialShape.setEnabled)
 
     # 快捷键设置
     def keyPressEvent(self, key: QKeyEvent):
@@ -50,93 +71,17 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         batch_searcher.show()
         batch_searcher.exec_()
 
-    # 五日图形选股
-    @staticmethod
-    def five_day_search():
-        finder = FiveDayFinder()
-        finder.show()
-        finder.exec_()
-
-    # 根据十大流通股东结构选股
-    @staticmethod
-    def search_by_holders_structure():
-        stock_list = FileManager.read_stock_list_file()
-        today = QDate.currentDate()
-        year = today.year()
-        month = today.month()
-        quarter = 4
-        if month < 4:
-            year -= 1
-        elif month < 7:
-            quarter = 1
-        elif month < 10:
-            quarter = 2
-        else:
-            quarter = 3
-
-        search_result = []
-        for index, row_stock in stock_list.iterrows():
-            code_num = row_stock['code']
-            code = str(code_num).zfill(6)
-            data = tushare.top10_holders(code=code, year=year, quarter=quarter)[1]
-            data['h_pro'] = data['h_pro'].astype(float)
-            under_five = data[data['h_pro'] < 5]
-            # 单人持股比例超过3%的跳过
-            if under_five['h_pro'].max() > 3:
-                continue
-            count = 0
-            for i, row_holder in under_five.iterrows():
-                # 排除公司持股和限售情况
-                if '有限公司' in row_holder['name'] or row_holder['sharetype'] == '限售流通股':
-                    continue
-                count += 1
-                # 股权结构优秀，加入选中列表
-                if count >= 5:
-                    search_result.append(code)
-                    break
-            if index > 100:
-                break
-
-        file_path = QFileDialog.getSaveFileName(directory=FileManager.selected_stock_list_path(), filter='TXT(*.txt)')
-        if file_path[0] != '':
-            file = open(file_path[0], 'w')
-            for code in search_result:
-                file.write(code + '\n')
-            file.close()
-
     # 保存基本面指标搜索条件
     def export_basic_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
-            'peOn': self.cbxPriceEarning.isChecked(),
-            'peMin': self.spbPriceEarningMin.value(),
-            'peMax': self.spbPriceEarningMax.value(),
-            'pbOn': self.cbxPriceBook.isChecked(),
-            'pbMin': self.spbPriceBookMin.value(),
-            'pbMax': self.spbPriceBookMax.value(),
-            'totalShareOn': self.cbxTotalShare.isChecked(),
-            'totalShareMin': self.spbTotalShareMin.value(),
-            'totalShareMax': self.spbTotalShareMax.value(),
-            'totalAssetsOn': self.cbxTotalAssets.isChecked(),
-            'totalAssetsMin': self.spbTotalAssetsMin.value(),
-            'totalAssetsMax': self.spbTotalAssetsMax.value(),
-            'grossProfitOn': self.cbxGrossProfit.isChecked(),
-            'grossProfit': self.spbGrossProfit.value(),
-            'netProfitOn': self.cbxNetProfit.isChecked(),
-            'netProfit': self.spbNetProfit.value(),
-            'incomeIncreaseOn': self.cbxIncomeIncrease.isChecked(),
-            'incomeIncrease': self.spbIncomeIncrease.value(),
-            'profitIncreaseOn': self.cbxProfitIncrease.isChecked(),
-            'profitIncrease': self.spbProfitIncrease.value(),
-            'netAssetProfitOn': self.cbxNetAssetProfit.isChecked(),
-            'netAssetProfit': self.spbNetAssetProfit.value(),
-            'totalHoldersOn': self.cbxTotalHolders.isChecked(),
-            'totalHoldersMin': self.spbTotalHoldersMin.value(),
-            'totalHoldersMax': self.spbTotalHoldersMax.value(),
-            'includeSt': self.cbxIncludeStStock.isChecked(),
-            'timeToMarketOn': self.cbxTimeToMarket.isChecked(),
-            'timeToMarketMin': self.spbTimeToMarketMin.value(),
-            'timeToMarketMax': self.spbTimeToMarketMax.value(),
+            'peOn': self.cbxPE.isChecked(),
+            'peMax': self.spbPEMax.value(),
+            'pbOn': self.cbxPB.isChecked(),
+            'pbMax': self.spbPBMax.value(),
+            'psOn': self.cbxPS.isChecked(),
+            'psMax': self.spbPSMax.value(),
+            'includeSt': self.cbxIncludeST.isChecked()
         }
         if file_path[0] != '':
             FileManager.export_config_as_json(data, file_path[0])
@@ -149,49 +94,26 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             if 'peOn' not in data:
                 Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
-            self.cbxPriceEarning.setChecked(data['peOn'])
-            self.spbPriceEarningMin.setValue(data['peMin'])
-            self.spbPriceEarningMax.setValue(data['peMax'])
-            self.cbxPriceBook.setChecked(data['pbOn'])
-            self.spbPriceBookMin.setValue(data['pbMin'])
-            self.spbPriceBookMax.setValue(data['pbMax'])
-            self.cbxTotalShare.setChecked(data['totalShareOn'])
-            self.spbTotalShareMin.setValue(data['totalShareMin'])
-            self.spbTotalShareMax.setValue(data['totalShareMax'])
-            self.cbxTotalAssets.setChecked(data['totalAssetsOn'])
-            self.spbTotalAssetsMin.setValue(data['totalAssetsMin'])
-            self.spbTotalAssetsMax.setValue(data['totalAssetsMax'])
-            self.cbxGrossProfit.setChecked(data['grossProfitOn'])
-            self.spbGrossProfit.setValue(data['grossProfit'])
-            self.cbxNetProfit.setChecked(data['netProfitOn'])
-            self.spbNetProfit.setValue(data['netProfit'])
-            self.cbxIncomeIncrease.setChecked(data['incomeIncreaseOn'])
-            self.spbIncomeIncrease.setValue(data['incomeIncrease'])
-            self.cbxProfitIncrease.setChecked(data['profitIncreaseOn'])
-            self.spbProfitIncrease.setValue(data['profitIncrease'])
-            self.cbxNetAssetProfit.setChecked(data['netAssetProfitOn'])
-            self.spbNetAssetProfit.setValue(data['netAssetProfit'])
-            self.cbxTotalHolders.setChecked(data['totalHoldersOn'])
-            self.spbTotalHoldersMin.setValue(data['totalHoldersMin'])
-            self.spbTotalHoldersMax.setValue(data['totalHoldersMax'])
-            self.cbxIncludeStStock.setChecked(data['includeSt'])
-            self.cbxTimeToMarket.setChecked(data['timeToMarketOn'])
-            self.spbTimeToMarketMin.setValue(data['timeToMarketMin'])
-            self.spbTimeToMarketMax.setValue(data['timeToMarketMax'])
+            self.cbxPE.setChecked(data['peOn'])
+            self.spbPEMax.setValue(data['peMax'])
+            self.cbxPB.setChecked(data['pbOn'])
+            self.spbPBMax.setValue(data['pbMax'])
+            self.cbxPS.setChecked(data['psOn'])
+            self.spbPSMax.setValue(data['psMax'])
+            self.cbxIncludeST.setChecked(data['includeSt'])
 
     # 保存技术面指标搜索条件
     def export_technical_config(self):
         file_path = QFileDialog.getSaveFileName(directory=FileManager.search_config_path(), filter='JSON(*.json)')
         data = {
             'timePeriod': self.spbTechnicalTimePeriod.value(),
-            'macdOn': self.cbxMacdEnabled.isChecked(),
-            'macdBehaviour': self.cbbMacdBehaviour.currentText(),
-            'bollOn': self.cbxBollEnabled.isChecked(),
-            'bollBehaviour': self.cbbBollBehaviour.currentText(),
-            'bollTrack': self.cbbBollTrack.currentText(),
-            'maOn': self.cbxMaEnabled.isChecked(),
+            'macdOn': self.cbxMACD.isChecked(),
+            'macdBehaviour': self.cbbMACDBehaviour.currentText(),
+            'bollOn': self.cbxBOLL.isChecked(),
+            'bollBehaviour': self.cbbBOLLBehaviour.currentText(),
+            'bollTrack': self.cbbBOLLTrack.currentText(),
+            'maOn': self.cbxMA.isChecked(),
             'maShort': self.spbMaShort.value(),
-            'maBehaviour': self.cbbMaBehaviour.currentText(),
             'maLong': self.spbMaLong.value(),
         }
         if file_path[0] != '':
@@ -206,14 +128,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
                 Tools.show_error_dialog('选取的配置文件格式不对！')
                 return
             self.spbTechnicalTimePeriod.setValue(data['timePeriod'])
-            self.cbxMacdEnabled.setChecked(data['macdOn'])
-            self.cbbMacdBehaviour.setCurrentText(data['macdBehaviour'])
-            self.cbxBollEnabled.setChecked(data['bollOn'])
-            self.cbbBollBehaviour.setCurrentText(data['bollBehaviour'])
-            self.cbbBollTrack.setCurrentText(data['bollTrack'])
-            self.cbxMaEnabled.setChecked(data['maOn'])
+            self.cbxMACD.setChecked(data['macdOn'])
+            self.cbbMACDBehaviour.setCurrentText(data['macdBehaviour'])
+            self.cbxBOLL.setChecked(data['bollOn'])
+            self.cbbBOLLBehaviour.setCurrentText(data['bollBehaviour'])
+            self.cbbBOLLTrack.setCurrentText(data['bollTrack'])
+            self.cbxMA.setChecked(data['maOn'])
             self.spbMaShort.setValue(data['maShort'])
-            self.cbbMaBehaviour.setCurrentText(data['maBehaviour'])
             self.spbMaLong.setValue(data['maLong'])
 
     # 保存自定义指标搜索条件
@@ -280,7 +201,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.lstCriteriaItems.clear()
 
     # 开始搜索全部股票
-    def search_all_stocks(self):
+    def start_searching(self):
         # 确保选股日期不是周末
         search_date = Tools.get_nearest_trade_date(self.dteSearchDate.date()).toString('yyyy-MM-dd')
         # 弹出搜索结果界面
@@ -306,89 +227,28 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             current_searching_date = searcher.move_to_next_date(current_searching_date)
 
     # 基本面指标分析
-    def match_basic_criterias(self, row: pandas.DataFrame, search_date: str):
+    def match_basic_criterias(self, data: pandas.DataFrame):
         # 检测股票是否是ST股
-        if not self.cbxIncludeStStock.isChecked():
-            name = row['name']
-            if 'ST' in name:
-                return False
-
-        # 检测股票上市时间是否符合范围
-        if self.cbxTimeToMarket.isChecked():
-            date = row['timeToMarket']
-            # 去除还未上市的股票
-            if date == 0:
-                return False
-            # 获取上市和搜索日期
-            date_to_market = datetime.strptime(str(date), '%Y%m%d')
-            date_at_search = datetime.strptime(search_date, '%Y-%m-%d')
-            # 获取上市月数
-            months_to_market = (date_at_search - date_to_market).days / 30.45
-            if months_to_market < self.spbTimeToMarketMin.value() or months_to_market > self.spbTimeToMarketMax.value():
+        if not self.cbxIncludeST.isChecked():
+            if data['isST'] == 1:
                 return False
 
         # 检测股票市盈率是否符合范围
-        if self.cbxPriceEarning.isChecked():
-            pe = row['pe']
-            if pe < self.spbPriceEarningMin.value() or pe > self.spbPriceEarningMax.value():
+        if self.cbxPE.isChecked():
+            pe = data['peTTM']
+            if pe < 0 or pe > self.spbPEMax.value():
                 return False
 
         # 检测股票市净率是否符合范围
-        if self.cbxPriceBook.isChecked():
-            pb = row['pb']
-            if pb < self.spbPriceBookMin.value() or pb > self.spbPriceBookMax.value():
+        if self.cbxPB.isChecked():
+            pb = data['pbMRQ']
+            if pb < 0 or pb > self.spbPBMax.value():
                 return False
 
-        # 检测股票总股本是否符合范围
-        if self.cbxTotalShare.isChecked():
-            totals = row['totals']
-            if totals < self.spbTotalShareMin.value() or totals > self.spbTotalShareMax.value():
-                return False
-
-        # 检测股票总市值是否符合范围
-        if self.cbxTotalAssets.isChecked():
-            assets = row['totalAssets']
-            if assets < self.spbTotalAssetsMin.value() or assets > self.spbTotalAssetsMax.value():
-                return False
-
-        # 检测股票毛利率是否达标
-        if self.cbxGrossProfit.isChecked():
-            gpr = row['gpr']
-            if gpr < self.spbGrossProfit.value():
-                return False
-
-        # 检测股票净利率是否达标
-        if self.cbxNetProfit.isChecked():
-            npr = row['npr']
-            if npr < self.spbNetProfit.value():
-                return False
-
-        # 检测股票收入增长是否达标
-        if self.cbxIncomeIncrease.isChecked():
-            revenue = row['rev']
-            if revenue < self.spbIncomeIncrease.value():
-                return False
-
-        # 检测股票利润增长是否达标
-        if self.cbxProfitIncrease.isChecked():
-            profit = row['profit']
-            if profit < self.spbProfitIncrease.value():
-                return False
-
-        # 检测股票净资产收益率是否达标
-        if self.cbxNetAssetProfit.isChecked():
-            profit = row['esp']
-            asset = row['bvps']
-            if asset == 0:
-                return False
-            roe = profit / asset * 100
-            if roe < self.spbNetAssetProfit.value():
-                return False
-
-        # 检测股票股东人数是否符合范围
-        if self.cbxTotalHolders.isChecked():
-            holders = row['holders'] / 10000
-            if holders < self.spbTotalHoldersMin.value() or holders > self.spbTotalHoldersMax.value():
+        # 检测股票市销率是否符合范围
+        if self.cbxPS.isChecked():
+            ps = data['psTTM']
+            if ps < 0 or ps > self.spbPSMax.value():
                 return False
 
         # 所有指标全部达标
@@ -419,13 +279,16 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return False
         period = self.spbTechnicalTimePeriod.value() + 1
         # 检测MACD图形
-        if self.cbxMacdEnabled.isChecked() and not TA.match_macd(data, period, self.cbbMacdBehaviour.currentText()):
+        if self.cbxMACD.isChecked() and not TA.match_macd(data, period, self.cbbMACDBehaviour.currentText()):
             return False
         # 检测BOLL区间
-        if self.cbxBollEnabled.isChecked() and not TA.match_boll(data, period, self.cbbBollTrack.currentText(), self.cbbBollBehaviour.currentText()):
+        if self.cbxBOLL.isChecked() and not TA.match_boll(data, period, self.cbbBOLLTrack.currentText(), self.cbbBOLLBehaviour.currentText()):
             return False
         # 检测均线交叉
-        if self.cbxMaEnabled.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
+        if self.cbxMA.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value(), self.cbbMaBehaviour.currentText()):
+            return False
+        # 检测特殊图形
+        if self.cbxSpecialShape.isChecked() and not TA.match_special_shape(data, self.spbTechnicalTimePeriod.value(), self.cbbSpecialShape.currentText()):
             return False
         return True
 

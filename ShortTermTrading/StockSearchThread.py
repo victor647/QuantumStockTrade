@@ -49,26 +49,27 @@ class StandardStockSearcher(StockSearcher):
             # 判断股票是否在选中的交易所中
             if not StockFinder.Instance.code_in_search_range(code_num):
                 continue
-            # 基本面指标考察
-            if not StockFinder.Instance.match_basic_criterias(row, self.searchDate):
-                continue
             # 获得股票历史数据
             stock_data = FileManager.read_stock_history_data(stock_code, True)
             # 选股日期之前和之后的数据
-            data_before = TA.get_stock_data_before_date(stock_data, self.searchDate)
+            data_before_search_date = TA.get_stock_data_before_date(stock_data, self.searchDate)
             # 新股还没上市
-            if data_before.empty:
+            if data_before_search_date.empty:
+                continue
+            # 基本面指标考察
+            most_recent_day_data = data_before_search_date.iloc[-1]
+            if not StockFinder.Instance.match_basic_criterias(most_recent_day_data):
                 continue
             data_after = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 技术面指标考察
-            if not StockFinder.Instance.match_technical_criterias(data_before):
+            if not StockFinder.Instance.match_technical_criterias(data_before_search_date):
                 continue
             # 自定义指标考察
-            if not StockFinder.Instance.match_custom_criterias(data_before):
+            if not StockFinder.Instance.match_custom_criterias(data_before_search_date):
                 continue
 
             # 选股日收盘价
-            pre_close = round(data_before.iloc[-1]['close'], 2)
+            pre_close = round(most_recent_day_data['close'], 2)
             # 次日开盘
             next_day_open = TA.get_stock_performance_after_days(data_after, pre_close, 1, 'open')
             # 五日收盘
@@ -89,20 +90,11 @@ class StandardStockSearcher(StockSearcher):
             # 最高收益
             max_profit = TA.get_percent_change_from_price(TA.get_price_from_percent_change(pre_close, five_day_high),
                                                           TA.get_price_from_percent_change(pre_close, next_day_low))
-            # 获得股票行业信息
-            # industry = row['industry']
-            # 获得股票上市地区
-            # area = row['area']
-            # 获得股票市盈率
-            # pe = row['pe']
-            # 获得股票市净率
-            # pb = row['pb']
-            # 获得股票总市值
-            # assets = row['totalAssets']
-            # 净资产收益率
-            # roe = round(row['esp'] / row['bvps'] * 100, 2)
+            pe = round(most_recent_day_data['peTTM'], 2)
+            pb = round(most_recent_day_data['pbMRQ'], 2)
+            ps = round(most_recent_day_data['psTTM'], 2)
             # 将符合要求的股票信息打包
-            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit] #, industry, area, pe, pb, assets, roe]
+            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, pe, pb, ps]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(stock_code)

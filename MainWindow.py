@@ -1,6 +1,6 @@
 import sys
 import traceback
-import baostock, tushare
+import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
@@ -45,7 +45,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @staticmethod
     def reconnect_server():
         baostock.login()
-        tushare.set_token('eee03f328c31ce7b74e1f0417863e4019723e9bdda3fb0d243cf9a1c')
 
     # 个股股性分析
     def show_stock_analyzer(self):
