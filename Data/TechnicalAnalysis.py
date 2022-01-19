@@ -515,8 +515,8 @@ def candlestick_shape(daily_data: pandas.DataFrame):
 
 # 特殊K线图形
 def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
+    trimmed_data = stock_data[-period:]
     if shape == '对数底':
-        trimmed_data = stock_data[-period:]
         period_min = str(round(trimmed_data['low'].min(), 2)).split('.')
         left = list(period_min[0])
         right = list(period_min[1])
@@ -536,5 +536,10 @@ def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
             # *ab.ba
             if right[0] == left[-1] and right[1] == left[-2]:
                 return True
+    elif shape == '金针探底':
+        min_index = trimmed_data['low'].idxmin()
+        min_day_data = trimmed_data.iloc(min_index)
+        if min_day_data['close_pct'] - min_day_data['low_pct'] > 2 and min_day_data['open_pct'] - min_day_data['low_pct'] > 2:
+            return True
     return False
 
