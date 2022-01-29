@@ -541,5 +541,6 @@ def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
         min_day_data = trimmed_data.iloc(min_index)
         if min_day_data['close_pct'] - min_day_data['low_pct'] > 2 and min_day_data['open_pct'] - min_day_data['low_pct'] > 2:
             return True
+    elif shape == '孕线':
     return False
 

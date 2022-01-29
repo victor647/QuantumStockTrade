@@ -33,7 +33,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.cbbMACDBehaviour.addItems(['金叉', '翻红', '绿柱缩短'])
         self.cbbBOLLBehaviour.addItems(['上穿', '下穿'])
         self.cbbBOLLTrack.addItems(['上轨', '中轨', '下轨'])
-        self.cbbSpecialShape.addItems(['对数底', '金针探底', '揉搓线', '仙人指路', '早晨之星'])
+        self.cbbSpecialShape.addItems(['对数底', '金针探底', '揉搓线', '孕线', '仙人指路', '早晨之星'])
 
     def setup_triggers(self):
         self.btnStartSearch.clicked.connect(self.start_searching)
