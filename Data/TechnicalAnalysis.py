@@ -514,9 +514,9 @@ def candlestick_shape(daily_data: pandas.DataFrame):
 
 
 # 特殊K线图形
-def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
-    trimmed_data = stock_data[-period:]
+def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):    
     if shape == '对数底':
+        trimmed_data = stock_data[-period:]
         period_min = str(round(trimmed_data['low'].min(), 2)).split('.')
         left = list(period_min[0])
         right = list(period_min[1])
@@ -537,10 +537,97 @@ def match_special_shape(stock_data: pandas.DataFrame, period: int, shape: str):
             if right[0] == left[-1] and right[1] == left[-2]:
                 return True
     elif shape == '金针探底':
+        trimmed_data = stock_data[-period:]
         min_index = trimmed_data['low'].idxmin()
         min_day_data = trimmed_data.iloc(min_index)
         if min_day_data['close_pct'] - min_day_data['low_pct'] > 2 and min_day_data['open_pct'] - min_day_data['low_pct'] > 2:
             return True
+    elif shape == '揉搓线':        
+        for i in range(-period-2, 0):
+            day1_data = stock_data.iloc[i]
+            # 第一天是阳线
+            if day1_data['close_pct'] > 3:
+                day2_data = stock_data.iloc[i+1]
+                # 第二天是上影线
+                if day2_data['high'] > day1_data['high'] and is_long_neck_or_tail(day2_data, True, True):
+                    day3_data = stock_data.iloc[i+2]
+                    # 第三天是下影线
+                    if day3_data['low'] < day2_data['low'] and is_long_neck_or_tail(day3_data, False, True):
+                        return True
     elif shape == '孕线':
+        for i in range(-period-1, 0):
+            day1_data = stock_data.iloc[i]
+            # 第一天是阴线
+            if day1_data['open_pct'] - day1_data['close_pct'] > 3:
+                day2_data = stock_data.iloc[i+1]
+                # 第二天是阳线并且完全被第一天实体部分包住
+                if day2_data['close'] > day2_data['open'] and day2_data['high'] < day1_data['open'] and day2_data['low'] > day1_data['close']:
+                    return True
+    elif shape == '仙人指路':
+        for i in range(-period - 1, 0):
+            day1_data = stock_data.iloc[i]
+            # 第一天是小阳线
+            if day1_data['close'] > day1_data['open'] and day1_data['close_pct'] < 3:
+                day2_data = stock_data.iloc[i + 1]
+                # 第二天是上影阳线并且量比2倍以上
+                if day2_data['close'] > day1_data['close'] and day2_data['amount'] > day1_data['amount'] * 2 and is_long_neck_or_tail(day2_data, True, False):
+                    return True
+    elif shape == '早晨之星':
+        for i in range(-period - 2, 0):
+            day1_data = stock_data.iloc[i]
+            # 第一天是实体阴线
+            if is_solid(day1_data, False):
+                day2_data = stock_data.iloc[i+1]
+                # 第二天是十字星并且创新低
+                if day2_data['low'] < day1_data['low'] and is_cross(day2_data):
+                    day3_data = stock_data.iloc[i+2]
+                    if day2_data['low'] < day3_data['low'] and is_solid(day3_data, True):
+                        return True
     return False
+
+
+# 检查某天的K线是否是上下影线
+def is_long_neck_or_tail(day_data, is_neck: bool, short_body: bool):
+    day_high = max(day_data['open'], day_data['close'])
+    day_low = min(day_data['open'], day_data['close'])
+    day_body = day_high - day_low
+    day_neck = day_data['high'] - day_high
+    day_leg = day_low - day_data['low']
+    # 上影线
+    if is_neck:
+        if day_neck > day_leg * 2:
+            return day_neck > day_body * 2 if short_body else day_neck > day_body
+    # 下影线
+    else:
+        if day_leg > day_neck * 2:
+            return day_leg > day_body * 2 if short_body else day_leg > day_body
+    return False
+
+
+# 检查某天是否是实体K线
+def is_solid(day_data, is_up: bool):
+    day_high = max(day_data['open'], day_data['close'])
+    day_low = min(day_data['open'], day_data['close'])
+    day_body = day_high - day_low
+    day_neck = day_data['high'] - day_high
+    day_leg = day_low - day_data['low']
+    if day_body > day_neck * 2 and day_body >day_leg * 2:
+        if is_up:
+            return day_data['close'] > day_data['open']
+        else:
+            return day_data['close'] < day_data['open']
+    return False
+
+
+# 检查某天的K线是否是十字星
+def is_cross(day_data):
+    day_high = max(day_data['open'], day_data['close'])
+    day_low = min(day_data['open'], day_data['close'])
+    day_body = day_high - day_low
+    day_neck = day_data['high'] - day_high
+    day_leg = day_low - day_data['low']
+    return day_neck > day_body * 2 and day_leg > day_body * 2
+
+
+    
 
