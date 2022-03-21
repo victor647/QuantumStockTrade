@@ -115,7 +115,7 @@ def import_stock_list(import_func):
         return
     file = open(file_path[0], 'r')
     for line in file:
-        code = line.rstrip('\n').rstrip('\t')
+        code = line.rstrip('\n').rstrip('\t').rstrip(' ')
         if code == '':
             continue
         import_func(code)

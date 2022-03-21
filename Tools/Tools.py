@@ -68,6 +68,8 @@ def get_stock_name_from_code(stock_code: str):
         return ''
     table = FileManager.read_stock_list_file()
     row = table[table['code'] == int(stock_code)]
+    if row.size == 0:
+        return ''
     name = row.iloc[0]['name'] 
     return name
 

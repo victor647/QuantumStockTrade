@@ -18,6 +18,11 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="btnImportStockPool">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>导入股池</string>
        </property>
@@ -25,6 +30,11 @@
      </item>
      <item>
       <widget class="QLabel" name="lblMAShort">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>短期均线周期</string>
        </property>
@@ -32,6 +42,11 @@
      </item>
      <item>
       <widget class="QSpinBox" name="spbMAShortPeriod">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="minimum">
         <number>5</number>
        </property>
@@ -45,6 +60,11 @@
      </item>
      <item>
       <widget class="QLabel" name="lblMALong">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>长期均线周期</string>
        </property>
@@ -52,6 +72,11 @@
      </item>
      <item>
       <widget class="QSpinBox" name="spbMALongPeriod">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="minimum">
         <number>20</number>
        </property>
@@ -69,13 +94,23 @@
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>最近</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spbRecentCandleSticks">
+      <widget class="QSpinBox" name="spbOccurancePeriod">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="maximum">
         <number>20</number>
        </property>
@@ -86,6 +121,11 @@
      </item>
      <item>
       <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>根K线内出现</string>
        </property>
@@ -93,25 +133,49 @@
      </item>
      <item>
       <widget class="QRadioButton" name="rbnBackToLine">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>回踩均线</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="rbnGoldCross">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>金叉</string>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <property name="autoExclusive">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="rbnChangeDirection">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>拐头向上</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -121,6 +185,11 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="lblReferenceMA">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>参考均线：</string>
        </property>
@@ -128,25 +197,52 @@
      </item>
      <item>
       <widget class="QRadioButton" name="rbnMAShort">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>短期均线</string>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <property name="autoExclusive">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="rbnMALong">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>长期均线</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="tblStockList"/>
+    <widget class="QTableWidget" name="tblStockList">
+     <column>
+      <property name="text">
+       <string>股票代码</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>股票名称</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -7,7 +7,7 @@ from QtDesign.MainWindow_ui import Ui_MainWindow
 from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
 from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor, FifteenMinTrader, FifteenMinFinder
 from RealTimeMonitor import LiveTracker
-from Data.QueryStockData import query_all_stock_data
+from Data.QueryStockData import query_all_stock_daily_data
 from Tools import TradeSettings, FileManager
 
 
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # 获取最新股票K线图
     @staticmethod
     def get_stocks_history_data():
-        query_all_stock_data()
+        query_all_stock_daily_data()
 
 
 

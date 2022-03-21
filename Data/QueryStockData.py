@@ -4,9 +4,9 @@ from Tools import Tools, ProgressBar, FileManager
 
 
 # 获取最新全部股票数据
-def query_all_stock_data():
+def query_all_stock_daily_data():
     stock_list = FileManager.read_stock_list_file()
-    exporter = QueryStockData(stock_list)
+    exporter = QueryStockDailyData(stock_list)
     progress = ProgressBar.ProgressBar(stock_list.shape[0], '正在爬取股票历史数据', exporter)
     progress.show()
     exporter.progressBarCallback.connect(progress.update_search_progress)
@@ -15,7 +15,8 @@ def query_all_stock_data():
     progress.exec()
 
 
-class QueryStockData(QThread):
+# 获取股票日线图
+class QueryStockDailyData(QThread):
     progressBarCallback = pyqtSignal(int, str, str)
     finishedCallback = pyqtSignal()
 
@@ -56,3 +57,47 @@ class QueryStockData(QThread):
         result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,preclose,turn,amount,peTTM,pbMRQ,psTTM,tradestatus,isST',
                                                     start_date=self.startDate, end_date=self.today, frequency='d', adjustflag='2')
         FileManager.save_stock_history_data(result, code if not is_market else market + code)
+
+
+# 获取列表股票15分钟K线数据
+def query_stocks_15min_data(stock_list: list, parser):
+    searcher = QueryStockFifteenMinData(stock_list, parser)
+    progress = ProgressBar.ProgressBar(len(stock_list), '正在爬取股票15分钟K线', searcher)
+    progress.show()
+    searcher.progressBarCallback.connect(progress.update_search_progress)
+    searcher.finishedCallback.connect(progress.finish_progress)
+    searcher.start()
+    progress.exec()
+
+
+# 获取股票15分钟线图
+class QueryStockFifteenMinData(QThread):
+    progressBarCallback = pyqtSignal(int, str, str)
+    finishedCallback = pyqtSignal()
+
+    def __init__(self, stock_list: list, parser):
+        super().__init__()
+        now = QDate.currentDate()
+        start_date = now.addMonths(-1)
+        self.today = now.toString('yyyy-MM-dd')
+        self.startDate = start_date.toString('yyyy-MM-dd')
+        self.stockList = stock_list
+        self.parser = parser
+
+    def run(self):
+        i = 0
+        for stock_code in self.stockList:
+            i += 1
+            market, index_code = Tools.get_trade_center_and_index(stock_code)
+            # 获取股票历史数据
+            if index_code != '000000':
+                self.parser(stock_code, self.query_fifteen_min_data(market, stock_code))
+            self.progressBarCallback.emit(i, stock_code, '')
+        self.finishedCallback.emit()
+
+    # 获取15分钟K线数据
+    def query_fifteen_min_data(self, market: str, code: str):
+        bs_result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='open,high,low,close',
+                                                    start_date=self.startDate, end_date=self.today, frequency='15', adjustflag='2')
+        data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
+        return data
