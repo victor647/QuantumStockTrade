@@ -4,26 +4,8 @@ import Tools.FileManager as FileManager
 
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
-    stock_closes = stock_data['close']
     # 将价格数据转换为涨跌幅数据
     get_percentage_data(stock_data)
-
-    # 计算BOLL轨道，至少上市20天
-    if stock_closes.shape[0] < 20:
-        return
-    upper, middle, lower = talib.BBANDS(stock_closes, 20, 2, 2)
-    stock_data['boll_upper'] = upper
-    stock_data['boll_middle'] = middle
-    stock_data['boll_lower'] = lower
-
-    # 计算MACD图形，至少上市34天
-    if stock_closes.shape[0] < 34:
-        return
-    white, yellow, column = talib.MACD(stock_closes)
-    column = column * 2
-    stock_data['macd_white'] = white
-    stock_data['macd_yellow'] = yellow
-    stock_data['macd_column'] = column
 
 
 # 分析价格获得涨跌幅百分比数据
@@ -36,8 +18,29 @@ def get_percentage_data(database: pandas.DataFrame):
     database['amplitude'] = database['high_pct'] - database['low_pct']
 
 
+# 计算MACD图形，至少上市34天
+def get_macd(stock_data: pandas.DataFrame):
+    if stock_data['close'].shape[0] < 34:
+        return
+    white, yellow, column = talib.MACD(stock_data['close'])
+    column = column * 2
+    stock_data['macd_white'] = white
+    stock_data['macd_yellow'] = yellow
+    stock_data['macd_column'] = column
+
+
+# 计算BOLL轨道，至少上市20天
+def get_boll(stock_data: pandas.DataFrame):
+    if stock_data['close'].shape[0] < 20:
+        return
+    upper, middle, lower = talib.BBANDS(stock_data['close'], 20, 2, 2)
+    stock_data['boll_upper'] = upper
+    stock_data['boll_middle'] = middle
+    stock_data['boll_lower'] = lower
+
+
 # 计算BIAS折线，至少上市24天
-def get_bias_index(stock_data: pandas.DataFrame):
+def get_bias(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 24:
         return
     ma_24 = talib.SMA(stock_data['close'], 24)
@@ -45,7 +48,7 @@ def get_bias_index(stock_data: pandas.DataFrame):
 
 
 # 计算KDJ曲线，至少上市13天
-def get_kdj_index(stock_data: pandas.DataFrame):
+def get_kdj(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 13:
         return
     low_list = stock_data['low'].rolling(window=9).min()

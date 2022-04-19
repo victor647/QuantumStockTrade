@@ -117,4 +117,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainWindow()
     main_window.show()
+    # 自动更新股票数据
+    if sys.argv[1] == '-auto':
+        FileManager.save_stock_list_file()
+        query_all_stock_daily_data()
     sys.exit(app.exec_())
