@@ -61,7 +61,7 @@ class TradeSimulator(QDialog, Ui_TradeSimulator):
         self.stockCode = Tools.get_stock_code(self.iptStockNumber)
         # 获取交易所信息
         self.market, index_code = Tools.get_trade_center_and_index(self.stockCode)
-        start_date = self.dteStart.date().addYears(-1).toString('yyyy-MM-dd')
+        start_date = self.dteStart.date().addMonths(-6).toString('yyyy-MM-dd')
         end_date = self.dteEnd.date().toString('yyyy-MM-dd')
         # 获取股票历史数据
         bs_result = baostock.query_history_k_data(code=self.market + '.' + self.stockCode, fields='date,open,high,low,close,preclose,pctChg,turn',

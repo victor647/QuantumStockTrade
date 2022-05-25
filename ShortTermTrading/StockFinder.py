@@ -4,11 +4,9 @@ from PyQt5.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from ShortTermTrading.SearchResult import SearchResult
 from ShortTermTrading.BatchSearcher import BatchSearcher
-from ShortTermTrading.FiveDayFinder import FiveDayFinder
 from ShortTermTrading.StockSearchThread import StandardStockSearcher
-from datetime import datetime
 import ShortTermTrading.SearchCriteria as SearchCriteria
-import pandas
+import pandas, baostock
 from Tools import Tools, FileManager
 import Data.TechnicalAnalysis as TA
 
@@ -232,6 +230,7 @@ class StockFinder(QMainWindow, Ui_StockFinder):
 
     # 基本面指标分析
     def match_basic_criterias(self, data: pandas.DataFrame):
+
         # 检测股票是否是ST股
         if not self.cbxIncludeST.isChecked():
             if data['isST'] == 1:
@@ -265,9 +264,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             return True
         # 跳过还未上市新股
         if data.empty:
-            return False
-        # 跳过当日停牌股票
-        if data.iloc[-1]['tradestatus'] == 0:
             return False
 
         # 逐条筛选自定义指标

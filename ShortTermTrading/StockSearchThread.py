@@ -4,6 +4,7 @@ from Tools.ProgressBar import ProgressBar
 import ShortTermTrading.StockFinder as StockFinder
 import ShortTermTrading.FiveDayFinder as FiveDayFinder
 import Data.TechnicalAnalysis as TA
+import baostock, pandas
 
 
 # 选股算法基类
@@ -52,49 +53,60 @@ class StandardStockSearcher(StockSearcher):
             # 获得股票历史数据
             stock_data = FileManager.read_stock_history_data(stock_code, True)
             # 选股日期之前和之后的数据
-            data_before_search_date = TA.get_stock_data_before_date(stock_data, self.searchDate)
+            data_before_search = TA.get_stock_data_before_date(stock_data, self.searchDate)
             # 新股还没上市
-            if data_before_search_date.empty:
+            if data_before_search.empty:
                 continue
-            # 基本面指标考察
-            most_recent_day_data = data_before_search_date.iloc[-1]
-            if not StockFinder.Instance.match_basic_criterias(most_recent_day_data):
-                continue
-            data_after = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 技术面指标考察
-            if not StockFinder.Instance.match_technical_criterias(data_before_search_date):
+            if not StockFinder.Instance.match_technical_criterias(data_before_search):
                 continue
             # 自定义指标考察
-            if not StockFinder.Instance.match_custom_criterias(data_before_search_date):
+            if not StockFinder.Instance.match_custom_criterias(data_before_search):
+                continue
+            # 基本面指标考察
+            data_today = data_before_search.iloc[-1]
+            date = data_today.name
+            code_with_market = row['market'] + '.' + stock_code
+            bs_result = baostock.query_history_k_data_plus(code=code_with_market, fields='isST,peTTM,pbMRQ,psTTM', frequency='d', start_date=date)
+            if len(bs_result.data) == 0:
+                continue
+            basic_data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float).iloc[0]
+            data_today['isST'] = basic_data['isST']
+            data_today['peTTM'] = basic_data['peTTM']
+            data_today['pbMRQ'] = basic_data['pbMRQ']
+            data_today['psTTM'] = basic_data['psTTM']
+            if not StockFinder.Instance.match_basic_criterias(data_today):
                 continue
 
+            data_after_search = TA.get_stock_data_after_date(stock_data, self.searchDate)
             # 选股日收盘价
-            pre_close = round(most_recent_day_data['close'], 2)
-            # 次日开盘
-            next_day_open = TA.get_stock_performance_after_days(data_after, pre_close, 1, 'open')
-            # 五日收盘
-            five_day_close = TA.get_stock_performance_after_days(data_after, pre_close, 5, 'close')
+            pre_close = round(data_today['close'], 2)
             # 跑赢大盘
-            market, index_code = Tools.get_trade_center_and_index(stock_code)
-            if index_code == '000001':
-                index_performance = index_shanghai_performance
-            elif index_code == '399001':
-                index_performance = index_shenzhen_performance
-            else:
-                index_performance = index_startup_performance
-            market_difference = round(five_day_close - index_performance, 2)
+            # market, index_code = Tools.get_trade_center_and_index(stock_code)
+            # if index_code == '000001':
+            #     index_performance = index_shanghai_performance
+            # elif index_code == '399001':
+            #     index_performance = index_shenzhen_performance
+            # else:
+            #     index_performance = index_startup_performance
+            # market_difference = round(five_day_close - index_performance, 2)
+            # 次日最高
+            next_day_high = TA.get_stock_extremes_in_day_range(data_after_search, pre_close, 1, 1, 'high')
             # 次日最低
-            next_day_low = TA.get_stock_extremes_in_day_range(data_after, pre_close, 1, 1, 'low')
+            next_day_low = TA.get_stock_extremes_in_day_range(data_after_search, pre_close, 1, 1, 'low')
             # 五日最高
-            five_day_high = TA.get_stock_extremes_in_day_range(data_after, pre_close, 2, 5, 'high')
+            five_day_high = TA.get_stock_extremes_in_day_range(data_after_search, pre_close, 1, 5, 'high')
+            # 五日最低
+            five_day_low = TA.get_stock_extremes_in_day_range(data_after_search, pre_close, 1, 5, 'low')
             # 最高收益
             max_profit = TA.get_percent_change_from_price(TA.get_price_from_percent_change(pre_close, five_day_high),
-                                                          TA.get_price_from_percent_change(pre_close, next_day_low))
-            pe = round(most_recent_day_data['peTTM'], 2)
-            pb = round(most_recent_day_data['pbMRQ'], 2)
-            ps = round(most_recent_day_data['psTTM'], 2)
+                                                          TA.get_price_from_percent_change(pre_close, five_day_low))
+            pe = round(data_today['peTTM'], 2)
+            pb = round(data_today['pbMRQ'], 2)
+            ps = round(data_today['psTTM'], 2)
+            industry = baostock.query_stock_industry(code=code_with_market, date=date).data[0][3]
             # 将符合要求的股票信息打包
-            items = [stock_code, name, pre_close, next_day_open, five_day_close, market_difference, next_day_low, five_day_high, max_profit, pe, pb, ps]
+            items = [stock_code, name, industry, pre_close, next_day_high, next_day_low, five_day_high, five_day_low, pe, pb, ps]
             # 添加股票信息至列表
             self.addItemCallback.emit(items)
             self.selectedStocks.append(stock_code)

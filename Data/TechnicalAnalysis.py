@@ -5,7 +5,9 @@ import Tools.FileManager as FileManager
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     # 将价格数据转换为涨跌幅数据
-    get_percentage_data(stock_data)
+    get_fibonacci_ma(stock_data)
+    get_macd(stock_data)
+    get_bbi(stock_data)
 
 
 # 分析价格获得涨跌幅百分比数据
@@ -63,8 +65,17 @@ def get_kdj(stock_data: pandas.DataFrame):
     stock_data['kdj_j'] = j
 
 
-# 计算所有MA均线
-def calculate_all_ma_curves(stock_data: pandas.DataFrame):
+# 计算BBI指标，至少上市24天
+def get_bbi(stock_data: pandas.DataFrame):
+    data_3 = talib.SMA(stock_data['close'], 3)
+    data_6 = talib.SMA(stock_data['close'], 6)
+    data_12 = talib.SMA(stock_data['close'], 12)
+    data_24 = talib.SMA(stock_data['close'], 24)
+    stock_data['bbi'] = (data_3 + data_6 + data_12 + data_24) / 4
+
+
+# 计算标准周期的均线
+def get_standard_ma(stock_data: pandas.DataFrame):
     calculate_ma_curve(stock_data, 5)
     calculate_ma_curve(stock_data, 10)
     calculate_ma_curve(stock_data, 20)
@@ -72,13 +83,14 @@ def calculate_all_ma_curves(stock_data: pandas.DataFrame):
     calculate_ma_curve(stock_data, 60)
 
 
-# 计算股池需要的MA均线
-def calculate_pool_ma_curves(stock_data: pandas.DataFrame):
+# 计算斐波那契均线
+def get_fibonacci_ma(stock_data: pandas.DataFrame):
     calculate_ma_curve(stock_data, 5)
-    calculate_ma_curve(stock_data, 20)
-    calculate_ma_curve(stock_data, 60)
-    calculate_ma_curve(stock_data, 120)
-    calculate_ma_curve(stock_data, 250)
+    calculate_ma_curve(stock_data, 13)
+    calculate_ma_curve(stock_data, 21)
+    calculate_ma_curve(stock_data, 34)
+    calculate_ma_curve(stock_data, 55)
+    calculate_ma_curve(stock_data, 89)
 
 
 # 计算MA均线
@@ -91,9 +103,9 @@ def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
         return ''
     stock_data[key] = talib.SMA(stock_data['close'], period)
     # 解决最前端数据不够的问题
-    for i in range(period):
-        if math.isnan(stock_data[key].iloc[i]):
-            stock_data[key].iloc[i] = stock_data['close'].iloc[:i + 1].mean()
+    # for i in range(period):
+    #     if math.isnan(stock_data[key].iloc[i]):
+    #         stock_data[key].iloc[i] = stock_data['close'].iloc[:i + 1].mean()
     return key
 
 

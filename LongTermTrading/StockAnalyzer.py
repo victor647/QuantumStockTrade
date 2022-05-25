@@ -79,8 +79,8 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         # 分析股票股性
         TA.get_percentage_data(self.stockDatabase)
         # 计算均线
-        TA.calculate_all_ma_curves(self.marketDatabase)
-        TA.calculate_all_ma_curves(self.stockDatabase)
+        TA.get_standard_ma(self.marketDatabase)
+        TA.get_standard_ma(self.stockDatabase)
         self.analyze_data()
         self.calculate_trends()
         self.repaint()

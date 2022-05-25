@@ -31,7 +31,7 @@ def decorate_bar_series(bar_set: QBarSet, color: QColor, transparent=False):
 def plot_stock_search_and_trade(stock_code: str, search_date: str, days_after: int = 20, days_before: int = 100, trade_history=None):
     stock_data = FileManager.read_stock_history_data(stock_code, True)
     # 计算均线数据
-    TA.calculate_all_ma_curves(stock_data)
+    TA.get_standard_ma(stock_data)
     # 选股日期后的数据
     data_after = TA.get_stock_data_after_date(stock_data, search_date, days_after)
     # 选股日期前的数据
@@ -60,7 +60,7 @@ def plot_pooled_stock_graph(stock_code: str):
     stock_data = pandas.DataFrame(result.data, columns=result.fields, dtype=float)
     stock_data.set_index('date', inplace=True)
     # 计算均线并画图
-    TA.calculate_pool_ma_curves(stock_data)
+    TA.get_fibonacci_ma(stock_data)
     graph = CandleStickChart(stock_data[-100:], stock_code)
     graph.plot_pool_ma_lines()
     graph.plot_price()

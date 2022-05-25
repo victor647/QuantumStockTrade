@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>830</width>
+    <width>722</width>
     <height>311</height>
    </rect>
   </property>
@@ -108,22 +108,17 @@
      </column>
      <column>
       <property name="text">
-       <string>收盘价</string>
+       <string>行业板块</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>次日开盘</string>
+       <string>当日收盘</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>五日收盘</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>跑赢大盘</string>
+       <string>次日最高</string>
       </property>
      </column>
      <column>
@@ -138,7 +133,7 @@
      </column>
      <column>
       <property name="text">
-       <string>最大收益</string>
+       <string>五日最低</string>
       </property>
      </column>
      <column>

@@ -1,4 +1,4 @@
-import baostock, pandas, math
+import baostock, pandas
 from PyQt5.QtCore import QDate, QThread, pyqtSignal
 from Tools import Tools, ProgressBar, FileManager
 
@@ -23,7 +23,7 @@ class QueryStockDailyData(QThread):
     def __init__(self, stock_list: pandas.DataFrame):
         super().__init__()
         now = QDate.currentDate()
-        start_date = now.addYears(-1)
+        start_date = now.addMonths(-6)
         self.today = now.toString('yyyy-MM-dd')
         self.startDate = start_date.toString('yyyy-MM-dd')
         self.stockList = stock_list
@@ -54,7 +54,7 @@ class QueryStockDailyData(QThread):
 
     # 向服务器请求股票数据
     def fetch_stock_data(self, market: str, code: str, is_market=False):
-        result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,preclose,turn,amount,peTTM,pbMRQ,psTTM,tradestatus,isST',
+        result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,pctChg,turn,amount',
                                                     start_date=self.startDate, end_date=self.today, frequency='d', adjustflag='2')
         FileManager.save_stock_history_data(result, code if not is_market else market + code)
 

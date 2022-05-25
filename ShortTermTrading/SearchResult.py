@@ -41,10 +41,13 @@ class SearchResult(QDialog, Ui_SearchResult):
         # 股票名称
         self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
         column += 1
-        # 选股日收盘价
+        # 行业板块
+        self.tblStockList.setItem(row_count, column, QTableWidgetItem(items[column]))
+        column += 1
+        # 当日收盘
         column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])
-        # 次日开盘、五日收盘、默认收益、次日最低、五日最高、最大收益
-        for i in range(6):
+        # 次日最高、次日最低、五日最高、五日最低
+        for i in range(4):
             column = Tools.add_colored_item(self.tblStockList, row_count, column, items[column], '%')
         # 市盈率
         column = Tools.add_sortable_item(self.tblStockList, row_count, column, items[column])

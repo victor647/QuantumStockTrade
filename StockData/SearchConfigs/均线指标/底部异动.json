@@ -6,10 +6,10 @@
         "comparedField": "\u6700\u4f4e\u4ef7",
         "queryPeriodBegin": 1,
         "queryPeriodEnd": 1,
-        "comparedPeriodBegin": 100,
+        "comparedPeriodBegin": 60,
         "comparedPeriodEnd": 1,
-        "operator": "\u5c0f\u4e8e",
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5c0f\u4e8e",
         "value": 1.25
     },
     {
@@ -21,8 +21,8 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 5,
         "comparedPeriodEnd": 1,
-        "operator": "\u5927\u4e8e",
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
         "value": 1.0
     },
     {
@@ -34,21 +34,21 @@
         "queryPeriodEnd": 1,
         "comparedPeriodBegin": 10,
         "comparedPeriodEnd": 1,
-        "operator": "\u5927\u4e8e",
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
         "value": 1.0
     },
     {
-        "queryLogic": "\u6700\u9ad8",
+        "queryLogic": "\u5e73\u5747",
         "comparedLogic": "\u5e73\u5747",
         "queryField": "\u6362\u624b\u7387",
         "comparedField": "\u6362\u624b\u7387",
-        "queryPeriodBegin": 5,
+        "queryPeriodBegin": 3,
         "queryPeriodEnd": 1,
-        "comparedPeriodBegin": 30,
-        "comparedPeriodEnd": 6,
-        "operator": "\u5927\u4e8e",
+        "comparedPeriodBegin": 20,
+        "comparedPeriodEnd": 4,
         "comparedObject": "\u6bd4\u503c",
+        "operator": "\u5927\u4e8e",
         "value": 2.0
     }
 ]

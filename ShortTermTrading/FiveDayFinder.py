@@ -2,7 +2,6 @@ from QtDesign.FiveDaysFinder_ui import Ui_FiveDayShapeFinder
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from Tools import FileManager, Tools
 from ShortTermTrading.FiveDayMatches import FiveDayMatches
-from ShortTermTrading.StockSearchThread import FiveDaySearcherSingle, FiveDaySearcherMultiple
 import ShortTermTrading.StockFinder as StockFinder
 import ShortTermTrading.SearchCriteria as SearchCriteria
 import Data.TechnicalAnalysis as TA
