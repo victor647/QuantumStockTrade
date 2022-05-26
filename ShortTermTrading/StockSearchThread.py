@@ -104,7 +104,8 @@ class StandardStockSearcher(StockSearcher):
             pe = round(data_today['peTTM'], 2)
             pb = round(data_today['pbMRQ'], 2)
             ps = round(data_today['psTTM'], 2)
-            industry = baostock.query_stock_industry(code=code_with_market, date=date).data[0][3]
+            industry_info = baostock.query_stock_industry(code=code_with_market, date=date).data
+            industry = industry_info[0][3] if len(industry_info) > 0 else ''
             # 将符合要求的股票信息打包
             items = [stock_code, name, industry, pre_close, next_day_high, next_day_low, five_day_high, five_day_low, pe, pb, ps]
             # 添加股票信息至列表

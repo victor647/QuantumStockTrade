@@ -343,7 +343,7 @@ def match_ma(stock_data: pandas.DataFrame, days_ahead: int, period_short: int, p
 # 计算是否符合MACD图形
 def match_macd(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
     if 'macd_white' not in stock_data.columns:
-        return False
+        get_macd(stock_data)
     # 获取MACD指标的三条数据
     white = stock_data['macd_white']
     yellow = stock_data['macd_yellow']
@@ -367,15 +367,14 @@ def match_macd(stock_data: pandas.DataFrame, days_ahead: int, behaviour: str):
 
 
 # 计算是否符合BOLL图形
-def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behaviour: str):
+def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str):
     if 'boll_upper' not in stock_data.columns:
-        return False
+        get_boll(stock_data)
     # 获取布林线的三根轨道
     upper = stock_data['boll_upper']
     middle = stock_data['boll_middle']
     lower = stock_data['boll_lower']
     stock_closes = stock_data['close']
-
     # 获取对应轨道价格
     if track == '上轨':
         line = upper
@@ -383,29 +382,22 @@ def match_boll(stock_data: pandas.DataFrame, days_ahead: int, track: str, behavi
         line = middle
     else:
         line = lower
-
     # 获取最近和几日前的价格以及轨道
     ahead_stock = stock_closes.iloc[-days_ahead]
     ahead_line = line.iloc[-days_ahead]
     newest_stock = stock_closes.iloc[-1]
     newest_line = line.iloc[-1]
-
-    if behaviour == '上穿':
-        return ahead_stock < ahead_line and newest_stock > newest_line
-    elif behaviour == '下穿':
-        return ahead_stock > ahead_line and newest_stock < newest_line
-    return False
+    return ahead_stock < ahead_line and newest_stock > newest_line
 
 
 # 计算是否符合KDJ图形
 def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold: int):
     if 'kdj_k' not in stock_data.columns:
-        return False
+        get_kdj(stock_data)
     # 获取三条线的值
     line_k = stock_data['kdj_k']
     line_d = stock_data['kdj_d']
     line_j = stock_data['kdj_j']
-
     # 获取用户需要的值
     if 'K' in line:
         value = line_k
@@ -414,11 +406,27 @@ def match_kdj(stock_data: pandas.DataFrame, line: str, behaviour: str, threshold
     # 计算J值
     else:
         value = line_j
-
     if behaviour == '大于':
         return value.iloc[-1] > threshold
     else:
         return value.iloc[-1] < threshold
+
+
+# 计算是否连续x日站上BBI均线
+def match_bbi(stock_data: pandas.DataFrame, days_ahead: int):
+    if 'bbi' not in stock_data.columns:
+        get_bbi(stock_data)
+    first_day_close = stock_data['close'].iloc[-days_ahead]
+    first_day_bbi = stock_data['bbi'].iloc[-days_ahead]
+    if first_day_close > first_day_bbi:
+        return False
+    for i in range(-days_ahead + 1, 0):
+        day_close = stock_data['close'].iloc[i]
+        day_bbi = stock_data['bbi'].iloc[i]
+        # 任意一天收盘低于BBI则不符合
+        if day_close < day_bbi:
+            return False
+    return True
 
 
 # 剪去股票在某个日期之前的K线数据

@@ -485,16 +485,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbbBOLLBehaviour">
+          <widget class="QComboBox" name="cbbBOLLTrack">
            <property name="enabled">
             <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbbBOLLTrack">
-           <property name="enabled">
-            <bool>false</bool>
+          <widget class="QCheckBox" name="cbxBBI">
+           <property name="text">
+            <string>站稳BBI</string>
            </property>
           </widget>
          </item>

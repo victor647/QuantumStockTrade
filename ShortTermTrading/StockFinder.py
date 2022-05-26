@@ -29,7 +29,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         self.dteSearchDate.setDate(QDate.currentDate())
         # 初始化技术面指标下拉菜单
         self.cbbMACDBehaviour.addItems(['金叉', '翻红', '绿柱缩短'])
-        self.cbbBOLLBehaviour.addItems(['上穿', '下穿'])
         self.cbbBOLLTrack.addItems(['上轨', '中轨', '下轨'])
         self.cbbSpecialShape.addItems(['对数底', '金针探底', '揉搓线', '孕线', '仙人指路', '早晨之星'])
 
@@ -108,7 +107,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             'macdOn': self.cbxMACD.isChecked(),
             'macdBehaviour': self.cbbMACDBehaviour.currentText(),
             'bollOn': self.cbxBOLL.isChecked(),
-            'bollBehaviour': self.cbbBOLLBehaviour.currentText(),
             'bollTrack': self.cbbBOLLTrack.currentText(),
             'maOn': self.cbxMA.isChecked(),
             'maShort': self.spbMaShort.value(),
@@ -131,7 +129,6 @@ class StockFinder(QMainWindow, Ui_StockFinder):
             self.cbxMACD.setChecked(data['macdOn'])
             self.cbbMACDBehaviour.setCurrentText(data['macdBehaviour'])
             self.cbxBOLL.setChecked(data['bollOn'])
-            self.cbbBOLLBehaviour.setCurrentText(data['bollBehaviour'])
             self.cbbBOLLTrack.setCurrentText(data['bollTrack'])
             self.cbxMA.setChecked(data['maOn'])
             self.spbMaShort.setValue(data['maShort'])
@@ -282,10 +279,13 @@ class StockFinder(QMainWindow, Ui_StockFinder):
         if self.cbxMACD.isChecked() and not TA.match_macd(data, period, self.cbbMACDBehaviour.currentText()):
             return False
         # 检测BOLL区间
-        if self.cbxBOLL.isChecked() and not TA.match_boll(data, period, self.cbbBOLLTrack.currentText(), self.cbbBOLLBehaviour.currentText()):
+        if self.cbxBOLL.isChecked() and not TA.match_boll(data, period, self.cbbBOLLTrack.currentText()):
             return False
         # 检测均线交叉
         if self.cbxMA.isChecked() and not TA.match_ma(data, period, self.spbMaShort.value(), self.spbMaLong.value()):
+            return False
+        # 检测站上BBI
+        if self.cbxBBI.isChecked() and not TA.match_bbi(data, period):
             return False
         # 检测特殊图形
         if self.cbxSpecialShape.isChecked() and not TA.match_special_shape(data, self.spbTechnicalTimePeriod.value(), self.cbbSpecialShape.currentText()):
