@@ -54,7 +54,7 @@ class QueryStockDailyData(QThread):
 
     # 向服务器请求股票数据
     def fetch_stock_data(self, market: str, code: str, is_market=False):
-        result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,pctChg,turn,amount',
+        result = baostock.query_history_k_data_plus(code=market + '.' + code, fields='date,open,high,low,close,preclose,turn,amount',
                                                     start_date=self.startDate, end_date=self.today, frequency='d', adjustflag='2')
         FileManager.save_stock_history_data(result, code if not is_market else market + code)
 

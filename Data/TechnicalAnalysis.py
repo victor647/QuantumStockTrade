@@ -5,9 +5,7 @@ import Tools.FileManager as FileManager
 # 计算技术指标
 def get_technical_index(stock_data: pandas.DataFrame):
     # 将价格数据转换为涨跌幅数据
-    get_fibonacci_ma(stock_data)
-    get_macd(stock_data)
-    get_bbi(stock_data)
+    get_percentage_data(stock_data)
 
 
 # 分析价格获得涨跌幅百分比数据

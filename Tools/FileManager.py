@@ -234,7 +234,7 @@ def read_stock_history_data(stock_code: str, set_date_index: bool):
 # 保存单只股票历史数据到csv文件
 def save_stock_history_data(bs_result, stock_code: str):
     data = pandas.DataFrame(bs_result.data, columns=bs_result.fields, dtype=float)
-    # TechnicalAnalysis.get_technical_index(data)
+    TechnicalAnalysis.get_technical_index(data)
     data.to_csv(stock_history_path(stock_code))
 
 
