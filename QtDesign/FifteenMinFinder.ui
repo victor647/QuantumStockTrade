@@ -132,14 +132,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rbnBackToLine">
+      <widget class="QRadioButton" name="rbnStayOnShort">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>回踩均线</string>
+        <string>站稳短线</string>
        </property>
        <property name="autoExclusive">
         <bool>false</bool>
@@ -154,7 +154,7 @@
         </font>
        </property>
        <property name="text">
-        <string>金叉</string>
+        <string>短长金叉</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -165,63 +165,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="rbnChangeDirection">
+      <widget class="QRadioButton" name="rbnOppositeDirection">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>拐头向上</string>
-       </property>
-       <property name="autoExclusive">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="lblReferenceMA">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>参考均线：</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="rbnMAShort">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>短期均线</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-       <property name="autoExclusive">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="rbnMALong">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>长期均线</string>
+        <string>短上长下</string>
        </property>
        <property name="autoExclusive">
         <bool>false</bool>
@@ -240,6 +191,16 @@
      <column>
       <property name="text">
        <string>股票名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当前价格</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>均线支撑</string>
       </property>
      </column>
     </widget>

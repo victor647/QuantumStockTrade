@@ -44,10 +44,14 @@ def get_trade_center_and_index(stock_code: str):
     elif 400000 < code < 600000:
         market = 'bj'
         index = '000000'
-    # 上海主板以及科创板
-    elif 600000 <= code < 700000:
+    # 上海主板
+    elif 600000 <= code < 688000:
         market = 'sh'
         index = '000001'
+    # 科创板
+    elif 688000 <= code < 700000:
+        market = 'sh'
+        index = '000300'
     # 深圳可转债
     elif 128000 <= code <= 129000:
         market = 'sz'

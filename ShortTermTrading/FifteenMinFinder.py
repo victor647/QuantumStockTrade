@@ -33,17 +33,31 @@ class FifteenMinFinder(QDialog, Ui_FifteenMinFinder):
         ma_key_long = TA.calculate_ma_curve(stock_data, ma_long)
         period = self.spbOccurancePeriod.value()
 
-        # 均线金叉
-        if self.rbnGoldCross.isChecked() and ma_key_long != '':
+        current_price = stock_data['close'].iloc[-1]
+        # 连续x次站稳短期均线
+        if self.rbnStayOnShort.isChecked():
+            for i in range(-period, -1):
+                ma_short = stock_data[ma_key_short].iloc[i]
+                close = stock_data['close'].iloc[i]
+                if close < ma_short:
+                    return
+            self.append_selected_stock(stock_code, current_price, stock_data[ma_key_short].iloc[-1])
+        elif ma_key_long != '':
             short_before = stock_data[ma_key_short].iloc[-period]
             short_now = stock_data[ma_key_short].iloc[-1]
             long_before = stock_data[ma_key_long].iloc[-period]
             long_now = stock_data[ma_key_long].iloc[-1]
-            if short_before < long_before and short_now > long_now:
-                self.append_selected_stock(stock_code)
+            # 均线金叉
+            if self.rbnGoldCross.isChecked():
+                if short_before < long_before and short_now > long_now:
+                    self.append_selected_stock(stock_code, current_price, short_now)
+            # 短线向上，长线向下
+            elif self.rbnOppositeDirection.isChecked():
+                if short_before < short_now < long_now < long_before:
+                    self.append_selected_stock(stock_code, current_price, short_now)
 
     # 开始筛选符合图形的股票
-    def append_selected_stock(self, stock_code: str):
+    def append_selected_stock(self, stock_code: str, price: float, ma: float):
         name = Tools.get_stock_name_from_code(stock_code)
         if name == '':
             return
@@ -51,3 +65,5 @@ class FifteenMinFinder(QDialog, Ui_FifteenMinFinder):
         self.tblStockList.insertRow(row_count)
         self.tblStockList.setItem(row_count, 0, QTableWidgetItem(stock_code))
         self.tblStockList.setItem(row_count, 1, QTableWidgetItem(name))
+        self.tblStockList.setItem(row_count, 2, QTableWidgetItem(round(price, 2)))
+        self.tblStockList.setItem(row_count, 3, QTableWidgetItem(round(ma, 2)))

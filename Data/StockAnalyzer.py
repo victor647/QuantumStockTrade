@@ -212,7 +212,7 @@ class StockAnalyzer(QMainWindow, Ui_StockAnalyzer):
         # 波段时长
         column = Tools.add_sortable_item(self.tblHighLowPoints, row, column, point.totalDays)
         # 涨跌天数
-        days_string = str(point.upDays) + '/' + str(point.downDays) + '/' + str(point.flatDays)
+        days_string = str(point.upDays) + '-' + str(point.downDays) + '-' + str(point.flatDays)
         column = Tools.add_sortable_item(self.tblHighLowPoints, row, column, point.upDays, days_string)
         # 累计涨跌幅
         column = Tools.add_colored_item(self.tblHighLowPoints, row, column, point.percentChange, '%')

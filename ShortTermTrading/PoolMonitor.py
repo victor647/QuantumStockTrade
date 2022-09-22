@@ -69,7 +69,7 @@ class PoolMonitor(QDialog, Ui_PoolMonitor):
         three_day_change = TA.get_percent_change_from_price(last_close_price, stock_data.iloc[-4]['close'])
         column = Tools.add_colored_item(self.tblStockList, row, column, three_day_change, '%')
         # 历史最高
-        history_max = stock_data['high'].max()
+        history_max = round(stock_data['high'].max(), 2)
         column = Tools.add_sortable_item(self.tblStockList, row, column, history_max)
         # 回撤幅度
         fallback_percent = TA.get_percent_change_from_price(last_close_price, history_max)

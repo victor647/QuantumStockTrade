@@ -4,7 +4,8 @@ import baostock
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
-from LongTermTrading import StockAnalyzer, ScheduledInvestment, TradeSimulator
+from LongTermTrading import ScheduledInvestment, TradeSimulator
+from Data import StockAnalyzer
 from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor, FifteenMinTrader, FifteenMinFinder
 from RealTimeMonitor import LiveTracker
 from Data.QueryStockData import query_all_stock_daily_data
