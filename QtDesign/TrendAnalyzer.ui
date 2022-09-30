@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TrendAnalyzer</class>
+ <widget class="QDialog" name="TrendAnalyzer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>744</width>
+    <height>364</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>趋势分析</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="lblMinPeriod">
+       <property name="text">
+        <string>趋势最短时长</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spbMinPeriod">
+       <property name="suffix">
+        <string>天</string>
+       </property>
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblMinAmplitude">
+       <property name="text">
+        <string>箱体最小振幅</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spbMinAmplitude">
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="maximum">
+        <number>20</number>
+       </property>
+       <property name="value">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblTrendBase">
+       <property name="text">
+        <string>趋势顶点判定</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnMinMax">
+       <property name="text">
+        <string>最高最低价</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbnClose">
+       <property name="text">
+        <string>收盘价</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAnalyzeTrends">
+       <property name="text">
+        <string>分析箱体趋势</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnStockGraph">
+       <property name="text">
+        <string>显示K线</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpHighLowPoints">
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>趋势高低点</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QTableWidget" name="tblHighLowPoints">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>95</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>日期</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>类型</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>价格</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>偏离MA5</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>波段时长</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>涨跌天数</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>累计涨跌幅</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
