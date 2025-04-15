@@ -1,7 +1,7 @@
 from QtDesign.FiveDayMatches_ui import Ui_FiveDayMatches
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
-from PyQt5.QtCore import Qt
-from Tools import Tools
+from PyQt6.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import Qt
+from Libraries import Tools
 import Data.HistoryGraph as HistoryGraph
 
 

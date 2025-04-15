@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>HistoryGraph</class>
  <widget class="QDialog" name="HistoryGraph">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>121</width>
+    <height>43</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
@@ -46,7 +54,7 @@
   <customwidget>
    <class>QChartView</class>
    <extends>QWidget</extends>
-   <header location="global">PyQt5.QtChart</header>
+   <header location="global">PyQt6.QtChart</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

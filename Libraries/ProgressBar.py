@@ -1,6 +1,6 @@
 from QtDesign.ProgressBar_ui import Ui_ProgressBar
-from PyQt5.QtWidgets import QDialog
-from PyQt5.QtCore import QThread
+from PyQt6.QtWidgets import QDialog
+from PyQt6.QtCore import QThread
 
 
 # 进度条显示

@@ -1,7 +1,7 @@
-from PyQt5.QtGui import QColor
-from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QErrorMessage, QLineEdit, QTableWidget
-from Tools import FileManager as FileManager
+from PyQt6.QtGui import QColor
+from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QErrorMessage, QLineEdit, QTableWidget
+from Libraries import FileManager as FileManager
 import Data.TechnicalAnalysis as TechnicalAnalysis
 from Data.CustomSortingTableData import CustomSortingTableData
 import webbrowser, baostock

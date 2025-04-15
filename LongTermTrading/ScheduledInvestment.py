@@ -1,11 +1,11 @@
 from QtDesign.ScheduledInvestment_ui import Ui_ScheduledInvestment
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog, QHeaderView
-from PyQt5.QtCore import QDate, Qt
-from PyQt5.QtGui import QKeyEvent
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog, QHeaderView
+from PyQt6.QtCore import QDate, Qt
+from PyQt6.QtGui import QKeyEvent
 from Data.InvestmentStatus import StockInvestment
 from Data.HistoryGraph import CandleStickChart
 import Data.TechnicalAnalysis as TA
-from Tools import Tools, FileManager
+from Libraries import Tools, FileManager
 import baostock, pandas, math
 
 

@@ -1,6 +1,6 @@
 from QtDesign.FifteenMinFinder_ui import Ui_FifteenMinFinder
-from Tools import FileManager, Tools
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem
+from Libraries import FileManager, Tools
+from PyQt6.QtWidgets import QDialog, QTableWidgetItem
 from Data.QueryStockData import query_stocks_15min_data
 import Data.TechnicalAnalysis as TA
 import pandas

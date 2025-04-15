@@ -2,9 +2,9 @@ import time
 import RealTimeMonitor.RealTimeStockData as RealTimeStockData
 import RealTimeMonitor.LiveTracker as LiveTracker
 from QtDesign.MonitorCondition_ui import Ui_MonitorCondition
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidget, QTableWidgetItem, QComboBox
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtWidgets import QDialog, QTreeWidgetItem, QTableWidget, QTableWidgetItem, QComboBox
 
 
 def base_message():

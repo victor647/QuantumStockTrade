@@ -1,15 +1,15 @@
 import sys
 import traceback
 import baostock
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from QtDesign.MainWindow_ui import Ui_MainWindow
 from LongTermTrading import ScheduledInvestment, TradeSimulator
 from Data import StockAnalyzer
 from ShortTermTrading import StockFinder, SelectedPerformance, PoolMonitor, FifteenMinTrader, FifteenMinFinder
 from RealTimeMonitor import LiveTracker
 from Data.QueryStockData import query_all_stock_daily_data
-from Tools import TradeSettings, FileManager
+from Libraries import TradeSettings, FileManager
 
 
 if hasattr(Qt, 'AA_EnableHighDpiScaling'):
@@ -122,4 +122,4 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2 and sys.argv[1] == '-auto':
         FileManager.save_stock_list_file()
         query_all_stock_daily_data()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

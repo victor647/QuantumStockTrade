@@ -1,5 +1,5 @@
 from QtDesign.SearchCriteria_ui import Ui_SearchCriteria
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 import ShortTermTrading.StockFinder as StockFinder
 import pandas
 

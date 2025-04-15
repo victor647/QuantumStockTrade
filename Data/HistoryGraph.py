@@ -1,11 +1,11 @@
-from PyQt5.QtWidgets import QDialog
-from PyQt5.QtChart import *
-from PyQt5.QtCore import Qt, QDateTime, QDate
-from PyQt5.QtGui import QColor, QFont
+from PyQt6.QtWidgets import QDialog
+from PyQt6.QtCharts import *
+from PyQt6.QtCore import Qt, QDateTime, QDate
+from PyQt6.QtGui import QColor, QFont
 from QtDesign.HistoryGraph_ui import Ui_HistoryGraph
 from Data.InvestmentStatus import StockInvestment
 import Data.TechnicalAnalysis as TA
-from Tools import FileManager, Tools
+from Libraries import FileManager, Tools
 import pandas, math, baostock
 
 

@@ -1,6 +1,6 @@
 import baostock, pandas
-from PyQt5.QtCore import QDate, QThread, pyqtSignal
-from Tools import Tools, ProgressBar, FileManager
+from PyQt6.QtCore import QDate, QThread, pyqtSignal
+from Libraries import Tools, ProgressBar, FileManager
 
 
 # 获取最新全部股票数据

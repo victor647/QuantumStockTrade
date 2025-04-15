@@ -1,11 +1,11 @@
-from PyQt5.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
+from PyQt6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 from QtDesign.TradeSimulator_ui import Ui_TradeSimulator
-from PyQt5.QtCore import Qt, QDate
+from PyQt6.QtCore import Qt, QDate
 import Data.TechnicalAnalysis as TA
 from Data.HistoryGraph import CandleStickChart
 from Data.InvestmentStatus import StockInvestment
 import baostock, pandas
-from Tools import Tools
+from Libraries import Tools
 
 
 # 长线模拟交易回测

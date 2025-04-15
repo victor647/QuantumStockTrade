@@ -1,10 +1,10 @@
-from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
+from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.SelectedPerformance_ui import Ui_SelectedPerformance
 import Data.TechnicalAnalysis as TA
 from Data.InvestmentStatus import StockInvestment
 import pandas
-from Tools import Tools, FileManager
+from Libraries import Tools, FileManager
 import Data.HistoryGraph as HistoryGraph
 
 

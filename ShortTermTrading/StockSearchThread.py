@@ -1,6 +1,6 @@
-from PyQt5.QtCore import pyqtSignal, QThread
-from Tools import FileManager, Tools
-from Tools.ProgressBar import ProgressBar
+from PyQt6.QtCore import pyqtSignal, QThread
+from Libraries import FileManager, Tools
+from Libraries.ProgressBar import ProgressBar
 import ShortTermTrading.StockFinder as StockFinder
 import ShortTermTrading.FiveDayFinder as FiveDayFinder
 import Data.TechnicalAnalysis as TA
@@ -82,7 +82,7 @@ class StandardStockSearcher(StockSearcher):
             # 选股日收盘价
             pre_close = round(data_today['close'], 2)
             # 跑赢大盘
-            # market, index_code = Tools.get_trade_center_and_index(stock_code)
+            # market, index_code = Libraries.get_trade_center_and_index(stock_code)
             # if index_code == '000001':
             #     index_performance = index_shanghai_performance
             # elif index_code == '399001':

@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QDialog
 from QtDesign.BatchSearcher_ui import Ui_BatchSearcher
 import ShortTermTrading.StockFinder as StockFinder
 

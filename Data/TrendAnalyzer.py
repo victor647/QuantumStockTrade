@@ -1,10 +1,10 @@
 import baostock, pandas
-from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView
 from QtDesign.TrendAnalyzer_ui import Ui_TrendAnalyzer
 import Data.TechnicalAnalysis as TA
 from Data.HistoryGraph import CandleStickChart, PriceDistributionChart
-from Tools import Tools
+from Libraries import Tools
 
 
 # 股票趋势高低点

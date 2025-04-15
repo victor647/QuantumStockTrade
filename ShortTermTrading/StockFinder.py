@@ -1,13 +1,13 @@
-from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
-from PyQt5.QtGui import QKeyEvent
+from PyQt6.QtCore import Qt, QDate
+from PyQt6.QtWidgets import QMainWindow, QFileDialog, QListWidgetItem
+from PyQt6.QtGui import QKeyEvent
 from QtDesign.StockFinder_ui import Ui_StockFinder
 from ShortTermTrading.SearchResult import SearchResult
 from ShortTermTrading.BatchSearcher import BatchSearcher
 from ShortTermTrading.StockSearchThread import StandardStockSearcher
 import ShortTermTrading.SearchCriteria as SearchCriteria
 import pandas, baostock
-from Tools import Tools, FileManager
+from Libraries import Tools, FileManager
 import Data.TechnicalAnalysis as TA
 
 

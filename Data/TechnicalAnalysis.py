@@ -1,5 +1,5 @@
-import pandas, talib, math
-import Tools.FileManager as FileManager
+import pandas, pandas_ta, math
+import Libraries.FileManager as FileManager
 
 
 # 计算技术指标
@@ -22,7 +22,7 @@ def get_percentage_data(database: pandas.DataFrame):
 def get_macd(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 34:
         return
-    white, yellow, column = talib.MACD(stock_data['close'])
+    white, yellow, column = pandas_ta.macd(stock_data['close'])
     column = column * 2
     stock_data['macd_white'] = white
     stock_data['macd_yellow'] = yellow
@@ -33,7 +33,7 @@ def get_macd(stock_data: pandas.DataFrame):
 def get_boll(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 20:
         return
-    upper, middle, lower = talib.BBANDS(stock_data['close'], 20, 2, 2)
+    upper, middle, lower = pandas_ta.bbands(stock_data['close'], 20, 2, 2)
     stock_data['boll_upper'] = upper
     stock_data['boll_middle'] = middle
     stock_data['boll_lower'] = lower
@@ -43,7 +43,7 @@ def get_boll(stock_data: pandas.DataFrame):
 def get_bias(stock_data: pandas.DataFrame):
     if stock_data['close'].shape[0] < 24:
         return
-    ma_24 = talib.SMA(stock_data['close'], 24)
+    ma_24 = pandas_ta.sma(stock_data['close'], 24)
     stock_data['bias_24'] = (stock_data['close'] - ma_24) / ma_24 * 100
 
 
@@ -65,10 +65,10 @@ def get_kdj(stock_data: pandas.DataFrame):
 
 # 计算BBI指标，至少上市24天
 def get_bbi(stock_data: pandas.DataFrame):
-    data_3 = talib.SMA(stock_data['close'], 3)
-    data_6 = talib.SMA(stock_data['close'], 6)
-    data_12 = talib.SMA(stock_data['close'], 12)
-    data_24 = talib.SMA(stock_data['close'], 24)
+    data_3 = pandas_ta.sma(stock_data['close'], 3)
+    data_6 = pandas_ta.sma(stock_data['close'], 6)
+    data_12 = pandas_ta.sma(stock_data['close'], 12)
+    data_24 = pandas_ta.sma(stock_data['close'], 24)
     stock_data['bbi'] = (data_3 + data_6 + data_12 + data_24) / 4
 
 
@@ -99,7 +99,7 @@ def calculate_ma_curve(stock_data: pandas.DataFrame, period: int):
     key = 'ma_' + str(period)
     if key in stock_data:
         return ''
-    stock_data[key] = talib.SMA(stock_data['close'], period)
+    stock_data[key] = pandas_ta.sma(stock_data['close'], period)
     # 解决最前端数据不够的问题
     # for i in range(period):
     #     if math.isnan(stock_data[key].iloc[i]):

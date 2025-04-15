@@ -1,8 +1,8 @@
 from QtDesign.SearchResult_ui import Ui_SearchResult
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeyEvent
-from Tools import Tools, FileManager
+from PyQt6.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeyEvent
+from Libraries import Tools, FileManager
 import Data.HistoryGraph as HistoryGraph
 
 

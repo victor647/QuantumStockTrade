@@ -1,4 +1,4 @@
-import Tools.TradeSettings as TradeSettings
+import Libraries.TradeSettings as TradeSettings
 
 
 # 单次交易记录

@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFileDialog
 from QtDesign.FifteenMinTrader_ui import Ui_FifteenMinTrader
 import Data.TechnicalAnalysis as TA
 from Data.InvestmentStatus import StockInvestment
 import pandas
-from Tools import Tools, FileManager
+from Libraries import Tools, FileManager
 import Data.HistoryGraph as HistoryGraph
 
 

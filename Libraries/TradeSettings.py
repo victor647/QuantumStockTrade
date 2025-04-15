@@ -1,5 +1,5 @@
 from QtDesign.TradeSettings_ui import Ui_TradeSettings
-from PyQt5.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog
 
 brokerFeePercentage = 0.00018
 stampDuty = 0.001

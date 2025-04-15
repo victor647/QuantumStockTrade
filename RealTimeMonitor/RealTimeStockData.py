@@ -1,5 +1,5 @@
 import RealTimeMonitor.MonitorCondition as MonitorCondition
-from PyQt5.QtWidgets import QTreeWidgetItem
+from PyQt6.QtWidgets import QTreeWidgetItem
 import time
 
 

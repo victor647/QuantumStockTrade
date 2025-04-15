@@ -1,7 +1,7 @@
 from QtDesign.PoolMonitor_ui import Ui_PoolMonitor
-from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
-from PyQt5.QtCore import QDate
-from Tools import Tools, FileManager
+from PyQt6.QtWidgets import QDialog, QTableWidgetItem, QHeaderView
+from PyQt6.QtCore import QDate
+from Libraries import Tools, FileManager
 from Data import TechnicalAnalysis as TA
 from Data import HistoryGraph
 import pandas, baostock
